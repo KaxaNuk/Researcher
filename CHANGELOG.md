@@ -6,6 +6,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
+## [1.23.0] - 2026-10-23
+Your researcher now knows the Data Curator 0.51.0 and its new Sharadar provider, and what to work
+around when a strategy uses it.
+
+**What to do differently:** say `update` in your home. Before a strategy moves to Sharadar, ask
+your researcher what 0.51.0 changes: a dividend or split column stops a Sharadar run for now.
+### Changed
+- **`data-curator-custom-calculations`** (0.6.0): a *Changed in 0.51.0* section, from the
+  Curator's changelog — `main()` requires `data_block_providers`, `ExcelConfigurator` needs
+  `data_blocks`, an older workbook is updated with `kaxanuk.data_curator update excel`, pyarrow
+  26 or later, prefixes checked against the run's data blocks — not yet checked by a run of the
+  worked example, so `library_version` stays 0.50.0. Beside it, what a strategy's Sharadar run
+  measured on 2026-10-23: any `d_*` or `s_*` column stops the run
+  (<https://github.com/KaxaNuk/Data-Curator/issues/39>); `c_daily_traded_value` is empty, with
+  split-adjusted close times split-adjusted volume in its place
+  (<https://github.com/KaxaNuk/Data-Curator/issues/40>); the startup subscription's key is served
+  by `api.sharadar.com`, not Nasdaq Data Link, whose 429 locks the account. *Known provider
+  faults* gains Sharadar's three-decimal prices and the rebuild of the adjusted close from the
+  unadjusted close and Sharadar's `actions` table
+  (<https://github.com/KaxaNuk/Data-Curator/issues/41>). `references/input-columns.md` adds the
+  Sharadar page, what Sharadar fills and its tickers; `references/programmatic-run.md` the
+  Sharadar call.
+- **`next`** (1.10.1): `references/investment-lab.md` names Data Curator 0.51.0
+  (2026-10-23) as the latest.
+- **`workshop`** (0.4.2): the app is the Lab Platform, its new name, no longer the Investment Lab
+  app; the Investment Lab is the whole product.
+
 ## [1.22.0] - 2026-10-23
 Your researcher now makes interactive presentations from your own work with the new `deck` skill:
 every claim cited, every figure quoted from its file, built with HyperFrames.

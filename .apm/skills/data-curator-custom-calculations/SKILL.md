@@ -13,7 +13,7 @@ description: >
   composition, wiring the column into the output, for configuration files and runs of `main()`,
   and whether a wrong value is the provider's or the library's.
 metadata:
-  version: 0.5.1
+  version: 0.6.0
   library_version: 0.50.0
 ---
 
@@ -26,6 +26,35 @@ injects each of the function's parameters with the data of the column named afte
 This skill was checked against Data Curator **0.50.0**, the frontmatter's `library_version`:
 compare it with the build `uv pip list` shows, and on a newer minor or major version treat every
 trap here as unproven until it is checked again.
+
+**Changed in 0.51.0, from its changelog — not yet checked by a run of the worked example.** The
+first release with the Sharadar provider, released 2026-10-23. `main()` now requires
+`data_block_providers`, and `ExcelConfigurator` needs `data_blocks`; a parameter workbook from an
+earlier build is brought up to date with `kaxanuk.data_curator update excel`. It asks for pyarrow
+26 or later. Each column's prefix is checked against the data blocks of the run, so a `d_*` or `s_*`
+column with no dividends or splits block mapped stops the run before anything is fetched.
+
+**Sharadar on 0.51.0, measured on 2026-10-23 by a strategy's own run** — the only runs of the
+provider so far; FMP's lines below stay as checked on 0.50.0:
+
+- **Any `d_*` or `s_*` column stops the run**, selected in `Configuration.columns` or only a
+  parameter of a `c_*`, even with the dividends and splits blocks mapped to the provider:
+  `[CRITICAL] Column not available under prefix 's': s_denominator`, and the same for
+  `s_split_date`, `s_numerator`, `d_ex_dividend_date`, `d_dividend` and
+  `d_dividend_split_adjusted`, although the documentation's Sharadar page lists some of them.
+  Reported, <https://github.com/KaxaNuk/Data-Curator/issues/39>. Until it is fixed, a split or
+  dividend comes from Sharadar's own `actions` table, read outside the Curator, as *Known provider
+  faults* below says.
+- **The built-in `c_daily_traded_value` is empty on every row**: Sharadar sends no VWAP.
+  Reported, <https://github.com/KaxaNuk/Data-Curator/issues/40>. Build the traded value as
+  `m_close_split_adjusted` × `m_volume_split_adjusted` in a `c_*` of your own, under a name of its
+  own.
+- **The key and its server.** Sharadar's startup subscription, <https://sharadar.com/startup>, is
+  served by Sharadar's own API, `https://api.sharadar.com/v1.0`, with the key as the `api_key`
+  parameter or the `x-api-key` header. Nasdaq Data Link, `data.nasdaq.com`, answers that key with
+  HTTP 429, *exceeded the API speed limit and your account has temporarily been disabled*: it is
+  the wrong server, not a rate limit. A key on the free tier answers 403, *Exceeds free tier*, and
+  returns about five years of a few sample tickers.
 
 **What this skill knows comes from the documentation, the changelog and runs — never from the
 library's code.** The Curator is open source, but the rule is the same for every KaxaNuk tool:
@@ -122,7 +151,8 @@ Do not write code until the inputs and the output name are settled. Resolve at l
 - The financial concept, in plain words, and its formula.
 - Price adjustment: raw (`m_close`), split-adjusted (`m_close_split_adjusted`), or
   dividend-and-split-adjusted (`m_close_dividend_and_split_adjusted`). This changes the result;
-  never pick it silently.
+  never pick it silently. A provider fills only some of them: under Sharadar, `m_close` is the one
+  unadjusted price, as `references/input-columns.md` says.
 - Window and horizon (`5d` / `21d` / `63d` / `252d`, rolling vs exponential) if the concept has one.
 - For fundamentals: whether the configured `period` is `annual` or `quarterly`, since the same
   function yields different values for each, and last-twelve-months logic only makes sense for
@@ -187,12 +217,13 @@ Run every check, and fix until all pass:
       averaged or ranked on it — is checked for continuity at every split before anything reads
       it, as `universe-point-in-time`'s register says. A provider's unadjusted volume can already
       be in post-split shares before the split date, and the split adjustment then counts it twice.
+      Under Sharadar, `c_daily_traded_value` is empty: build it as the 0.51.0 notes above say.
 - [ ] The code parses: `uv run --no-project python -m py_compile <file>` for a file, or a clean run
       of the cell for a notebook, and the linter the project uses passes.
 - [ ] If the calculation depends, directly or transitively, on any `f_*`, `fbs_*`, `fcf_*`, `fis_*`,
       `d_*` or `s_*` column, the run needs a provider for the fundamentals, dividends or splits
       block in `data_block_providers`. For the fundamental blocks the result also depends on the
-      configured `period`.
+      configured `period`. Under Sharadar on 0.51.0, any `d_*` or `s_*` dependency stops the run.
 
 ## 7. Report
 
@@ -226,6 +257,20 @@ volume before some 2025 splits is already in post-split shares — ORLY 15:1 on 
 data, <https://github.com/KaxaNuk/Data-Curator/issues/36>: it is reported to FMP. The
 documentation's FMP page maps `m_volume_split_adjusted` straight to FMP's own split-adjusted
 volume, so the second count is FMP's adjustment, not the Curator's.
+
+**Sharadar rounds every price to three decimals**, the adjusted ones included, as its raw API
+sends them — AAPL on 1998-01-02: close 16.25 unadjusted, 0.145 split-adjusted, 0.121
+dividend-and-split-adjusted. An early adjusted series of a name split many times moves in steps of
+about 0.8% or more, which is noise in a daily return, not the market. The Curator maps
+`m_close_split_adjusted` and `m_close_dividend_and_split_adjusted` straight to Sharadar's `close`
+and `closeadj`, as the documentation's Sharadar page says, so the rounding is Sharadar's; an open
+fill on `m_open_split_adjusted` keeps it too. What a strategy did, measured on 2026-10-23: rebuild
+the split factor and the total-return close from the exact unadjusted `m_close` and Sharadar's
+`actions` table, downloaded whole with `/data/actions?years=full`. In it a split's value is the
+ratio new shares over old, and a `dividend` or `spinoffdividend` value is cash per share in
+today's split-adjusted shares. Where `closeadj` is $10 or more, the rebuilt daily returns matched
+its own within 1e-4 for AAPL, KO, LEHMQ, NVDA, SPY and GE. Asked of the Curator as a feature,
+<https://github.com/KaxaNuk/Data-Curator/issues/41>.
 
 ## References
 

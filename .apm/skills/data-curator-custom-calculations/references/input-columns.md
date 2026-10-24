@@ -27,7 +27,8 @@ The documentation lists them. Read the lists rather than memory, and never the i
   name for it:
   <https://kaxanuk-data-curator.readthedocs.io/en/stable/data_providers/financial_modeling_prep.html>
   for FMP, <https://kaxanuk-data-curator.readthedocs.io/en/stable/data_providers/lseg_workspace.html>
-  for LSEG. The prefixes are on
+  for LSEG, <https://kaxanuk-data-curator.readthedocs.io/en/stable/data_providers/sharadar.html>
+  for Sharadar, since 0.51.0. The prefixes are on
   <https://kaxanuk-data-curator.readthedocs.io/en/stable/data_providers/data_tag_homogenization.html>.
   A tag missing from the provider's page is one that provider does not supply: FMP's page has no
   unadjusted `m_vwap`, which the worked example rebuilds as `c_vwap` because FMP leaves it empty.
@@ -47,6 +48,14 @@ three variants: unadjusted, `_split_adjusted` and `_dividend_and_split_adjusted`
 provider supplies only some of them: FMP's page lists no unadjusted `m_vwap` and no
 `m_vwap_dividend_and_split_adjusted`, and LSEG's lists the unadjusted prices, volume and VWAP, and
 split-adjusted open, high, low and close.
+
+**Sharadar** (0.51.0) fills `m_open`, `m_high`, `m_low`, `m_close` and `m_volume` split-adjusted,
+`m_close` unadjusted and `m_close_dividend_and_split_adjusted`: no VWAP in any variant and no
+unadjusted open, high, low or volume, as its documentation page lists and a strategy's run on
+2026-10-23 found. Every price arrives rounded to three decimals, the adjusted ones included, as
+`SKILL.md`'s *Known provider faults* says. Its identifiers are its own tickers: a delisted name
+under its final ticker (AAMRQ, LEHMQ), a recycled ticker suffixed (DD1). Its catalogue,
+`/data/tickers?years=full`, comes as one zip of the whole table.
 
 Which one to use is a modelling decision, not a detail:
 
@@ -73,6 +82,11 @@ and record what it was.
 
 Dividends and splits are data blocks of their own, each mapped to a provider in
 `data_block_providers` (the changelog, 0.50.0).
+
+**Under Sharadar on 0.51.0 none of them can be asked for**, whatever its documentation page lists:
+any `d_*` or `s_*` column stops the run, as `SKILL.md`'s 0.51.0 notes say
+(<https://github.com/KaxaNuk/Data-Curator/issues/39>). The page also says Sharadar publishes a
+dividend only adjusted for later splits, so the amount as paid is a custom calculation.
 
 ## Fundamental columns
 

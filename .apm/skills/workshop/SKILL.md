@@ -14,7 +14,7 @@ description: >
   copy Golden-Flow's files (`init-example`), cover a step's tool (its own skill), compute a
   performance number no starter task asks for, or give investment advice.
 metadata:
-  version: 0.4.1
+  version: 0.4.2
 ---
 
 # Workshop — the researcher as tutor in a KaxaNuk Training Workshop
@@ -214,7 +214,7 @@ In every block:
 - **No advice.** It never says buy, sell, trim, add or hold, and recommends no product and no data
   provider: the course's own list of providers is quoted with what it says of each, and the choice
   is the owner's.
-- **The Investment Lab app** is known from what the course says of it: the tutor never describes a
+- **The Lab Platform** is known from what the course says of it: the tutor never describes a
   screen the course does not show.
 
 ## A starter session: the AI does the task
@@ -324,7 +324,7 @@ is the owner's choice, never the tutor's, and nothing outside the course's list 
 
 ## A Lab module still coming, on the no-code track
 
-A module of the session's `lab` whose `state` is *coming* has no screen in the Investment Lab app
+A module of the session's `lab` whose `state` is *coming* has no screen in the Lab Platform
 yet; its `instead` names the Golden-Flow file the no-code track works in its place. After the owner
 runs `init-example` with that path, walk it with them part by part, with the step's skill: for each
 part their prediction first, then what it measures, its figures quoted as Golden-Flow's, from its

@@ -61,9 +61,15 @@ Notes that matter:
   run that reads fundamentals (`f_*`, `fbs_*`, `fcf_*`, `fis_*`), dividends (`d_*`) or splits
   (`s_*`) maps those blocks too; FMP's documentation page lists tags for all four. Their data-block
   classes are on no documentation page and in no recorded run: name them here only once a run has.
-- `data_block_providers` needs kaxanuk-data-curator 0.50.0 or later. The `market_data_provider` and
-  `fundamental_data_provider` arguments of earlier versions are deprecated (the changelog, 0.50.0):
-  never pass them.
+- `data_block_providers` needs kaxanuk-data-curator 0.50.0 or later, and 0.51.0 requires it. The
+  `market_data_provider` and `fundamental_data_provider` arguments of earlier versions are
+  deprecated (the changelog, 0.50.0): never pass them.
+- **0.51.0 requires `data_block_providers`** (its changelog). A strategy's run on Sharadar,
+  2026-10-23, passed `kaxanuk.data_curator.data_providers.Sharadar(api_key=api_key)` in place of
+  `FinancialModelingPrep(...)`, mapped to `MarketDailyDataBlock` alone, with the key from
+  `KNDC_API_KEY_SHARADAR`, as the documentation's Sharadar page names it. The same run mapped
+  `DividendsDataBlock` and `SplitsDataBlock` to Sharadar too, and every `d_*` and `s_*` column
+  still stopped it (`SKILL.md`'s 0.51.0 notes): map them only once that is fixed.
 - Build the `Configuration` as the worked example does: `datetime.date` dates, a `period` of
   `annual` or `quarterly`, and `identifiers` and `columns` as tuples. Every identifier is processed
   with the same column selection.
