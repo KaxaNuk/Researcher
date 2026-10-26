@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
+## [1.23.1] - 2026-10-26
+The README's install lines now give the repository's new address,
+<https://github.com/KaxaNuk/Researcher>.
+
+**What to do differently:** nothing. The old address still leads to the same repository.
+### Changed
+- **`README.md`**: the two lines to paste, to set up a researcher and to bring one back, name
+  `https://github.com/KaxaNuk/Researcher`. Every other mention of the old address stays for now.
+
 ## [1.23.0] - 2026-10-23
 Your researcher now knows the Data Curator 0.51.0 and its new Sharadar provider, and what to work
 around when a strategy uses it.
