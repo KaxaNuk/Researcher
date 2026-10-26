@@ -2,7 +2,7 @@
 
 | |
 |---|
-| [![Works with](https://img.shields.io/badge/works%20with-Claude%20Code%20%7C%20Codex%20%7C%20Gemini%20CLI%20%7C%20Cursor%20%7C%20Copilot-blue)](#install--three-steps-no-coding) [![License](https://img.shields.io/github/license/KaxaNuk/KaxaNuk-Researcher?color=blue)](LICENSE) |
+| [![Works with](https://img.shields.io/badge/works%20with-Claude%20Code%20%7C%20Codex%20%7C%20Gemini%20CLI%20%7C%20Cursor%20%7C%20Copilot-blue)](#install--three-steps-no-coding) [![License](https://img.shields.io/github/license/KaxaNuk/Researcher?color=blue)](LICENSE) |
 | [![Version](https://img.shields.io/github/v/tag/KaxaNuk/KaxaNuk-Researcher?sort=semver&label=version&logo=github)](CHANGELOG.md) [![APM](https://img.shields.io/badge/installs%20with-APM%200.33.0-blue)](https://github.com/microsoft/apm) |
 | [![Languages](https://img.shields.io/badge/speaks-any%20language%20you%20choose-blue)](#install--three-steps-no-coding) [![Powered by KaxaNuk](https://img.shields.io/badge/powered%20by-KaxaNuk-orange?colorB=orange)](https://kaxanuk.mx) |
 
