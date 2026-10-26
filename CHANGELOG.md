@@ -13,7 +13,8 @@ The README's install lines now give the repository's new address,
 **What to do differently:** nothing. The old address still leads to the same repository.
 ### Changed
 - **`README.md`**: the two lines to paste, to set up a researcher and to bring one back, name
-  `https://github.com/KaxaNuk/Researcher`. Every other mention of the old address stays for now.
+  `https://github.com/KaxaNuk/Researcher`, and so does the licence badge. Every other mention of the
+  old address stays for now.
 
 ## [1.23.0] - 2026-10-23
 Your researcher now knows the Data Curator 0.51.0 and its new Sharadar provider, and what to work
