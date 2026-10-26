@@ -94,7 +94,7 @@ prices, shown to teach the method, never a promise or a recommendation.
 step 2 instead; it asks for your copy's address and brings your researcher back, set up as it was:
 
 ```text
-Please install this repo for me and bring back my researcher from my private copy on GitHub, start to finish in this conversation — install everything it needs without asking first: https://github.com/KaxaNuk/KaxaNuk-Researcher
+Please install this repo for me and bring back my researcher from my private copy on GitHub, start to finish in this conversation — install everything it needs without asking first: https://github.com/KaxaNuk/Researcher
 ```
 
 Then quit and reopen your assistant, open your researcher's folder in a **new** conversation, and
