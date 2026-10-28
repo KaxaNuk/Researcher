@@ -14,7 +14,8 @@ The README now opens with how to install your researcher, right under its first 
 - **`README.md`**: *Install — three steps, no coding* follows the opening paragraph, with a line
   pointing to *What it is, and what it is not*, which says where what it reads goes. The picture,
   the two examples, *Why not just use Claude or Codex?*, *Take it with you* and *What it is, and
-  what it is not* follow under a heading of their own, *What your researcher does*.
+  what it is not* follow under a heading of their own, *What your researcher does*. The package and
+  the Data Curator are called open source, no longer free.
 
 ## [1.23.1] - 2026-10-26
 The README's install lines now give the repository's new address,

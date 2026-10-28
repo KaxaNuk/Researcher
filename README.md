@@ -103,8 +103,8 @@ projects, and for learning to invest when you want. It is never investment advic
 you to buy, sell or hold, never trades or moves money, and every decision, and its risk, is yours.
 It runs on your computer through your AI assistant; what it reads goes to the company behind that
 assistant (Anthropic for Claude, OpenAI for Codex, Google for Gemini), never to KaxaNuk, and a copy
-goes to your own private GitHub only when you ask. It is free under the MIT licence, as is and
-without warranty; your data provider, your assistant and the Investment Lab's libraries, which
+goes to your own private GitHub only when you ask. It is open source under the MIT licence, as is
+and without warranty; your data provider, your assistant and the Investment Lab's libraries, which
 KaxaNuk sells, each have their own terms. The worked example's figures come from a backtest on past
 prices, shown to teach the method, never a promise or a recommendation.
 
@@ -159,7 +159,7 @@ checks a folder before you share or push it, and walks you through a leaked key.
 
 The researcher needs nothing beyond this package. A strategy can use KaxaNuk's libraries:
 
-- **The Data Curator** is open source and free. A strategy needs a key for it from a data provider;
+- **The Data Curator** is open source. A strategy needs a key for it from a data provider;
   the worked example uses FMP's. A wrong value in downloaded data is usually the provider's, not the
   library's: your researcher tells them apart and says where to report it.
 - **The Backtest Engine, Attribution Analysis and Portfolio Construction** come together, with
