@@ -6,6 +6,38 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
+## [1.24.0] - 2026-10-27
+Every release of your researcher is now tested and installed before it reaches you, by checks the
+package runs on itself.
+
+**What to do differently:** nothing.
+### Added
+- **`tools/check.py`**: every check a commit passes, in one command, each `ok` or `FAIL` — ruff, the
+  Bloom Code check, the frozen files, the strategy template and the example in step with the
+  exceptions `AGENTS.md` lists, the Markdown rules on the lines added since `origin/dev`, each
+  version against its CHANGELOG and against the last release's tag, the private words of
+  `.git/info/private-names.txt`, which no clone shares, and the tests. `--fast` leaves the tests
+  out; `--record-parity` records `SETUP.md`'s `init-example` lines in
+  `tools/parity_exceptions.json`, once each has been read.
+- **`tools/install_check.py`**: the install a release is tried with, from an archive of the commit
+  or, with `--github`, from GitHub — project scope for Claude, user scope for Claude then Codex,
+  and the deployed `scaffold.py` making a strategy, a home and the example — each counted against
+  what the package holds, in a throwaway home it removes. On Windows that home is in the user's
+  folder: APM stages a package 68 characters below `apm_modules/`, so the temporary folder is too
+  deep for the 260-character limit. `--migrate-from` tries a move from an older package.
+- **`tools/release.py`**: the release from `dev` to `main`. It refuses until nothing is
+  uncommitted, GitHub's `dev` and `main` are in `dev`'s history, the version opens the CHANGELOG
+  with a sentence and has no tag, the security check finds nothing to fix and both tools above
+  pass; then, with `--go`, it pushes, fast-forwards, tags and reads `main` and the tag back from
+  GitHub.
+- **`tests/`**: tests of the skills' scripts and of the tools, by pytest, which `tools/check.py`
+  runs, every fake key in them built from pieces; and **`.githooks/pre-commit`**, which runs
+  `tools/check.py --fast` before each commit once a clone sets `git config core.hooksPath .githooks`.
+### Changed
+- **`AGENTS.md`** and **`CONTRIBUTING.md`**: the checks, the install and the release name these
+  tools in place of the commands typed by hand; the skills' scripts have tests, and a change to one
+  carries its test.
+
 ## [1.23.2] - 2026-10-27
 The README now opens with how to install your researcher, right under its first paragraph.
 

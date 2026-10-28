@@ -4,7 +4,7 @@
 # install for the user brings everything; `SETUP.md`, or `CONTRIBUTING.md`'s *Installing by hand*,
 # has the install and update commands.
 name: kaxanuk-researcher
-version: 1.23.2
+version: 1.24.0
 description: The KaxaNuk Researcher — train your own research companion; you name and teach it, it keeps a library of what you read and answers from it with sources, works out your ideas and plans, briefs you each morning and comes with you to every project, work or personal; it teaches you to invest when you want, with every tool to build and test a strategy on the KaxaNuk Strategy Template and Investment Lab — every Lab skill, init-researcher, init-strategy, init-example and init-python-library, and the templates, worked example and home they copy.
 author: KaxaNuk
 license: MIT

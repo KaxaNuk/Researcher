@@ -1,0 +1,4 @@
+#!/bin/sh
+# Every check a commit passes but the tests, which tools/release.py runs: see CONTRIBUTING.md.
+# Set once per clone: git config core.hooksPath .githooks
+exec uv run --no-project python -I -B tools/check.py --fast

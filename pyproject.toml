@@ -1,5 +1,10 @@
-# This repository's ruff settings, for the skills' scripts. The worked example in `examples/`
-# carries its own `pyproject.toml`, which governs it alone.
+# This repository's ruff settings, for the skills' scripts, tools/ and tests/, and pytest's, which
+# tools/check.py runs. The worked example in `examples/` carries its own `pyproject.toml`, which
+# governs it alone.
+[tool.pytest.ini_options]
+addopts = "-p no:cacheprovider"
+testpaths = ["tests"]
+
 [tool.ruff]
 target-version = "py312"
 extend-exclude = ["examples", "templates"]

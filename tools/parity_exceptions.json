@@ -1,0 +1,75 @@
+{
+  "examples/strategy/golden-flow/SETUP.md": [
+    {
+      "example": [
+        "Everything needed to go from nothing to a repository you can work in, from `init-example` to an",
+        "environment the worked strategy runs in. An agent — Claude, Codex, Cursor — can follow it end to",
+        "end, and a person can read it in a few minutes."
+      ],
+      "template": [
+        "Everything needed to go from nothing to a repository you can work in, from `init-strategy` to the",
+        "strategy's own README. An agent — Claude, Codex, Cursor — can follow it end to end, and a person can",
+        "read it in a few minutes."
+      ]
+    },
+    {
+      "example": [
+        "> - otherwise the repository does not exist yet → step 1. It needs **where to put it**, which",
+        ">   defaults to `golden-flow` beside the folder you are in; ask if the user has not said."
+      ],
+      "template": [
+        "> - otherwise the repository does not exist yet → step 1, `init-strategy`. It asks for **the",
+        ">   strategy's name**, always the user's: it becomes the folder and repository name, so",
+        ">   `fcf-yield-quality`, not `Experiment`. With none, it asks what the idea is and suggests a few.",
+        ">   It puts the folder beside the one you are in unless the user names another place. Pass on what",
+        ">   the user has said: a name, a place, **one sentence on the idea**, which seeds the README in",
+        ">   step 5."
+      ]
+    },
+    {
+      "example": [
+        "**`init-example` makes it.** It is a skill of the"
+      ],
+      "template": [
+        "**`init-strategy <strategy-name>` makes it.** It is a skill of the"
+      ]
+    },
+    {
+      "example": [
+        "step 4 says. A script copies the worked example inside the researcher package, byte for byte, into",
+        "a new folder, `golden-flow` unless you choose another place. It then makes that folder a git",
+        "repository and commits it once. That folder is the root. You can read the example",
+        "[on GitHub](https://github.com/KaxaNuk/KaxaNuk-Researcher/tree/main/examples/strategy/golden-flow)",
+        "without making anything."
+      ],
+      "template": [
+        "step 4 says. A script copies the template inside the researcher package, byte for byte, into a new",
+        "folder named after the strategy, so every strategy made from the same package version starts",
+        "identical. It then makes that folder a git repository and commits it once. That folder is the root.",
+        "You can read the template",
+        "[on GitHub](https://github.com/KaxaNuk/KaxaNuk-Researcher/tree/main/templates/strategy) before",
+        "making anything."
+      ]
+    },
+    {
+      "example": [
+        "A strategy of your own is not made from here: `init-strategy <strategy-name>` makes it from the",
+        "template, which holds every file this example works through, describing what belongs in it. Never",
+        "build on the example."
+      ],
+      "template": [
+        "The worked example, `golden-flow`, is not copied: every file it works through is already here,",
+        "describing what belongs in it. To read or run it, `init-example` copies it into a folder of its",
+        "own. Never build on it."
+      ]
+    },
+    {
+      "example": [
+        "> Then commit again: `git commit -m \"Start from the KaxaNuk example strategy, golden-flow\"`."
+      ],
+      "template": [
+        "> Then commit again: `git commit -m \"Start from the KaxaNuk Strategy Template\"`."
+      ]
+    }
+  ]
+}

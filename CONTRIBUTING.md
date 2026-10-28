@@ -57,12 +57,16 @@ templates/python-library/
 examples/<kind>/<name>/
                       the worked examples, one folder each, by kind as the templates are: today
                       one, a strategy worked through every folder of the template
+tools/                the harness: check.py, every check a commit passes; install_check.py, the
+                      install a release is tried with; release.py, the release; never installed
+tests/                the tests of the skills' scripts and of tools/, which check.py runs
+.githooks/pre-commit  runs check.py, the tests aside, before each commit, once a clone sets it
 SETUP.md              the install, step by step — what an assistant follows when you paste the URL
 USE-CASES.md          twelve ways to use the researcher, step by step
 ONBOARDING.md         the onboarding and first read as approved, step by step — frozen
 FROZEN.json           the fingerprints of the frozen files
 apm.yml               the package: what apm install reads; it depends on nothing
-pyproject.toml        the ruff settings for the skills' scripts
+pyproject.toml        the ruff settings for the skills' scripts, tools/ and tests/, and pytest's
 AGENTS.md, CLAUDE.md  the rules for changing this repository
 CONTRIBUTING.md       this file: the install by hand, this layout, and how a change is checked
 CHANGELOG.md          one entry per version
@@ -77,74 +81,64 @@ skills keep updating with `uvx --from apm-cli==0.33.0 apm update -g`.
 
 ## Development
 
+One command runs every check a commit passes, from the repository's root:
+
 ```bash
-uvx ruff check .
-(cd templates/strategy && uvx ruff check .)
-for e in examples/strategy/*/; do (cd "$e" && uvx ruff check .); done
-(cd templates/python-library && uvx ruff check .)
-uv run --no-project python .apm/skills/bloom-code-lint/scripts/bloom_code_check.py .apm/skills/*/scripts
-(cd templates/strategy && uv run --no-project python ../../.apm/skills/bloom-code-lint/scripts/bloom_code_check.py . --max-line-length 100)
-for e in examples/strategy/*/; do (cd "$e" && uv run --no-project python ../../../.apm/skills/bloom-code-lint/scripts/bloom_code_check.py . --max-line-length 100); done
-(cd templates/python-library && uv run --no-project python ../../.apm/skills/bloom-code-lint/scripts/bloom_code_check.py . --max-line-length 120)
+uv run --no-project python -I tools/check.py
 ```
 
-Ruff lints the skills' scripts, the strategy and Python library templates and every strategy
-example, each with its own settings. The Bloom Code check runs on the scripts at its default 120
-columns, and from inside each template and example, so it finds their own packages, at the line
-length each sets: 100 for a strategy, its template and its examples, 120 for the Python library
-template. An example of another kind, three folders down in `examples/<kind>/<name>/`, runs as its
-template does, with one more `../`. Everything runs through `uv`: no Python of your own is needed.
-Run them on your machine before every commit; there is no CI, so nothing runs them for you.
-Nothing else runs inside `templates/`: `uv sync`, `uv build` or Sphinx there would write a
-`.venv/`, a `uv.lock` or a `dist/` into the package.
+Each check prints `ok` or `FAIL`, with what failed under it, and a failure never stops the next one:
+
+- **ruff** at the root, which covers the skills' scripts, `tools/` and `tests/`, then in the
+  strategy and Python library templates and in every example, each with its own settings;
+- **the Bloom Code check** on the skills' scripts, `tools/` and `tests/` at its default 120 columns,
+  then from inside each template and example, so it finds their own packages, at the line length
+  each sets: 100 for a strategy, its template and its examples, 120 for the Python library template;
+- **the frozen files**, each against its fingerprint in `FROZEN.json`, line endings aside;
+- **the template and the example in step**, below;
+- **the Markdown** added since `origin/dev`, committed or not: LF line endings, no literal tab, no
+  section sign, and 100 columns but where `AGENTS.md` allows a longer line;
+- **the versions**: each part's version agrees with its `CHANGELOG.md`, and a part changed since the
+  last release's tag carries a new one — the package, the home template, the strategy template, each
+  example and the Python library template's *Started from* sentence;
+- **the private words**, below;
+- **the tests** in `tests/`, by pytest, which `uv` brings with pypdf.
+
+Everything runs through `uv`: no Python of your own is needed. There is no CI. Once per clone,
+
+```bash
+git config core.hooksPath .githooks
+```
+
+makes git run `tools/check.py --fast`, every check but the tests, before each commit, and refuse the
+commit when one fails. Nothing else runs inside `templates/`: `uv sync`, `uv build` or Sphinx there
+would write a `.venv/`, a `uv.lock` or a `dist/` into the package.
 
 **The frozen files stay unchanged** unless the owner says otherwise, as `AGENTS.md` says under
-*Rules*. Before every commit, from the repository's root, this prints each frozen file that no
-longer matches its fingerprint in `FROZEN.json`, and fails if there is one:
-
-```bash
-uv run --no-project python - <<'PY'
-import hashlib, json, pathlib, sys
-files = json.loads(pathlib.Path("FROZEN.json").read_text(encoding="utf-8"))["files"]
-changed = [p for p, h in files.items() if hashlib.sha256(pathlib.Path(p).read_bytes().replace(b"\r\n", b"\n")).hexdigest() != h]
-print("\n".join(f"frozen file changed: {p}" for p in changed) or "frozen files unchanged")
-sys.exit(bool(changed))
-PY
-```
+*Rules*. When the check names one, revert it or show it to the owner; its fingerprint moves only on
+the owner's word.
 
 **The template and the example in step.** They are kept in step by hand, by the rules in
-`AGENTS.md`; these checks are the only automation. For each file `git ls-files templates/strategy`
-lists, each check drops a strategy example's own lines, marked as `AGENTS.md` says (in a notebook,
-also every marked block inside a markdown cell), and compares the rest with the template's copy,
-blank lines aside. For the Markdown and Python files:
+`AGENTS.md`, and the check compares them. For each Markdown, Python and notebook file
+`git ls-files templates/strategy` lists that the example also holds, it drops the example's own
+lines, marked as `AGENTS.md` says (in a notebook, also every marked block inside a cell, and every
+example-only cell), and compares the rest with the template's copy, blank lines aside, notebooks
+cell by cell, by cell id. The exceptions `AGENTS.md` lists are applied: the example's `README.md` is
+its own, its `CHANGELOG.md` shares only what comes before its entries, the template's `OBJECTIVE.md`
+body and its `AGENTS.md` status banner are what the example replaces. `SETUP.md`'s `init-example`
+lines are recorded in `tools/parity_exceptions.json`; when a change to either copy moves them, the
+check names each difference, and once each has been read and is one `AGENTS.md` allows,
 
 ```bash
-for x in examples/strategy/*/; do
-  for f in $(git ls-files templates/strategy | grep -E '\.(md|py)$'); do
-    e="$x${f#templates/strategy/}"
-    [ -f "$e" ] || continue
-    awk '/^(<!-- example: begin -->|# --- example: begin ---)$/{s=1;next} /^(<!-- example: end -->|# --- example: end ---)$/{s=0;next} !s' "$e" \
-      | diff -B <(awk 1 "$f") - > /dev/null || echo "differs: $e"
-  done
-done
+uv run --no-project python -I tools/check.py --record-parity
 ```
 
-For the notebooks, cell by cell, by cell id:
+records them anew. Any other difference is a fault.
 
-```bash
-for x in examples/strategy/*/; do for nb in $(git ls-files templates/strategy | grep '\.ipynb$'); do
-  uv run --no-project python - "$nb" "$x${nb#templates/strategy/}" <<'PY' || echo "differs: $x${nb#templates/strategy/}"
-import json, re, sys
-marked = re.compile(r'^(<!-- example: begin -->|# --- example: begin ---)$.*?^(<!-- example: end -->|# --- example: end ---)$\n?', re.M | re.S)
-def cells(path):
-    kept = [c for c in json.load(open(path, encoding='utf-8'))['cells'] if not ''.join(c['source']).startswith('# EXAMPLE-ONLY CELL')]
-    return [(c.get('id'), c['cell_type'], [l for l in marked.sub('', ''.join(c['source'])).splitlines() if l.strip()]) for c in kept]
-sys.exit(cells(sys.argv[1]) != cells(sys.argv[2]))
-PY
-done; done
-```
-
-A file either check names is a fault, unless `AGENTS.md` lists it as an exception.
+**The private words.** `.git/info/private-names.txt` lists, one per line, what no tracked file,
+commit message not yet on `origin/dev` or branch may hold: a client's name, a personal path. Git
+never commits or sends that folder, so each clone writes its own; a clone without it is told the
+check was skipped.
 
 **To try a change** to a skill, a command, an instruction or the agent, install it at project scope
 from a short scratch folder, with APM 0.33.0, **in a shell whose home is a short, empty throwaway
@@ -193,10 +187,27 @@ too, and this prints nothing:
 git -C "$K/lib2" grep -n -e kn_python_library_template -e kn-python-library-template -e KnPythonLibraryTemplate -e "KN Python Library Template" -e "KaxaNuk SC" -- ':!AGENTS.md'
 ```
 
-**Before a release, make the install above with the commit to be tagged.** It should deploy exactly
-27 skills, 9 commands, 3 rules and 1 agent, with no warning.
+**Before a release, `tools/install_check.py` makes the install above** on an archive of the commit,
+and `tools/release.py` runs it:
 
-**Then install it for the user twice**, from the archive, each time from a new shell whose `HOME`
+```bash
+uv run --no-project python -I tools/install_check.py
+```
+
+It checks a project-scope install for Claude: every skill, command, rule and agent the package
+holds, today 27, 9, 3 and 1, deployed with no warning. Then a user-scope install in a new home:
+Claude, then Codex put on APM's list by `user_targets.py add`, then Codex, then `apm update -g`,
+with each assistant holding what the package holds. Last, the deployed `scaffold.py` makes a
+strategy, a researcher's home and the worked example from that install. It works in a folder of
+its own that it removes, `kn-<random>`, with `HOME` and `USERPROFILE` inside it. On Windows that
+folder is in your user folder: without long paths, an `apm_modules/` deeper than 57 characters
+fails with `WinError 3`, as APM stages a package 68 characters below it, and the temporary folder
+is too deep. `--github KaxaNuk/Researcher#dev` installs from GitHub instead, as a newcomer does;
+`--migrate-from <owner/name#ref>` installs that older package first and moves from it as `update`
+does.
+
+**Then install it for the user twice by hand**, as the interview needs a person: from the archive,
+each time from a new shell whose `HOME`
 and `USERPROFILE` are a new empty folder under `$K`: once Claude, then Codex; once Codex, then
 Claude.
 
@@ -240,11 +251,19 @@ scheduled reached your own. A newer APM is adopted only when these installs pass
 Windows.
 
 **Branches.** Work is committed on `dev`; `main` is what every user installs. When `dev` holds a
-release, its checks above passed and its install tried, it reaches `main` by a fast-forward, and
-the release is tagged there, as `AGENTS.md` says:
+release, it reaches `main` by a fast-forward and the release is tagged there, as `AGENTS.md` says,
+by one command:
 
 ```bash
-git switch main && git merge --ff-only dev && git push origin main
-git tag -a vX.Y.Z -m "X.Y.Z: <the entry's first sentence>" && git push origin vX.Y.Z
-git switch dev
+uv run --no-project python -I tools/release.py
 ```
+
+says what would be released, or why not; with `--go` it releases. It refuses, before anything is
+pushed, unless `dev` is checked out with nothing uncommitted; GitHub's `dev` and `main` are both in
+its history, or it names the commits to merge into `dev` first; `apm.yml`'s version opens the
+`CHANGELOG.md`, its entry opens with a sentence and no tag has that version yet; the security check
+finds nothing to fix; and `tools/check.py` and `tools/install_check.py` pass. Then it pushes `dev`,
+fast-forwards `main` to it, tags `vX.Y.Z` there with `X.Y.Z: <the entry's opening sentence>`, pushes
+`main` and the tag, switches back to `dev`, and reads `main` and the tag back from GitHub to confirm
+both name the release's commit. A step that fails after the first push says what was done and what
+is left.
