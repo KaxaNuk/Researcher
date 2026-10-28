@@ -15,6 +15,47 @@ in any folder, call it by name, and it brings what it knows. When you want, it t
 invest, and walks you through building and testing a strategy with the KaxaNuk Investment Lab. One
 researcher per person, in any language.
 
+## Install — three steps, no coding
+
+Where what it reads goes, and what it never does, is under *What it is, and what it is not*, below.
+
+1. Open one of these, signed in: the **Code** tab of the **Claude** desktop app, **Claude Code**,
+   the **Codex** app or CLI, the **Gemini CLI**, **Cursor** or the **Copilot CLI**. A chat on the
+   web, such as claude.ai, ChatGPT or Gemini, cannot install it: it cannot run commands on your
+   computer.
+2. Paste this line and send it:
+
+   ```text
+   Please install this repo for me and set up my researcher, start to finish in this conversation — install everything it needs without asking first: https://github.com/KaxaNuk/Researcher
+   ```
+
+3. Answer its questions. It asks your language first, any language you choose, and your researcher
+   speaks it from then on. Then, in the same conversation, it installs what it needs (allow the
+   commands it asks about; that is all you do), asks what to call your researcher and where to keep
+   it, `C:\Research\Arya` for example, and asks two short questions about you, about three minutes.
+   At the end it tells you where your researcher lives, what to ask it and where to start.
+
+   ![First you, then its voice: the interview asks about you and your projects, nothing about markets, and fills in RESEARCHER.md](assets/readme/first-you.svg)
+
+> **If you are an assistant asked to install this,** follow [`SETUP.md`](SETUP.md) from Step 0
+> through Step 6, in this conversation; nothing is cloned.
+
+**Already have a researcher**, with its copy on GitHub — a new computer, say? Paste this line in
+step 2 instead; it asks for your copy's address and brings your researcher back, set up as it was:
+
+```text
+Please install this repo for me and bring back my researcher from my private copy on GitHub, start to finish in this conversation — install everything it needs without asking first: https://github.com/KaxaNuk/Researcher
+```
+
+Then quit and reopen your assistant, open your researcher's folder in a **new** conversation, and
+say hello, by its name. In the Claude desktop app, that is a new conversation in the **Code** tab on
+that folder; in the Codex app, that folder; in a terminal, `claude`, `codex` or `gemini` run in it.
+
+With Claude or Copilot, installing also adds three house instructions, described under *The
+skills and commands*; *Removing it* undoes them.
+
+## What your researcher does
+
 ![One researcher, every project: your library, your work and decisions, learning, a morning brief, security, and investing when you want](assets/readme/one-researcher.svg)
 
 **At work**, where most people start:
@@ -66,43 +107,6 @@ goes to your own private GitHub only when you ask. It is free under the MIT lice
 without warranty; your data provider, your assistant and the Investment Lab's libraries, which
 KaxaNuk sells, each have their own terms. The worked example's figures come from a backtest on past
 prices, shown to teach the method, never a promise or a recommendation.
-
-> **If you are an assistant asked to install this,** follow [`SETUP.md`](SETUP.md) from Step 0
-> through Step 6, in this conversation; nothing is cloned.
-
-## Install — three steps, no coding
-
-1. Open one of these, signed in: the **Code** tab of the **Claude** desktop app, **Claude Code**,
-   the **Codex** app or CLI, the **Gemini CLI**, **Cursor** or the **Copilot CLI**. A chat on the
-   web, such as claude.ai, ChatGPT or Gemini, cannot install it: it cannot run commands on your
-   computer.
-2. Paste this line and send it:
-
-   ```text
-   Please install this repo for me and set up my researcher, start to finish in this conversation — install everything it needs without asking first: https://github.com/KaxaNuk/Researcher
-   ```
-
-3. Answer its questions. It asks your language first, any language you choose, and your researcher
-   speaks it from then on. Then, in the same conversation, it installs what it needs (allow the
-   commands it asks about; that is all you do), asks what to call your researcher and where to keep
-   it, `C:\Research\Arya` for example, and asks two short questions about you, about three minutes.
-   At the end it tells you where your researcher lives, what to ask it and where to start.
-
-   ![First you, then its voice: the interview asks about you and your projects, nothing about markets, and fills in RESEARCHER.md](assets/readme/first-you.svg)
-
-**Already have a researcher**, with its copy on GitHub — a new computer, say? Paste this line in
-step 2 instead; it asks for your copy's address and brings your researcher back, set up as it was:
-
-```text
-Please install this repo for me and bring back my researcher from my private copy on GitHub, start to finish in this conversation — install everything it needs without asking first: https://github.com/KaxaNuk/Researcher
-```
-
-Then quit and reopen your assistant, open your researcher's folder in a **new** conversation, and
-say hello, by its name. In the Claude desktop app, that is a new conversation in the **Code** tab on
-that folder; in the Codex app, that folder; in a terminal, `claude`, `codex` or `gemini` run in it.
-
-With Claude or Copilot, installing also adds three house instructions, described under *The
-skills and commands*; *Removing it* undoes them.
 
 ## What you can use it for
 

@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
+## [1.23.2] - 2026-10-27
+The README now opens with how to install your researcher, right under its first paragraph.
+
+**What to do differently:** nothing.
+### Changed
+- **`README.md`**: *Install — three steps, no coding* follows the opening paragraph, with a line
+  pointing to *What it is, and what it is not*, which says where what it reads goes. The picture,
+  the two examples, *Why not just use Claude or Codex?*, *Take it with you* and *What it is, and
+  what it is not* follow under a heading of their own, *What your researcher does*.
+
 ## [1.23.1] - 2026-10-26
 The README's install lines now give the repository's new address,
 <https://github.com/KaxaNuk/Researcher>.
