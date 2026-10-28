@@ -160,7 +160,7 @@ document is read:
 > - `init-python-library <name>`: a Python library of your own
 > - keep a copy: your home on a private GitHub repository
 >
-> More on each, step by step: <https://github.com/KaxaNuk/KaxaNuk-Researcher/blob/main/USE-CASES.md>
+> More on each, step by step: <https://github.com/KaxaNuk/Researcher/blob/main/USE-CASES.md>
 >
 > **Next:** ask me about it — *what does prospect theory say about why people hold on to losers?*
 >

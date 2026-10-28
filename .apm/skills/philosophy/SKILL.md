@@ -11,7 +11,7 @@ description: >
   does) or write RESEARCHER.md beyond Find first and those rules, and never says buy, sell, trim,
   add or hold.
 metadata:
-  version: 1.3.5
+  version: 1.3.6
 ---
 
 # Philosophy — the owner's view, in their own words, round by round
@@ -151,7 +151,8 @@ bank in place of sections 0 to 5:
    counts — and the notes they list as written.
 5. **Find the reading map**, `references/reading-map.md` in the `read` skill's folder: under
    `~/.claude/skills/read/` or the user's folder for the agent in use, or in the package under
-   `~/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/skills/read/`. Match its works against the
+   `~/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/read/`, under
+   `KaxaNuk/KaxaNuk-Researcher/` for an install from before 1.25.0. Match its works against the
    file names under `Sources/` and the notes in `Knowledge/INDEX.md`, as its *Match before
    proposing* says. A work with a note is *read*, never offered as one to find, and named by a
    link to the note; a file with no note is *in your Sources/, not yet read*; a *possibly in your
@@ -159,7 +160,7 @@ bank in place of sections 0 to 5:
    **Without the map**, ask the plain questions only, as section 9 of the bank says: no work is
    named anywhere, and no line is placed. Once *step 2* has made it a round on investing, say why in
    one line — the map comes with the `read` skill, which is not installed here — and give the fix,
-   `uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/KaxaNuk-Researcher --target <agent>`, then a
+   `uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/Researcher --target <agent>`, then a
    new session. Never write the map, or a work from it, from memory. A field round uses no map, and
    says nothing of it.
 6. **Work out, for later**: the topic to suggest (*step 2*); the level to suggest (*step 4*); on a

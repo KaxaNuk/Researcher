@@ -41,7 +41,7 @@ stays inside both the starting point and the folder: one that is absolute, or th
 either through `..`, is refused before anything is read.  A piece of the example goes into a folder
 of its own, never into a strategy, whose file of the same name is the template's.
 
-The package is found beside this script when it runs from a checkout of KaxaNuk-Researcher, then
+The package is found beside this script when it runs from a checkout of the package, then
 under `apm_modules/` in the folder it runs from or any folder above it, then under `~/.apm/`, where
 `apm install -g` puts it.  `--package` names it outright.  A destination or a `--package` that
 starts with `~` starts in the user's home folder.  The first line printed names the package found
@@ -162,8 +162,10 @@ LINK = re.compile(r'!?\[(?P<text>[^\]]*)\]\([^)]*\)')
 NOT_A_PARAGRAPH = re.compile(r'(?:[|>#<]|`{3}|~{3}|!\[|\[!\[|(?:[-*+]|\d+[.)])\s|(?P<rule>[-*_])(?P=rule){2,}\s*$)')
 PARAGRAPH_BREAK = re.compile(r'\n[ \t]*\n')
 SENTENCE_BREAK = re.compile(r'[.!?]\s+(?=\S)')
-# Where APM puts the package, relative to an `apm_modules/` folder: from GitHub, then from a path.
+# Where APM puts the package, relative to an `apm_modules/` folder: from GitHub; from GitHub under
+# the repository's name before 1.25.0, KaxaNuk-Researcher, until `update` moves it; then from a path.
 INSTALLED_PACKAGE_PATHS = [
+    pathlib.Path('KaxaNuk') / 'Researcher',
     pathlib.Path('KaxaNuk') / 'KaxaNuk-Researcher',
     pathlib.Path('_local') / 'KaxaNuk-Researcher',
 ]
@@ -181,7 +183,7 @@ WINDOWS_MAX_PATH = 260
 WINDOWS_FOLDER_MARGIN = 12
 MISSING_PACKAGE = ' '.join([
     'The researcher package was not found. Install it with',
-    '`uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/KaxaNuk-Researcher --target <agent>`,',
+    '`uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/Researcher --target <agent>`,',
     'or pass --package.',
 ])
 NO_EXAMPLES = 'The package holds no example: no folder examples/<kind>/<name>/ in it holds a README.md'

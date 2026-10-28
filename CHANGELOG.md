@@ -6,6 +6,96 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
+## [1.26.0] - 2026-10-27
+The worked example, Golden Flow, now shows a strategy done correctly that earns only in some
+markets, and every strategy's notebooks are marimo.
+
+**What to do differently:** say `update` in your home. A strategy you have already made keeps its
+own files; `init-strategy` starts a new one from the new template, and `init-example` gives a fresh
+copy of Golden Flow.
+### Changed
+- **The graduation gate has two layers** (`paper-trading-gate` 0.5.0, the template's findings,
+  `BITACORA.md` and `promote.py`). Soundness first: no survivorship bias, no look-ahead, no
+  overfitting, costs and capacity stated, reproducible from emptied data folders, each row with its
+  evidence. Then performance, the former criteria 1 to 3. Three outcomes: **graduates**, frozen and
+  paper traded; **sound and regime-dependent**, not paper traded alone, its findings naming where it
+  earned and where it failed — a later experiment may pair it with another signal, or a portfolio
+  manager use it at their discretion, theirs to decide; **not sound**, no conclusion drawn.
+- **The strategy template 0.20.0** adopts the proposals of issue KaxaNuk/Researcher#41: marimo
+  notebooks and no Jupyter; Sharadar in the curator; the adjustment rebuilt from the exact close;
+  every per-security file in Parquet through `Data/time_series.py`; every cost and the cash inside
+  the engine; a Verify that excludes a truncated run by name; the band read back beside the rule;
+  and a new experiment's signal on data already downloaded as an `r_*` refinery calculation.
+  `experiment-lifecycle` 0.15.0 and its references follow, its section contract the notebook's.
+- **The worked example, Golden Flow 0.18.0**, is curated again from its live repository at 0.21.0,
+  Experiment 1 only, on the owner's decision of 2026-10-27, which sets aside once `AGENTS.md`'s
+  rule that nothing is taken from a live strategy after the copy: Sharadar from 1998, a monthly
+  rule, every cost inside the engine. Its Experiment 1 reads as sound and regime-dependent;
+  `Paper_Trading_1`, the earlier FMP book, leaves it; its seed holds tickers and dates only. Its
+  step 6 needs Attribution Analysis 0.5.0.
+- **The Lab's skills follow it**: `universe-point-in-time` 0.4.0 and `data-analyzer-runs` 0.3.0;
+  `data-curator-custom-calculations` 0.7.0, its `library_version` 0.51.0, checked by Golden Flow's
+  run of 2026-10-24 from emptied data folders; `backtest-engine-runs` 0.5.0, its `library_version`
+  0.67.0, with the batch mode and the costs and the cash in the engine;
+  `portfolio-construction-runs` 0.6.0, with the band; `attribution-analysis-runs` 0.6.0, its
+  `library_version` still 0.2.0, since Golden Flow ran 0.5.0 from the library's repository, not a
+  release; `alpha-decomposition` 0.5.0, with the example's new figures. `blueprint`, `challenge`
+  and `blueprint-critic` name the marimo notebook, the band read back and the two-layer gate.
+- **`bloom-code-lint` 0.3.0**: the checker skips a marimo notebook, whose cells marimo generates.
+  `scaffold.py` leaves `__marimo__/` out of a copy, and `tools/check.py` runs ruff without a cache.
+- `init-example` 0.5.4, `init-strategy` 0.4.4, `how-we-work` 0.6.1, `next` 1.10.2 and `philosophy`
+  1.3.6 carry the marimo names and the two-layer gate, and move the versions 1.25.0 left behind.
+
+## [1.25.1] - 2026-10-27
+Your researcher's own skill now knows the package's new address too, and `update` brings it.
+
+**What to do differently:** say `update` in your home; `next` reminds you, as your researcher's
+skill is now behind the package.
+### Changed
+- **`interview`**, the researcher's skill template: 0.5.2. Its *which version are you?* reads the
+  package's lock entry under `kaxanuk/researcher` or the former `kaxanuk/kaxanuk-researcher`, and a
+  command on an assistant with none is read under the new folder, as 1.25.0 left them, so `update`
+  writes a home's skill again, its owner's own lines kept. A frozen file, changed on the owner's
+  word of 2026-10-27 to finish the move; its fingerprint in `FROZEN.json` moves with it.
+
+## [1.25.0] - 2026-10-27
+Your researcher now installs from the package's new address on GitHub, KaxaNuk/Researcher, and
+moves an older install there when you say `update`.
+
+**What to do differently:** say `update` in your home: it moves the package to its new address,
+asking first. Nothing else changes, and a researcher installed before keeps working until then.
+### Changed
+- **The address**: the package's repository on GitHub is now `KaxaNuk/Researcher` (the former
+  `KaxaNuk/KaxaNuk-Researcher` redirects there). Every link, install line and lookup names it:
+  `README.md`, `SETUP.md`, `CONTRIBUTING.md`, `ONBOARDING.md`, the home, strategy and Python
+  library templates, the worked example, and the skills and commands that read the package's
+  newest tag and changelog on GitHub. `apm.yml`'s `name:`, `kaxanuk-researcher`, is unchanged.
+- **Where the package is found**: a new install lands in `~/.apm/apm_modules/KaxaNuk/Researcher/`.
+  `scaffold.py`'s `INSTALLED_PACKAGE_PATHS`, the files `SETUP.md`, `init-researcher`, `interview`,
+  `next`, `philosophy`, `blueprint`, `challenge` and `update` follow, and the home's `AGENTS.md`
+  look there first, then under the former `KaxaNuk/KaxaNuk-Researcher/`, which an install from
+  before 1.25.0 keeps until `update` moves it; a lock entry's `repo_url` is matched under either
+  name.
+- **`update`** moves an install under the former address: the assistant in use put on APM's list,
+  the former package uninstalled and `KaxaNuk/Researcher` installed for every assistant on the
+  list, the home's own package left installed. `tools/install_check.py --migrate-from` tries that
+  move: from 1.23.2 under the former name, both assistants held every file afterwards and nothing
+  of the former package was left.
+- **The frozen files**, on the owner's word of 2026-10-27, to clean the onboarding while keeping its
+  flow and its questions: `SETUP.md`, `init-researcher` with `user_targets.py`, `interview` and
+  `ONBOARDING.md` take the new address and name the former folder; their fingerprints in
+  `FROZEN.json` move with them.
+- **`AGENTS.md`**: a fork changes every line naming `KaxaNuk/Researcher` or `KaxaNuk-Researcher`.
+- **The home template** 0.32.1, **the strategy template** 0.19.5, **the worked example** 0.17.9
+  and **the Python library template** 0.1.3 carry the new address.
+### Fixed
+- **`check_library.py`** (`audit`): a link written in angle brackets to a web address,
+  `[x](<https://…>)`, is no longer reported as a broken link.
+- **`check_numbers.py`** (`read`): a note saved with a byte order mark keeps its frontmatter, and a
+  figure in code fenced with tildes is no longer checked as the note's own.
+- **`bloom_code_check.py`**: the report stays in ASCII when a path holds a character the console
+  cannot write, `Łucja` written `\u0141ucja`, instead of stopping with `UnicodeEncodeError`.
+
 ## [1.24.0] - 2026-10-27
 Every release of your researcher is now tested and installed before it reaches you, by checks the
 package runs on itself.
@@ -30,9 +120,10 @@ package runs on itself.
   with a sentence and has no tag, the security check finds nothing to fix and both tools above
   pass; then, with `--go`, it pushes, fast-forwards, tags and reads `main` and the tag back from
   GitHub.
-- **`tests/`**: tests of the skills' scripts and of the tools, by pytest, which `tools/check.py`
-  runs, every fake key in them built from pieces; and **`.githooks/pre-commit`**, which runs
-  `tools/check.py --fast` before each commit once a clone sets `git config core.hooksPath .githooks`.
+- **`tests/`**: 267 tests of the skills' scripts and of the tools, by pytest, which
+  `tools/check.py` runs, every fake key in them built from pieces; five strict xfails each mark a
+  bug the tests found. And **`.githooks/pre-commit`**, which runs `tools/check.py --fast` before
+  each commit once a clone sets `git config core.hooksPath .githooks`.
 ### Changed
 - **`AGENTS.md`** and **`CONTRIBUTING.md`**: the checks, the install and the release name these
   tools in place of the commands typed by hand; the skills' scripts have tests, and a change to one

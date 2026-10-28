@@ -2,7 +2,7 @@
 
 This folder is your researcher's home: the library of what you read, your own voice, your studies
 and the rules it works by. It was made from the [KaxaNuk
-Researcher](https://github.com/KaxaNuk/KaxaNuk-Researcher). Once `interview` has named your
+Researcher](https://github.com/KaxaNuk/Researcher). Once `interview` has named your
 researcher, it writes a paragraph about it in place of this one, yours to change.
 
 ---
@@ -202,8 +202,8 @@ the package for it, list it in `~/.apm/apm.yml` — without that, the next updat
 installed for it — and install this home, once:
 
 ```bash
-uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/KaxaNuk-Researcher --target <your assistant>
-uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/skills/init-researcher/scripts/user_targets.py" add <your assistant>
+uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/Researcher --target <your assistant>
+uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/init-researcher/scripts/user_targets.py" add <your assistant>
 uvx --from apm-cli==0.33.0 apm install -g "<this folder>"
 ```
 

@@ -72,6 +72,18 @@ the Lab's licences and, for step 6, Attribution Analysis 0.5.0.
 - **`Paper_Trading/Paper_Trading_1/`**, the FMP book of 2026-10-06, retired as the live repository
   retired it on 2026-10-24. The step-7 scripts stay, with no book in `BOOKS`.
 
+## 0.17.9 (2026-10-27)
+
+**PATCH** — the KaxaNuk Researcher's address on GitHub is now `KaxaNuk/Researcher`. Nothing about
+any result changes.
+
+**What to do differently:** nothing.
+
+### Changed
+
+- **`SETUP.md`**, **`AGENTS.md`**, **`README.md`** and **`Bibliotheca/BIBLIOGRAPHY.md`**: every link
+  to the package and its install line name `KaxaNuk/Researcher`.
+
 ## 0.17.8 (2026-10-21)
 
 **PATCH** — the rules say what never leaves a strategy, and the `security` skill checks it before a

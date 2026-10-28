@@ -90,12 +90,13 @@ hashes; `golden-flow` has none. `paper_trading_N.py` stays shared and marked.
   *Done when* and *The next thing*, that `next` reads for any kind but a strategy. No folder in it
   is named `Bibliotheca/`: that word is a strategy's only, and every skill that finds one reads the
   folder that holds it as a strategy.
-- **A fork changes every line that names `KaxaNuk-Researcher`**, in either case —
-  `git grep -i kaxanuk-researcher` finds them, `scaffold.py`'s `INSTALLED_PACKAGE_PATHS` included —
-  and installs as the one researcher package on its user's machine. Two packages with skills or
-  commands of the same names do not share a user: a `-g` install of the second replaces a
-  same-named skill of the first, with a warning, and overwrites a same-named command silently. The
-  last install wins.
+- **A fork changes every line that names the package's repository**, `KaxaNuk/Researcher`, and its
+  former name, `KaxaNuk-Researcher`, in either case —
+  `git grep -i -e kaxanuk/researcher -e kaxanuk-researcher` finds them, `scaffold.py`'s
+  `INSTALLED_PACKAGE_PATHS` included — and installs as the one researcher package on its user's
+  machine. Two packages with skills or commands of the same names do not share a user: a `-g`
+  install of the second replaces a same-named skill of the first, with a warning, and overwrites a
+  same-named command silently. The last install wins.
 - **`tools/check.py` passes before any commit**: ruff, the Bloom Code check, the frozen files, the
   template and the example in step, the Markdown rules below, the versions, the private words and
   the tests, as `CONTRIBUTING.md`'s *Development* shows. The hook in `.githooks/` runs it, the tests

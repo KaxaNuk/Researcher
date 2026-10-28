@@ -19,7 +19,7 @@ metadata:
 # The research process — how a strategy repository is worked in
 
 Every KaxaNuk Investment Lab strategy lives in its own repository, copied from the **KaxaNuk
-Strategy Template**, which ships in `KaxaNuk/KaxaNuk-Researcher` as `templates/strategy/`. The
+Strategy Template**, which ships in `KaxaNuk/Researcher` as `templates/strategy/`. The
 template is the shape and every file the process expects in it: six folders, the documents at the
 root, and inside the folders each driver, module, notebook and document. Each is a description of
 what belongs there — a `.py` file as its docstring, a notebook as its markdown cells — to be filled
@@ -73,7 +73,7 @@ stage says so in its docstring and names the interface its library will replace.
 each library is called: `data-curator-custom-calculations`, `portfolio-construction-runs`,
 `backtest-engine-runs` and `attribution-analysis-runs`, with `universe-point-in-time` for step 2,
 `data-analyzer-runs` for the hand-rolled Analyzer, and `paper-trading-gate` for step 7. **Step 1 is
-the KaxaNuk Researcher's**, `KaxaNuk/KaxaNuk-Researcher`, whose home `init-researcher` makes: its
+the KaxaNuk Researcher's**, `KaxaNuk/Researcher`, whose home `init-researcher` makes: its
 `objective` drafts the claims, its `read` writes the notes in `Bibliotheca/`, and its `blueprint`
 drafts `BLUEPRINT_N.md` with every prediction citing a note.
 
@@ -278,5 +278,5 @@ is two rules, and the copies drift. Read them where they are.
   stripped, the blank for `experiment_N_marimo.py`.
 
 The three documents and the notebook are copies of Experiment 1's files in the worked example,
-`examples/strategy/golden-flow/` in KaxaNuk-Researcher, with the example's own lines stripped. They
+`examples/strategy/golden-flow/` in the package, with the example's own lines stripped. They
 change by hand with the example's, in the same commit, and so does `references/structure.md`.

@@ -194,36 +194,23 @@ def check_user_install(
     migrate_from: str,
 ) -> check.CheckResult:
     """
-    A user-scope install in a new home for Claude, then Codex put on APM's list and installed, then
-    an update: both assistants hold what the package holds. With an older package to migrate from,
-    that one is installed first, then uninstalled, as `update` does.
+    A user-scope install in a new home: the package for Claude, Codex put on APM's list by
+    `user_targets.py add`, the package for Codex, then an update; both assistants hold what the
+    package holds. With an older package to migrate from, that one is installed for both first, then
+    moved from as `update` moves it: uninstalled, and the new one installed for every assistant
+    on the list.
     """
     home = scratch / 'home'
     home.mkdir()
     _git_identity(home)
-    old_package = migrate_from.split('#')[0]
-    before = [
-        [
-            'install',
-            '-g',
-            migrate_from,
-            '--target',
-            'claude',
-        ],
-        [
-            'uninstall',
-            '-g',
-            old_package,
-        ],
-    ] if migrate_from else []
+    first_source = migrate_from or source
     first = _apm_steps(
         uvx,
         [
-            *before,
             [
                 'install',
                 '-g',
-                source,
+                first_source,
                 '--target',
                 'claude',
             ],
@@ -234,22 +221,15 @@ def check_user_install(
     if first.problems:
         return first
 
-    package = _installed_package(home / '.apm' / 'apm_modules')
+    first_package = _installed_package(home / '.apm' / 'apm_modules')
 
-    if package is None:
+    if first_package is None:
         return _missing_package_result('user install')
 
-    added = check.run(
-        [
-            sys.executable,
-            '-I',
-            '-B',
-            str(package / '.apm' / 'skills' / 'init-researcher' / 'scripts' / 'user_targets.py'),
-            'add',
-            'codex',
-        ],
+    added = _add_target(
         home,
-        _environment(home),
+        first_package,
+        'codex',
     )
 
     if added.returncode != 0:
@@ -258,16 +238,30 @@ def check_user_install(
             added,
         )
 
+    old_package = migrate_from.split('#')[0]
+    moves = [
+        [
+            'uninstall',
+            '-g',
+            old_package,
+        ],
+        [
+            'install',
+            '-g',
+            source,
+        ],
+    ] if migrate_from else []
     second = _apm_steps(
         uvx,
         [
             [
                 'install',
                 '-g',
-                source,
+                first_source,
                 '--target',
                 'codex',
             ],
+            *moves,
             [
                 'update',
                 '-g',
@@ -276,6 +270,7 @@ def check_user_install(
         ],
         home,
     )
+    package = _installed_package(home / '.apm' / 'apm_modules') or first_package
     expected = _package_parts(package)
     codex_parts = PackageParts(
         agents=_count(home / '.codex' / 'agents'),
@@ -362,6 +357,30 @@ def main(
 
     return 1 if failed else 0
 
+
+
+def _add_target(
+    home: pathlib.Path,
+    package: pathlib.Path,
+    target: str,
+) -> subprocess.CompletedProcess:
+    """
+    Put an assistant on APM's list in the throwaway home, by the installed package's own script.
+    """
+    added = check.run(
+        [
+            sys.executable,
+            '-I',
+            '-B',
+            str(package / '.apm' / 'skills' / 'init-researcher' / 'scripts' / 'user_targets.py'),
+            'add',
+            target,
+        ],
+        home,
+        _environment(home),
+    )
+
+    return added
 
 def _apm(
     uvx: str,

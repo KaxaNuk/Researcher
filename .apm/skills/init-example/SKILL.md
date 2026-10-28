@@ -21,7 +21,7 @@ its documents, the findings, the results and the paper-trading gate. An example'
 between example markers — `<!-- example: begin -->` and `<!-- example: end -->` in Markdown,
 `# --- example: begin ---` and `# --- example: end ---` in Python, a marimo notebook included —
 beside the template's description of what belongs in each file. Every example is also readable
-without installing anything, in `examples/<kind>/<name>/` of `KaxaNuk/KaxaNuk-Researcher`.
+without installing anything, in `examples/<kind>/<name>/` of `KaxaNuk/Researcher`.
 
 **The list is the package's, never yours.** Which examples there are, and the line on what each
 shows, come from the script, which reads them from the package's folders and READMEs: never name
