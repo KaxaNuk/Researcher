@@ -704,7 +704,7 @@ def _build_parser() -> argparse.ArgumentParser:
     choice.add_argument(
         '--fast',
         action='store_true',
-        help='every check but the tests, as the pre-commit hook runs it',
+        help='every check but the tests, for a quick look before a commit',
     )
     choice.add_argument(
         '--record-parity',

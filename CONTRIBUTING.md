@@ -60,7 +60,6 @@ examples/<kind>/<name>/
 tools/                the harness: check.py, every check a commit passes; install_check.py, the
                       install a release is tried with; release.py, the release; never installed
 tests/                the tests of the skills' scripts and of tools/, which check.py runs
-.githooks/pre-commit  runs check.py, the tests aside, before each commit, once a clone sets it
 SETUP.md              the install, step by step — what an assistant follows when you paste the URL
 USE-CASES.md          twelve ways to use the researcher, step by step
 ONBOARDING.md         the onboarding and first read as approved, step by step — frozen
@@ -104,14 +103,9 @@ Each check prints `ok` or `FAIL`, with what failed under it, and a failure never
 - **the private words**, below;
 - **the tests** in `tests/`, by pytest, which `uv` brings with pypdf.
 
-Everything runs through `uv`: no Python of your own is needed. There is no CI. Once per clone,
-
-```bash
-git config core.hooksPath .githooks
-```
-
-makes git run `tools/check.py --fast`, every check but the tests, before each commit, and refuse the
-commit when one fails. Nothing else runs inside `templates/`: `uv sync`, `uv build` or Sphinx there
+Everything runs through `uv`: no Python of your own is needed. There is no CI: run it before every
+commit, `--fast` to leave the tests out; `tools/release.py` runs it whole before anything
+reaches `main`. Nothing else runs inside `templates/`: `uv sync`, `uv build` or Sphinx there
 would write a `.venv/`, a `uv.lock` or a `dist/` into the package.
 
 **The frozen files stay unchanged** unless the owner says otherwise, as `AGENTS.md` says under

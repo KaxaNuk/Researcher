@@ -22,7 +22,7 @@ strategy's in `templates/strategy/AGENTS.md`, and a Python library's in
 | `templates/researcher/` | the researcher's home, copied by `init-researcher` | its `apm.yml` version leads its `CHANGELOG.md`; `update` compares a home against it |
 | `templates/python-library/` | the KaxaNuk Python Library Template, laid out like the KaxaNuk Data Curator, <https://github.com/KaxaNuk/Data-Curator>: copied by `init-python-library`, then named by its `name_library.py`, which only puts in the names, the holder and the one sentence the owner chose, and moves the package folder | a change here is a template release: the number in the first sentence of its `CHANGELOG.md`'s `## [Unreleased]` entry, *Started from the KaxaNuk Python Library Template X.Y.Z*, moves, and the root `CHANGELOG.md` says what changed; the rest of its `CHANGELOG.md`, and its `__version__`, 0.1.0, are the new library's own. A placeholder changed here changes `name_library.py` in the same commit, a change to its dependency groups updates `TOOL_DISTRIBUTIONS` and `TOOL_IMPORT_NAMES` there, and a change to its first-commit message, in `scaffold.py`'s `STARTING_POINTS`, updates `FIRST_COMMIT`. Ruff and the Bloom Code check, at 120, run in place; `uv sync`, the tests, the documentation and `uv build` only in a copy outside the repository, as `CONTRIBUTING.md` shows |
 | `assets/readme/` | the README's images, drawn as SVG by hand: text, never a binary, each with its alt text and its `<title>` and `<desc>` | edited here; a picture of the package shows it as it is, and changes in the release that changes what it shows |
-| `tools/`, `tests/`, `.githooks/` | the harness: `check.py`, every check a commit passes; `install_check.py`, the install a release is tried with; `release.py`, the release itself; the tests of the skills' scripts and of the tools; the pre-commit hook, which runs `check.py --fast` | edited here, never installed: APM deploys only `.apm/`. `tools/parity_exceptions.json` is written by `check.py --record-parity` only, after each difference it records has been read |
+| `tools/`, `tests/` | the harness: `check.py`, every check a commit passes; `install_check.py`, the install a release is tried with; `release.py`, the release itself; the tests of the skills' scripts and of the tools | edited here, never installed: APM deploys only `.apm/`. `tools/parity_exceptions.json` is written by `check.py --record-parity` only, after each difference it records has been read |
 
 **The strategy template and the example share every file the example does not mark.** A change to
 the template's description of a file changes the example's copy in the same commit. Only the lines
@@ -99,9 +99,8 @@ hashes; `golden-flow` has none. `paper_trading_N.py` stays shared and marked.
   same-named command silently. The last install wins.
 - **`tools/check.py` passes before any commit**: ruff, the Bloom Code check, the frozen files, the
   template and the example in step, the Markdown rules below, the versions, the private words and
-  the tests, as `CONTRIBUTING.md`'s *Development* shows. The hook in `.githooks/` runs it, the tests
-  aside, before every commit, once a clone has said `git config core.hooksPath .githooks`. There is
-  no CI.
+  the tests, as `CONTRIBUTING.md`'s *Development* shows, and `tools/release.py` runs it again before
+  anything reaches `main`. There is no CI.
 - **Markdown you write or change is wrapped at 100 columns**, with no literal tab and LF line
   endings. A line inside a fenced code block, a table row, a line carrying a URL, the YAML
   frontmatter at the top of a file and a line copied verbatim from a strategy's fixed or

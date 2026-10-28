@@ -10,7 +10,7 @@ description: >
   before reading, and cites every claim. It does NOT write code or answer questions about files
   outside the library from anything but the library.
 metadata:
-  version: 0.10.0
+  version: 0.10.1
 ---
 
 # Query — answer from what was read, and say where it came from
@@ -141,9 +141,10 @@ find out. A section nothing in the library bears on is named once in a list, nev
 A performance figure — a return, a Sharpe ratio, a drawdown, a turnover, an information
 coefficient, an attribution — is quoted **only from the file that owns it**: an experiment's
 `FINDINGS_N.md`, the strategy's `RESULTS.md`, or, for a measurement of step 3, *Before any
-experiment* in `RESULTS.md` and the `Data/analyzer.ipynb` section it cites. Name that file beside
-the figure. Never recompute it, round it, combine two figures into a third, or carry one from one
-strategy to another as though the window, the universe and the costs were the same. A figure in a
+experiment* in `RESULTS.md` and the section of `Data/analyzer_marimo.py` it cites — of
+`Data/analyzer.ipynb` in a strategy made before template 0.20.0. Name that file beside the figure.
+Never recompute it, round it, combine two figures into a third, or carry one from one strategy to
+another as though the window, the universe and the costs were the same. A figure in a
 source is the source's — the answer says whose it is, and never lets a paper's number stand as the
 strategy's.
 

@@ -2007,13 +2007,16 @@ def _(mo):
 def _(mo):
     mo.md(r"""
     **In words**, in [`FINDINGS_1.md`](FINDINGS_1.md) — **that file is the record, this notebook is
-    the method.** The cell below reads the gate's criteria 1 to 4 and the predictions from the
-    numbers above, row by row, **once for each pricing**: the pre-registered costs, which the
-    blueprint fixed, and the flat 5 bp half-spread, the blueprint's own fallback, priced after the
-    engine's range-based spread was found to read a megacap's daily range as spread. Which of the two
-    the gate is read at is the owner's decision, recorded in the journal. A criterion that needs a
-    run excluded by name reads "not evidenced". Criterion 5 is a person's signature, never this
-    cell's.
+    the method.** The cell below reads, from the numbers above, the rows of the gate those numbers
+    decide, and the predictions, row by row, **once for each pricing**: the pre-registered costs,
+    which the blueprint fixed, and the flat 5 bp half-spread, the blueprint's own fallback, priced
+    after the engine's range-based spread was found to read a megacap's daily range as spread. Which
+    of the two the gate is read at is the owner's decision, recorded in the journal. Its table keeps
+    the numbering of the gate the run was registered under: criteria 1 to 3 are the performance rows
+    P1 to P3 of the gate in two layers, and criterion 4 is soundness row S4; the other soundness
+    rows, S1, S2, S3 and S5, are read in `FINDINGS_1.md`, from the universe, the blueprint, the trial
+    count and the run itself. A row that needs a run excluded by name reads "not evidenced". The
+    outcome, and the sign-off, are a person's, never this cell's.
 
     ## Handoff
 

@@ -43,8 +43,14 @@ copy of Golden Flow.
   and `blueprint-critic` name the marimo notebook, the band read back and the two-layer gate.
 - **`bloom-code-lint` 0.3.0**: the checker skips a marimo notebook, whose cells marimo generates.
   `scaffold.py` leaves `__marimo__/` out of a copy, and `tools/check.py` runs ruff without a cache.
-- `init-example` 0.5.4, `init-strategy` 0.4.4, `how-we-work` 0.6.1, `next` 1.10.2 and `philosophy`
-  1.3.6 carry the marimo names and the two-layer gate, and move the versions 1.25.0 left behind.
+- `init-example` 0.5.4, `init-strategy` 0.4.4, `how-we-work` 0.6.1, `next` 1.10.2, `query` 0.10.1
+  and `philosophy` 1.3.6 carry the marimo names and the two-layer gate, and move the versions 1.25.0
+  left behind. The example notebook's verdict cell says how the table it prints, numbered as the
+  gate the run was registered under, maps onto the two layers.
+### Removed
+- **`.githooks/pre-commit`**, on the owner's word: `tools/release.py` runs every check, the tests
+  and the install before anything reaches `main`, and a hook guarded only a clone that set it up.
+  `AGENTS.md` and `CONTRIBUTING.md` say to run `tools/check.py` before a commit.
 
 ## [1.25.1] - 2026-10-27
 Your researcher's own skill now knows the package's new address too, and `update` brings it.
