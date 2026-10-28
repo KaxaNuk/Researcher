@@ -41,6 +41,11 @@ copy of Golden Flow.
   `library_version` still 0.2.0, since Golden Flow ran 0.5.0 from the library's repository, not a
   release; `alpha-decomposition` 0.5.0, with the example's new figures. `blueprint`, `challenge`
   and `blueprint-critic` name the marimo notebook, the band read back and the two-layer gate.
+- **`known-answer` 0.2.0** writes a marimo notebook, `known_answer_marimo.py`, in place of a
+  Jupyter one: the owner opens it in marimo's editor to read every figure, or runs it as a script,
+  which shows whether Verify passed and exits 1 on a raise. Tried end to end on recipe 1, the
+  AR(1)'s half-life, with marimo 0.25.2: it passed, raised once the method's intercept was dropped,
+  and left both folders unchanged.
 - **`bloom-code-lint` 0.3.0**: the checker skips a marimo notebook, whose cells marimo generates.
   `scaffold.py` leaves `__marimo__/` out of a copy, and `tools/check.py` runs ruff without a cache.
 - `init-example` 0.5.4, `init-strategy` 0.4.4, `how-we-work` 0.6.1, `next` 1.10.2, `query` 0.10.1

@@ -3,20 +3,19 @@ name: known-answer
 description: >
   Load this skill when the owner asks to check a method before it touches real data — *a
   known-answer test for my half-life estimate* — or when a session of a KaxaNuk Training Workshop
-  names it among its skills, even where the course still lists it as coming. It plans,
-  and on the owner's go writes, one notebook in a new folder of the owner's naming beside their
-  strategy: data simulated from a model whose truth is set and seeded (an AR(1) and its half-life,
-  a GBM's drift and volatility, a regression's beta, a factor model's loadings, a planted signal's
-  IC, clusters with known members, a two-state regime, a GARCH(1,1) and its forecast, a
-  classifier's coefficients, AUC and calibration), the owner's method run on it, a Verify section
-  that raises when the method misses the truth by more than a stated tolerance, and one way the
-  method fails, so the check is seen to bite. The owner runs it. It does NOT run the notebook,
-  write in a strategy, a course's clone or the home, read the owner's real data, compute a figure
-  about a book, screen a feature (`data-analyzer-runs`), validate a model out of sample, tutor a
-  session (`workshop`), explain the model or its theory (`teach`, at home), or say what the
-  library holds (`query`).
+  names it among its skills, even where the course still lists it as coming. It plans, and on the
+  owner's go writes, one marimo notebook in a new folder of the owner's naming beside their
+  strategy: data simulated from a model whose truth is set and seeded (an AR(1) and its half-life, a
+  GBM's drift and volatility, a regression's beta, a factor model's loadings, a planted signal's IC,
+  clusters with known members, a two-state regime, a GARCH(1,1) and its forecast, a classifier's
+  coefficients, AUC and calibration), the owner's method run on it, a Verify section that raises
+  when the method misses the truth by more than a stated tolerance, and one way the method fails, so
+  the check is seen to bite. The owner runs it. It does NOT run the notebook, write in a strategy, a
+  course's clone or the home, read the owner's real data, compute a figure about a book, screen a
+  feature (`data-analyzer-runs`), validate a model out of sample, tutor a session (`workshop`),
+  explain the model or its theory (`teach`, at home), or say what the library holds (`query`).
 metadata:
-  version: 0.1.1
+  version: 0.2.0
 ---
 
 # Known answer — a method proved on data whose truth you set
@@ -83,7 +82,9 @@ numbers or in their own words.
    says: a tolerance, never a result of the owner's method.
 6. **One notebook, and nothing else.** It lives in a new folder beside the strategy — never inside
    it, never inside a course's clone, never in the home — and writes no file when it runs: no CSV,
-   no saved chart, no cache. It imports from the strategy without writing in it.
+   no saved chart, no cache. It imports from the strategy without writing in it. marimo's editor
+   keeps its own session beside it, in `__marimo__/`, as *Step 5* says: marimo's, not the
+   notebook's.
 7. **Plan first, the owner's go, then write**, as the home's `AGENTS.md` requires of every write.
    The notebook is code: in a workshop, it is written only with the AI on.
 
@@ -151,7 +152,8 @@ numbers or in their own words.
   course's own notebook stays the course's: this one is the owner's, for their method.
 - **Nothing is overwritten.** The folder is new or empty. A notebook this skill wrote earlier
   changes only on a new plan and go.
-- **One file**, `known_answer.ipynb`, or a name the owner gives.
+- **One file**, `known_answer_marimo.py`, or a name the owner gives that ends in `_marimo.py`, as
+  a strategy's notebooks do.
 - **No version is saved**: the folder is not a repository, as a piece `init-example` copies is not.
   The notebook is the owner's to keep, move or delete.
 
@@ -178,6 +180,12 @@ tolerance.
 Its narrative is in the owner's language, its code in English — names, docstrings and comments —
 in the house style of the strategy beside it.
 
+**It is a marimo notebook**, as a strategy's are from template 0.20.0: a Python file, run as a
+script or opened in marimo's editor, with no output saved in it. Each section below is a markdown
+cell, `mo.md(...)`, and the cells that run it. marimo runs the cells in the order their names need,
+so every name is defined in one cell only, and a name a cell keeps to itself starts with `_`. The
+folder it sits in is `mo.notebook_dir()`, so the strategy beside it is found wherever it runs from.
+
 | Section | Holds |
 | --- | --- |
 | Header | what is checked, against which model; *Teaching computation on simulated data: no figure here is about a book or your data*; the owner's prediction, in their words, dated; any source the recipe names, as this skill's — *a lead from the known-answer skill, not in your library* — never as evidence, the theory left to `teach` and `query`; the line the owner runs |
@@ -198,27 +206,35 @@ that reads or writes a file or loads `.env`. Section 0 turns bytecode off first,
 `sys.dont_write_bytecode = True`, so no `__pycache__` lands there; puts the strategy's root first on
 `sys.path`, never `os.chdir` into it; and loads the file by its path with
 `importlib.util.spec_from_file_location`. The strategy's folder was unchanged after such a run,
-checked by running it on 2026-10-14.
+checked again, with marimo, by running it on 2026-10-27.
 
 ## Step 5: Check, hand over and read
 
 1. **Lint**, before the hand-over, with the strategy's own settings and no cache written; with no
-   strategy, `--line-length 100` in place of `--config`. Checked with ruff 0.17.0 on 2026-10-14:
+   strategy, `--line-length 100` in place of `--config`; then marimo's own check. A strategy made
+   before template 0.20.0 has no ignores for a marimo notebook in its settings, and the notebook,
+   written as above, needs none. Checked with ruff 0.17.3 and marimo 0.25.2 on 2026-10-27:
 
    ```bash
-   uvx ruff check --no-cache --config "<strategy>/pyproject.toml" "<folder>/known_answer.ipynb"
+   uvx ruff check --no-cache --config "<strategy>/pyproject.toml" "<folder>/known_answer_marimo.py"
+   uvx --from marimo marimo check --strict "<folder>/known_answer_marimo.py"
    ```
 
-2. **The owner runs it**, on either track: cell by cell in Jupyter or their editor, where every
-   figure shows, or by the line below, pasted into a terminal, with a `--with` for each package the
-   method imports. The line shows only whether Verify passed or which raise fired; the figures are
-   read in Jupyter or the editor. It saves nothing — the notebook stays as written — and a raise
-   prints the failing cell and its message and exits 1, checked by running it on 2026-10-14 with
-   nbclient 0.11.0, ipykernel 7.4.0 and NumPy 2.5.4:
+2. **The owner runs it**, on either track: cell by cell in marimo's editor, where every figure
+   shows, or as a script by the second line below, pasted into a terminal, each with a `--with`
+   for each package the method imports. The script shows only whether Verify passed or which raise
+   fired; the figures are read in the editor. It saves nothing — the notebook stays as written —
+   and a raise prints its message and exits 1, checked by running it on 2026-10-27 with marimo
+   0.25.2 and NumPy 2.5.4: it passed, and with the method's intercept dropped it raised and exited
+   1, both folders unchanged.
 
    ```bash
-   uv run --no-project --with numpy --with nbclient --with ipykernel jupyter execute "<folder>/known_answer.ipynb"
+   uv run --no-project --with marimo --with numpy marimo edit "<folder>/known_answer_marimo.py"
+   uv run --no-project --with marimo --with numpy python "<folder>/known_answer_marimo.py"
    ```
+
+   The editor keeps its session beside the notebook, in `__marimo__/`, with the figures it showed:
+   the simulation's, never the owner's data. It is marimo's, and deleting it loses nothing.
 
 3. **Read** it with the owner, from their run: Verify passed, or which raise fired, with its
    message; then their prediction against what came back, their reading first, on the no-code
