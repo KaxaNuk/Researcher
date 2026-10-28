@@ -30,9 +30,10 @@ package runs on itself.
   with a sentence and has no tag, the security check finds nothing to fix and both tools above
   pass; then, with `--go`, it pushes, fast-forwards, tags and reads `main` and the tag back from
   GitHub.
-- **`tests/`**: tests of the skills' scripts and of the tools, by pytest, which `tools/check.py`
-  runs, every fake key in them built from pieces; and **`.githooks/pre-commit`**, which runs
-  `tools/check.py --fast` before each commit once a clone sets `git config core.hooksPath .githooks`.
+- **`tests/`**: 267 tests of the skills' scripts and of the tools, by pytest, which
+  `tools/check.py` runs, every fake key in them built from pieces; five strict xfails each mark a
+  bug the tests found. And **`.githooks/pre-commit`**, which runs `tools/check.py --fast` before
+  each commit once a clone sets `git config core.hooksPath .githooks`.
 ### Changed
 - **`AGENTS.md`** and **`CONTRIBUTING.md`**: the checks, the install and the release name these
   tools in place of the commands typed by hand; the skills' scripts have tests, and a change to one
