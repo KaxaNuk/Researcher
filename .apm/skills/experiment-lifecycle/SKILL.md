@@ -13,7 +13,7 @@ description: >
   `backtest-engine-runs`, `attribution-analysis-runs`, `alpha-decomposition`,
   `paper-trading-gate`, or branches and changelogs (`how-we-work`).
 metadata:
-  version: 0.14.9
+  version: 0.15.0
 ---
 
 # The research process — how a strategy repository is worked in
@@ -64,7 +64,7 @@ one command or one notebook.
 
 The Investment Lab is KaxaNuk's six libraries that run steps 3 to 6, with a web front end. Each
 maps onto one module of the strategy: Data Curator (`Data/curator.py`), Data Refinery
-(`Data/refinery.py`), Data Analyzer (`Data/analyzer.ipynb`), Portfolio Construction
+(`Data/refinery.py`), Data Analyzer (`Data/analyzer_marimo.py`), Portfolio Construction
 (`Experiments/portfolio_construction.py`), Backtest Engine (`Experiments/backtest_engine.py`),
 Attribution Analysis (`Experiments/attribution_analysis.py`). Four have shipped — the Data
 Curator, Portfolio Construction, the Backtest Engine and Attribution Analysis — and two, the
@@ -94,8 +94,8 @@ of logic goes. `Paper_Trading/BITACORA.md` is the graduation gate — a contract
 named `JOURNAL`, because a journal here is an append-only dated log.
 
 **When a number changes, change it in `FINDINGS_N.md` first, then `RESULTS.md`.** One exception:
-findings from step 3 go straight into `RESULTS.md`, because notebook outputs are stripped before
-committing and a measurement living only in a cell output does not survive the commit.
+findings from step 3 go straight into `RESULTS.md`, because a marimo notebook saves no output and
+a measurement seen only on the screen of a run does not survive it.
 
 ## 3. The three files in every experiment
 
@@ -123,36 +123,47 @@ written is the rule meant, given to one plain sentence and one worked date's boo
 blueprint has its own, in `JOURNAL_N.md`. A strategy made from a template before 0.13.2 may keep
 the benchmark's choice in `BRAINSTORMING_1.md`, which the Researcher's commands still read.
 Experiment 1 can graduate like any other; its rules freeze once its findings report, and a rewrite
-the owner decides is written down as one, as the strategy's `AGENTS.md` says.
+the owner decides is written down as one, as the strategy's `AGENTS.md` says. A rule with a band
+reads the band back beside the rule, on two consecutive dates: the held names left as they drifted,
+the orders let through and the cash left over.
 
 ## 4. The notebook — one section contract, one cell that is the strategy
 
-`experiment_N.ipynb` follows the same sections every time. `references/experiment-notebook.ipynb` is
-the worked example's Experiment 1 notebook with its own cells stripped — markdown only, one cell per
-section saying what that section computes — and is the file to copy.
+`experiment_N_marimo.py` follows the same sections every time. **Every notebook is a marimo
+notebook**: a Python file of cells that runs as a script, `uv run python <file>`, opens with
+`uv run marimo edit <file>`, and saves no output in itself, so there is nothing to strip before a
+commit; marimo's cache, `__marimo__/`, is ignored. There is no Jupyter notebook in the template or
+the example. `references/experiment-notebook_marimo.py` is the worked example's Experiment 1
+notebook with its own lines stripped — one markdown cell per section saying what that section
+computes, and the cells every strategy runs — and is the file to copy. The example's own lines sit
+between `# --- example: begin ---` and `# --- example: end ---`, each alone at column 0.
 
 | Section | Contains |
 | --- | --- |
 | Header · Position in the pipeline · What this notebook does not do | the claim, the standing warnings, the four shared modules |
-| 0 · Setup | paths, and **the strategy's columns** — signal, mark price, fill price, commission price — the only strategy names in the notebook outside the rule |
-| 1 · The panel | refined files to `dates x securities` matrices, renamed securities stitched into one position by ISIN |
-| 2 · The rule | selection, sizing, timing; must produce `selected_matrix`, `REBALANCE_DATES`, `target_weights` with rows summing to **at most** 1.0; 2.1 asserts the invariants |
-| 3 · Construction | the book's shape — invested share, trigger frequency, turnover, concentration, group drift; 3.1 writes the deliverables, `portfolio_weights.csv` with cash as a real priced position |
-| 4 · Backtest | the KaxaNuk Backtest Engine, the only backtest anywhere; guarded import, reports and skips without a licence |
-| 5 · Attribution | Brinson-Fachler, the factor model, and Brinson-Fachler again on the residual, the book's and the index's daily weights both held overnight, so the close of t-1 earns day t; guarded the same way |
-| 6 · Counterfactuals | the arms that price who earned the idiosyncratic share: the same book with one choice removed, priced by the same engine |
-| 7 · Verdict | what it concluded, in words |
-| Handoff · Open items | what the next stage consumes; what this one left open |
-| 8 · Verify | assertions that raise when the output is wrong: the invariants, the weight file read back, each engine run's valued days against its window's trading days, and the first cut's benchmark within a point a year of the index's own returns file — each skipped where its library is absent |
+| 0 · Setup | the repository and the shared modules, then **the strategy's window, columns, bounds and costs** — the only strategy names in the notebook outside the rule |
+| 1 · The panel | the refined files loaded and reshaped to `dates x securities` matrices, and the rebalance calendar |
+| 2 · The rule | selection, sizing, timing and the control — **the one cell you write**; it produces `REBALANCE_DATES`, `target_weights` with rows summing to **at most** 1.0, the rest cash the engine pays interest on, and, under a no-trade band, `struck_weights` |
+| 2.1 · Invariants | what every rule must pass, whatever it is: printed here, raised on in section 8 |
+| 3 · Construction | the book's shape — invested share, orders and turnover, holdings and concentration, group drift — capacity against traded value, and every weight file written before any is priced |
+| 4 · Backtest | the KaxaNuk Backtest Engine, the only backtest anywhere, guarded; every cost and the cash priced inside it; every run read whole or excluded by name |
+| 5 · Attribution | where the return came from, by the library's own pipeline, guarded the same way |
+| 6 · Counterfactuals | the sweep, and the arms that price who earned the idiosyncratic share: the same book with one choice removed, priced by the same engine |
+| 7 · Verdict | what it concluded, **in words**: the gate read row by row, soundness then performance, the handoff and the open items |
+| 8 · Verify | assertions that raise when the output is wrong: the invariants, the weight file read back, each engine run's valued days against its window's trading days, no blocking name held by any book, and the first cut's benchmark within a point a year of the index's own returns file — each skipped where its library is absent. A truncated run is excluded by name with its reason; Verify fails a run that is neither read whole nor excluded, and refuses to exclude the rule, its control or the equal-weight arm |
+| 9 · Dashboards | optional: the engine's and the attribution library's own, to look at a run, never to quote |
 
-**Every notebook of the pipeline ends in a Verify section** — `Universe/universe.ipynb`,
-`Data/analyzer.ipynb` and each experiment's — that reads back what the notebook wrote and raises
+**Every notebook of the pipeline ends in a Verify section** — `Universe/universe_marimo.py`,
+`Data/analyzer_marimo.py` and each experiment's — that reads back what the notebook wrote and raises
 when it is wrong. It is where a strategy's tests live; `AGENTS.md` says why it counts against the
 window rather than a fixed floor.
 
-**Two look-aheads are stated plainly and nowhere else:** the signal used on rebalance date *t* is
-the one observed at *t-1* (the lag), and a delisting exit needs one day of hindsight, because a
-position is sold on the last day it still has a fill price.
+**The look-aheads are stated plainly, in section 2 and nowhere else:** everything the rule reads on
+a rebalance date *d* is read at the close of the trading day before it, and the fill is at *d*'s
+price (the lag); a condition read on *d* itself is named as the one same-day condition. There is no
+delisting exit: the engine sells a position whose prices stop at its last price, so the rule takes
+no day of hindsight for it, and a gap inside a series, which the engine cannot price, is a blocking
+row of the register, its name excluded by name.
 
 **Four modules beside the notebook are shared by every experiment**, one per Lab library.
 `securities_panel.py` is the one panel loader. `portfolio_construction.py` takes the eligible set
@@ -183,7 +194,8 @@ else.
 A `c_*` column that needs other securities is misplaced. Widening the Curator's schema refetches
 every identifier, so nothing tunable lives there: **a fitted column lives in the Refinery even when
 it is per-security, because a sweep must never cost a download.** Its inputs — arithmetic with
-nothing to tune — stay in the Curator.
+nothing to tune — stay in the Curator. **A new experiment's signal on the data already downloaded is
+an `r_*` calculation of the Refinery**, never a wider Curator schema and a second download.
 
 ## 6. Scaffolding
 
@@ -203,17 +215,24 @@ Researcher's `next` skill reads a strategy against this list and names the part 
 | E | The benchmark, chosen in `JOURNAL_1.md`, then the rule read back there and `BLUEPRINT_1.md` **before the rule** | `Experiments/Experiment_1/` | this skill; the Researcher, `blueprint`, which reads the rule back |
 | F | The broad reading, for what the blueprint left open | `Bibliotheca/` | the Researcher, `read` |
 | G | The cycle — portfolio, backtest, attribution | the notebook, `FINDINGS_1.md` | `portfolio-construction-runs`, `backtest-engine-runs`, `attribution-analysis-runs`, `alpha-decomposition`; the Researcher, `challenge` |
-| H | Every finished cycle, kept or rejected | `RESULTS.md` | this skill |
+| H | Every finished cycle, with the gate's outcome — graduates, sound and regime-dependent, or not sound | `RESULTS.md` | this skill |
 
-Then the gate — `Paper_Trading/BITACORA.md`, `paper-trading-gate` — or the next experiment.
+Then the gate — `Paper_Trading/BITACORA.md`, `paper-trading-gate` — or the next experiment. **The
+gate has two layers, read in order.** Soundness, S1 to S5: no survivorship bias, no look-ahead, no
+overfitting, costs and capacity stated, reproducible from a working copy whose data folders were
+emptied first. Then performance, P1 to P3: beats the benchmarks and its control over the whole
+window, idiosyncratic alpha in both layers, conclusions that survive perturbation. Three outcomes:
+it graduates, and is frozen and paper traded once a person signs; it is sound and
+regime-dependent, its periods named, and is not paper traded alone; or it is not sound, and no
+conclusion is drawn. A person reads the gate; the assistant never decides it.
 
 Every file those parts name is in the template, and so in a strategy made from it: each a
 description of what belongs in it, to be filled in — the worked example's drivers, modules,
 notebooks and experiment files with its own lines removed. A strategy made from a template
 before 0.10.0 lacks the files inside the folders; each comes back from the template, never from the
 example, whose copy is filled in: `init-strategy`'s script, run from the strategy's root,
-`scaffold.py strategy . --only <path>`. It never overwrites, so bring `Universe/universe.ipynb` by
-its path: `--only Universe` stops over the seed, which is already the strategy's own.
+`scaffold.py strategy . --only <path>`. It never overwrites, so bring `Universe/universe_marimo.py`
+by its path: `--only Universe` stops over the seed, which is already the strategy's own.
 
 **A new experiment `N` inside an existing strategy:**
 
@@ -226,10 +245,10 @@ its path: `--only Universe` stops over the seed, which is already the strategy's
    claim it moves, its control and the one condition that would falsify it, and cites every
    prediction's source; on the owner's go it is saved alone, before the rule. The blueprint
    template is the first experiment's; delete the sentences that only apply to Experiment 1.
-3. Copy `references/experiment-notebook.ipynb` to `experiment_N.ipynb`. It too is Experiment 1's:
-   retitle it `Experiment N`, replace every `_1` in it with `_N`, and delete the sentences that
-   only apply to Experiment 1. Then declare the experiment's columns in section 0; import the
-   panel loader in section 1; write the rule in section 2.
+3. Copy `references/experiment-notebook_marimo.py` to `experiment_N_marimo.py`. It too is
+   Experiment 1's: retitle it `Experiment N`, replace every `_1` in it with `_N`, and delete the
+   sentences that only apply to Experiment 1. Then declare the experiment's columns in section 0;
+   import the panel loader in section 1; write the rule in section 2.
 4. Add a row to `RESULTS.md` when `FINDINGS_N.md` first reports, citing it. A new experiment is a
    MINOR bump in `CHANGELOG.md`, and the entry is part of the change-set.
 
@@ -246,7 +265,7 @@ is two rules, and the copies drift. Read them where they are.
 | Committed results, bad runs, binaries, Production, `Config/.env`, example markers | `AGENTS.md`, *Other standing rules* |
 | The five ways a backtest lies, what look-ahead costs a fitted signal, and the Verify section every notebook ends in | `AGENTS.md`, *Research integrity — the five ways a backtest lies* |
 | What attribution must report | `AGENTS.md`, *What attribution must report*; reading it is `alpha-decomposition` |
-| The graduation gate and its five criteria | `Paper_Trading/BITACORA.md`, in the template |
+| The graduation gate: soundness S1 to S5, performance P1 to P3, three outcomes | `Paper_Trading/BITACORA.md`, in the template; reading it is `paper-trading-gate` |
 | What a version number means | `CHANGELOG.md`, *What a version number means here* |
 
 ## References
@@ -255,8 +274,8 @@ is two rules, and the copies drift. Read them where they are.
 - `references/blueprint-template.md`, `journal-template.md`, `findings-template.md` — the three
   documents of an experiment, the blanks for Experiment N > 1;
   the template ships Experiment 1's, the same files under `Experiments/Experiment_1/`.
-- `references/experiment-notebook.ipynb` — Experiment 1's notebook, markdown only, the blank for
-  `experiment_N.ipynb`.
+- `references/experiment-notebook_marimo.py` — Experiment 1's marimo notebook, the example's lines
+  stripped, the blank for `experiment_N_marimo.py`.
 
 The three documents and the notebook are copies of Experiment 1's files in the worked example,
 `examples/strategy/golden-flow/` in KaxaNuk-Researcher, with the example's own lines stripped. They

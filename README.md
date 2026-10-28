@@ -159,9 +159,9 @@ checks a folder before you share or push it, and walks you through a leaked key.
 
 The researcher needs nothing beyond this package. A strategy can use KaxaNuk's libraries:
 
-- **The Data Curator** is open source. A strategy needs a key for it from a data provider;
-  the worked example uses FMP's. A wrong value in downloaded data is usually the provider's, not the
-  library's: your researcher tells them apart and says where to report it.
+- **The Data Curator** is open source. A strategy needs a key for it from a data provider; the
+  worked example uses Sharadar's. A wrong value in downloaded data is usually the provider's, not
+  the library's: your researcher tells them apart and says where to report it.
 - **The Backtest Engine, Attribution Analysis and Portfolio Construction** come together, with
   their licences, in the KaxaNuk Investment Lab, which KaxaNuk sells; the Data Refinery and Data
   Analyzer libraries join them when they ship, and until then those stages run as the template's
@@ -249,7 +249,7 @@ The assistant loads each one when the work calls for it.
 | `backtest-engine-runs` | pricing a book with the Backtest Engine, and reading its report |
 | `attribution-analysis-runs` | running Attribution Analysis on a book, and getting its tables out |
 | `alpha-decomposition` | reading attribution: is the signal doing anything, or is it a factor exposure |
-| `paper-trading-gate` | step 7, graduation: the five criteria, the freeze, and the daily run and its record |
+| `paper-trading-gate` | step 7, graduation: soundness S1 to S5, performance P1 to P3, the three outcomes, the freeze, and the daily run and its record |
 
 </details>
 

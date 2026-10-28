@@ -4,16 +4,17 @@ description: >
   Load this skill whenever a KaxaNuk Strategy Template repository asks whether an experiment
   graduates to paper trading, step 7 — `Paper_Trading/BITACORA.md`, `promote.py`, `daily_update.py`,
   `record.py` and `Paper_Trading_N/paper_trading_N.py`. Use it when the user asks what the
-  graduation gate is, how each of its five criteria is evidenced, whether a `FINDINGS_N.md` clears
-  it, how a graduated book is frozen, what the daily run does and where it writes, what is
-  registered before day one, why the parameters are frozen, what a promoted experiment's folder is
-  named, or what the gate's status section should hold. It covers the five criteria and the usual
-  ways each fails, the freeze, the daily run, and what the assistant never decides. It does NOT
-  cover the cycle that produces the findings (use `backtest-engine-runs`,
-  `attribution-analysis-runs`, `alpha-decomposition`), the documents of an experiment (use
-  `experiment-lifecycle`), or step 8, Production, which is outside the repository.
+  graduation gate is, how its soundness criteria S1 to S5 and its performance criteria P1 to P3 are
+  evidenced, which of its three outcomes a `FINDINGS_N.md` reaches — graduates, sound and
+  regime-dependent, or not sound — how a graduated book is frozen, what the daily run does and where
+  it writes, what is registered before day one, why the parameters are frozen, what a promoted
+  experiment's folder is named, or what the gate's status section should hold. It covers both
+  layers and the usual ways each criterion fails, the outcomes, the freeze, the daily run, and what
+  the assistant never decides. It does NOT cover the cycle that produces the findings (use
+  `backtest-engine-runs`, `attribution-analysis-runs`, `alpha-decomposition`), the documents of an
+  experiment (use `experiment-lifecycle`), or step 8, Production, which is outside the repository.
 metadata:
-  version: 0.4.3
+  version: 0.5.0
 ---
 
 # The paper-trading gate — what graduation means, and what has to be true first
@@ -33,37 +34,75 @@ the repository when it is funded.
 
 - The user asks whether Experiment N graduates, or what would have to be true for it to.
 - The user is filling the gate's *Current status* section, or writing a `paper_trading_N.py`.
-- A `FINDINGS_N.md` reports a book that beats its benchmarks and the question turns to what
-  comes next.
+- A `FINDINGS_N.md` reports, and the question turns to what comes next — whether it beats its
+  benchmarks or not, since a book that loses over the whole window can still be sound.
 - The KaxaNuk Researcher's `challenge` command reaches the gate: it reads `BITACORA.md` only when
   graduation is being claimed, and this skill is how the criteria are read.
 
-## The gate: five criteria, all of them
+## The gate: two layers, three outcomes
 
-Strong backtest results are necessary and **not sufficient**. Every criterion is evidenced from
-the experiment's `FINDINGS_N.md` and from `RESULTS.md`; **if it cannot be evidenced from those,
-it has not been met.**
+Strong backtest results are necessary and **not sufficient**, and they are read second. The gate
+asks two questions in order: **is the experiment done correctly**, and only then **does it earn
+its place**. Every criterion is evidenced from the experiment's `FINDINGS_N.md` and from
+`RESULTS.md`; **a row without evidence does not hold.**
 
-| # | Criterion | Evidenced by | The usual way it fails |
+### Soundness — is the experiment done correctly?
+
+Each row cites its evidence; a row without evidence does not hold.
+
+| # | Soundness criterion | Evidenced by | The usual way it fails |
 | --- | --- | --- | --- |
-| 1 | **Beats the benchmarks on risk-adjusted return** — every benchmark it reports against *and* its own control row, over the same window | the ranking table of `FINDINGS_N.md`, and the control `BLUEPRINT_N.md` names in its *Rules* — the same rule with one ingredient removed — on the rule's own rebalance dates | a pass on Sharpe alone while the control earns more a year on the same dates — the single-metric pass the criterion exists to catch; a control on its own dates, which differs in two things |
-| 2 | **Attribution shows idiosyncratic alpha in both layers** — selection in the Brinson-Fachler cut, a residual the factor model cannot explain, and a selection story that survives the third pass on residual returns | the attribution section of `FINDINGS_N.md`, read with `alpha-decomposition` | the residual is there but random books of the same shape earn most of it; the third pass was never run. Expect *a pass with a qualification*: a book half factor, half idiosyncratic has passed and been told how much of it is not the idea |
-| 3 | **Conclusions survive parameter perturbation, and the trial count is published beside the winner** | a sweep read as a curve; the count of variants and of features screened | every setting a single value, none read as a curve; a count nobody wrote down; a setting the blueprint listed as unable to rescue the experiment moved after the result and counted as an edit rather than a trial. Publishing the count is the minimum, and the sign-off says whether the deflated figure was also computed |
-| 4 | **Costs and capacity are modelled and stated** — turnover, commission, and every assumption the engine does not model, borrow cost above all | the cost rows of `FINDINGS_N.md`, a realistic-commission row beside the frozen one | costs modelled, capacity not modelled at all; a long/short book with borrow cost in a footnote |
-| 5 | **Explicit sign-off** | a person's name and date in `BITACORA.md` | sought before 1 to 4 are evidenced |
+| S1 | **No survivorship bias** | the point-in-time universe: departed names kept in the seed, the security master, the usable date | a seed of today's members; departed names the provider does not price dropped without their share of the index published; a window opened before the date the universe can be priced |
+| S2 | **No look-ahead** | signals lagged, next-open fills, the blueprint's rule and predictions registered before any result | a signal struck on the same close it trades at; a `current_*` column selected on; a blueprint committed with or after the rule cell, or a prediction added once a number was seen |
+| S3 | **No overfitting** | the trial count published, the sweep read as a curve, the control and the random books priced | a count nobody wrote down; a single best cell read instead of the curve; a setting the blueprint said may not rescue the experiment moved after the result and counted as an edit rather than a trial; a control on its own dates, which differs in two things; random books truncated and never priced whole |
+| S4 | **Costs and capacity stated** | turnover, commission, slippage, cash, and every assumption the engine does not model | costs modelled, capacity not stated; a cost model that misreads the book's names, with no second row beside it; borrow cost of a long/short book in a footnote |
+| S5 | **Reproducible** | the pipeline ran from a working copy whose data folders were emptied first, every Verify passing | a figure from a run on yesterday's cache; a Verify section skipped, or one that prints rather than raises; a truncated engine run neither read whole nor excluded by name |
 
-Criterion 2 is evaluable here because the stack has a real attribution stage. A repository without
-one would have to name a substitute — a beta-matched control book, a regression on the market — and
-here there is no substitute to name, which means there is also no excuse.
+### Performance — does it earn its place?
+
+| # | Performance criterion | Evidenced by | The usual way it fails |
+| --- | --- | --- | --- |
+| P1 | **Beats the benchmarks and its control on risk-adjusted return, over the whole window** | the ranking table of `FINDINGS_N.md`, and the control `BLUEPRINT_N.md` names in its *Rules* — the same rule with one ingredient removed — on the rule's own rebalance dates | a pass on Sharpe alone while the control earns more a year on the same dates; a book that beats its control and loses to its index, which holds the control limb and fails the criterion |
+| P2 | **Attribution shows idiosyncratic alpha in both layers** — selection in the Brinson-Fachler cut, a residual the factor model cannot explain, and a selection story that survives the third pass on residual returns | the attribution section of `FINDINGS_N.md`, read with `alpha-decomposition` | the residual is there but random books of the same shape earn most of it; the third pass was never run. Expect *a pass with a qualification*: a book half factor, half idiosyncratic has passed and been told how much of it is not the idea |
+| P3 | **Conclusions survive parameter perturbation** | each setting of the blueprint's sweep, priced with its own control | the margin keeps its sign at every setting and no setting beats the benchmark; one setting carries the result and its neighbours do not |
+
+Soundness is read first because a performance criterion on an unsound experiment means nothing:
+a survivor-biased universe or a rule that saw the future produces a P1 pass by construction.
+**S3 is where the trial count lives**, the minimum against overfitting; the sign-off states whether
+the deflated figure was also computed.
+
+P2 is evaluable here because the stack has a real attribution stage. A repository without one would
+have to name a substitute — a beta-matched control book, a regression on the market — and here there
+is no substitute to name, which means there is also no excuse.
+
+### The outcomes
+
+- **Graduates** — every soundness and performance criterion holds, and the owner signs it off in
+  `BITACORA.md`: the book is frozen and paper traded.
+- **Sound and regime-dependent** — every soundness criterion holds; performance fails over the
+  whole window but holds in named periods. The findings name the periods where it earned and where
+  it failed, and the condition that tells them apart as far as the evidence goes. It is not paper
+  traded alone. It may be paired with another signal in a later experiment, or used at a portfolio
+  manager's discretion — the decision, and its risk, are theirs. Never a recommendation.
+- **Not sound** — a soundness criterion fails: no conclusion is drawn; fix it and run again.
+
+The sign-off stays a person's name and date. The assistant never decides a gate.
+
+**A named period is one the blueprint or the analyzer fixed before the result** — the thirds a
+blueprint judges sub-periods on, say — never one cut afterwards around where the book did well. A
+period chosen after the result is a forking path: it goes in the trial count, and the reading says
+so. The condition that tells the periods apart is stated as far as the evidence goes — what the
+book held, what the market did — and never as a forecast of which regime comes next.
 
 ## The promotion
 
-An experiment is **promoted, not copied.** `Paper_Trading/Paper_Trading_N/` mirrors the
-`Experiment_N` it came from, so the lineage of a paper-traded book is never in question; the
-experiment's notebook stays where it is, as the record of how the rule was chosen. The template
-ships `Paper_Trading_1/` as the contract of a frozen book, named for the experiment it would
-mirror: it becomes Experiment 1's book if Experiment 1 graduates, and a later experiment that
-graduates takes its own number. In the worked example it is that book, frozen.
+An experiment is **promoted, not copied**, and only an experiment that graduates.
+`Paper_Trading/Paper_Trading_N/` mirrors the `Experiment_N` it came from, so the lineage of a
+paper-traded book is never in question; the experiment's notebook stays where it is, as the record
+of how the rule was chosen. The template ships `Paper_Trading_1/` as the contract of a frozen book,
+named for the experiment it would mirror: it becomes Experiment 1's book if Experiment 1 graduates,
+and a later experiment that graduates takes its own number. The worked example has no book on
+paper: its Experiment 1 reads as sound and regime-dependent.
 
 A strategy's `1.0.0` waits for more than its first graduation: the changelog reserves it for this
 strategy's first book on paper trading, its results reproduced from a clean clone.
@@ -120,7 +159,7 @@ behind the day, hides a new flag among the old ones: read the flags, not only th
 The record has six tables — runs, books, performance, statistics, diagnostics, flags — keyed so a
 second run of a day replaces that day's rows. A past value the engine now prices differently is a
 **restatement**: flagged, never overwritten. The template ships these files as their contract in a
-docstring; the worked example carries them working.
+docstring; the worked example carries them working, with no book in `BOOKS`.
 
 **A paper-trading script re-fits nothing.** A run that tunes anything is a backtest wearing a
 costume, and it re-introduces exactly the search that produces negative out-of-sample performance.
@@ -130,30 +169,42 @@ like its backtest — turnover, holdings, exposure, costs — never for a good m
 ## Before a book's first day
 
 `BITACORA.md` gets a section for the book, committed before its first run and never edited. It
-holds the experiment, variant, commit and freeze date; the gate row by row with the sign-off; the
-bands for each diagnostic, from `FINDINGS_N.md`'s structural table and carried as `BANDS` in the
-book; the kill switch; the review dates and the period to watch before production; and what the
-record cannot show.
+holds the experiment, variant, commit and freeze date; the gate row by row, both layers, with the
+sign-off; the bands for each diagnostic, from `FINDINGS_N.md`'s structural table and carried as
+`BANDS` in the book; the kill switch; the review dates and the period to watch before production;
+and what the record cannot show.
 
 ## The status section
 
-*Current status* in `BITACORA.md` is the gate's record. Until something graduates it says so —
-*nothing has graduated and nothing has been tested*. When a candidate arrives, record which
-experiment, which variant, which criteria it clears and, above all, **which it does not and why:
-the blocking items are the content of this section, not the passing ones.** The worked example's
-verdict table, criterion by criterion with its evidence, is the shape to follow. Its answer was
-yes; a no has the same shape — each blocking row with the evidence that blocks it, and criterion 5
-*not sought*.
+*Current status* in `BITACORA.md` is the gate's record. Until an experiment reports it says so —
+*nothing has graduated and nothing has been tested*. When one reports, record which experiment,
+which variant, each criterion of both layers with its evidence, and the outcome it reaches. Above
+all, record **which criteria do not hold and why: the blocking items are the content of this
+section, not the passing ones.**
+
+- **Graduates:** every row holds, and the sign-off is a person's name and date.
+- **Sound and regime-dependent:** every S row holds; each P row that fails says so, and beside it
+  the named periods where it earned and where it failed, and the condition that tells them apart.
+  The sign-off row reads *not sought: not paper traded alone*.
+- **Not sound:** the S row that fails, and what will be fixed before the next run. No P row is
+  read.
+
+The worked example's *Current status*, Experiment 1 read row by row with its evidence, is the shape
+to follow for the second outcome.
 
 ## What the assistant never does here
 
-- **Declare graduation.** Criterion 5 is a person's signature; the assistant lays the four others
-  out, evidenced or not, and stops.
+- **Decide a gate.** The assistant lays both layers out, each row evidenced or not, names the
+  outcome the rows reach and stops; the reading and the sign-off are a person's.
+- **Recommend a sound, regime-dependent book** — for paper trading alone, for a portfolio, or for a
+  period it might earn in. Pairing it with another signal is a later experiment's blueprint; using
+  it at discretion is a portfolio manager's decision and risk.
 - **Compute a performance number**, a deflated Sharpe included. Every figure is quoted from
   `FINDINGS_N.md` or `RESULTS.md` with its source; a missing one is a re-run to ask for, never a
   value to supply.
-- **Read a criterion as met on a number the findings do not carry.** Capacity not modelled is
+- **Read a criterion as met on a number the findings do not carry.** Capacity not stated is S4
   *not met*, not *probably fine*.
+- **Name a period after the result** to make a book regime-dependent.
 - **Re-fit, re-tune or widen a rule** in a paper-trading script, whatever the reason offered.
 - **Freeze a book before the sign-off, or freeze one twice.**
 - **Register the scheduled task.** It changes the machine: the command is given, the user runs it.
@@ -162,12 +213,13 @@ yes; a no has the same shape — each blocking row with the evidence that blocks
 
 ## References
 
-- `Paper_Trading/BITACORA.md`, `daily_update.py` and `Paper_Trading_1/paper_trading_1.py` in the
-  worked example, `examples/strategy/golden-flow/` in the KaxaNuk Researcher package — the gate run
-  once, every row evidenced from `FINDINGS_1.md`: criteria 1 to 4 passed, criterion 3 exactly at its
-  bar, 6 of 8 settings. The owner signed on 2026-10-06, and the book frozen as `Paper_Trading_1` is
-  kept in the package as a record. The template's copies are the same files with the example's lines
-  removed.
+- `Paper_Trading/BITACORA.md` in the worked example, `examples/strategy/golden-flow/` in the KaxaNuk
+  Researcher package — the gate read once, both layers, every row evidenced from `FINDINGS_1.md`:
+  S1 to S5 hold; P1 and P3 fail over 2000–2026 and P2 is not evidenced; the book earned in
+  2018–2026 and lost in 2000–2008. Sound and regime-dependent, read on the owner's word of
+  2026-10-27, and not paper traded. Its `promote.py`, `daily_update.py` and `record.py` are the
+  working step-7 scripts, with no book in `BOOKS`. The template's copies are the same files with
+  the example's lines removed.
 - The strategy's `AGENTS.md`, *Research integrity — the five ways a backtest lies* and *What
-  attribution must report*, which criteria 2, 3 and 4 rest on.
+  attribution must report*, which S1 to S4 and P2 rest on.
 - `CHANGELOG.md` in the strategy, *What a version number means here* — `1.0.0` and the gate.

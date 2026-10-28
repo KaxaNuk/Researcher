@@ -19,7 +19,8 @@
 > meanwhile non weight more than 20% and less than 1%"*. The notes in `Bibliotheca/` were read
 > earlier — the papers on 2026-09-02, the book on 2026-08-25 — for an earlier form of the idea. An
 > earlier version's result was known too, so the order this file's first lines ask for was not kept.
-> The status column moved on 2026-10-06, when `FINDINGS_1.md` reported; no claim's wording changed.
+> The status column moved on 2026-10-24, when `FINDINGS_1.md` reported on the second rewrite, on
+> Sharadar from 2000; no claim's wording changed.
 
 ## The main idea
 
@@ -28,10 +29,11 @@
 
 The signal is the **golden cross**: a member is eligible while its 50-day simple moving average sits
 above its 200-day one, `r_trend_50_200` above zero, computed by the Refinery from the name's own
-adjusted close. The sizing is **traded value**: the 63-day average of each day's VWAP times volume,
-`r_traded_value_sma_63d`, which ranks the eligible names and weights them in proportion. The book
-holds as many as fit the owner's two bounds — no weight above 20%, none below 1% — so the market's
-own distribution of trading sets how many names it owns, and nobody chooses a count.
+adjusted close. The sizing is **traded value**: the 63-day average of each day's close times its
+volume, both split-adjusted — the dollars traded — `r_traded_value_sma_63d`, which ranks the
+eligible names and weights them in proportion. The book holds as many as fit the owner's two bounds
+— no weight above 20%, none below 1% — so the market's own distribution of trading sets how many
+names it owns, and nobody chooses a count.
 
 Neither half is clever, and that is the design. The strategy is named **Golden Flow** after the two
 of them — golden cross, dollar-volume flow — and the two columns are named here so that attribution
@@ -42,7 +44,8 @@ can later say which half earned the return.
 **Build a long-only US-equity book whose every decision can be explained in one sentence, and find
 out how much of its return is the idea rather than the market.** The deliverable is not a number; it
 is a rule simple enough that when it works, we can say *why*, and when it fails, we can say *which
-part* failed.
+part* failed — and simple enough to be the Lab's reference example of the whole process, from the
+first note to a book on paper.
 
 Concretely, an acceptable end state is: *on any date, the strategy names the stocks it holds, gives
 a one-sentence reason for each, and can point at an attribution that says how much of the return
@@ -58,15 +61,16 @@ reader sees which parts of the idea have survived contact with the data, so it i
 
 | | Claim | Status |
 | --- | --- | --- |
-| **1. The signal** | Holding only members in a confirmed uptrend — the golden cross — produces a better book than the same rule without it | **confirmed as a book**, 2015 to 2026, in sample |
-| **2. The sizing** | Ranking and weighting by 63-day traded value, inside the 20% and 1% bounds, tilts capital toward what the market is buying, and that is worth return | **confirmed as a book**, 2015 to 2026, in sample |
-| **3. The construction** | A trend filter is a value-trap screen — a falling stock can never enter — and the bounds guarantee no name above 20% and none below 1% | **true by construction** |
+| **1. The signal** | Holding only members in a confirmed uptrend — the golden cross — produces a better book than the same rule without it | **confirmed against its control only**, on the KN US Equity Core, 2000 to 2026, monthly, net: a Sharpe of 0.162 against its control's 0.097 (0.221 against 0.117 at a flat 5 bp), +1.30 points of CAGR (+2.24), beating it on both in 2000–2008 and 2018–2026 and losing in 2009–2017 — and losing to the Core's 0.315 ([`FINDINGS_1.md`](Experiments/Experiment_1/FINDINGS_1.md)). In sample. 0.15's "confirmed as a book" on FMP, 2015 to 2026, was measured on the version this one replaced, and no longer stands |
+| **2. The sizing** | Ranking and weighting by 63-day traded value, inside the 20% and 1% bounds, tilts capital toward what the market is buying, and that is worth return | **confirmed as a book against equal weight**, 2000 to 2026: 0.162 against 0.087 for the same names equally weighted (0.221 against 0.157 at a flat 5 bp) ([`FINDINGS_1.md`](Experiments/Experiment_1/FINDINGS_1.md)). Against random draws, not evidenced. In sample |
+| **3. The construction** | A trend filter is a value-trap screen — a falling stock can never enter — and the bounds guarantee no name above 20% and none below 1% | **true by construction on the targets**; under the half-point band, 556 struck weights over 26 years sat outside the bounds by at most the band and the overnight move; as a source of return it is measured only through claim 1's control |
 
 Status vocabulary, so it means the same across strategies: **untested** · **measured** (the analyzer
 says something; no book has been run) · **falsified** · **confirmed as a book** (it beats its
 benchmarks through the engine) · **confirmed as a factor** (attribution assigns it the return) ·
 **unexplained** (confirmed as a book, not as a factor — the usual state, and the interesting one) ·
-**true by construction**.
+**true by construction** · **confirmed against its control only** (it beats the same rule with the
+claim's ingredient removed, and loses to its benchmarks).
 
 ### Claim 1 — the signal
 
@@ -82,10 +86,10 @@ keep by cutting drawdowns more than by adding return, and the data-snooping pape
 moving-average rule found to work is the maximum of many tried.
 
 **What the run found**, in [`FINDINGS_1.md`](Experiments/Experiment_1/FINDINGS_1.md). On the KN US
-Equity Core, 2015 to 2026, the book's Sharpe is 0.842 against its control's 0.763, and its CAGR is
-+0.60 points above it. It beats the control on both in 2 of 3 sub-periods. That is the status the
-blueprint's table fixed for this result before the run, and it is in sample. Attribution puts nine
-tenths of the excess return in factors, so the signal is not confirmed as a factor.
+Equity Core, 2000 to 2026, monthly and net, the book's Sharpe is 0.162 against its control's 0.097,
+and 0.221 against 0.117 at the flat 5 bp row; it beats the control on Sharpe and CAGR in 2000–2008
+and 2018–2026, and loses in 2009–2017. Its drawdown is −82.6% against the control's −91.7%. It loses
+to the Core's 0.315, so the claim is confirmed against its control only, in sample.
 
 ### Claim 2 — the sizing
 
@@ -99,9 +103,10 @@ traded names *underperform* across the whole cross-section; the argument for thi
 inside the most traded names, where the rule ranks, the sign can differ. That is a measurement for
 the analyzer, not an assumption.
 
-**What the run found**, in [`FINDINGS_1.md`](Experiments/Experiment_1/FINDINGS_1.md). On the KN US
-Equity Core, 2015 to 2026, the book's Sharpe is 0.842 against 0.722 for the same names equally
-weighted. It is in sample.
+**What the run found**, in [`FINDINGS_1.md`](Experiments/Experiment_1/FINDINGS_1.md). The book's
+Sharpe is 0.162 against 0.087 for the same names equally weighted, 0.221 against 0.157 at the flat
+row, more than the 0.03 the blueprint allowed. Against random draws it is not evidenced: the rule
+beats 15 of the 19 random books priced whole at the flat row, where the bar was 16 of 20.
 
 ### Claim 3 — the construction
 
@@ -118,8 +123,10 @@ measured only through claim 1's control — what the screen excludes is what the
   None was chosen on the metric it is judged by, and the blueprint's sweep shows their neighbours.
   That is a defence against data-snooping, not evidence of optimality.
 - **Not that this is out of sample.** Nothing is, until the book has days on paper after its freeze.
-- **Not that the universe is free of survivorship.** Members FMP does not carry are dropped, and the
-  share of the index they held is published per date beside every result.
+- **Not that the universe is free of survivorship.** Members Sharadar does not carry are dropped,
+  and the share of the index they held is published per date beside every result.
+- **Not that the earlier versions' results carry over.** They were measured on FMP from 2015, and
+  before that on another index, with other rules and windows, and are rows of `RESULTS.md`.
 
 ---
 
@@ -127,8 +134,8 @@ measured only through claim 1's control — what the screen excludes is what the
 
 | Half | Column | Built by | Read by |
 | --- | --- | --- | --- |
-| the signal | `r_trend_50_200` — the 50-day average of the adjusted close over the 200-day one, minus one; above zero is the golden cross | `Data/Refinery/custom_calculations.py`, because a sweep of the two windows must never cost a download | the rule's eligibility, and `Data/analyzer.ipynb` |
-| the sizing | `r_traded_value_sma_63d` — the 63-day simple average of `c_daily_traded_value`, VWAP times volume | `Data/Refinery/custom_calculations.py`, beside its 21- and 126-day siblings, and checked equal to the Curator's own `c_daily_traded_value_sma_63d` | the rule's ranking and weighting; `r_liquidity_rank`, its per-date percentile, is what the analyzer screens |
+| the signal | `r_trend_50_200` — the 50-day average of the adjusted close over the 200-day one, minus one; above zero is the golden cross | `Data/Refinery/custom_calculations.py`, because a sweep of the two windows must never cost a download | the rule's eligibility, and `Data/analyzer_marimo.py` |
+| the sizing | `r_traded_value_sma_63d` — the 63-day simple average of `c_traded_value`, the close times the volume, both split-adjusted, as `Data/Curator/custom_calculations.py` writes it (Sharadar publishes no VWAP) | `Data/Refinery/custom_calculations.py`, beside its 21- and 126-day siblings, and checked by the analyzer against the 63-day average of the Curator's own column | the rule's ranking and weighting; `r_liquidity_rank`, its per-date percentile, is what the analyzer screens |
 
 Two columns, two stages, so attribution and the counterfactual books can say which half earned the
 return.

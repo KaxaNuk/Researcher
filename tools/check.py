@@ -344,6 +344,7 @@ def check_ruff() -> CheckResult:
                 'ruff',
                 'check',
                 '.',
+                '--no-cache',
                 '--quiet',
                 '--output-format',
                 'concise',

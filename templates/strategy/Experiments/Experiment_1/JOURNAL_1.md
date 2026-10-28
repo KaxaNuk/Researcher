@@ -40,4 +40,7 @@ being clever. `blueprint` reads the benchmark from it.
 
 The second, saved before the blueprint, is *the rule read back*: the rule in one plain sentence,
 one worked date's book — the names it holds that day, each one's rank and signal value, and why the
-last name in and the first name out fall where they do — and the owner's yes, in their words.
+last name in and the first name out fall where they do — and the owner's yes, in their words. Where
+the rule has a no-trade band, **the band is read back beside it**, on the worked date and the
+rebalance before it: the names it holds on both, and which held names keep their drifted weights
+and which are traded.

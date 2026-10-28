@@ -35,9 +35,19 @@ could beat every benchmark and settle nothing is a measurement, not a test.
   weight, and whether a capped name's excess goes to cash or to the other names. Named bounds are
   the design, and the control holds them too; every other constraint is switched off, a lever a
   later experiment has to earn.
-- **Cash:** where the uninvested residual goes — a real, priced instrument, because the engine's
-  weight file has no cash row.
-- **Timing:** calendar, or event-driven on a stated trigger. Say what happens between triggers.
+- **Cash:** what the weights leave uninvested is cash, which the engine holds and pays interest
+  on: name the rate file, the spread a broker keeps below it, and the cash reserve. The same rate
+  is the risk-free rate of every Sharpe ratio the engine reports.
+- **Costs, inside the engine:** commission in basis points of the notional; the slippage model and
+  the half-spread it falls back on; and, registered now so it is never a forking path later, the
+  flat half-spread every book is priced again at beside the model, a stress row and a small
+  account. Then **what the cost model does not do**, by name.
+- **Delistings and gaps:** a position whose prices stop is sold by the engine at its last price; a
+  gap inside a series, which the engine cannot price, is a blocking row of the register, excluded
+  by name from every book.
+- **Timing:** calendar, or event-driven on a stated trigger. Say what happens between triggers,
+  and name any no-trade band: how far a held name's target may move before it is traded, read
+  back beside the rule in `JOURNAL_1.md` before this file is written.
 - **Lag:** how many days between the signal and the fill, and what the engine adds on top.
 - **Control:** the same rule with exactly one ingredient removed — name which — trading on this
   rule's own rebalance dates, so that the ingredient is the only difference. A control left to find
@@ -47,8 +57,8 @@ could beat every benchmark and settle nothing is a measurement, not a test.
 ### What this experiment should show
 
 **Predictions, fixed before the run.** Each cites a `Bibliotheca/` note or a section of
-`Data/analyzer.ipynb`, which measures the signal but builds no book. Getting these right is worth
-more than a good Sharpe; getting them wrong is worth more than a bad one.
+`Data/analyzer_marimo.py`, which measures the signal but builds no book. Getting these right is
+worth more than a good Sharpe; getting them wrong is worth more than a bad one.
 
 | # | Prediction | Where it comes from | What would falsify it |
 | --- | --- | --- | --- |
@@ -62,14 +72,19 @@ Costs usually belong here.
 What the experiment has to show to count as a success, fixed now. At the least:
 
 1. It beats the benchmark `JOURNAL_1.md` chose **and its own control** on risk-adjusted
-   return, net, over the same window — criterion 1 of the gate in `Paper_Trading/BITACORA.md`.
-2. Reproducible from a clean clone, through the pipeline, with no manual step.
+   return, net, over the same window — performance criterion P1 of the gate in
+   `Paper_Trading/BITACORA.md`.
+2. Reproducible from a working copy whose data folders were emptied first, through the pipeline,
+   with no manual step, every Verify passing — soundness criterion S5.
 3. A tradeable trigger frequency — not a rule that fires every day.
 4. Every prediction above evaluated explicitly in `FINDINGS_1.md`, **including the ones that turn
    out wrong.**
 
-**Success is necessary for graduation, not sufficient.** The gate's five criteria in
-`Paper_Trading/BITACORA.md` decide it, and a person signs it.
+**Success is necessary for graduation, not sufficient.** The gate in `Paper_Trading/BITACORA.md`
+decides it, in two layers — soundness, S1 to S5, then performance, P1 to P3 — and a person signs
+it. Name here what will evidence each soundness row: the trial count and the sweep, the control
+and the random books, the cost rows, the run from emptied data folders. A row without its evidence
+does not hold, and a book whose soundness fails yields no conclusion at all.
 
 ### What would falsify it
 

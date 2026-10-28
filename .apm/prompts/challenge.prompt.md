@@ -42,12 +42,12 @@ command asks whether the run treated them that way. `${input:experiment}` is the
 2. `FINDINGS_N.md` — the verdicts, the tally, the trial count, the caveats, and the claim it says
    the experiment moved.
 3. `JOURNAL_N.md` — what happened during the run, and what was already disclosed.
-4. `RESULTS.md`, including *Before any experiment* — where the analyzer's measurements survive once
-   notebook outputs are stripped, and where the published numbers live.
+4. `RESULTS.md`, including *Before any experiment* — where the analyzer's measurements survive,
+   since a notebook saves no output in its file, and where the published numbers live.
 5. `OBJECTIVE.md` — the claims this experiment tests, and their statuses.
 6. `BIBLIOGRAPHY.md` and every note a prediction cites, in the strategy's `Bibliotheca/`.
 7. `AGENTS.md` in that repository — the bar a result has to clear, and who writes each document.
-8. `Paper_Trading/BITACORA.md` only when graduation is being claimed.
+8. `Paper_Trading/BITACORA.md` only when the gate is being read.
 
 **Not the engine's workbooks.** `Backtest/` and `Attribution/` are gitignored outputs: a fresh
 clone has none, and they can differ from what the findings published. Every number in the report
@@ -68,10 +68,14 @@ is quoted from `FINDINGS_N.md` or `RESULTS.md`, with its source named.
    run added. A deviation with a good reason is fine — an undisclosed one is not: check that it is
    in the caveats or the journal, and name it when it is nowhere.
 5. **Success criteria, one by one.** Each is met, unmet or unevaluated, before any claim of
-   adoption or graduation. A criterion that passes is worth a line too. When the owner claims
-   graduation, the gate is covered here: `Paper_Trading/BITACORA.md`'s five criteria are read
-   against `FINDINGS_N.md` and `RESULTS.md`, each evidenced or not met, and nothing is written
-   there.
+   adoption or graduation. A criterion that passes is worth a line too. When the owner reads the
+   gate, it is covered here, in its two layers in `Paper_Trading/BITACORA.md`, against
+   `FINDINGS_N.md` and `RESULTS.md`: every soundness criterion first, S1 to S5, each with its
+   evidence or not holding — a row without evidence does not hold — then performance, P1 to P3, each
+   holding, failing or not evidenced. Then the outcome the rows describe — graduates, sound and
+   regime-dependent, or not sound — named, never decided; a regime-dependent reading names the
+   periods it earned and failed in, and a soundness failure leaves no conclusion to challenge.
+   Nothing is written there.
 6. **The notes behind the predictions** — the part no backtest reviewer will do. Open each cited
    note: does it say what the prediction says it says, does the relative path resolve inside the
    strategy, and is any source cited that has no note? Where the findings claim a source's failure
@@ -118,8 +122,9 @@ in words. The ordering the whole process rests on — the blueprint saved before
 counterfactuals before the engine — lives in the git log, not in the files. So read the log, as
 check 10 does: run `git log --oneline -- Experiments/Experiment_N` in the strategy's folder. Quote
 in the report, in plain words, what it shows — the version that wrote the blueprint, as check 10
-finds it, and whether it was saved before the one that put the rule into `experiment_N.ipynb`. A
-blueprint saved with its rule, or after it, cannot be told from one written afterwards; say so.
+finds it, and whether it was saved before the one that put the rule into
+`experiment_N_marimo.py`. A blueprint saved with its rule, or after it, cannot be told from one
+written afterwards; say so.
 
 The process can move under an experiment too: `blueprint`, `blueprint-critic` and this command come
 from one package, updated for every strategy at once. Read the version this run uses as `blueprint`
@@ -167,6 +172,6 @@ yet. This replaces the owner's own commit an older home's `AGENTS.md` asks for.
 - **`OBJECTIVE.md`** — a claim's status is `objective`'s to change, and its wording is the owner's.
 - **Compute or restate a performance number**, including a corrected one. The engines produce
   numbers; this command compares the ones already written down.
-- **Declare graduation.** The gate's last criterion is a person's signature.
+- **Declare graduation**, or any outcome of the gate. Its sign-off is a person's name and date.
 - **Open another experiment's files** unless the request and the reason are already in
   `JOURNAL_N.md`, and **write anything at home.**

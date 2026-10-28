@@ -51,9 +51,9 @@ passes to get here.
 
 # --- example: begin ---
 
-# Golden Flow runs one book, `Paper_Trading_1`, with `BIL` as cash, against the KN US Equity
-# Core or, while the index's files lag the day, `SPY`.  In this package the book is a
-# record, and `Paper_Trading/BITACORA.md` says why it does not run here.
+# Golden Flow has no book on paper: its Experiment 1 reads as sound and regime-dependent, which is
+# not paper traded alone, as `Paper_Trading/BITACORA.md` says.  This is the working daily run a
+# book that graduates would take.
 
 import argparse
 import datetime
@@ -80,9 +80,9 @@ __all__ = [
 ]
 
 # The graduated books, by folder name.  A book is added here in the commit that freezes it, and
-# removed in the commit that sends it to production or retires it.  Experiment 1 graduated on
-# 2026-10-06, signed by the owner, as `BITACORA.md` records.
-BOOKS = ("Paper_Trading_1",)
+# removed in the commit that sends it to production or retires it.  None is on paper, as
+# `BITACORA.md` records.
+BOOKS = ()
 
 PAPER_TRADING_DIRECTORY = pathlib.Path(__file__).parent
 REPOSITORY_ROOT = PAPER_TRADING_DIRECTORY.parent

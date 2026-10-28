@@ -1,6 +1,8 @@
 """
-The promotion of a graduated experiment -- step 7 of 8.  Run once, when a person has signed the
-gate in `BITACORA.md`, and never again for the same book.
+The promotion of a graduated experiment -- step 7 of 8.  Run once, when an experiment graduates:
+every soundness and every performance criterion of the gate in `BITACORA.md` holds, and a person
+has signed it there.  Never again for the same book, and never for an experiment that reads as
+sound and regime-dependent, which is not paper traded alone.
 
 In plain words: freeze the strategy.  Every file the book needs to go from raw prices to a priced
 book is copied byte for byte, from the commit that graduated, into `Paper_Trading/Paper_Trading_N/`
@@ -11,8 +13,9 @@ construction can change the shared modules tomorrow, and the graduated book neve
 
 What it copies is listed in `FROZEN_FILES`, and it refuses to run on a working tree with changes
 to tracked files: a freeze of code nobody committed is a freeze nobody can reproduce.  The rule
-itself is not copied here -- it lives in a notebook cell -- so `paper_trading_N.py` carries it,
-written from the experiment's cells and committed before the promotion.
+itself is not copied here -- it lives in a cell of the experiment's marimo notebook -- so
+`paper_trading_N.py` carries it, written from the experiment's cells and committed before the
+promotion.
 
 Two things cannot be copied, because every book shares them: the raw price files, and the
 calculations the Curator runs while it writes them.  `FREEZE.json` records the hash of those

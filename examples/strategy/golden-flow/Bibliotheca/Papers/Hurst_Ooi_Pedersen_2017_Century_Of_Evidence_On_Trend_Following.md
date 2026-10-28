@@ -15,12 +15,12 @@ the property the authors call "crisis alpha".
 
 ## What it implies for Golden Flow
 
-> Rewritten on 2026-10-07 for this copy, after FINDINGS_1.md reported.
+> Rewritten on 2026-10-27 for this copy, after FINDINGS_1.md reported on Sharadar.
 >
 > **Claim 1, the signal.** The paper is the reason to test a trend rule at all: the effect it
-> reports is not one sample's. Golden Flow's evidence is one sample, 2015-01-02 to 2026-06-01, and
-> in sample. Inside it the golden cross beat its control, the same rule without the cross, in 2015
-> to 2018 and in 2019 to 2022. It lost 2023 to 2026 by 11.4 points a year
+> reports is not one sample's. Golden Flow's evidence is one sample, 2000-01-03 to 2026-08-14, in
+> sample. Inside it the golden cross beat its control, the same rule without the cross, on Sharpe
+> and CAGR in 2000–2008 and 2018–2026, and lost in 2009–2017
 > ([`FINDINGS_1.md`](../../Experiments/Experiment_1/FINDINGS_1.md), prediction 1).
 >
 > The paper's books are sized by volatility; Golden Flow's by traded value. So it says nothing for

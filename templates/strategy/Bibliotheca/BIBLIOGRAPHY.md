@@ -75,7 +75,7 @@ available elsewhere.**
 
 A researcher reads these notes to fine-tune the claims in [`../OBJECTIVE.md`](../OBJECTIVE.md) and
 to draft the thesis and predictions in each `BLUEPRINT_N.md`. It may be a person, or yours, made
-with `init-researcher` from the [KaxaNuk Researcher](https://github.com/KaxaNuk/KaxaNuk-Researcher).
+with `init-researcher` from the [KaxaNuk Researcher](https://github.com/KaxaNuk/Researcher).
 **Every prediction it writes cites the note it came from**, so each line of the hypothesis points
 back to something somebody read.
 
@@ -104,7 +104,7 @@ process itself.
 | Is there value apart from price? | Graham & Dodd (1934), Damodaran (1994) | valuation is a model with explicit assumptions, not a number | `BLUEPRINT_N.md`: state the mechanism before the test |
 | How is capital allocated across many bets? | Markowitz (1952) | risk lives in covariance; portfolios over assets | step 4, and the Portfolio Construction module |
 | Which risk is rewarded? | Sharpe (1964), Lintner (1965) | beta earns a premium — **performance attribution is born** | step 6's first cut: market exposure against everything else |
-| What is skill, measurably? | Jensen (1968) | alpha is the residual after the risk adjustment; measurement precedes belief | graduation criterion 2 asks for **idiosyncratic** alpha |
+| What is skill, measurably? | Jensen (1968) | alpha is the residual after the risk adjustment; measurement precedes belief | graduation criterion P2 asks for **idiosyncratic** alpha |
 | Must alpha be proven? | Fama (1970) | alpha is rare; evidence beats intuition | the bar in `AGENTS.md`, and *the five ways a backtest lies* |
 | How many risks are there? | Ross (1976) | multiple priced factors, even when unnamed | why step 6 uses a multi-factor model, not a single beta |
 | Which factors, empirically? | Fama & French (1992, 1993), Carhart (1997) | value, size, momentum; research becomes systematic | the factor sets step 6 reads |

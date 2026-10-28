@@ -39,6 +39,12 @@ Features page: they show the arithmetic, and in practice are reused.
 A division involving decimal columns returns float64 (the changelog, 0.38), and one between integer
 columns returns float (0.43.0). The worked example's prices arrive as fixed-point decimals.
 
+**A sparse column reaches pandas whole through a plain list.** In the worked example's runs on
+0.51.0, a dividend column — a value on its ex-date, null elsewhere — converted through its
+Arrow-backed pandas Series handed back its values alone; `column.to_pyarrow().to_pylist()`, then
+`pandas.to_numeric`, kept every row. Its `c_*` calculations read every input that way, as floats,
+and hand each result back through `DataColumn.load()` with any non-finite value made null.
+
 ## Conversions and inspection
 
 ```python

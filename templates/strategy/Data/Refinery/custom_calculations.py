@@ -10,6 +10,10 @@ Two kinds of column live here, and only here:
     refetch of every identifier, and a sweep must never cost a download, so the frozen inputs stay
     in the Curator and the column with the setting lives here.
 
+**A new experiment's signal on the data already downloaded is an `r_*` column here**, computed from
+the `c_*` columns the Curator wrote -- the daily total-return log returns, the traded value --
+never a widening of the Curator's columns and a second download.
+
 What is expected here is one function per column, named exactly as the column, resolved by
 parameter name the same way the Curator resolves its own.  Every parameter is a column of the
 panel -- the date, `main_identifier`, any `c_*` or `r_*` column, any `current_*` column -- and a

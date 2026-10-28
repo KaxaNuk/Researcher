@@ -40,24 +40,31 @@ being clever. `blueprint` reads the benchmark from it.
 
 The second, saved before the blueprint, is *the rule read back*: the rule in one plain sentence,
 one worked date's book — the names it holds that day, each one's rank and signal value, and why the
-last name in and the first name out fall where they do — and the owner's yes, in their words.
+last name in and the first name out fall where they do — and the owner's yes, in their words. Where
+the rule has a no-trade band, **the band is read back beside it**, on the worked date and the
+rebalance before it: the names it holds on both, and which held names keep their drifted weights
+and which are traded.
 
 <!-- example: begin -->
 
-**What this copy of the journal holds.** Golden Flow's entries from 2026-10-05 on, whole and word
-for word, then one entry on how this copy was made.
+**What this copy of the journal holds.** Golden Flow's entries from 2026-10-05 to 2026-10-24, whole
+and word for word, with the entry the package wrote on 2026-10-07, when it first copied the
+strategy, in its place among them; then one entry of 2026-10-27, on the owner's decision about the
+gate.
 
-- **Left out:** every entry dated before 2026-10-05, including the 2026-09-23 entries that
-  `BLUEPRINT_1.md` and one entry below cite. Also left out: the 2026-10-06 entry that retired
-  `BRAINSTORMING_1.md`, with the brainstorming entries it quotes.
-- **Replaced:** private names, each by a description in square brackets. They are another
-  strategy's name, the name of the Analytics Factory's private repository, a local path and a
-  branch name. Nothing else in an entry is changed.
+- **Left out:** every entry dated before 2026-10-05, including the 2026-09-23 entries that one
+  entry below cites; the 2026-10-06 entry that retired `BRAINSTORMING_1.md`, with the brainstorming
+  entries it quotes; and Golden Flow's later experiments, which this copy does not hold.
+- **Replaced**, each by a description in square brackets: private names — another strategy's name,
+  the name of the Analytics Factory's private repository and an issue in it, a person's name, a
+  local path and a branch name — and four mentions of Golden Flow's next experiment. The owner's
+  first name is written "the owner". Nothing else in an entry is changed.
 - **A key to the entries:**
   - versions 0.13.0 and 0.14.0, and their tags, are Golden Flow's own earlier versions, run on
-    another index;
+    another index; 0.15.0 to 0.15.2 are this experiment's earlier version, on FMP prices;
   - "the desk" is KaxaNuk's Analytics Factory;
-  - "the worked example", in entries dated before 2026-10-07, is the package's earlier example.
+  - "the worked example", in entries dated before 2026-10-07, is the package's earlier example;
+  - `Paper_Trading_1`, the paper book of 0.15.2, was retired on 2026-10-24 and is not in this copy.
 
 <!-- example: end -->
 
@@ -697,5 +704,426 @@ for word, then one entry on how this copy was made.
     In this copy the book does not run, and `Paper_Trading/BITACORA.md` says why.
 - Open threads: the paper record continues in the strategy's own repository, and this copy does not
   follow it. The first kill-switch reading is at the review of 2027-10-06.
+
+<!-- example: end -->
+
+<!-- example: begin -->
+
+## 2026-10-07 — The package ships the copy
+
+- Idea / question: the owner asked to tag and push the KaxaNuk Researcher 0.34.0, whose worked
+  example is now a curated copy of this repository's 0.15.1, and this repository with it; the
+  documents here still said the package shipped `liquid-golden-cross`.
+- What we tried / considered: the README, `AGENTS.md` and `SETUP.md` lines that described the
+  package; the journal and the changelog keep what they said when they were written.
+- Outcome / decision: the three documents say the package ships the copy, `examples/golden-flow/`,
+  from KaxaNuk Researcher 0.34.0, and that this repository stays the live strategy, which the copy
+  does not follow. `main`, with the tags 0.13.0, 0.14.0 and 0.15.1, was pushed on 2026-10-07 at the
+  owner's word. Version 0.15.2, PATCH.
+- Open threads: the daily task, as the entry above says.
+
+<!-- example: end -->
+
+<!-- example: begin -->
+
+## 2026-10-23 — Experiment 1 is rewritten a second time: the owner's decisions, in his words
+
+- Idea / question: the owner asked for the reference example to be brought to the KaxaNuk
+  Researcher of the day and run end to end *"since 2000 (we should have factor data and benchmark
+  since then)"*, on the new inputs — *"we have now sharadar and the new KN US Equity Core
+  benchmark"*, and the factor model's new numbers — and for a paper to come out of it: *"tenemos
+  que revisar que todo haga sentido y no estemos cometiendo ningun error o assumiendo cosas que se
+  alejen de la realidad point in time"*. He added a constraint 0.15 did not meet: *"no quiero una
+  estrategia que tenga demasiados rebalanceos y sea demasiado difícil de probar en mi cuenta de
+  broker"* (in English: not too many rebalances, easy to test in his broker account). 0.15.2
+  re-strikes on 1,381 of 2,869 trading days.
+- What we tried / considered: an Experiment 2 beside 0.15.2, or a second rewrite of Experiment 1.
+  The owner chose the **rewrite**, under the procedure `AGENTS.md` sets: this entry, a new
+  `BLUEPRINT_1.md` naming the blueprint of 2026-10-06, 0.15.2 kept at its tag and as a row of
+  `RESULTS.md`, and the runs of 0.13.0, 0.14.0 and 0.15.x counted in this experiment's trials. Every
+  decision below was taken in chat on 2026-10-23, before any stage of this version ran.
+- Outcome / decision:
+  - **Universe.** The KN US Equity Core as the desk supplied it on 2026-10-22, from the owner's
+    Downloads folder, byte for byte (the same files as the factor model's `Data/Supplied/`):
+    `index_daily_holdings_1998.csv` (md5 `49e70b8537ad923ac2c1afc8b0ea1164`),
+    `backtest_returns.csv` (md5 `b2c804f5a383b1fc5d9810a35f7f3aab`),
+    `backtest_components_mask.csv` (md5 `d42becfb5f32e3befb02351a4cb65f1b`) and `tickers.csv`
+    (md5 `e41397073f3a764ed8c88030a473d903`). 2,199 listings keyed by Sharadar ticker, 640 to 915
+    members a day, 1998-12-31 to 2026-08-14; the weights sum to one within 3e-5 every day and the
+    mask agrees with them on every cell. The returns file has ISO dates and a blank return header.
+    It is a wider index than 0.15's Core, which held about 600 names from 2000.
+  - **Prices.** **Sharadar**, through the Data Curator 0.51.0, the first release with its provider.
+    Sharadar keeps delisted securities, so lie 1 of `AGENTS.md` is no longer accepted: it is close
+    to removed, and what is left is measured. The download carries only the columns a stage reads.
+  - **Window.** 2000-01-03, the factor model's first date, or the first date on which the members
+    with a price and a signal hold 90% of the Core's weight, whichever is later; to 2026-08-14, the
+    last date of the Core and the factor model. Nothing is held out: there is no later data.
+  - **Factor model.** *"espero que el modelo de factores nuevo ya tenga la correcion en
+    momentum"*: the KN US Equity Factor Model's Experiment 1, whose Momentum skips the latest
+    month, by desk ticker, 2000-01-03 to 2026-08-14 (`factor_files/experiment_1/Desk/`, md5 of
+    `Momentum.csv` `7724586d9165b3e154301086d4caa7b6`). Its repository says [the factor model's owner] has not
+    reviewed it and every figure is provisional; so is every attribution here.
+  - **Rebalance.** **Monthly, on a fixed date**: struck on the last trading day of each month and
+    filled at the **next day's open**, a market-on-open order (Sharadar publishes no VWAP). A
+    **no-trade band of 0.5 points**: a held name keeps its drifted weight unless its target differs
+    by more than half a point; entries and exits always trade. The sweep tries 0.25 and 1.0, read on
+    turnover only.
+  - **Cash.** *"no usese bil, usa cash si llega a pasar"*, then *"inviertelo a una tasa usando datos
+    de la fred de la tasa interbancaria o de reporte ... y que asuma costos como los de interactive
+    brokers"*, and *"all this cost should be simulted using the backtest engine nothing outside"*:
+    no cash fund. What the bounds cannot place is **USD cash**, paid by the engine at FRED's
+    effective federal funds rate (`DFF`) less half a point, floored at zero, ACT/360, as
+    Interactive Brokers pays on a dollar balance — the engine's `financing_benchmark_rate` rate file
+    and `cash_interest_spread = -0.005`. The same rate is the risk-free rate of every Sharpe ratio
+    the engine reports, so Sharpe ratios here are excess of cash, where 0.15's were not. SOFR was
+    considered and set aside: it starts in 2018, and DFF is the rate IBKR's dollar benchmark follows.
+  - **Costs.** *"we can increase in bases the transaction costs instead of cents"*: commission
+    **1 basis point of notional** (`commission_model = "basis_points"`), about IBKR's fixed
+    half-cent a share on a fifty-dollar share; slippage **`spread_plus_impact`**, a Corwin-Schultz
+    half-spread from Sharadar's daily high and low plus square-root market impact from its volume.
+    A stress row at 5 bp commission and 10 bp flat slippage. All inside the engine.
+  - **Delistings.** With Sharadar, a delisted name has prices to its real last trade, often over the
+    counter. The engine sells a held name there (`delisted_position_handling =
+    "sell_at_last_price"`), which **drops 0.15's one stated leak**, the t−1 exit that needed a day of
+    hindsight. The t−1 exit stays only for a gap inside a series, which the engine cannot price.
+  - **Capital.** $1M as the headline, as in 0.15, and a $100k row for an account the owner can test.
+  - **Sign-off.** The owner's approval of the plan of 2026-10-23 is the go on the blueprint's
+    parameters above; the night stops at the gate's verdict: no signature, no freeze, no push.
+- Open threads: the Sharadar account answered *"exceeded the API speed limit and your account has
+  temporarily been disabled"* (HTTP 429) on the evening of 2026-10-23, before this version's
+  download; the curator waits for it and asks in batches of 25 with a pause between. The seed
+  reads Sharadar's catalogue as exported on 2026-09-24 (md5 `f26a268032658d0f7fba08d6c70dd947`),
+  copied from the benchmark repository's provider cache rather than asked for again; four Core
+  listings are not in it: ADRX1, SAGE, SKYD and WBA.
+
+<!-- example: end -->
+
+<!-- example: begin -->
+
+## 2026-10-23 — The data stage on Sharadar: what the provider is, and what the Curator rebuilds
+
+- Idea / question: can the Core's 2,199 listings be priced from 1998 on Sharadar as the market
+  priced them, before any rule exists?
+- What we tried / considered:
+  - **The account.** The startup subscription is served by Sharadar's own API,
+    `api.sharadar.com/v1.0`, not Nasdaq Data Link: the evening's HTTP 429 "account temporarily
+    disabled" came from asking `data.nasdaq.com` with this key. The seed's catalogue
+    (`/data/tickers?years=full`, md5 `efdfffb59f3944a0062cfe4770accb4f`, fetched 2026-10-23) and
+    the corporate actions (`/data/actions?years=full`) are taken whole from it; the Curator's
+    provider already used it. Data Curator 0.51.0, ten seconds between batches of 25 at the
+    owner's word ("maybe go slower in the download").
+  - **Three decimals.** Sharadar rounds every price to three decimals, its adjusted ones included:
+    its raw rows for AAPL on 1998-01-02 read close 16.25, split-adjusted close 0.145, adjusted close
+    0.121. The Curator's dividend and split blocks would rebuild the adjustment, but with the
+    Sharadar provider any `d_*` or `s_*` column stops a run ("Column not available under prefix"),
+    so `Data/curator.py` rebuilds it after the download from the exact close and the actions bulk
+    file: splits (a ratio, new to old), cash dividends and spin-offs (cash a share, in today's
+    split-adjusted shares).
+  - **Splits after the window.** NFE's 1-for-50 of 2026-09-14 is in every NFE price and dividend
+    since 2019; the first rebuild dropped actions after the window's end and read NFE's dividends
+    as 17% a quarter. Fixed: a split after the last day counts on every day.
+  - **A factor no action records.** NVTP's split-adjusted prices are a hundred times its close with
+    no action to say why; the rebuild takes Sharadar's constant wherever the two bases differ by
+    one, so the rebuilt price, Sharadar's volume and its dividends stay on one basis.
+  - **Volume adjusted twice.** The universe notebook's first split check flagged 316 names — its
+    tolerance read any big liquidity move around a split as a fault. Measured split by split: at
+    82 splits in 77 listings (BBWI 2000-05-31, FAST 2002-05-13, GILD 2002-03-08, EBAY, CLF, NVDA,
+    NFLX…) traded value steps by the split's own factor while the shares the tape printed stay
+    flat — the volume before the split was already in post-split shares, FMP's fault of
+    Data-Curator #36 on Sharadar. The Curator divides the earlier volume by the factor where both
+    hold (within 10% and 15% in logs, 30 days each side, splits of five for four or more); the
+    universe check reads the same signature and finds none left.
+- Outcome / decision:
+  - **Checked file by file** against Sharadar wherever its decimals allow (prices of ten dollars or
+    more): 2,199 files; three with a day off by more than 0.5% — BILL and IOT on 2025-06-03, a
+    one-day glitch in Sharadar's adjusted close the rebuild does not share, and CXW in 1998,
+    dividends Sharadar books on other dates than its actions table — and no split-adjusted close
+    off Sharadar's. The open keeps Sharadar's rounding: 0.23 bp of the Core at most.
+  - **The universe:** 2,198 listings priced (UB is not in Sharadar), the window opens on the floor,
+    2000-01-03, at 98.1% of the Core priced and signalled and never below 96.5%; the share of the
+    Core with no price is at most 0.11% on any day, against about 7% on FMP in 0.15. Excluded by
+    name, the register's blocking rows: FPS, H1, ILA.A, MDLN, Q and SUNB, with less than 200 days of
+    prices while members, and TXCCQ, whose adjusted price moves more than sixfold in a day.
+  - **The analyzer** wrote `RESULTS.md`, *Before any experiment*, rows 1 to 17, and its section 1.1
+    measures the provider's precision and what the Curator rebuilt.
+  - **Issues filed at the owner's word** ("send the issues to each", "report all data issues to
+    data curator and kn us equity benchmark"): Data-Curator #39 (dividend and split columns
+    unreachable with Sharadar), #40 (`c_daily_traded_value` empty without a VWAP), #41 (rebuild the
+    adjustment where a provider rounds), #42 (Sharadar's data faults found here); and
+    [an issue in the Analytics Factory's private repository] (the Core's findings, and whether its construction reads the
+    same double-counted volume).
+- Open threads: the open fill keeps three decimals; the Core may carry the volume fault in its own
+    construction (issue #10); the deflated Sharpe stays uncomputed.
+
+<!-- example: end -->
+
+<!-- example: begin -->
+
+## 2026-10-23 — The rule read back on one worked date, before its blueprint
+
+- Idea / question: does the rule, as the owner decided it, do on a real date what its one sentence
+  says? *On the first trading day of each month, at the open, hold the KN US Equity Core's members
+  whose 50-day average sat above their 200-day one at the month's last close, each in proportion to
+  its 63-day traded value, none above 20% and none below 1%; leave a held name alone when its
+  target moved by half a point or less.*
+- What we tried / considered: the book of 2026-08-03, struck on the close of 2026-07-31, computed in
+  a scratch script with `portfolio_construction.bounded_by_score` on the refined panel — no rule
+  cell holds code yet.
+- Outcome / decision: 703 members, 456 in a golden cross, all 456 with a fill price; the bounds hold
+  **28 names, fully invested**: MU 18.8%, NVDA 12.3%, SNDK 8.6%, AAPL 6.7%, AMD 6.2%, INTC 5.7%,
+  AMZN 4.8%, GOOGL 4.6%, AVGO 4.0%, MRVL 4.0%, then AMAT, LITE, WDC, QCOM, STX, LRCX, BE, LLY, DELL,
+  KLAC, JPM, GEV, CAT, CSCO, GLW, V, RKLB and TXN between 2.0% and 1.0%. The 29th, UNH, is out
+  because adding it would put the smallest weight under 1%. The most traded members out on the
+  cross are TSLA, MSFT, META, PLTR and ORCL, each with its 50-day average below its 200-day at the
+  close. MU's $48.6bn a day over 63 days, above NVDA's $31.8bn, was checked against Sharadar's raw
+  rows: about $800 to $1,200 a share on about 50 million shares a day, as published. No cap binds
+  on this date; the book is a semiconductor and memory book this month, which the 20% cap does not
+  prevent.
+- Open threads: the owner's yes to this read-back is his approval of the plan of 2026-10-23, which
+  fixed every element above before the run.
+
+<!-- example: end -->
+
+<!-- example: begin -->
+
+## 2026-10-23 — The blueprint's draft, put to its critic cold, and what was done about each objection
+
+- Idea / question: what does a reader with no stake find wrong in the draft before it is committed?
+- What we tried / considered: the `blueprint-critic` agent read the draft, `AGENTS.md`,
+  `OBJECTIVE.md`, `RESULTS.md`, the three entries above and every note the draft cites, and wrote
+  nothing. Six blocking objections and nineteen others.
+- Outcome / decision, objection by objection:
+  - **B1, the reason did not cover the falsifier's CAGR limb.** The thesis now takes the return
+    limb from the analyzer: forward 21-day return on the pool 0.87% with the cross on against
+    0.20% off, beside the volatility (rows 10 and 11), and the compounding argument; the single-name
+    reading is labelled the blueprint's, the notes being on indices.
+  - **B2, claim 1's status hung on a lead and a replaced version's status.** The table now reads
+    the benchmark limb from success criterion 1, names the middle case "confirmed against its
+    control only", and says `OBJECTIVE.md`'s status of 0.15 is rewritten from this version's
+    findings, never kept.
+  - **B3, claim 2 had no status; claim 3 broke under the band.** Claim 2 against equal weight is
+    falsified as a source of Sharpe if prediction 3 holds, confirmed as a book if it fails; its
+    random-draw half stays a lead. Claim 3 holds on targets, and the band's half-point excursions
+    outside the bounds are reported in section 2.1.
+  - **B4, trades off the monthly dates.** No book re-strikes between its dates: the engine's sale of
+    a delisted name is a sale; a name the engine refuses for a gap inside a series is excluded by
+    name from every book and the run priced again. Success criterion 3 now states tradeability,
+    since twelve dates a year hold by construction.
+  - **B5, the control's eligibility.** Written in full: every condition of the rule but the cross,
+    the same bounds, band, cash, costs and delisting rule, on the rule's dates.
+  - **B6, gaps in what may not rescue the falsifier.** Added: the universe and its files, the
+    provider, the rebuild and the volume correction with its tolerances, the traded-value
+    definition, the control's definition, the gap and delisting rules, the slippage model and its
+    fallback.
+  - **N1** Faber and Hurst now cited as context on indices. **N2** the Core's history as a backtest
+    of its rules is a key risk, asked of the desk in issue #10. **N3** traded value is the
+    rebuild's close times volume, and `OBJECTIVE.md` is brought to it with the findings. **N4** the
+    open price on d is named as the one same-day condition, a small leak. **N5** the band is read
+    back below. **N6** Sharpe ratios are excess of cash and not comparable with 0.15.2's; the flat
+    spread is named a simplification. **N7** what the cost model does not do is stated: no
+    per-order minimum, an undocumented window on the fill's day, integer shares on adjusted prices;
+    `AGENTS.md`'s fourth lie is brought to the engine's basis-point commission in the documents
+    pass. **N8** the window's floor is the owner's, chosen after 0.15's results, confirmed by the
+    coverage rule. **N9** leads say what would have licensed them and are counted as leads, not
+    trials. **N10** the findings report the share of months the book beat the control and the two
+    books' overlap beside every margin. **N11** Han, Zhou & Zhu's wording corrected; Daniel &
+    Moskowitz added against prediction 2. **N12** the equal-weight arm is capped at 20% with the rest
+    in cash. **N13** lead 6 is now checkable: 15 to 60 names on most dates, the cap binding on fewer
+    than a quarter. **N14** lead 8 follows Paleologo: momentum small. **N15** the 0.22% cites
+    analyzer section 1.1, and 2009–2017 is "close to nothing" on the cross's rows only. **N16**
+    folded into B4. **N17** random books draw from what the control may hold; the $100,000 rule and
+    control are counted as books, the trial count 152. **N18** the over-the-counter sale is named a
+    caveat with Shumway (1997); Kaminski & Lo's wording corrected. **N19** Daniel & Moskowitz is a
+    key risk.
+  - **The band, read back (N5)** with `portfolio_construction.banded_book` on the books of
+    2026-07-01 and 2026-08-03: July held 30 names, August's target is 28; 16 held names keep their
+    drifted weights, 12 orders go in — TXN and V enter, CRWV, UNH, WMT and XOM leave, six names
+    resize — and 1.4% stays in cash. Kept names can drift under the floor: GLW is struck at 0.72%
+    against a 1.11% target, within the half point. At weights near 1% the band is wide in relative
+    terms; it was fixed for the number of orders, before any return.
+- Open threads: none blocking; the blueprint is committed alone, next.
+
+<!-- example: end -->
+
+<!-- example: begin -->
+
+## 2026-10-24 — The cycle: three runs, what the engine charged, and the verdict
+
+- Idea / question: does the monthly book of the blueprint of 2026-10-23 pass its gate, priced by the
+  engine with every cost and the cash's interest inside it?
+- What we tried / considered:
+  - **First run.** The engine refused every book: `Configuration` requires `commission_cents` even
+    with basis-point commission (`TypeError`). `build_configuration` now passes 0.0 — a defect for
+    the Backtest Engine's issues.
+  - **Second run.** 63 engine runs and the attribution; Verify raised. (a) The band's invariant
+    checked the struck weight against its target within the band, but the rule scales traded names
+    down when kept names hold more than their targets, as the blueprint says: rewritten as "no
+    struck weight above its target by more than the band", then given one point of overnight
+    allowance in the third run, since a kept name is decided at the close and written at the next
+    open. (b) Twenty runs stopped valuing early — "Cash error on <date>" — at rebalances whose costs
+    outran the 1% reserve: eighteen random books, two sweep settings, the rule at $100,000.
+    (c) **The costs were not believable.** The rule paid $362,502 of slippage against $15,573 of
+    commission at 1 bp: about 23 bp a trade on average, 40 to 55 bp on dates such as 2000-01-03 and
+    2026-08-03, on AAPL, MSFT and NVDA. The stress row — 5 bp commission and 10 bp flat — was the
+    cheaper of the two. The engine's Corwin–Schultz estimate reads a megacap's daily range as spread.
+    One pricing of the rule with the engine's other estimator, Abdi–Ranaldo (reading the
+    split-adjusted close as well), gave 7 to 40 bp a trade, median by year — no better.
+  - **What was done, and what was not.** The pre-registered row stays the record, marked; **every
+    book was priced again at a flat 5 bp, the blueprint's own fallback half-spread** — the same
+    weights, no new book, a forking path counted beside the trials. Truncated runs are excluded by
+    name in the notebook (`Backtest/excluded_runs.csv`) and every criterion that needs one reads "not
+    evidenced"; Verify raises only if a run is neither read whole nor excluded with its reason, or if
+    the rule, the control or equal weight is excluded. The cash reserve was not raised: it is on the
+    blueprint's list of what may not rescue the falsifier.
+  - **Third run**, 2026-10-24: 102 engine runs, 81 read, 21 excluded by name; Verify passes, 71
+    checks.
+- Outcome / decision:
+  - **The falsifier does not fire**: the cross beats its control by +0.065 Sharpe and +1.30 points
+    (flat: +0.105 and +2.24), on both measures in 2000–2008 and 2018–2026, losing in 2009–2017.
+  - **The book does not graduate**: its Sharpe, 0.162 (flat 0.221), is below the Core's 0.308 and
+    `SPY`'s 0.307; every sweep setting keeps its margin over its control and none beats the Core.
+    Criteria 1 and 3 fail at both cost rows; 2 is not evidenced (13 of 19 random books at the flat
+    row). The whole shortfall is 2000–2008, −13.7% a year against the Core's −3.4%: the bubble's
+    most traded names, held into the fall, left late by a monthly cross.
+  - **Tradeable by hand**: about twenty orders on each of twelve dates a year, turnover 2.16; 1,481
+    orders under $100 are the band's residue, a kept name re-traded by a few dollars.
+  - **Attribution**: four fifths of the excess return is factor exposure; momentum is the largest
+    style (+31.9 points), against lead 8; idiosyncratic +43.2, residual selection +7.7. The first
+    cut reconciles to 0.07 points a year.
+  - `FINDINGS_1.md` rewritten; `RESULTS.md`, `OBJECTIVE.md` and `BITACORA.md` compiled from it.
+- Open threads, for the owner: which cost row the gate is read at (it does not change the verdict);
+  whether `Paper_Trading_1`, the 0.15.2 book, keeps running; a quoted-spread source for the
+  `Bibliotheca/`; and the issues for each part of the Investment Lab this run found.
+
+<!-- example: end -->
+
+<!-- example: begin -->
+
+## 2026-10-24 — The owner reads the gate at the flat 5 bp row, and keeps it
+
+- Idea / question: which cost row is Experiment 1's gate read at, and does the gate change after the
+  book failed it?
+- What we tried / considered: the pre-registered row, the engine's Corwin–Schultz spread, which
+  charged megacaps 23 to 55 bp a trade; the flat 5 bp row, the blueprint's own fallback
+  half-spread; and the owner's idea of graduating a book that works only in some periods, through the
+  momentum and size exposures it carries.
+- Outcome / decision: **the gate is read at the flat 5 bp row**, the Corwin–Schultz row reported
+  beside it; **the gate is kept as it is**, five criteria and the same margins, for [the next experiment] as
+  well — a book that works only in a declared regime is a later experiment with a gate of its own,
+  written before its run. The verdict does not move: criteria 1 and 3 fail at the flat row.
+- Open threads: [the next experiment, which this copy does not hold].
+
+<!-- example: end -->
+
+<!-- example: begin -->
+
+## 2026-10-24 — The adjustment moves into the Curator's own calculations, and no number moves
+
+- Idea / question: can the rebuilt adjustment be computed by the Data Curator itself, from
+  Sharadar's dividends and splits, instead of a post-step over the actions bulk file?
+- What we tried / considered: the entry of 2026-10-23 says the `d_*` and `s_*` columns stopped a
+  run with the Sharadar provider. That was a wrong column name, not a limit of the library: once the
+  dividend and split blocks are mapped to the provider, the joined names
+  `d_ex_dividend_date_dividend_split_adjusted`, `s_split_date_numerator` and
+  `s_split_date_denominator` are read (Data-Curator #39, closed). The rebuild is now eight `c_*`
+  calculations in `Data/Curator/custom_calculations.py` — the split ratio, with Sharadar's constant
+  basis where a factor has no split and a split after the window; the total-return close and its
+  ratio; the open on both bases; the total log return; traded value with the volume counted twice
+  corrected; and the total-return volume. The one action the dividend column does not carry is a
+  spin-off (GE HealthCare, GE Vernova and 245 more files): `Data/curator.py` adds them after the
+  download from Sharadar's actions file (Data-Curator #43). `c_daily_traded_value` and
+  `c_log_returns_dividend_and_split_adjusted` are renamed `c_traded_value` and
+  `c_log_returns_total`.
+- Outcome / decision: ten reference names (AAPL, NFE, NVTP, FAST, GE, KO, LEHMQ, MSFT, CXW, BILL)
+  match the earlier rebuild to 1e-14 or better. The full download, the refinery, the universe and the
+  analyzer re-ran; the adjustment checks read as before (three files with a day off Sharadar's,
+  none with a split-adjusted close off). Experiment 1's struck weights match the published ones
+  except in 10 of 162,880 cells, by 1e-6, the sixth decimal of the weight file, where a difference of
+  1e-14 lands on a rounding boundary. Every engine figure re-ran and matches FINDINGS_1 to its last
+  digit (the rule's Sharpe 0.1620, flat 0.2214; the Core 0.3075; `SPY` 0.3070), and so do the rule's,
+  the control's and equal weight's attribution (idiosyncratic +43.22, +29.65, −9.08; Brinson alpha
+  +26.85, selection +18.71; residual selection +7.68). The random books' attribution was stopped
+  before it finished: it is re-run on Attribution Analysis 0.5.0 next. No published number moves.
+- Open threads: the run took over six hours, 98% of the engine's share of it loading CSVs one book
+  at a time. Before [the next experiment] the pipeline moves to the engine's batch mode, Parquet read with
+  PyArrow and Attribution Analysis 0.5.0, with Backtest Engine 0.67.0 (the owner's decision of
+  today), and Experiment 1's attribution is read again on 0.5.0.
+
+<!-- example: end -->
+
+<!-- example: begin -->
+
+## 2026-10-24 — Attribution Analysis 0.5.0 by KN sector, linked; a faster pipeline; Paper_Trading_1 retired
+
+- Idea / question: the pipeline took over six hours, and the attribution library was three
+  releases behind. Before [the next experiment], every library on its newest build, every step fast enough to
+  re-run end to end, and Experiment 1's attribution read again on the new library.
+- What we tried / considered:
+  - **Versions** (the owner's rule of today: check every library before a run). Data Curator 0.51.0,
+    the newest; Backtest Engine 0.67.0, installed, which gives the six headline books the same
+    Sharpe and CAGR as 0.66.0 to six decimals; Attribution Analysis 0.5.0, installed from the
+    library's own repository at `1ed3b09` (0.5.0 with its unreleased by-year tables), because its
+    licence index answered 503. The unified KaxaNuk licence server validates it with the owner's
+    engine key; the key filed for attribution is the old server's.
+  - **Where the time went.** 445 of the engine's 452 minutes were spent loading CSVs, once per
+    book; the attribution sent each worker the whole universe's returns. Now: every per-security
+    file is Parquet, written and read with PyArrow through `Data/time_series.py` (the universe
+    notebook from about four minutes to 28 seconds, its four files byte-identical; the refinery's
+    files equal to 1e-12; the panel loader twice as fast and bit-identical); the engine prices books
+    in its batch mode, one load of the market data per batch, from a slim CSV copy of the eight
+    columns it reads (its Parquet reader refuses these files on 0.66.0, reported); attribution
+    runs through the library's own pipeline, `attribute()`, in about twenty seconds a book.
+  - **The owner's decisions for Attribution Analysis 0.5.0, before its first run**: the textbook
+    Brinson-Fachler (1985) by KN sector, so allocation is the sector bet and selection the names
+    picked inside a sector, as `AGENTS.md` describes the first cut; and Carino linking, so every
+    cumulative effect adds up to the compounded return over the 26 years. Each security's KN sector
+    is read from the factor model's own sector files — one sector per security, the classification
+    the second layer prices; 51 listings no sector file carries are `unclassified`. The cash the
+    book leaves uninvested is a segment of its own at a zero return. The library computes the
+    idiosyncratic residual itself, as the return its factors leave unexplained, instead of reading
+    the model's residual file.
+  - **`Paper_Trading_1` retired** (the owner's decision: Sharadar is the only provider kept, and no
+    FMP file is). It recorded one day, the first run by hand on 2026-10-05; the daily task was
+    never scheduled. Its frozen files stand at tag `0.15.2`.
+- Outcome / decision: Experiment 1 is re-run end to end on the new pipeline and the new library.
+  The engine's figures are expected not to move; every attribution figure will, because the formula
+  and the linking changed: the published ones are simple sums of daily effects on the 0.3 formula.
+  `FINDINGS_1.md` is rewritten from this run, and says which number moved and why.
+- Open threads: the engine's Parquet reader; a load of about five minutes per batch, in the
+  engine; the owner's `.env` line for the attribution licence.
+
+<!-- example: end -->
+
+<!-- example: begin -->
+
+## 2026-10-27 — The gate has two layers, and Experiment 1 reads as sound and regime-dependent
+
+- Idea / question: the entry of 2026-10-24 kept the gate as it was, five criteria, and set aside
+  the owner's idea of a book that works only in some periods. Under it, Experiment 1 simply does
+  not graduate. Does a book that was tested correctly, and fails over the whole window while it
+  earns in named periods, have an outcome of its own?
+- What we tried / considered: the five criteria as they stood; and a gate in two layers, which
+  asks first whether the experiment was done correctly and then whether the book earns its place.
+- Outcome / decision: the owner decided on 2026-10-27 that **the gate has two layers and three
+  outcomes**, in `Paper_Trading/BITACORA.md` for every experiment from now on.
+  - **Soundness**, each row with its evidence, a row without evidence not holding: S1 no
+    survivorship bias, S2 no look-ahead, S3 no overfitting, S4 costs and capacity stated, S5
+    reproducible. **Performance**, the former criteria 1 to 3: P1 beats the benchmarks and its
+    control over the whole window, P2 idiosyncratic alpha in both layers, P3 survives perturbation.
+  - **The outcomes**: *graduates*, when every row holds and the owner signs it off; *sound and
+    regime-dependent*, when every soundness row holds and performance fails over the whole window
+    but holds in named periods; *not sound*, when a soundness row fails — no conclusion is drawn,
+    and the experiment is fixed and run again.
+  - **Experiment 1 reads as sound and regime-dependent**, at the flat 5 bp row the gate is read at,
+    on the run of 2026-10-24; no figure is computed again. S1 to S5 hold on the evidence
+    `FINDINGS_1.md` quotes; P1 and P3 fail and P2 is not evidenced. Against its control the book
+    earned in 2000–2008 and 2018–2026 and lost in 2009–2017; against the KN US Equity Core it
+    earned in 2018–2026 only. `FINDINGS_1.md`'s gate section is rewritten in the two layers.
+  - **It is not paper traded alone.** It may be paired with another signal in a later experiment,
+    or used at a portfolio manager's discretion; the decision, and its risk, are theirs. Nothing
+    here recommends either.
+- Open threads: the condition that tells the periods apart. The evidence names them after the fact
+  — the bubble's most traded names held into the fall of 2000–2008, left late by a monthly cross —
+  and no signal that could be read in advance; a later experiment would have to find one.
 
 <!-- example: end -->

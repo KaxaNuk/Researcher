@@ -2,19 +2,19 @@
 name: universe-point-in-time
 description: >
   Load this skill whenever you build, extend, run or debug the Universe stage of a KaxaNuk Strategy
-  Template repository — `Universe/Investable_Universe.csv` and `Universe/universe.ipynb`, step 2.
-  Use it when the user asks what belongs in the seed, how to add or change the securities a
-  strategy trades, why delisted names are kept, how to build or refresh `Security_Master.csv`, how
-  to reconcile a provider against the seed, what a recycled identifier is, why classifications are
-  prefixed `current_`, what belongs in `Data_Issues.csv`, or from which date a universe is usable.
-  It covers the seed's contract, the two-layer master, the checks and the usable date. It does NOT
-  cover downloading prices (the Data stage, `Data/curator.py`, with
+  Template repository — `Universe/Investable_Universe.csv` and `Universe/universe_marimo.py`,
+  step 2. Use it when the user asks what belongs in the seed, how to add or change the securities
+  a strategy trades, why delisted names are kept, how to build or refresh `Security_Master.csv`,
+  how to reconcile a provider against the seed, what a recycled identifier is, why classifications
+  are prefixed `current_`, what belongs in `Data_Issues.csv`, or from which date a universe is
+  usable. It covers the seed's contract, the two-layer master, the checks and the usable date. It
+  does NOT cover downloading prices (the Data stage, `Data/curator.py`, with
   `data-curator-custom-calculations`), the refinery's cross-sectional panel (see the example's
   `Data/refinery.py`), screening a feature (use `data-analyzer-runs`), sizing a book (use
   `portfolio-construction-runs`), or the research process around the stage (use
   `experiment-lifecycle`).
 metadata:
-  version: 0.3.3
+  version: 0.4.0
 ---
 
 # The Universe — the eligible list, rebuilt for each date rather than for today
@@ -36,17 +36,21 @@ Universe/Investable_Universe.csv   the seed, committed  ->  edit this to change 
         |
         +--> Data/curator.py       downloads one file per identifier in it
         |
-        +--> universe.ipynb        Security_Master.csv, Data_Issues.csv
+        +--> universe_marimo.py    Security_Master.csv, Data_Issues.csv, the usable date
                     |
                     +--> Data/refinery.py    joins the master onto the panel as current_*
 ```
 
 **The template ships the seed, header-only, and the notebook as its markdown cells**, each section
-a description of what its code must do. In a strategy made from a template before 0.10.0
-`Universe/universe.ipynb` is missing. It comes back from the template through `init-strategy`'s
-script, run from the strategy's root, `scaffold.py strategy . --only Universe/universe.ipynb` — by
-its own path, because `--only Universe` stops over the seed, which is already the strategy's own.
-Never write the notebook from memory.
+a description of what its code must do. The notebook is a marimo notebook, run as a script —
+`uv run python Universe/universe_marimo.py`, or cell by cell with
+`uv run marimo edit Universe/universe_marimo.py` — which saves no output in its file; its session
+cache, `__marimo__/`, is ignored. In a strategy made from a template before 0.10.0 the notebook is
+missing, and before 0.20.0 it is a Jupyter notebook, `Universe/universe.ipynb`. The marimo one
+comes back from the template through `init-strategy`'s script, run from the strategy's root,
+`scaffold.py strategy . --only Universe/universe_marimo.py` — by its own path, because
+`--only Universe` stops over the seed, which is already the strategy's own — and an old notebook's
+cells are moved into it by hand, then the old file deleted. Never write the notebook from memory.
 
 ## 1. The seed is the whole decision
 
@@ -58,9 +62,14 @@ unverifiable.
 - **One column is required: `main_identifier`**, the name the Data Curator asks the provider for.
   It is chosen per experiment, the identifier that experiment's provider prices under, and mapped
   from an index's own ticker by the strategy's seed builder, or by the Analytics Factory when it
-  supplies the map. Every other column is the strategy's own. Replace the rows with equities,
-  ETFs, FX crosses, crypto pairs or futures and every stage below still runs: nothing downstream
-  names an asset class.
+  supplies the map. Replace the rows with equities, ETFs, FX crosses, crypto pairs or futures and
+  every stage below still runs: nothing downstream names an asset class.
+- **It holds identifiers and dates, and nothing a provider sells.** A name, a permanent
+  identifier, an ISIN, a sector: each is the provider's data, read from the provider's catalogue
+  cached in `Universe/Provider_Cache/`, which git ignores, and joined into the security master. The
+  seed is committed, so a vendor field in it is the vendor's data published with the strategy. The
+  worked example's seed is `main_identifier,index_identifier,valid_from,valid_to`, and nothing
+  else.
 - **A seed taken from an index carries a second key, `index_identifier`**: the index's own
   ticker, in its holdings' own convention — `BRK.B`, a digit-suffixed reused ticker — beside
   `main_identifier`. Every join to the index's files — membership, the benchmark's weights, the
@@ -82,19 +91,21 @@ cross-section, so every rank, every breadth reading and every book struck from t
 as a change-set of its own: its own commit, its own changelog entry, and the pipeline re-run before
 any figure from it is quoted beside an older one.
 
-### What else the seed is worth carrying
+### What else the universe is worth carrying
 
-Nothing beyond the identifier is required, and two columns earn their place in most strategies:
+Nothing beyond the identifier is required in the seed, and two things earn their place in most
+strategies' security masters, both from the provider's cached catalogue, never typed into the seed:
 
-- **A stable identity — an ISIN, a FIGI, an issuer key.** A point-in-time universe *contains*
-  renamed securities: two identifiers sharing one identity, each carrying part of the history.
-  Without a column that says which two rows are one company, the panel holds both legs and doubles
-  the bet at the changeover. **The stitching downstream is only as good as this column**, and
-  where the seed has none the loader keys by the identifier itself and stitches nothing — which is
-  correct, because the seed has told it nothing.
+- **A stable identity — a provider's permanent identifier, an ISIN, a FIGI.** A point-in-time
+  universe *contains* renamed securities: two identifiers sharing one identity, each carrying part
+  of the history. Without a column that says which two rows are one company, the panel holds both
+  legs and doubles the bet at the changeover. **The stitching downstream is only as good as this
+  column**, and where there is none the loader keys by the identifier itself and stitches nothing
+  — which is correct, because nothing has told it more. The worked example checks that no
+  `permaticker` of Sharadar's catalogue falls on two of its rows.
 - **A readable name**, so a book can be read by a person rather than decoded.
 
-A seed taken from an index's own list often carries a third: **a span**, the first and last dates
+A seed taken from an index's own list often carries **a span**, the first and last dates
 an identifier speaks for one company, so the panel reads no price of the company that later reused
 the symbol. **A span ends where the security did, never where its source does.** A listing still
 trading on the last date of the file the span was taken from — an index's master, a provider's
@@ -103,9 +114,9 @@ there, every live name stops on that day. No backtest cut earlier notices, becau
 span ending then reads the same as an open one; a paper book is the first reader of the days after,
 and finds nothing to price.
 
-Add whatever else the strategy groups or reports by. A column the provider can fill may be left
-empty in the seed and filled by section 2; a column only you know — a hand-assigned bucket, an
-internal classification — belongs in the seed, because nothing else will supply it.
+Add whatever else the strategy groups or reports by. A column the provider can fill is filled by
+section 2, from its cache; a column only you know — a hand-assigned bucket, an internal
+classification — belongs in the seed, because nothing else will supply it.
 
 ## 2. The security master, in two layers
 
@@ -156,7 +167,9 @@ stage has a work list rather than a chart to interpret.
 
 | Check | The failure it catches |
 | --- | --- |
-| **Missing file** | an identifier the provider does not carry, which becomes a silent hole in the panel |
+| **Not in the catalogue** | a member of the index the provider does not list at all: still a row of the seed, with no span, and its weight is survivorship cost, named |
+| **Missing file** | an identifier the provider does not carry, which becomes a silent hole in the panel — counted apart from one it refused today (a rate limit, a timeout), because only the second is worth asking again |
+| **Spliced** | a file that runs outside its security's span: another company's history under a reused symbol, read only inside the span |
 | **Schema drift** | a folder holding two column sets, which makes every downstream read conditional |
 | **Late start** | a series that begins after the panel does, so the cross-section is smaller before that date |
 | **Early end** | a series that stops early — delisted or halted, and a held position must be exited on its last priced day |
@@ -165,7 +178,7 @@ stage has a work list rather than a chart to interpret.
 | **Status disagreement** | the price history and the provider's listing status disagree: a series ending early on a name the provider calls active is a data gap, not a delisting, and the reverse is a reused symbol |
 | **Unusable values** | zero or negative prices, which break every return calculation downstream |
 | **Impossible daily move** | an adjusted price that multiplies several times over in one day — an unadjusted corporate action or a bad print, not a return. Set the threshold above real squeezes, so a flag means the series is wrong rather than merely wild |
-| **Traded value broken at a split** | a provider whose unadjusted volume before a split is already in post-split shares: the split adjustment counts it twice, so traded value — and every rank or weight taken on it — is too large by the split factor over the security's whole history before the split. At every split, compare the median traded value of the thirty trading days after with the thirty before: a correct series stays near one whatever the factor; a break near the factor, or its inverse, is this fault. Fill prices are not affected. Found on FMP files of 2026-09-23 for ORLY (15:1, 2025-06-10), NOW (5:1, 2025-12-18) and TPL (3:1, 2025-12-23). It is FMP's data, not the Data Curator's — its maintainers confirmed it, <https://github.com/KaxaNuk/Data-Curator/issues/36> — so it is reported to FMP |
+| **Traded value broken at a split** | a provider whose unadjusted volume before a split is already in post-split shares: the split adjustment counts it twice, so traded value — and every rank or weight taken on it — is too large by the split factor over the security's whole history before the split. At every split, compare the median traded value of the thirty trading days after with the thirty before, and the shares the tape printed the same way: traded value landing on the split's own factor while the shares stay flat is this fault, and a jump without the flat shares is the market. Fill prices are not affected. Found on FMP files of 2026-09-23 for ORLY (15:1, 2025-06-10), NOW (5:1, 2025-12-18) and TPL (3:1, 2025-12-23) — FMP's data, its maintainers confirmed, <https://github.com/KaxaNuk/Data-Curator/issues/36> — and on Sharadar, measured by the worked example on 2026-10-23, at 82 splits in 77 listings. Where the Curator corrects the volume in its own `c_*` traded value, as the example's does, this check reads the same signature and names any split the correction missed |
 | **No usable signal** | a history shorter than the strategy's longest warm-up, so the name can never be selected |
 
 Give each row a severity, and **sort blocking first**. A register nobody can triage is a chart with
@@ -191,8 +204,11 @@ section 1.
 
 Nothing else in the pipeline says so, which is why it is answered here, and why it is declared in
 `BLUEPRINT_N.md` before the rule rather than discovered afterwards. The worked example declares 90%
-of its index's weight; on 2015-01-02, its owner's floor, the members its provider prices held 92.97%
-in the record run.
+of its index's weight, priced and with 200 days of history behind it, on every date to the window's
+end; on 2000-01-03, its owner's floor, the members Sharadar prices and signals held 98.1% of the KN
+US Equity Core, and never less than 96.5% after, so the window opens on the floor. It writes the
+coverage per date to `Universe/Coverage.csv` and the window to `Universe/Window.csv`, which the
+analyzer and the experiment read rather than retype.
 
 ## 5. What the stage hands on
 
@@ -200,9 +216,10 @@ in the record run.
 | --- | --- |
 | `Universe/Security_Master.csv` | `Data/refinery.py`, which joins its columns onto the panel as `current_*` |
 | `Universe/Data_Issues.csv` | the caveats table of every `FINDINGS_N.md`, the Data stage's work list, and each experiment's exclusions: the names its blocking rows list |
-| The usable date | `BLUEPRINT_N.md`, as the declared window |
+| The usable date — the example's `Universe/Window.csv` | the analyzer and the experiment, which read it from the file, and `BLUEPRINT_N.md`, as the declared window |
+| The coverage per date — the example's `Universe/Coverage.csv` | the survivorship row of `RESULTS.md` and every `FINDINGS_N.md` |
 
-`Security_Master.csv`, `Data_Issues.csv` and the provider cache are all **regenerable and therefore
+Every table the notebook writes and the provider cache are **regenerable and therefore
 gitignored**; `Investable_Universe.csv` is the only committed input. Composition, listing status and
 listing age belong here too — a universe whose members mostly listed after the backtest starts is a
 different universe from the one the row count suggests.

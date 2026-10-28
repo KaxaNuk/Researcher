@@ -9,7 +9,10 @@ Usage:
 
 A directory is searched for *.py files below it, skipping links and every folder named in
 IGNORED_FOLDER_NAMES: virtual environments, caches, .git, apm_modules and node_modules. A file or
-folder named on the command line is always checked.
+folder named on the command line is always checked. A marimo notebook -- a file with a line opening
+`app = marimo.App(` and one opening `@app.cell` -- is skipped and counted: marimo generates its
+cells as functions that take and return tuples of names, and writes their imports and signatures
+itself.
 
 Two rules are read with a threshold by default: BLOOM010 (one item per line) fires from three
 comma-separated items, or from two when the line is longer than --max-line-length; BLOOM012 (one call
@@ -657,7 +660,14 @@ def main(argv: list[str] | None = None) -> int:
     """
     parser = _build_argument_parser()
     arguments = parser.parse_args(argv)
-    python_files = _collect_python_files(arguments.paths)
+    collected_files = _collect_python_files(arguments.paths)
+    python_files = [
+        python_file
+        for python_file
+        in collected_files
+        if not _is_marimo_notebook(python_file)
+    ]
+    notebook_count = len(collected_files) - len(python_files)
     working_directory = pathlib.Path.cwd()
     detected_packages = _detect_local_packages(working_directory)
     declared_packages = frozenset(arguments.local_packages)
@@ -682,6 +692,9 @@ def main(argv: list[str] | None = None) -> int:
         print(formatted)
     file_count = len(python_files)
     violation_count = len(file_violations)
+
+    if notebook_count > 0:
+        print(f'[i] {notebook_count} marimo notebook(s) skipped: their cells are generated')
 
     if violation_count > 0:
         print(f'[x] {violation_count} Bloom Code violation(s) in {file_count} file(s)')
@@ -1537,6 +1550,28 @@ def _is_load_context(node: ast.AST) -> bool:
         node.ctx,
         ast.Load,
     )
+
+
+def _is_marimo_notebook(path: pathlib.Path) -> bool:
+    """
+    Whether a file is a marimo notebook, which marimo generates: a line opening with
+    `app = marimo.App(` and one opening with `@app.cell`.
+    """
+    try:
+        lines = path.read_text(encoding='utf-8').splitlines()
+    except (OSError, UnicodeDecodeError):
+        return False
+
+    has_app = any(
+        line.startswith('app = marimo.App(')
+        for line in lines
+    )
+    has_cell = any(
+        line.startswith('@app.cell')
+        for line in lines
+    )
+
+    return has_app and has_cell
 
 
 def _is_missing_type_hints(

@@ -36,14 +36,20 @@ about how the panel was loaded.
 
 # --- example: begin ---
 
-# Every matrix comes back on one calendar, so the 63-day traded value and the 200-day trend
-# line up although they warm up at different speeds.
-
 import csv
 import operator
 import pathlib
+import sys
 
 import pandas
+import pyarrow
+import pyarrow.compute
+
+# Every per-security file is read through the one module that writes it, in `Data/`.
+DATA_DIRECTORY = pathlib.Path(__file__).parent.parent / "Data"
+sys.path.insert(0, str(DATA_DIRECTORY))
+
+import time_series  # noqa: E402 - the path above has to exist first
 
 __all__ = [
     "expand_to_identifiers",
@@ -98,15 +104,14 @@ def expand_to_identifiers(
         spans = []
 
         for listing in listings:
-            path = REFINERY_DIRECTORY / f"{listing}.csv"
+            path = time_series.path_for(REFINERY_DIRECTORY, listing)
 
             if not path.is_file():
                 continue
 
-            dates = pandas.read_csv(
+            dates = time_series.read_frame(
                 path,
-                usecols=[DATE_COLUMN],
-                parse_dates=[DATE_COLUMN],
+                (DATE_COLUMN,),
             )[DATE_COLUMN]
             spans.append((
                 dates.max(),
@@ -156,7 +161,7 @@ def load_matrices(
     position_keys = read_position_keys()
     paths = [
         path
-        for path in sorted(REFINERY_DIRECTORY.glob("*.csv"))
+        for path in sorted(REFINERY_DIRECTORY.glob(f"*{time_series.SUFFIX}"))
         if path.stem in investable
     ]
 
@@ -167,55 +172,57 @@ def load_matrices(
 
         raise FileNotFoundError(empty_folder_message)
 
-    frames = []
+    tables = []
 
     for path in paths:
-        with path.open(encoding="utf-8-sig", newline="") as handle:
-            header = next(csv.reader(handle), [])
-
-        missing = [
-            column
-            for column in (DATE_COLUMN, *columns)
-            if column not in header
-        ]
-
-        if len(missing) > 0:
-            missing_columns_message = f"{path.name} does not carry {missing}"
-
-            raise KeyError(missing_columns_message)
-
-        frame = pandas.read_csv(
+        # A column the file does not carry is named by the reader before a row is read.
+        table = time_series.read_table(
             path,
-            usecols=[DATE_COLUMN, *columns],
-            parse_dates=[DATE_COLUMN],
+            (DATE_COLUMN, *columns),
         )
-        frame[IDENTIFIER_COLUMN] = position_keys.get(path.stem, path.stem)
-        frame["last_reported"] = frame[DATE_COLUMN].max()
-        frames.append(frame)
+        rows = table.num_rows
+        position = position_keys.get(path.stem, path.stem)
+        last_reported = pyarrow.compute.max(table.column(DATE_COLUMN))
+        keyed = table.append_column(
+            IDENTIFIER_COLUMN,
+            pyarrow.array([position] * rows, pyarrow.string()),
+        )
+        tables.append(keyed.append_column(
+            "last_reported",
+            pyarrow.repeat(last_reported, rows),
+        ))
 
-    panel = pandas.concat(
-        frames,
-        ignore_index=True,
+    # Every file is stacked as Arrow and converted to pandas once: a conversion per file costs
+    # more than reading it.
+    stacked = pyarrow.concat_tables(tables)
+    panel = stacked.to_pandas()
+    ordered = panel.sort_values(
+        [
+            DATE_COLUMN,
+            "last_reported",
+        ],
+        kind="stable",
     )
-    ordered = panel.sort_values([
-        DATE_COLUMN,
-        "last_reported",
-    ])
     # One calendar and one set of positions for every matrix.  A pivot drops a date on which every
     # value of a column is null -- the first sixty-two days of a traded-value average, the first
     # hundred and ninety-nine of a trend -- and matrices on different calendars line up on nothing.
     unique_dates = ordered[DATE_COLUMN].unique()
     calendar = pandas.DatetimeIndex(sorted(unique_dates))
     positions = sorted(ordered[IDENTIFIER_COLUMN].unique())
+    # One grouping for every column: on a date where two legs of one position both report, the
+    # last value that is not null wins, the leg still reporting later sorting last.
+    grouped = ordered.groupby(
+        [
+            DATE_COLUMN,
+            IDENTIFIER_COLUMN,
+        ],
+        sort=True,
+    )
+    last_values = grouped[list(columns)].last()
     matrices = {}
 
     for column in columns:
-        matrix = ordered.pivot_table(
-            index=DATE_COLUMN,
-            columns=IDENTIFIER_COLUMN,
-            values=column,
-            aggfunc="last",
-        )
+        matrix = last_values[column].unstack(IDENTIFIER_COLUMN)
         matrices[column] = matrix.reindex(
             index=calendar,
             columns=positions,

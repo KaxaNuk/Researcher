@@ -35,4 +35,13 @@
   ones its sections cite, each linked to them; 1, 2, 4, 7, 10 and 11 skipped. Its sections kept as
   they were
 
+## [2026-10-27] audit | the notes curated again, for Experiment 1 on Sharadar
+- wrote: `Papers/Daniel_Moskowitz_2016_Momentum_Crashes.md`, carried into this copy because
+  `BLUEPRINT_1.md` cites it; *What it says* kept verbatim, its frontmatter in the shape above
+- updated: every implication, rewritten from Experiment 1's findings on Sharadar, 2000 to 2026,
+  its blockquote opening with the date; every *What it says* kept verbatim. `BIBLIOGRAPHY.md`:
+  Daniel & Moskowitz moved from the leads to the claim 1 rows
+- left as leads: Novy-Marx (2012), Barroso & Santa-Clara (2015), George & Hwang (2004) and
+  Moreira & Muir (2017) — their notes not carried
+
 <!-- example: end -->

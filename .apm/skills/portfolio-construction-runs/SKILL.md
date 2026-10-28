@@ -6,14 +6,14 @@ description: >
   installed, configured, called or debugged. Use it when the user asks to pick or compare a sizing
   method (equal weight, inverse volatility, risk parity, HRP, mean-variance, the KN Index), call
   `build_allocator` or `run_pipeline`, build point-in-time eligibility, lag a signal, choose
-  rebalance dates, add a weight cap or a minimum holding count, express cash as a position, or write
-  the weight file the Backtest Engine reads. It covers installing the library and its licence, the
+  rebalance dates, add a no-trade band, a weight cap or a minimum holding count, leave cash to the
+  engine, or write the weight file the Backtest Engine reads. It covers installing the library and its licence, the
   per-date weigher and its one causal cut, the traps that make a plausible book wrong, and the
   invariants every rule must pass. It does NOT cover pricing the book (use `backtest-engine-runs`),
   reading what sizing earned (use `alpha-decomposition`), or the documents around the experiment
   (use `experiment-lifecycle`).
 metadata:
-  version: 0.5.3
+  version: 0.6.0
   library_version: 1.28.0
 ---
 
@@ -212,9 +212,10 @@ weights = pandas.Series(
   registry entry, `requirements_for(name)`, has `history_input="returns"`. Snapshot methods read
   their columns from the snapshot table: put the feature there, as it stood before the date.
 - **Weights sum to at most one, not to exactly one.** A method's book sums to its target exposure,
-  1.0; the module scales it down when a lever asks for cash, and the residual becomes a real, priced
-  cash position when the weight file is written. Nothing eligible is an empty book — 100% cash, kept
-  as an all-zero row, because "went to cash" is an instruction the engine has to receive.
+  1.0; the module scales it down when a lever asks for cash, and what the weights leave is cash,
+  which the Backtest Engine holds and pays interest on (`backtest-engine-runs`). Nothing eligible is
+  an empty book — 100% cash, kept as an all-zero row, because "went to cash" is an instruction the
+  engine has to receive.
 
 ## 5. Eligibility and timing, point in time
 
@@ -224,18 +225,28 @@ module's, and it is fixed:
 - **Lag the eligibility** so the set used on rebalance date *t* is the one observed at *t-1*, filled
   with False so the warm-up holds nothing rather than everything. A security has to have been
   authorised yesterday and be sellable today, and those are two different days on purpose.
-- **Sell before a price series stops.** A name is tradable on *t* only if it is priced on *t* and
-  on *t+1*. A delisting, or a corporate event that leaves a gap in the provider's file, then drops
-  the name from the target on its last priced day; the set changes, and the book re-strikes and
-  sells it there. The Backtest Engine refuses a rebalance date on which any open position has no
-  price, so a book that holds a name through a gap is refused outright, not mispriced. One day of
-  hindsight, the leak the template's `AGENTS.md` names; apply it to the book and every
-  counterfactual alike, so it is no difference between them.
+- **No day of hindsight for a delisting.** A name is tradable on a rebalance date if it has a price
+  to fill at that day. A position whose prices stop is the engine's to sell at its last price
+  (`delisted_position_handling = "sell_at_last_price"`), so the rule takes no exit for it. **A gap
+  inside a series** is different: the Backtest Engine refuses a rebalance date on which any open
+  position has no price, so a book that holds a name through a gap is refused outright, not
+  mispriced. The worked example lists such a name as a blocking row of `Universe/Data_Issues.csv`
+  and excludes it by name from every book, its weight published, so no book trades off its own
+  dates. The older cure — selling at *t−1*, the last priced day, one day of hindsight — is
+  `exit_before_price_stops` in its module, no longer called.
 - **Rebalance on change** when the rule is event-driven: the days the lagged set changed. A
   `BinaryMatrix` of the lagged signal counts entries and exits per date with `turnover()`. A
   calendar rule takes
   `CalendarRebalancer(trading_dates=..., frequency=RebalanceFrequency.MONTH_END)` on the panel's own
-  dates.
+  dates; the worked example's `first_trading_days_of_month` gives the first trading day of each
+  month, each decided on the close before it.
+- **A no-trade band**, where the blueprint names one: a held name whose target differs from the
+  weight it drifted to by no more than the band keeps its drifted weight; entries, exits and larger
+  moves trade to target, and what the kept names hold over their targets comes out of the traded
+  names in proportion, so the book never exceeds one. It is decided at the close and written at the
+  next open, so a kept name's weight can sit outside the bounds by the band plus the overnight move:
+  count those excursions. The worked example's `banded_book` does this at half a point, and it is
+  read back on two consecutive dates beside the rule's read-back, before the blueprint.
 
 In a KaxaNuk Strategy Template repository the eligible set comes from the refined panel — the rule
 builds it from the `r_*` columns — and the library sizes it. If you do use its loaders and
@@ -268,14 +279,15 @@ cap and a floor on each weight — are the design, not levers to earn, and the c
 too. The library's richer machinery — a `Mandate` with group limits, a tracking-error budget,
 Black-Litterman views — is a lever of the same kind: one at a time, each beating the book without
 it. The worked example sizes by traded value inside a 20% cap and a 1% floor, by the owner's
-design, and in its in-sample backtest the equal-weight arm lost: 14.53% a year at a Sharpe of
-0.722, against 20.33% at 0.842.
+design, and in its in-sample backtest the equal-weight arm lost: at the flat 5 bp row, 5.67% a year
+at a Sharpe of 0.157, against 7.72% at 0.221.
 
 ## 7. The weight file
 
 In a KaxaNuk Strategy Template repository `Experiments/backtest_engine.py` writes
 `Portfolio/portfolio_weights.csv`: wide, `Ticker` first, one ISO date per column, every column
-summing to exactly 1.0 with the residual in the cash proxy. Outside one, the library's output
+summing to at most 1.0, each weight written to six places and rounded down; what a column leaves is
+cash, held by the engine. Outside one, the library's output
 handlers write the same layout — `Ticker`, then one column per date, the layout the engine detects.
 The changelog says the portfolio entity stores tickers normalised: check they still match the
 market-data file names.
@@ -293,8 +305,13 @@ method:
   be given, if it is not;
 - **every security paid for today had its signal on the prior close** — check the signal itself, not
   the composed eligibility, because the signal is what had to exist in advance;
-- every security bought is tradable on the day it is bought, so a fill price exists;
-- nothing is still held on a day after it stopped being tradable.
+- every security bought has a price to fill at on the day it is bought;
+- no name a blocking row of `Universe/Data_Issues.csv` lists is ever held;
+- under a band, every struck weight is its target or a held name's drift within the band, and the
+  struck weights the band leaves outside the bounds are counted;
+- the control trades only on the rule's dates.
+
+The notebook's section 8, Verify, raises on every one of them.
 
 Run them over **every** book an experiment builds, not only the benchmark's. A variant that holds a
 name the benchmark could not is a bug wearing a Sharpe.

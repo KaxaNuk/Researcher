@@ -10,6 +10,10 @@ Two kinds of column live here, and only here:
     refetch of every identifier, and a sweep must never cost a download, so the frozen inputs stay
     in the Curator and the column with the setting lives here.
 
+**A new experiment's signal on the data already downloaded is an `r_*` column here**, computed from
+the `c_*` columns the Curator wrote -- the daily total-return log returns, the traded value --
+never a widening of the Curator's columns and a second download.
+
 What is expected here is one function per column, named exactly as the column, resolved by
 parameter name the same way the Curator resolves its own.  Every parameter is a column of the
 panel -- the date, `main_identifier`, any `c_*` or `r_*` column, any `current_*` column -- and a
@@ -38,10 +42,6 @@ It prevents a signal that knew the future distribution, and a rank that was sile
 """
 
 # --- example: begin ---
-
-# The rule's two columns, `r_trend_50_200` and `r_traded_value_sma_63d`, beside the
-# neighbouring windows the sweep reads: the trends 20/100 and 100/300, and traded value over
-# 21 and 126 days.
 
 import pandas
 
@@ -103,60 +103,60 @@ def r_liquidity_rank(
 
 def r_traded_value_sma_126d(
     main_identifier: "pandas.Series",
-    c_daily_traded_value: "pandas.Series",
+    c_traded_value: "pandas.Series",
 ) -> "pandas.Series":
     """
     The 126-day simple average of daily traded value, one of the sweep's two neighbours of 63.
     """
     return _rolling_mean(
         main_identifier,
-        c_daily_traded_value,
+        c_traded_value,
         126,
     )
 
 
 def r_traded_value_sma_21d(
     main_identifier: "pandas.Series",
-    c_daily_traded_value: "pandas.Series",
+    c_traded_value: "pandas.Series",
 ) -> "pandas.Series":
     """
     The 21-day simple average of daily traded value, one of the sweep's two neighbours of 63.
     """
     return _rolling_mean(
         main_identifier,
-        c_daily_traded_value,
+        c_traded_value,
         21,
     )
 
 
 def r_traded_value_sma_63d(
     main_identifier: "pandas.Series",
-    c_daily_traded_value: "pandas.Series",
+    c_traded_value: "pandas.Series",
 ) -> "pandas.Series":
     """
     The 63-day simple average of daily traded value: the rule's rank and weight.
 
     It is built here, beside its 21- and 126-day neighbours, so the rule and its sweep read one
-    definition; the analyzer checks it equals the Curator's own
-    `c_daily_traded_value_sma_63d`, so moving it here changed no number.
+    definition; the analyzer checks it equals the 63-day average
+    of the Curator's own daily column.
     """
     return _rolling_mean(
         main_identifier,
-        c_daily_traded_value,
+        c_traded_value,
         63,
     )
 
 
 def r_trend_100_300(
     main_identifier: "pandas.Series",
-    m_close_dividend_and_split_adjusted: "pandas.Series",
+    c_close_dividend_and_split_adjusted: "pandas.Series",
 ) -> "pandas.Series":
     """
     The 100-day average over the 300-day one, minus one: the slower neighbour of the golden cross.
     """
     return _trend(
         main_identifier,
-        m_close_dividend_and_split_adjusted,
+        c_close_dividend_and_split_adjusted,
         100,
         300,
     )
@@ -164,14 +164,14 @@ def r_trend_100_300(
 
 def r_trend_20_100(
     main_identifier: "pandas.Series",
-    m_close_dividend_and_split_adjusted: "pandas.Series",
+    c_close_dividend_and_split_adjusted: "pandas.Series",
 ) -> "pandas.Series":
     """
     The 20-day average over the 100-day one, minus one: the faster neighbour of the golden cross.
     """
     return _trend(
         main_identifier,
-        m_close_dividend_and_split_adjusted,
+        c_close_dividend_and_split_adjusted,
         20,
         100,
     )
@@ -179,7 +179,7 @@ def r_trend_20_100(
 
 def r_trend_50_200(
     main_identifier: "pandas.Series",
-    m_close_dividend_and_split_adjusted: "pandas.Series",
+    c_close_dividend_and_split_adjusted: "pandas.Series",
 ) -> "pandas.Series":
     """
     Measure how far the 50-day average sits above the 200-day one, as a fraction.
@@ -191,7 +191,7 @@ def r_trend_50_200(
     """
     return _trend(
         main_identifier,
-        m_close_dividend_and_split_adjusted,
+        c_close_dividend_and_split_adjusted,
         50,
         200,
     )

@@ -15,17 +15,17 @@ rather than from better selection.
 
 ## What it implies for Golden Flow
 
-> Rewritten on 2026-10-07 for this copy, after FINDINGS_1.md reported.
+> Rewritten on 2026-10-27 for this copy, after FINDINGS_1.md reported on Sharadar.
 >
 > **Claim 1, the signal, and against it.** On this paper's argument the death cross — the 50-day
 > average falling back under the 200-day — is the slowest possible stop: it confirms a fall that has
-> already happened. The paper overlays a long/short momentum book, whose short leg carries the crash
-> risk. Golden Flow is long only, and runs no other stop, by design
-> ([`BLUEPRINT_1.md`](../../Experiments/Experiment_1/BLUEPRINT_1.md), *Rules*).
+> already happened. Golden Flow reads it once a month, which makes it slower still, and runs no
+> other stop, by design ([`BLUEPRINT_1.md`](../../Experiments/Experiment_1/BLUEPRINT_1.md), *Key
+> risks*).
 >
-> Even so, the slow exit cut the worst drawdown to −32.47%, against −46.32% for the control, the
-> same rule without the cross ([`FINDINGS_1.md`](../../Experiments/Experiment_1/FINDINGS_1.md),
-> prediction 2). No stop-loss besides the cross was tested. The sweep's faster cross, 20/100, kept
-> a Sharpe margin of +0.064 over its own control and lost 0.85 points of CAGR to it
-> ([`FINDINGS_1.md`](../../Experiments/Experiment_1/FINDINGS_1.md), the sweep). This paper is the
-> case for testing a stop-loss in a later experiment, against this rule.
+> The record shows the cost where the paper says it would be. In 2000–2008 the book lost 13.68% a
+> year, against 3.41% for the KN US Equity Core, holding the bubble's most traded names into the
+> fall ([`FINDINGS_1.md`](../../Experiments/Experiment_1/FINDINGS_1.md), by sub-period). The sweep's
+> faster cross, 20/100, keeps its margin over its own control, 0.228 against 0.118 at the flat row,
+> and does not beat the Core. This paper is the case for a faster exit in a later experiment,
+> against this rule.

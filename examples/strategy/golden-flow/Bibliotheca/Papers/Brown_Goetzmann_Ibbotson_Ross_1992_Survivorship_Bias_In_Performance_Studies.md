@@ -15,15 +15,14 @@ abnormal returns even when none exist in the underlying process. The bias is not
 
 ## What it implies for Golden Flow
 
-> Rewritten on 2026-10-07 for this copy, after FINDINGS_1.md reported.
+> Rewritten on 2026-10-27 for this copy, after FINDINGS_1.md reported on Sharadar.
 >
 > **Claims 1 to 3 rest on a universe that keeps its dead.** The seed,
-> [`Universe/Investable_Universe.csv`](../../Universe/Investable_Universe.csv), is point-in-time and
-> retains delisted names, as this paper requires.
+> [`Universe/Investable_Universe.csv`](../../Universe/Investable_Universe.csv), lists every listing
+> the index held from 1998-12-31 and retains delisted names, as this paper requires.
 >
-> What is still missing is measured, not assumed away. Members that FMP, this experiment's provider,
-> does not price held up to 7.0% of the index's weight in 2015, at most 0.12% in 2022 and none
-> from 2023 ([`FINDINGS_1.md`](../../Experiments/Experiment_1/FINDINGS_1.md), caveat 1). They are
-> disproportionately large dead companies a traded-value rule would have held. So the early years
-> are measured on a slightly survivor-biased index: lie 1 of [`AGENTS.md`](../../AGENTS.md),
-> accepted and quantified, not removed.
+> Sharadar, this experiment's only provider, keeps delisted securities. The one member it does not
+> price, `UB`, held at most 0.11% of the index on any day, and the members priced and signalled
+> held at least 96.5% of the index's weight on every day of the window
+> ([`RESULTS.md`](../../RESULTS.md), *Before any experiment*, rows 14 and 15). Lie 1 of
+> [`AGENTS.md`](../../AGENTS.md) is close to removed here, and what is left is measured.

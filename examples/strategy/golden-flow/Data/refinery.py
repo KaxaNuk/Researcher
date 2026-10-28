@@ -5,23 +5,28 @@ In plain words: the Curator sees one security at a time; this stage sees all of 
 It stacks every Curator file into one panel, computes the `r_*` columns across it, and writes the
 files back out with more columns, each security's rows kept inside the span the seed gives it.
 
-Runs after `Universe/universe.ipynb`, because it joins the security master that notebook writes,
-and before `Data/analyzer.ipynb`, which reads what this writes.  Run too early it should say which
-columns it is skipping and carry on -- the right behaviour and the wrong outcome.
+Runs after `Universe/universe_marimo.py`, because it joins the security master that notebook
+writes, and before `Data/analyzer_marimo.py`, which reads what this writes.  Run too early it should
+say which columns it is skipping and carry on -- the right behaviour and the wrong outcome.
 
-    Data/Curator/Time_Series/<id>.csv      m_* + c_*                    per security
+    Data/Curator/Time_Series/<id>.parquet  m_* + c_*                       per security
             |
             v   stack, compute per date across the cross-section, join the master
-    Data/Refinery/Time_Series/<id>.csv     m_* + c_* + r_* + current_*  rows in span, more columns
+    Data/Refinery/Time_Series/<id>.parquet m_* + c_* + r_* + current_*     rows in span, more cols
 
-What is expected here is loading, ordering and writing.  The calculations live in
-`Data/Refinery/custom_calculations.py`.
+What is expected here is loading, ordering and writing, every file read and written through
+`Data/time_series.py`.  The calculations live in `Data/Refinery/custom_calculations.py`.
 
-- Membership is an allowlist taken from `Universe/Investable_Universe.csv`, so the cash proxy and
+- Membership is an allowlist taken from `Universe/Investable_Universe.csv`, so the cash rate and
   the benchmarks in the Curator folder never enter a rank.  There is no second list to forget.
-- Keep each security's rows inside the span the seed gives it: outside it, a file under a reused
-  identifier is another company's history, and no stage may read it.  A seed without spans keeps
-  every row.
+- Keep each security's rows inside the span the seed gives it, `valid_from` to `valid_to`: outside
+  it, a file under a reused identifier is another company's history, and no stage may read it.  A
+  seed without spans keeps every row.
+- Load only the columns the calculations read: a panel of hundreds of securities over decades then
+  stays inside a few hundred megabytes.
+- For a seed taken from an index, attach the index's weight on each date, read through
+  `Data/hand_supplied.py` and keyed by the price files, so every cross-sectional column is taken
+  over the day's members and a name outside the index never moves another name's rank.
 - Resolve each `r_*` function by its parameter names against the columns already built -- the same
   convention the Curator uses -- and compute them in dependency order.
 - Join the classification columns of `Universe/Security_Master.csv`, prefixed `current_`, because
@@ -43,10 +48,6 @@ It prevents a rank or a breadth reading that was quietly taken over the wrong se
 
 # --- example: begin ---
 
-# Golden Flow's refinery keeps each security's rows inside the seed's span, attaches the
-# index's weight on each date as `r_index_weight`, and takes ranks and counts over the day's
-# members.  It is the seam the KaxaNuk Data Refinery library replaces once it ships.
-
 import csv
 import importlib.util
 import inspect
@@ -55,6 +56,12 @@ import sys
 import types
 
 import pandas
+
+# Every per-security file is written and read through one module, so it lives beside this one.
+DATA_DIRECTORY = pathlib.Path(__file__).parent
+sys.path.insert(0, str(DATA_DIRECTORY))
+
+import time_series  # noqa: E402 - the path above has to exist first
 
 __all__ = [
     "attach_index_weight",
@@ -91,11 +98,10 @@ def attach_index_weight(
     """
     Map the index's weight on each date onto the panel, zero for a name not in the index that day.
 
-    The holdings arrive keyed by the index's tickers and are renamed through the seed.  A listing
-    the seed does not map, such as `BRK.B`, carries no weight here and is named in the register,
-    `Universe/Data_Issues.csv`.  A date the holdings do not cover -- before the file starts, or
-    after it ends -- carries no weight: membership is never carried forward past the last date the
-    Analytics Factory wrote.
+    The holdings arrive keyed by the index's tickers and are renamed through the seed, so a listing
+    whose two names differ is still a member.  A date the holdings do not cover -- before the file
+    starts, or after it ends -- carries no weight: membership is never carried forward past the
+    last date the desk wrote.
     """
     specification = importlib.util.spec_from_file_location(
         "hand_supplied",
@@ -190,14 +196,13 @@ def load_panel(
     spans = read_valid_spans()
     frames = []
 
-    for path in sorted(CURATOR_DIRECTORY.glob("*.csv")):
+    for path in sorted(CURATOR_DIRECTORY.glob(f"*{time_series.SUFFIX}")):
         if path.stem not in investable:
             continue
 
-        full_frame = pandas.read_csv(
+        full_frame = time_series.read_frame(
             path,
-            usecols=list(columns),
-            parse_dates=[DATE_COLUMN],
+            columns,
         )
         frame = _inside_span(
             full_frame,
@@ -231,8 +236,8 @@ def main() -> int:
     """
     Build the cross-sectional columns and write one refined file per security.
 
-    Runs after `Universe/universe.ipynb`, whose security master it joins, and before
-    `Data/analyzer.ipynb`, which reads what it writes.
+    Runs after `Universe/universe_marimo.py`, whose security master it joins, and before
+    `Data/analyzer_marimo.py`, which reads what it writes.
     """
     calculations = load_custom_calculations()
     inputs = set()
@@ -348,7 +353,7 @@ def remove_stale_files(
     current = set(refined[IDENTIFIER_COLUMN].unique())
     stale_paths = [
         path
-        for path in sorted(REFINERY_DIRECTORY.glob("*.csv"))
+        for path in sorted(REFINERY_DIRECTORY.glob(f"*{time_series.SUFFIX}"))
         if path.stem not in current
     ]
 
@@ -380,10 +385,7 @@ def write_panel(
     written_identifiers = []
 
     for identifier, group in refined.groupby(IDENTIFIER_COLUMN):
-        curated = pandas.read_csv(
-            CURATOR_DIRECTORY / f"{identifier}.csv",
-            parse_dates=[DATE_COLUMN],
-        )
+        curated = time_series.read_frame(time_series.path_for(CURATOR_DIRECTORY, identifier))
         additions = group[[DATE_COLUMN, *added_columns]]
         # An inner join keeps only the rows inside the security's span, which the panel already
         # cut: a date outside it is another company's price under the same symbol.
@@ -392,9 +394,9 @@ def write_panel(
             on=DATE_COLUMN,
             how="inner",
         )
-        output.to_csv(
-            REFINERY_DIRECTORY / f"{identifier}.csv",
-            index=False,
+        time_series.write_frame(
+            output,
+            time_series.path_for(REFINERY_DIRECTORY, identifier),
         )
         written_identifiers.append(identifier)
 

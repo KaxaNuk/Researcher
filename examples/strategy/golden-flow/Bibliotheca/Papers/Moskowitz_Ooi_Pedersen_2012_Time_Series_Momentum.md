@@ -15,14 +15,14 @@ strongest at roughly a twelve-month lookback and reversing beyond that.
 
 ## What it implies for Golden Flow
 
-> Rewritten on 2026-10-07 for this copy, after FINDINGS_1.md reported.
+> Rewritten on 2026-10-27 for this copy, after FINDINGS_1.md reported on Sharadar.
 >
 > **Claim 1, the signal: this, not Jegadeesh-Titman, is the family the golden cross belongs to.**
 > The cross asks whether a name is above its own trailing average. It never asks how the name ranks
 > against its peers.
 >
-> A factor model built on relative momentum should see little of it, and it did. It finds 11.31
-> points of momentum in the rule's 137.35 points of excess return, and 8.01 in the control's 120.81
-> ([`FINDINGS_1.md`](../../Experiments/Experiment_1/FINDINGS_1.md), the factor model). So the cross
-> is measured by the control instead, the same rule without it: the rule leads it by 0.080 of Sharpe
-> and 0.60 points a year.
+> A factor model built on relative momentum should see little of the cross itself, and the control
+> shows it: the rule reads +90.5 points of momentum and the same rule without the cross +75.9, at
+> the flat row ([`FINDINGS_1.md`](../../Experiments/Experiment_1/FINDINGS_1.md), the factor model).
+> So the cross is measured by the control instead: the rule leads it by 0.065 of Sharpe and 1.30
+> points of CAGR a year, 0.105 and 2.24 at the flat row.

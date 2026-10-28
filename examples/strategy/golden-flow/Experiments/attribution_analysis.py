@@ -27,8 +27,8 @@ What is expected here:
 - Take the book as a daily series, from `Backtest/`, never from `Portfolio/portfolio_weights.csv`.
   The library rejects a weight file that is not daily once it spans a year, and the rebalance-date
   file the engine read is exactly what it refuses.  The book it attributes is the one the engine
-  held each trading day, drift and the cash proxy included; the benchmark's holdings follow the
-  same rule.
+  held each trading day, drift and its cash included; the benchmark's holdings follow the same
+  rule.
 - Hold both weight tables overnight.  The engine's daily weights and the index's holdings are
   struck at a day's close, after that day's return has moved them, and the library pairs a weight
   with the return of its own date.  Paired as they arrive, a weight that already holds a day's
@@ -47,12 +47,18 @@ What is expected here:
   what it holds is compared against the fraction of the index it happens to own, and the
   difference is reported as alpha, most of it filed under interaction, where nobody looks.  Drop
   the engine's benchmark column on the way, which it returns at zero, and keep the cash position.
-- Shape the hand-supplied files into what the library's loader accepts, which is decided by **one
-  cell**: the first header.  `Ticker` means securities down and dates across; `date_column` means
-  dates down and securities across.  Anything else -- `date`, `m_date`, the name a provider happened
-  to use -- raises before a number is read.  The same rule governs the book, the benchmark's
-  holdings and the benchmark's return series, and none of them may carry nulls.  That is why the
-  shaping lives here and not in a notebook.
+- Shape what the library reads in one place, never in a notebook: no nulls, each side's weights
+  summing to one, and the cash the rule leaves uninvested a segment of its own, at a zero return,
+  so the book's cash is neither dropped nor read as a security.  Where the library loads files, its
+  loader decides the layout by **one cell**, the first header: `Ticker` means securities down and
+  dates across; `date_column` means dates down and securities across; anything else -- `date`,
+  `m_date`, the name a provider happened to use -- raises before a number is read.  Where it takes
+  tables in memory, through its own pipeline, hand them over there and write nothing.
+- Name the methodology once, as the owner chose it before the first run: the formula of the first
+  cut, the groups it allocates across -- sectors, say, each security in the one the factor model
+  classifies it in -- and how daily effects are carried over the window.  A sum of daily effects
+  and a compounded, linked one differ by many points over decades, and a change of either moves
+  every attribution figure while no engine figure moves.
 - Say what the factor directory has to look like, because it holds nothing but factor files: one
   CSV per factor, named by its file name, a date column first -- its header may be empty -- and
   one column per security after it.  Four names belong to the model's own series, matched exactly
@@ -79,7 +85,8 @@ The follow-ups are counterfactual books the engine can already price.  `AGENTS.m
 reasoning.
 
 It produces `Attribution/` -- the tables of the two decompositions and the third pass, and the
-figures where they are kept -- for `FINDINGS_N.md`, and the answer to graduation criterion 2.
+figures where they are kept -- for `FINDINGS_N.md`, and the answer to the gate's performance
+criterion P2.
 
 It prevents selling factor beta as if it were alpha, crediting a book with a day's return its
 weights already held or with an unpriced member's return, and a run that stops at its first file
@@ -88,44 +95,72 @@ because a header carries the name a provider gave it rather than the one the loa
 
 # --- example: begin ---
 
-# Golden Flow attributes against the KN US Equity Core's holdings and the KN US Equity Factor
-# Model, read through `Data/hand_supplied.py`.  The notebook calls `attribute_books`, which
-# runs each book's passes in parallel: all three on the rule, its control and the
-# equal-weight arm, the factor model alone on the twenty random books.  `held_overnight`
-# pairs the close of t-1 with day t, and `benchmark_coverage` reports the share of the index
-# the run can price.
-
 import concurrent.futures
 import hashlib
 import importlib.util
 import pathlib
+import sys
 import types
 
 import pandas
 import pyarrow
 
+# Every per-security file is read through the one module that writes it, in `Data/`.
+DATA_DIRECTORY = pathlib.Path(__file__).parent.parent / "Data"
+sys.path.insert(0, str(DATA_DIRECTORY))
+
+import time_series  # noqa: E402 - the path above has to exist first
+
 __all__ = [
-    "DATE_HEADER",
     "LIBRARY_INSTALLED",
     "attribute_book",
     "attribute_books",
     "benchmark_coverage",
     "held_overnight",
+    "kn_sectors",
     "load_asset_returns",
     "load_benchmark_weights",
     "load_factor_returns",
     "load_prices",
+    "open_dashboard",
     "report_missing_inputs",
-    "to_arrow",
     "widen_to_benchmark",
 ]
 
-# The one cell that decides whether a file loads: dates down, securities across.  `date`, `m_date`
-# or whatever a provider used raises before a number is read.
-DATE_HEADER = "date_column"
 HAND_SUPPLIED_PATH = pathlib.Path(__file__).parent.parent / "Data" / "hand_supplied.py"
 LIBRARY_INSTALLED = importlib.util.find_spec("kaxanuk.attribution_analysis") is not None
-PRICE_COLUMN = "m_close_dividend_and_split_adjusted"
+# The owner's decisions of 2026-10-24 for Attribution Analysis 0.5.0: the textbook Brinson-Fachler
+# by KN sector, and every cumulative effect linked with Carino so it adds up to the compounded
+# return.  The cash the rule leaves uninvested is a segment of its own, under this name.
+BRINSON_FACHLER_FORMULA = "textbook"
+CASH_TICKER = "CASH"
+# The engine's own name for the book's cash in its daily weights, replaced by the segment above.
+ENGINE_CASH_COLUMN = "CASH_RESERVE"
+LINKING_METHOD = "carino"
+# The KN sectors of the factor model, whose files say which sector each security is in.
+KN_SECTORS = (
+    "communication",
+    "consumer_discretionary",
+    "consumer_staples",
+    "energy",
+    "financials",
+    "health_care",
+    "industrials",
+    "materials",
+    "real_estate",
+    "technology",
+    "utilities",
+)
+# The library's in-memory tables name their date column so.
+LIBRARY_DATE_COLUMN = "date"
+# The factor files that hold the vendor's totals rather than a factor: the library computes the
+# residual itself and never takes these as factors.
+RESERVED_FACTOR_NAMES = (
+    "f_idyo_returns",
+    "f_total_excess_returns",
+    "f_total_factor_returns",
+)
+PRICE_COLUMN = "c_close_dividend_and_split_adjusted"
 # The factor files, read once per process: every book attributed in it reads the same ones.
 FACTOR_CACHE = {}
 # The Curator's files, for the cash proxy and anything else outside the seed.
@@ -138,14 +173,18 @@ def attribute_book(
     task: dict[str, object],
 ) -> dict[str, object]:
     """
-    Run the three passes on one book, in a worker process, and return the summed tables.
+    Run the three passes on one book, in a worker process, and return their linked tables.
 
-    The task carries the book's daily weights already widened to the index, the index's weights,
-    the asset returns and the layers to run: `brinson`, `factor` and `residual`.  The factor files
-    are read once per worker and kept, because they are a gigabyte and every book reads the same
-    ones.  The library computes; this only sums its daily tables over the window, in points.  With
-    a `cache_directory`, the answer is kept under the hash of everything the task carries, so a
-    notebook re-run attributes only what changed.
+    The task carries the book's daily weights, held overnight and widened to the index, the index's
+    weights on the same dates, the asset returns and the layers to run: `brinson`, `factor` and
+    `residual`.  The library's own pipeline does the work, through `attribute()`: the textbook
+    Brinson-Fachler by KN sector, the owner's decision of 2026-10-24, the KN US Equity Factor
+    Model, and both linked with Carino, so every cumulative effect adds up to the compounded
+    return.  The cash the rule leaves uninvested is a segment of its own at a zero return, because
+    the textbook formula takes each side's weights summing to one; the library's interest on cash is
+    none, and the engine's is in its own figures.  With a `cache_directory`, the answer is kept
+    under the hash of everything the task carries, so a notebook re-run attributes only what
+    changed.
     """
     cache_path = _attribution_cache_path(task)
 
@@ -157,68 +196,64 @@ def attribute_book(
 
     matplotlib.use("Agg")
 
-    import kaxanuk.attribution_analysis.performance_attribution
-
-    library = kaxanuk.attribution_analysis.performance_attribution
-
-    book = task["book"]
-    benchmark = task["benchmark"]
-    asset_returns = task["asset_returns"]
     layers = tuple(task["layers"])
-    window = book.index
+    factors = _factor_returns()
+    book = _with_cash(task["book"])
+    aligned_benchmark = task["benchmark"].reindex(columns=task["book"].columns)
+    benchmark = _with_cash(aligned_benchmark.fillna(0.0))
+    asset_returns = task["asset_returns"].reindex(
+        index=book.index,
+        columns=book.columns,
+    ).fillna(0.0)
+    segment_map = {
+        **kn_sectors(factors),
+        CASH_TICKER: "cash",
+    }
     answer = {
         "name": task["name"],
     }
 
-    if "brinson" in layers:
-        brinson = library.BrinstonFachlerArrowAttribution(
-            to_arrow(asset_returns),
-            to_arrow(book),
-            to_arrow(benchmark),
-            date_column=DATE_HEADER,
+    if "brinson" in layers or "factor" in layers:
+        result = _attribute(
+            book,
+            benchmark,
+            asset_returns,
+            factors,
+            segment_map,
+            "brinson" in layers,
+            "factor" in layers,
         )
-        brinson.time_series_calculation()
-        brinson_frame = brinson.df.to_pandas()
-        brinson_daily = brinson_frame.set_index("date")
-        answer["brinson_daily"] = brinson_daily
-        answer["brinson_totals"] = brinson_daily.select_dtypes("number").sum() * 100
+        answer["diagnostics"] = [
+            (str(diagnostic.code.value), diagnostic.count)
+            for diagnostic in result.diagnostics
+        ]
+        answer["relative_stats"] = dict(result.relative_stats)
 
-    if "factor" in layers or "residual" in layers:
-        factors = _factor_returns()
+        if result.brinson_fachler is not None:
+            answer["brinson_daily"] = _dated_frame(result.brinson_fachler.per_period)
+            answer["brinson_totals"] = _last_row(result.brinson_fachler.cumulative) * 100
+            answer["brinson_by_year"] = result.brinson_fachler.by_year.to_pandas()
 
-    if "factor" in layers:
-        first_date = window.min()
-        last_date = window.max()
-        by_factor = {
-            name: to_arrow(frame.loc[first_date:last_date])
-            for name, frame in factors.items()
-        }
-        factor_model = library.KNFMArrowAttribution(
-            to_arrow(book),
-            by_factor,
-            to_arrow(asset_returns),
-            date_column=DATE_HEADER,
-        )
-        factor_model.multifactor_attribution()
-        factor_daily = factor_model.portfolio_attribution_ts.to_pandas()
-        answer["factor_totals"] = factor_daily.select_dtypes("number").sum() * 100
+        if result.factor_model is not None:
+            answer["factor_totals"] = _factor_totals(result.factor_model)
+            answer["factor_by_year"] = result.factor_model.by_year.to_pandas()
 
     if "residual" in layers:
         idiosyncratic = factors["f_idyo_returns"].reindex(
-            index=window,
-            columns=asset_returns.columns,
+            index=book.index,
+            columns=book.columns,
         )
         covered_columns = idiosyncratic.columns[idiosyncratic.notna().any()]
-        residual = library.BrinstonFachlerArrowAttribution(
-            to_arrow(idiosyncratic.fillna(0.0)),
-            to_arrow(book),
-            to_arrow(benchmark),
-            date_column=DATE_HEADER,
+        residual = _attribute(
+            book,
+            benchmark,
+            idiosyncratic.fillna(0.0),
+            factors,
+            segment_map,
+            True,
+            False,
         )
-        residual.time_series_calculation()
-        residual_frame = residual.df.to_pandas()
-        residual_daily = residual_frame.set_index("date")
-        answer["residual_totals"] = residual_daily.select_dtypes("number").sum() * 100
+        answer["residual_totals"] = _last_row(residual.brinson_fachler.cumulative) * 100
         covered_weight = book[covered_columns].sum(axis=1)
         answer["covered_share"] = float(covered_weight.mean())
 
@@ -297,6 +332,36 @@ def held_overnight(
     moved = weights.shift(1)
 
     return moved.iloc[1:]
+
+
+def kn_sectors(
+    factors: dict[str, "pandas.DataFrame"],
+) -> dict[str, str]:
+    """
+    Each security's KN sector, read from the factor model's own sector files.
+
+    A sector factor's file carries a return for a security only on the days it belongs to that
+    sector, so the sector a security is found in is the one the factor model classifies it in --
+    the same classification the second layer prices.  The model holds one sector per security for
+    the whole window, so the map is static, as the library's segment map is; a security no sector
+    file carries is `unclassified`.
+    """
+    present = [
+        sector
+        for sector in KN_SECTORS
+        if sector in factors
+    ]
+    days_in_sector = pandas.DataFrame({
+        sector: _days_carried(factors[sector])
+        for sector in present
+    }).fillna(0.0)
+    classified = days_in_sector[days_in_sector.max(axis=1) > 0]
+    sectors = classified.idxmax(axis=1)
+
+    return {
+        str(identifier): str(sector)
+        for identifier, sector in sectors.items()
+    }
 
 
 def load_asset_returns(
@@ -383,28 +448,76 @@ def load_prices(
     columns = {}
 
     for identifier in identifiers:
-        refined_path = REFINERY_DIRECTORY / f"{identifier}.csv"
-        curated_path = CURATOR_DIRECTORY / f"{identifier}.csv"
+        refined_path = time_series.path_for(REFINERY_DIRECTORY, identifier)
+        curated_path = time_series.path_for(CURATOR_DIRECTORY, identifier)
         path = refined_path if refined_path.is_file() else curated_path
 
         if not path.is_file():
             continue
 
-        frame = pandas.read_csv(
+        frame = time_series.read_frame(
             path,
-            usecols=[
+            (
                 "m_date",
                 PRICE_COLUMN,
-            ],
-            parse_dates=["m_date"],
-            index_col="m_date",
-        )
+            ),
+        ).set_index("m_date")
         positive = frame[PRICE_COLUMN].where(frame[PRICE_COLUMN] > 0)
         columns[identifier] = positive.reindex(dates)
 
     return pandas.DataFrame(
         columns,
         index=dates,
+    )
+
+
+def open_dashboard(
+    task: dict[str, object],
+    port: int = 8050,
+) -> None:
+    """
+    Serve the library's dashboard for one book, until the kernel stops.
+
+    The task is the one `attribute_book` reads, so the dashboard shows the same book against the
+    same index, with the same settings, from the result the library's pipeline returns; nothing is
+    written.  It is a way to look at a book, never a source of numbers, and it blocks, so no
+    pipeline calls it.
+    """
+    import matplotlib
+
+    matplotlib.use("Agg")
+
+    import kaxanuk.attribution_analysis.dashboard
+
+    factors = _factor_returns()
+    book = _with_cash(task["book"])
+    aligned_benchmark = task["benchmark"].reindex(columns=task["book"].columns)
+    benchmark = _with_cash(aligned_benchmark.fillna(0.0))
+    asset_returns = task["asset_returns"].reindex(
+        index=book.index,
+        columns=book.columns,
+    ).fillna(0.0)
+    segment_map = {
+        **kn_sectors(factors),
+        CASH_TICKER: "cash",
+    }
+    result = _attribute(
+        book,
+        benchmark,
+        asset_returns,
+        factors,
+        segment_map,
+        True,
+        True,
+    )
+    dashboard = kaxanuk.attribution_analysis.dashboard.create_dashboard_from_result(
+        result,
+        portfolio_name=str(task["name"]),
+        benchmark_name="KN US Equity Core",
+    )
+    dashboard.run_server(
+        debug=False,
+        port=port,
     )
 
 
@@ -424,24 +537,6 @@ def report_missing_inputs() -> list[str]:
     missing.extend(hand_supplied.report_missing())
 
     return missing
-
-
-def to_arrow(
-    frame: "pandas.DataFrame",
-) -> "pyarrow.Table":
-    """
-    Hand the library a table whose first column is the date header its loader accepts.
-
-    The conversion lives here so no notebook has to remember which of the two layouts a given input
-    takes, or that the header is what decides it.
-    """
-    dated = frame.reset_index()
-    renamed = dated.rename(columns={dated.columns[0]: DATE_HEADER})
-
-    return pyarrow.Table.from_pandas(
-        renamed,
-        preserve_index=False,
-    )
 
 
 def widen_to_benchmark(
@@ -473,6 +568,71 @@ def widen_to_benchmark(
     )
 
     return widened.fillna(0.0)
+
+
+def _attribute(
+    book: "pandas.DataFrame",
+    benchmark: "pandas.DataFrame",
+    asset_returns: "pandas.DataFrame",
+    factors: dict[str, "pandas.DataFrame"],
+    segment_map: dict[str, str],
+    brinson: bool,
+    factor_model: bool,
+) -> object:
+    """
+    One call to the library's pipeline: the inputs in memory, the owner's settings.
+
+    The factor files the library reserves for totals -- the vendor's total factor, total excess and
+    idiosyncratic returns -- are not handed over as factors: the library computes the residual
+    itself, as the return the factors leave unexplained.
+    """
+    import kaxanuk.attribution_analysis.entities.attribution_inputs
+    import kaxanuk.attribution_analysis.entities.attribution_options
+    import kaxanuk.attribution_analysis.entities.factor_returns
+    import kaxanuk.attribution_analysis.entities.portfolio_weights_arrow
+    import kaxanuk.attribution_analysis.entities.returns_table
+    import kaxanuk.attribution_analysis.performance_attribution
+
+    entities = kaxanuk.attribution_analysis.entities
+    factor_returns = {}
+
+    if factor_model:
+        for name, frame in factors.items():
+            if name in RESERVED_FACTOR_NAMES:
+                continue
+
+            aligned = frame.reindex(
+                index=book.index,
+                columns=book.columns,
+            ).fillna(0.0)
+            factor_returns[name] = entities.factor_returns.FactorReturns(
+                _dated_table(aligned),
+                name,
+            )
+
+    inputs = entities.attribution_inputs.AttributionInputs(
+        asset_returns=entities.returns_table.ReturnsTable(_dated_table(asset_returns)),
+        portfolio_weights=entities.portfolio_weights_arrow.PortfolioWeights(_dated_table(book)),
+        benchmark_weights=entities.portfolio_weights_arrow.PortfolioWeights(
+            _dated_table(benchmark)
+        ),
+        factor_returns=factor_returns,
+        segment_map=segment_map,
+    )
+    settings = entities.attribution_options.AttributionSettings(
+        brinson_fachler_method=brinson,
+        factor_model_method=factor_model,
+        brinson_fachler_formula=BRINSON_FACHLER_FORMULA,
+        linking_method=LINKING_METHOD,
+        cash_ticker=CASH_TICKER,
+    )
+    pipeline = kaxanuk.attribution_analysis.performance_attribution
+    outcome = pipeline.attribute(
+        inputs,
+        settings,
+    )
+
+    return outcome[0]
 
 
 def _attribution_cache_path(
@@ -516,6 +676,44 @@ def _attribution_cache_path(
     return cache_directory / f"{digest.hexdigest()}.pkl"
 
 
+def _dated_frame(
+    table: "pyarrow.Table",
+) -> "pandas.DataFrame":
+    """
+    A library table as a pandas frame indexed by its `date` column.
+    """
+    frame = table.to_pandas()
+
+    return frame.set_index(LIBRARY_DATE_COLUMN)
+
+
+def _dated_table(
+    frame: "pandas.DataFrame",
+) -> "pyarrow.Table":
+    """
+    A dates-down frame as the library's in-memory tables take it: the date first, named `date`.
+    """
+    named = frame.rename_axis(LIBRARY_DATE_COLUMN)
+    dated = named.reset_index()
+
+    return pyarrow.Table.from_pandas(
+        dated,
+        preserve_index=False,
+    )
+
+
+def _days_carried(
+    frame: "pandas.DataFrame",
+) -> "pandas.Series":
+    """
+    The number of days a file carries a non-zero value for each security.
+    """
+    filled = frame.fillna(0.0)
+    carried = filled.ne(0.0)
+
+    return carried.sum()
+
+
 def _factor_returns() -> dict[str, "pandas.DataFrame"]:
     """
     The factor files keyed by the book's identifiers, read on the first call in a process.
@@ -526,10 +724,46 @@ def _factor_returns() -> dict[str, "pandas.DataFrame"]:
     return FACTOR_CACHE["factors"]
 
 
+def _factor_totals(
+    factor_model: object,
+) -> "pandas.Series":
+    """
+    The factor model's linked totals, in points, under the names every notebook reads.
+
+    Each factor's cumulative contribution, and three totals: the book's compounded holdings return
+    as `f_total_excess_returns`, the factors' share of it as `f_total_factor_returns`, and the
+    residual no factor explains as `f_idyo_returns`.
+    """
+    contributions = _last_row(factor_model.cumulative_contributions)
+    totals = _last_row(factor_model.cumulative_totals)
+    named_totals = pandas.Series({
+        "f_total_excess_returns": totals["portfolio_returns"],
+        "f_total_factor_returns": totals["factor_returns"],
+        "f_idyo_returns": totals["idiosyncratic_returns"],
+    })
+    combined = pandas.concat([
+        contributions,
+        named_totals,
+    ])
+
+    return combined * 100
+
+
+def _last_row(
+    table: "pyarrow.Table",
+) -> "pandas.Series":
+    """
+    The last date's row of a cumulative table, its numbers only.
+    """
+    frame = table.to_pandas()
+    numbers = frame.select_dtypes("number")
+
+    return numbers.iloc[-1]
+
+
 def _load_hand_supplied() -> "types.ModuleType":
     """
-    Import the reader of the Analytics Factory's files by path, because `Data/` is a folder, not a
-    package.
+    Import the reader of the desk's files by path, because `Data/` is a folder, not a package.
     """
     specification = importlib.util.spec_from_file_location(
         "hand_supplied",
@@ -562,5 +796,24 @@ def _priced_holdings(
     )
 
     return kept.fillna(0.0)
+
+
+def _with_cash(
+    weights: "pandas.DataFrame",
+) -> "pandas.DataFrame":
+    """
+    The weights with what they leave uninvested as a cash column, so every date sums to one.
+    """
+    invested = weights.drop(
+        columns=[
+            CASH_TICKER,
+            ENGINE_CASH_COLUMN,
+        ],
+        errors="ignore",
+    )
+    remainder = 1.0 - invested.sum(axis=1)
+    cash = remainder.clip(lower=0.0)
+
+    return invested.assign(**{CASH_TICKER: cash})
 
 # --- example: end ---

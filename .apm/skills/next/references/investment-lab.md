@@ -20,7 +20,7 @@ repository's, made from the KaxaNuk Strategy Template.
 | --- | --- | --- | --- | --- |
 | **Data Curator** | 3 | pulls market and fundamental data from a provider — FMP, Sharadar or LSEG — and aligns it on one calendar | 0.51.0 (2026-10-23) | open source and free, on [PyPI](https://pypi.org/project/kaxanuk.data-curator/); a strategy's `uv sync` installs it. The provider's key comes from the provider |
 | **Data Refinery** | 3 | cleans, adjusts and reshapes the curated data | *coming* | in the Lab when it ships; until then, a strategy's own `Data/refinery.py` does it |
-| **Data Analyzer** | 3 | tests whether a feature carries signal, before any book is built | *coming* | in the Lab when it ships; until then, a strategy's own `Data/analyzer.ipynb` does it |
+| **Data Analyzer** | 3 | tests whether a feature carries signal, before any book is built | *coming* | in the Lab when it ships; until then, a strategy's own `Data/analyzer_marimo.py` does it |
 | **Portfolio Construction** | 4 | turns a signal into weights, limits and a rebalancing rule | 2.0.1 (2026-10-06) | in the Lab: access to KaxaNuk's private repository, `KaxaNuk/Portfolio-Construction`, and, since 2.0.0, a licence. An equal-weight book needs neither |
 | **Backtest Engine** | 5 | prices a book over history, with costs and no look-ahead | 0.67.0 (2026-09-26) | in the Lab: its licence brings a welcome email with an index URL and a key |
 | **Attribution Analysis** | 6 | splits the return into factor exposure and the part that is the strategy's own | 0.3.0 (2026-09-27) | in the Lab, as the Backtest Engine |

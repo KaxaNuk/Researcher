@@ -13,7 +13,7 @@ description: >
   does NOT cover what the numbers mean for a strategy (use `alpha-decomposition`) or running the
   backtest that produced the book (use `backtest-engine-runs`).
 metadata:
-  version: 0.5.2
+  version: 0.6.0
   library_version: 0.2.0
 ---
 
@@ -153,9 +153,10 @@ day's move multiplies that move again, and every book, the benchmark's included,
 the cross-section's daily variance. Nothing raises, and every figure reads larger. **Move both
 tables one day on** — `weights.shift(1)`, first row dropped, so the close of `t−1` earns day `t` —
 after the asset returns are computed on the unmoved dates, as the worked example's `held_overnight`
-does. On the worked example's Experiment 1 window, 2015 to 2026, the first cut's benchmark read
-**21.23** points a year against the index's own 14.30 paired on the same day, and **14.85** against
-14.31 held overnight: a gap of 6.94 points a year, then of 0.54.
+does. On the worked example's earlier Experiment 1, 2015 to 2026 on 0.2.0, the first cut's
+benchmark read **21.23** points a year against the index's own 14.30 paired on the same day, and
+**14.85** against 14.31 held overnight: a gap of 6.94 points a year, then of 0.54. Its current
+Experiment 1, 2000 to 2026 on 0.5.0, held overnight, reconciles to 0.22 points a year.
 
 **Market data — one file per security**, `{TICKER}.csv` or `{TICKER}.parquet`, with the date and
 price columns named in the configuration (`user_column_date`, `user_column_price`); returns are
@@ -378,8 +379,9 @@ Step 6 reads what step 5 produced, and `Experiments/attribution_analysis.py` sha
   members with no price and a book not widened each leave a clean-looking run and a gap here.
   **A zero price in the index's holdings reads as an infinite return**: in the worked example
   `RAI`, excluded from every book, was still in the index, so its `load_prices` reads a price of
-  zero or below as none. Its notebook prints the gap beside the first cut, and gate criterion 2
-  fails above a point a year, the blueprint's tolerance.
+  zero or below as none. Its notebook prints the gap beside the first cut; above a point a year,
+  the blueprint's tolerance, its Verify raises and the gate's performance criterion P2 reads "not
+  evidenced".
 - **The benchmark's daily weights and its daily returns** belong to the experiment, not to the
   library's defaults, with the same density rule. A benchmark chosen after seeing the result is not
   a benchmark.

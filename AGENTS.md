@@ -26,14 +26,15 @@ strategy's in `templates/strategy/AGENTS.md`, and a Python library's in
 
 **The strategy template and the example share every file the example does not mark.** A change to
 the template's description of a file changes the example's copy in the same commit. Only the lines
-between `<!-- example: begin -->` and `<!-- example: end -->` — `# --- example: begin ---` in
-Python, `# EXAMPLE-ONLY CELL` on a notebook cell — are the example's own; every other line is the
-same in both copies. A marker stands alone on its line, at column 0. The only exceptions are the
-example's status banner in `AGENTS.md`; the `init-example` lines of `SETUP.md`; the body of
-`OBJECTIVE.md`; the entries of `CHANGELOG.md`; the name and version in `pyproject.toml`; and,
-whole, the example's `README.md` (its own, as a strategy's is after `SETUP.md` step 5), its seed
-CSV and every file only the example has — its notes, `Universe/seed.py` and a frozen book's
-`FREEZE.json` with the files it hashes. `paper_trading_N.py` stays shared and marked.
+between `<!-- example: begin -->` and `<!-- example: end -->` — `# --- example: begin ---` and
+`# --- example: end ---` in Python, a marimo notebook included — are the example's own; every other
+line is the same in both copies. A marker stands alone on its line, at column 0. The only
+exceptions are the example's status banner in `AGENTS.md`; the `init-example` lines of `SETUP.md`;
+the body of `OBJECTIVE.md`; the entries of `CHANGELOG.md`; the name and version in
+`pyproject.toml`; and, whole, the example's `README.md` (its own, as a strategy's is after
+`SETUP.md` step 5), its seed CSV and every file only the example has — its notes and
+`Universe/seed.py`. An example with a book on paper adds that book's `FREEZE.json` and the files it
+hashes; `golden-flow` has none. `paper_trading_N.py` stays shared and marked.
 
 ## Rules
 
@@ -107,7 +108,8 @@ CSV and every file only the example has — its notes, `Universe/seed.py` and a 
   Never use the section symbol; write "section".
 - **No secrets, no binaries.** The worked example, `golden-flow`, is the only strategy this
   repository names, as a curated copy; nothing in it is taken from a live strategy repository after
-  the copy.
+  the copy. It was curated again from the live repository once, on the owner's word of 2026-10-27,
+  Experiment 1 only; another curation takes the owner's word again.
 
 ## When a Lab library or an Analytics Factory file changes
 
@@ -131,17 +133,19 @@ CSV and every file only the example has — its notes, `Universe/seed.py` and a 
    names the build to install.
 5. **An Analytics Factory change** — a folder, a file name, a header, a date order — changes
    `Data/hand_supplied.py` in the template and the example (which keeps reading the older names),
-   `attribution-analysis-runs` and `investment-lab.md`; a frozen book's copy stays as it was.
+   `attribution-analysis-runs` and `investment-lab.md`; a frozen book's copy, where an example
+   has one, stays as it was.
 6. **A library that replaces a hand-rolled stage** (the Data Refinery, the Data Analyzer) gets its
    own `*-runs` skill with a `library_version`, and the stage's seam file, `experiment-lifecycle`
    and `investment-lab.md` move with it.
 7. **The worked example's seed follows its index.** When the KN US Equity Core's membership changes,
    rebuild `examples/strategy/golden-flow/Universe/Investable_Universe.csv` with its
-   `Universe/seed.py`: the listings whose FMP symbol, verified or not, is the index's own ticker,
-   departed names included, with their first and last price dates — tickers and dates only, never an
-   ISIN, a name or any other vendor field. It is an example release, re-run where a figure moves.
-   The frozen book's seed stays as it is, tickers and dates only; never restore the hashed original
-   to satisfy `FREEZE.json`.
+   `Universe/seed.py`: every listing the index held, departed names included, by Sharadar's ticker,
+   which is the index's own, with its first and last price dates in Sharadar's catalogue — the
+   columns `main_identifier`, `index_identifier`, `valid_from` and `valid_to`, never a name, a
+   permanent identifier or any other vendor field. It is an example release, re-run where a figure
+   moves. An example with a frozen book keeps that book's seed as it is; never restore a hashed
+   original to satisfy its `FREEZE.json`.
 8. **A new worked example** — an ETF strategy, or one users ask for — is a folder of its own,
    `examples/<kind>/<name>/`, where `<kind>` is the template it is worked through, as
    `templates/<kind>/` names it: `examples/strategy/<name>/` for an ETF strategy. It is curated as

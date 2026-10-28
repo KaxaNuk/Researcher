@@ -1,6 +1,6 @@
 [project]
 name = "kn-strategy-template"
-version = "0.19.4"
+version = "0.20.0"
 license = "MIT"
 # The ceiling is the Backtest Engine's, not this repository's: its quick start states Python 3.12
 # or 3.13, and every performance figure here comes from that engine, so a version it cannot be
@@ -9,8 +9,8 @@ license = "MIT"
 requires-python = ">=3.12,<3.14"
 dependencies = [
     "duckdb>=1.5.0",
-    "ipykernel>=7.3.0",
-    "kaxanuk-data-curator>=0.50.0",
+    "kaxanuk-data-curator>=0.51.0",
+    "marimo>=0.25.2",
     "matplotlib>=3.11.1",
     "numpy>=2.5.2",
     "pandas>=2.3.3,<3",
@@ -22,8 +22,7 @@ dependencies = [
 
 [dependency-groups]
 notebook = [
-    "ipykernel>=7.3.0",
-    "jupyterlab>=4.6.3",
+    "marimo>=0.25.2",
 ]
 
 # Ruff enforces the house style described in AGENTS.md, so the rules are checkable rather than
@@ -63,14 +62,28 @@ ignore = [
 # A notebook resolves the repository root and puts a directory on the import path before importing
 # from it.  The import cannot come first: there is nothing to import from until the path is set.
 [tool.ruff.lint.per-file-ignores]
-"*.ipynb" = ["E402"]
+# A marimo notebook is generated: each cell is a function whose arguments are the names other cells
+# define, constants included, and whose annotations are quoted names it never imports.
+"*_marimo.py" = [
+    "E501",
+    "F821",
+    "F841",
+    "N803",
+    "N806",
+]
 
 # KaxaNuk libraries are third-party, but reading them in their own block is how you see at a
 # glance which stage of the platform a module sits on.  A module imported by bare name from a
 # directory that is not a package belongs in `known-local-folder`, or Ruff files it alongside
 # numpy and pandas.
 [tool.ruff.lint.isort]
-known-local-folder = []
+known-local-folder = [
+    "attribution_analysis",
+    "backtest_engine",
+    "hand_supplied",
+    "portfolio_construction",
+    "securities_panel",
+]
 section-order = [
     "future",
     "standard-library",

@@ -5,7 +5,7 @@ steps as a folder structure, with the conventions that let two people share a to
 explaining it first. Building the data needs a data-provider key; the backtest and attribution,
 steps 5 and 6, also need the licensed Backtest Engine and Attribution Analysis. It is research,
 never investment advice: *What it is, and what it is not*, in the
-[KaxaNuk Researcher's README](https://github.com/KaxaNuk/KaxaNuk-Researcher#readme).
+[KaxaNuk Researcher's README](https://github.com/KaxaNuk/Researcher#readme).
 
 The universe is one CSV whose only required column is `main_identifier`, and every stage reads it
 without knowing what is in it: **equities, ETFs, FX, crypto, commodities or futures all run the
@@ -19,7 +19,7 @@ improves in public.
 
 This template is the shape and every file the process expects in it, each a description of what
 belongs there; *What is in here* says what each file is for. The
-[example](https://github.com/KaxaNuk/KaxaNuk-Researcher/tree/main/examples/strategy/golden-flow)
+[example](https://github.com/KaxaNuk/Researcher/tree/main/examples/strategy/golden-flow)
 is the same files worked through for one strategy, `golden-flow`.
 
 ---
@@ -55,14 +55,14 @@ Three jobs, one tool for each. Install once, use for every strategy.
 
 **KaxaNuk's agent skills teach whichever assistant you pick** the Lab modules and this process:
 what each does, how it is called, and what it must never be asked to do. They are one package,
-[`KaxaNuk/KaxaNuk-Researcher`](https://github.com/KaxaNuk/KaxaNuk-Researcher), installed once for
+[`KaxaNuk/Researcher`](https://github.com/KaxaNuk/Researcher), installed once for
 your user and there in every strategy, so **a strategy installs nothing**. Nothing here needs them
 to be read; a filled-in repository is faster with them.
 
 ### A researcher beside the process
 
 A researcher is a separate project, one per person rather than per strategy, made once with
-`init-researcher`, a skill of the [KaxaNuk Researcher](https://github.com/KaxaNuk/KaxaNuk-Researcher):
+`init-researcher`, a skill of the [KaxaNuk Researcher](https://github.com/KaxaNuk/Researcher):
 a companion you name and teach, with its own library of what you have read. Its commands serve the
 parts below: `objective` drafts the claims in `OBJECTIVE.md` and rewrites their evidence from the
 notes (A, B); `read` writes the notes in `Bibliotheca/` (B, F); `blueprint` drafts each
@@ -98,12 +98,13 @@ run `next` at any moment: it reads the folder and says which part comes next.
   **delisted names included**: a list of today's names has already deleted everything that
   failed. `main_identifier` is the only required column; add whatever else your strategy groups
   by. The universe comes after the claims because they decide what it has to contain.
-- **D. The data.** Write your `c_*` and `r_*` columns into the two `custom_calculations.py`, fill
-  in the Curator and Refinery drivers that call the libraries, and run the Universe and Data steps
-  in this order: curator, then `universe.ipynb`, then refinery, then `analyzer.ipynb`. The universe
-  notebook sits *between* the two Data commands because it profiles what the curator downloaded
-  and writes the master the refinery joins. The analyzer's measurements go straight into
-  `RESULTS.md`.
+- **D. The data.** Write your `c_*` and `r_*` columns into the two `custom_calculations.py`, fill in
+  the Curator and Refinery drivers that call the libraries, and run the Universe and Data steps in
+  this order: curator, then `universe_marimo.py`, then refinery, then `analyzer_marimo.py`. The
+  universe notebook sits *between* the two Data commands because it profiles what the curator
+  downloaded and writes the master the refinery joins. The analyzer's measurements go straight into
+  `RESULTS.md`. Every notebook is a marimo notebook: a Python file that runs as a script and saves
+  no output in itself.
 - **E. The blueprint.** Name the benchmark, then write `BLUEPRINT_1.md` before the rule. The
   benchmark is what "beat" means: an index, an ETF or an equal-weight book of the universe.
   Choosing it, with the candidates set aside, is an entry of `JOURNAL_1.md` before the blueprint;
@@ -122,7 +123,9 @@ run `next` at any moment: it reads the folder and says which part comes next.
   it moved. Report the rejected result as loudly as the promising one: *What is closed* is what
   stops the next person repeating it.
 
-Then the gate in `Paper_Trading/BITACORA.md`, or Experiment 2, from E again.
+Then the gate in `Paper_Trading/BITACORA.md` — soundness first, S1 to S5, then performance, P1 to
+P3 — or Experiment 2, from E again. An experiment that is sound and earns only in named periods is
+read as such and not paper traded alone.
 
 ---
 
@@ -168,9 +171,9 @@ What goes in each folder, written down only here, so keep this table current:
 | Folder | Step | What belongs in it | Committed |
 | --- | --- | --- | --- |
 | `Bibliotheca/` | 1 | `BIBLIOGRAPHY.md`, the index of sources and the leads. `Papers/`, one note per paper, and `Books/`, one folder per book — its `INDEX.md` of chapters and one note per chapter somebody chose to read — each beside the PDF it came from. `LOG.md`, what was read here and when. `Notes/` for clippings and transcripts | the notes and the indexes — they are the reasoning. The PDFs and `Extracts/` are ignored: licensed material, and the extracts regenerate |
-| `Universe/` | 2 | `Investable_Universe.csv`, **the seed**: one row per security. `universe.ipynb`, which profiles what the curator downloaded and writes `Security_Master.csv` and `Data_Issues.csv` | the seed and the notebook; the two outputs and `Provider_Cache/` are regenerated, so ignored |
-| `Data/` | 3 | `curator.py`, `refinery.py`, `analyzer.ipynb` — the three drivers — and `hand_supplied.py`, the one reader of the index and factor files KaxaNuk's Analytics Factory ships, in place from `KN_ANALYTICS_PATH` or from the drop zones. `Curator/custom_calculations.py` for `c_*` columns and `Refinery/custom_calculations.py` for `r_*`. `Curator/Time_Series/`, `Benchmarks/`, `Factors/` and `Refinery/Time_Series/` for what is downloaded or dropped in by hand; `Analyzer/` for charts and the signal table | code only. **Every data file is ignored** — downloaded, derived or dropped in, all of it regenerable |
-| `Experiments/` | 4–6 | The four shared modules — `securities_panel.py`, `portfolio_construction.py`, `backtest_engine.py`, `attribution_analysis.py`. One `Experiment_N/` per idea: `BLUEPRINT_N.md`, `JOURNAL_N.md`, `FINDINGS_N.md`, the notebook, and its `Portfolio/`, `Backtest/` and `Attribution/` output folders | the documents, the notebook with outputs stripped, the modules. The output folders are rebuilt by the notebook, so ignored |
+| `Universe/` | 2 | `Investable_Universe.csv`, **the seed**: one row per security. `universe_marimo.py`, which profiles what the curator downloaded and writes `Security_Master.csv` and `Data_Issues.csv` | the seed and the notebook; the two outputs and `Provider_Cache/` are regenerated, so ignored |
+| `Data/` | 3 | `curator.py`, `refinery.py`, `analyzer_marimo.py` — the three drivers — and `hand_supplied.py`, the one reader of the index and factor files KaxaNuk's Analytics Factory ships, in place from `KN_ANALYTICS_PATH` or from the drop zones. `Curator/custom_calculations.py` for `c_*` columns and `Refinery/custom_calculations.py` for `r_*`. `Curator/Time_Series/`, `Benchmarks/`, `Factors/` and `Refinery/Time_Series/` for what is downloaded or dropped in by hand; `Analyzer/` for charts and the signal table | code only. **Every data file is ignored** — downloaded, derived or dropped in, all of it regenerable |
+| `Experiments/` | 4–6 | The four shared modules — `securities_panel.py`, `portfolio_construction.py`, `backtest_engine.py`, `attribution_analysis.py`. One `Experiment_N/` per idea: `BLUEPRINT_N.md`, `JOURNAL_N.md`, `FINDINGS_N.md`, the notebook, and its `Portfolio/`, `Backtest/` and `Attribution/` output folders | the documents, the notebook, which saves no output, and the modules. The output folders are rebuilt by the notebook, so ignored, as is marimo's `__marimo__/` |
 | `Paper_Trading/` | 7 | `BITACORA.md`, what graduation means and the gate. `promote.py`, which freezes a graduated experiment into `Paper_Trading_N/`; `daily_update.py`, which runs every frozen book each day; `record.py`, which keeps the record in files, a DuckDB database or both. `Paper_Trading_N/`, one frozen book: its `paper_trading_N.py`, the files it needs in the strategy's own layout, and `FREEZE.json` | the scripts, `BITACORA.md` and every frozen book. Each day's raw files, logs and record are ignored, and the record cannot be fetched again: keep it in the database or back it up |
 | `Config/` | — | `.env.template`, copied to `.env` and filled in with a data-provider key, the Lab's licences, the Analytics Factory's folder and the paper-trading settings | the template. **`.env` never** — and it cannot be regenerated, so discarding all changes loses it |
 
@@ -179,19 +182,18 @@ What goes in each folder, written down only here, so keep this table current:
 be filled in with the strategy's own: a `.py` file as its docstring, a notebook as its markdown
 cells, a document as its prose.
 
-The [example](https://github.com/KaxaNuk/KaxaNuk-Researcher/tree/main/examples/strategy/golden-flow)
+The [example](https://github.com/KaxaNuk/Researcher/tree/main/examples/strategy/golden-flow)
 works the same files through, its own lines beside that description between the example markers:
-`<!-- example: begin -->` and `<!-- example: end -->` in Markdown, `# --- example: begin ---` in
-Python, `# EXAMPLE-ONLY CELL` on a notebook cell. To read the example, or run it, copy it whole
-into a folder of its own:
+`<!-- example: begin -->` and `<!-- example: end -->` in Markdown, `# --- example: begin ---` and
+`# --- example: end ---` in Python, a marimo notebook included. To read the example, or run it,
+copy it whole into a folder of its own:
 
 ```text
 init-example
 ```
 
 Never build on it. The seed in `Universe/`, everything between the markers and every file only the
-example has (its notes, `Universe/seed.py`, and a frozen book's `FREEZE.json` with the files it
-hashes) are that strategy's.
+example has (its notes and `Universe/seed.py`) are that strategy's.
 
 ---
 
@@ -204,7 +206,7 @@ pipeline wherever your work already is.
 | --- | --- | --- | --- |
 | **Data Curator** | 3 | pulls raw market and fundamental data from any provider and aligns it on one calendar | open source and free, on [PyPI](https://pypi.org/project/kaxanuk.data-curator/) |
 | **Data Refinery** | 3 | cleans, adjusts and reshapes the curated data into analysis-ready series | coming; hand-rolled in `Data/refinery.py` until then |
-| **Data Analyzer** | 3 | builds features and tests whether they carry signal, before you model anything | coming; hand-rolled in `Data/analyzer.ipynb` until then |
+| **Data Analyzer** | 3 | builds features and tests whether they carry signal, before you model anything | coming; hand-rolled in `Data/analyzer_marimo.py` until then |
 | **Portfolio Construction** | 4 | turns a signal into weights, position limits and a rebalancing rule | licensed |
 | **Backtest Engine** | 5 | runs the rules over history with costs and no look-ahead, and returns the track record | licensed |
 | **Attribution Analysis** | 6 | splits the return into known factor exposure and the part that is actually yours | licensed |
@@ -244,16 +246,18 @@ But when we want to share a tool, some names have to mean the same thing in both
 | `r_*` | `Data/Refinery/custom_calculations.py` | **securities against each other, per date** | you need a rank, a breadth reading, or a column with a setting an experiment will sweep — a fitted model, or a window |
 | `current_*` | `Data/refinery.py`, joined from the security master | **today's classification — not point-in-time** | you group or report by something new. Never select on it |
 
-Two rules follow, and one exception worth knowing:
+Three rules follow, and one exception worth knowing:
 
 - **A `c_*` column that needs to see other securities is misplaced** and belongs in the Refinery.
 - **Widening the Curator's schema forces a refetch of every identifier.** That is deliberate, since
   it stops a folder holding a mix of schemas, but it makes the Curator the wrong home for anything
   you intend to tune.
-- **So a column with a setting to sweep, fitted or a window such as a twelve-month return's, lives
-  in the Refinery even when it is per-security.** Its settings are exactly what an experiment
-  sweeps, and **a sweep must never cost a download.** Its *inputs*, arithmetic with nothing to tune,
-  stay in the Curator.
+- **A new experiment's signal on the data already downloaded is an `r_*` column**, computed by the
+  Refinery, never a wider Curator schema and a second download.
+- **The exception: a column with a setting to sweep, fitted or a window such as a twelve-month
+  return's, lives in the Refinery even when it is per-security.** Its settings are exactly what an
+  experiment sweeps, and **a sweep must never cost a download.** Its *inputs*, arithmetic with
+  nothing to tune, stay in the Curator.
 
 ### The names
 

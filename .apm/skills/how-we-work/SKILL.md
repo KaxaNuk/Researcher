@@ -10,7 +10,7 @@ description: >
   it. It does NOT cover the research process itself (use `experiment-lifecycle`) or Python style
   (the `python-bloom-code` and `python-pep8` instructions).
 metadata:
-  version: 0.6.0
+  version: 0.6.1
 ---
 
 # How we work — issues, branches, changelogs, versions
@@ -42,8 +42,10 @@ A long-lived branch other than `main`, such as a deployed `dev`, exists only whe
 
 - **The linter passes.** For Python, `uvx ruff check .`, notebooks included; the repository's own
   configuration decides the rules.
-- **Notebook outputs are stripped.** The committed notebook is the method; the record lives in a
-  document.
+- **A notebook's outputs are never committed.** The committed notebook is the method; the record
+  lives in a document. A marimo notebook, as a KaxaNuk strategy's are, saves none in itself, so
+  there is nothing to strip; its cache, `__marimo__/`, is ignored. A Jupyter notebook in another
+  repository has its outputs stripped first.
 - **The `CHANGELOG.md` entry is part of the change-set**, not a follow-up. If you cannot write the
   entry, the change-set is not finished.
 - **No secrets, no binaries.** Nothing from a `.env` file, no keys in a notebook output or a log

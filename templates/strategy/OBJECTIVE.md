@@ -44,7 +44,8 @@ Status vocabulary, so it means the same across strategies: **untested** · **mea
 says something; no book has been run) · **falsified** · **confirmed as a book** (it beats its
 benchmarks through the engine) · **confirmed as a factor** (attribution assigns it the return) ·
 **unexplained** (confirmed as a book, not as a factor — the usual state, and the interesting one) ·
-**true by construction**.
+**true by construction** · **confirmed against its control only** (it beats the same rule with the
+claim's ingredient removed, and loses to its benchmarks).
 
 *Give each claim a short section below saying what the evidence is — at first the question that
 would settle it, then the `Bibliotheca/` notes read for it, then `RESULTS.md` once something is

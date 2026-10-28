@@ -41,6 +41,48 @@ for somebody who was not in the room:
 
 ---
 
+## 0.20.0 (2026-10-27)
+
+**MINOR** — the template takes what Golden Flow 0.16.0 to 0.21.0 learned, the proposals of issue
+KaxaNuk/Researcher#41: marimo notebooks in place of Jupyter, Sharadar in the curator, the adjustment
+rebuilt from the exact close, every cost and the cash inside the engine, a Verify that excludes a
+truncated run by name, the band read back beside the rule, and a graduation gate in two layers.
+
+**What to do differently:** nothing for a strategy already made, whose files are its own; a new one,
+made with `init-strategy`, starts from this. Its experiments read the gate in two layers: soundness,
+then performance.
+
+### Changed
+
+- **The notebooks** are marimo, run as scripts, nothing saved in them to strip:
+  `Universe/universe_marimo.py`, `Data/analyzer_marimo.py` and
+  `Experiments/Experiment_1/experiment_1_marimo.py` replace the three Jupyter notebooks.
+  `pyproject.toml`'s notebook group is marimo, without jupyterlab or ipykernel, its ruff ignores a
+  marimo notebook's generated cell signatures, and `.gitignore` ignores `__marimo__/`.
+- **Universe**: the seed holds identifiers and dates only, and the name and the permanent identifier
+  come from the provider's cached catalogue; the register reads spliced files and traded value
+  across a split by the signature the Curator corrects.
+- **Data**: `Data/curator.py` downloads Sharadar in batches, rebuilds the adjustment from the exact
+  close as `c_*` calculations, carries spin-offs, checks every file against the provider and
+  corrects volume adjusted twice; every per-security file is Parquet, through the new
+  `Data/time_series.py`; a cash-rate series rides beside the benchmarks; and
+  `Data/Refinery/custom_calculations.py` says a new experiment's signal on data already downloaded
+  is an `r_*` column. The Data Curator floor is 0.51.0.
+- **Experiments**: `backtest_engine.py` prices every cost and the cash inside the engine —
+  basis-point commission, spread-and-impact slippage with a flat half-spread re-pricing beside it,
+  cash at a rate file less a broker's spread — in batches, a truncated run excluded by name;
+  `portfolio_construction.py` adds the monthly calendar and the no-trade band, with blocking rows
+  in place of a sale the day before a series stops; `attribution_analysis.py` names its
+  methodology, the book's cash a segment of its own.
+- **The experiment's documents**: the blueprint asks for costs and cash in the engine, the band
+  read back and the evidence for each soundness row; the findings read the gate in two layers,
+  soundness S1 to S5 and performance P1 to P3, with three outcomes — graduates, sound and
+  regime-dependent, not sound; the journal reads the band back beside the rule.
+- **Paper trading**: `BITACORA.md` and `promote.py` freeze only an experiment that graduates; a
+  sound, regime-dependent book is not paper traded alone.
+- **`AGENTS.md`, `README.md`, `SETUP.md`, `RESULTS.md`**: marimo throughout, the two-layer gate,
+  the band, the costs and the cash in the engine, and the `r_*` rule.
+
 ## 0.19.4 (2026-10-21)
 
 **PATCH** — the rules say what never leaves a strategy, and the `security` skill checks it before a

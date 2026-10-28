@@ -41,6 +41,37 @@ for somebody who was not in the room:
 
 ---
 
+## 0.18.0 (2026-10-27)
+
+**MINOR, result-invalidating** — Golden Flow is curated again from its live repository at 0.21.0,
+Experiment 1 only, on the owner's decision of 2026-10-27: Sharadar prices and the KN US Equity Core
+from 1998, a monthly rule from 2000 to 2026, every cost and the cash's interest inside the engine.
+Read through the new two-layer gate, Experiment 1 is **sound and regime-dependent**: every
+soundness criterion holds; the book beats its control in 2000–2008 and 2018–2026 and the Core only
+in 2018–2026, and loses to the Core and `SPY` on Sharpe over the whole window. It is not paper
+traded.
+
+**What to do differently:** say `init-example` for a fresh copy. Running it needs a Sharadar key,
+the Lab's licences and, for step 6, Attribution Analysis 0.5.0.
+
+### Changed
+
+- **Experiment 1**, re-curated: the blueprint of 2026-10-23, the journal to 2026-10-24 with the
+  owner's decision of 2026-10-27, the findings read in two layers. Every figure is quoted from the
+  live repository's findings, measured on Backtest Engine 0.67.0 and Attribution Analysis 0.5.0;
+  none is computed anew.
+- **Experiments 2 and 3**, their notes, claims, columns and rows stay out.
+- **The seed**: 2,199 listings, tickers and dates only. `Universe/seed.py` writes them from
+  Sharadar's catalogue, which it caches, and runs before the universe notebook.
+- **The notebooks** are marimo; the data stage is Sharadar's, in Parquet.
+- **`Bibliotheca/`**: Daniel and Moskowitz (2016), which the blueprint cites, is carried in; every
+  note's implications are rewritten for the Sharadar figures.
+
+### Removed
+
+- **`Paper_Trading/Paper_Trading_1/`**, the FMP book of 2026-10-06, retired as the live repository
+  retired it on 2026-10-24. The step-7 scripts stay, with no book in `BOOKS`.
+
 ## 0.17.8 (2026-10-21)
 
 **PATCH** — the rules say what never leaves a strategy, and the `security` skill checks it before a

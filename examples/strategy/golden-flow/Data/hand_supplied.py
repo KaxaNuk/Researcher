@@ -46,10 +46,28 @@ a member dropped because its two keys differ.
 
 # --- example: begin ---
 
-# Golden Flow reads the KN US Equity Core -- its holdings and returns, under the Analytics
-# Factory's own file names -- and the KN US Equity Factor Model's twenty files.
-# `read_member_holdings` renames the index's tickers into the seed's FMP symbols through the
-# seed's two keys.
+# Golden Flow reads the **KN US Equity Core** of 2026-10-22, from 1998-12-31, under the names the
+# owner supplied it with on 2026-10-23:
+#
+#     Benchmarks/index_daily_holdings_1998.csv
+#         m_date, ISO dates; one column per listing, keyed by Sharadar's ticker, its weight in the
+#         index that day
+#     Benchmarks/backtest_returns.csv
+#         m_date, ISO dates; the index's daily return in a second column whose header is blank
+#     Benchmarks/backtest_components_mask.csv, Benchmarks/tickers.csv
+#         the same membership as 0 and 1, and the listings' tickers: staged beside the two, and
+#         checked against them by the universe notebook, never read for a number
+#     Factors/<Name>.csv
+#         dates down in an unnamed first column, ISO; listings across, keyed like the holdings
+#
+# **Two keys, one map.**  The desk keys every listing by Sharadar's ticker -- `BRK.B`, `DD1` for a
+# symbol since recycled -- and so does every price file, since Sharadar serves both; the map is the
+# identity today, and it stays a map so a second provider is one more column, not a rewrite.  The
+# seed, `Universe/Investable_Universe.csv`, carries both: `index_identifier`, the desk's, and
+# `main_identifier`, the price file's.  `read_member_holdings` renames the holdings
+# through that map, and every reader of membership -- the universe notebook, the analyzer, the rule,
+# the attribution and the paper book -- goes through it, so a listing whose two keys differ is never
+# silently read as a non-member.  `read_listing_keys` gives the map itself, for the factor files.
 
 import os
 import pathlib
@@ -61,6 +79,7 @@ __all__ = [
     "ANALYTICS_PATH_KEY",
     "BENCHMARK_HOLDINGS_NAME",
     "BENCHMARK_RETURNS_NAME",
+    "BENCHMARK_RETURNS_SERIES_NAME",
     "INDEX_IDENTIFIER_COLUMN",
     "LIBRARY_DATE_HEADER",
     "benchmark_directory",
@@ -74,32 +93,33 @@ __all__ = [
 ]
 
 ANALYTICS_PATH_KEY = "KN_ANALYTICS_PATH"
-# The Analytics Factory's folder names, newest first: the Analytics Factory's layout, then the one
-# it replaced.
+# The desk's folder names, newest first: the Analytics Factory's layout, then the one it replaced.
 BENCHMARK_FOLDER_NAMES = (
     "Benchmark Portfolios",
     "Benchmarks",
 )
-BENCHMARK_HOLDINGS_NAME = "KN_US_Equity_Benchmark_Holdings.csv"
-BENCHMARK_RETURNS_NAME = "KN_US_Equity_Benchmark_Returns.csv"
+BENCHMARK_HOLDINGS_NAME = "index_daily_holdings_1998.csv"
+BENCHMARK_RETURNS_NAME = "backtest_returns.csv"
+# The index's return series has no header of its own, so it is named here.
+BENCHMARK_RETURNS_SERIES_NAME = "kn_us_equity_core"
 DROP_IN_DIRECTORY = pathlib.Path(__file__).parent / "Curator"
 ENVIRONMENT_PATH = pathlib.Path(__file__).parent.parent / "Config" / ".env"
 FACTOR_FOLDER_NAMES = (
     "Factor Models",
     "Factors",
 )
-# The seed's two keys: the price file's, and the Analytics Factory's.
+# The seed's two keys: the price file's, and the desk's.
 IDENTIFIER_COLUMN = "main_identifier"
 INDEX_IDENTIFIER_COLUMN = "index_identifier"
 SEED_PATH = pathlib.Path(__file__).parent.parent / "Universe" / "Investable_Universe.csv"
 
-# The Analytics Factory writes `m_date` in both benchmark files, ISO in one and day first in the
-# other; the attribution library wants every frame's dates under one header of its own.
+# The desk writes `m_date` in both benchmark files, ISO in both since the Core of 2026-10-22; the
+# attribution library wants every frame's dates under one header of its own.
 DESK_DATE_HEADER = "m_date"
 FACTOR_DATE_FORMAT = "%Y-%m-%d"
 HOLDINGS_DATE_FORMAT = "%Y-%m-%d"
 LIBRARY_DATE_HEADER = "date_column"
-RETURNS_DATE_FORMAT = "%d/%m/%Y"
+RETURNS_DATE_FORMAT = "%Y-%m-%d"
 
 # The model's own series, known to the library by these names and dropped from the percentage
 # decomposition; a factor file is otherwise named by its file name in lower case.
@@ -113,8 +133,7 @@ RESERVED_FACTOR_NAMES = {
 
 def benchmark_directory() -> "pathlib.Path":
     """
-    The folder the index's two files are read from: the Analytics Factory's, or the drop-in beside
-    the Curator.
+    The folder the index's two files are read from: the desk's, or the drop-in beside the Curator.
     """
     analytics = _analytics_directory()
 
@@ -130,7 +149,7 @@ def benchmark_directory() -> "pathlib.Path":
 
 def factor_directory() -> "pathlib.Path":
     """
-    The folder the factor model's files are read from: the Analytics Factory's, or the drop-in.
+    The folder the factor model's files are read from: the desk's, or the drop-in.
     """
     analytics = _analytics_directory()
 
@@ -146,8 +165,7 @@ def factor_directory() -> "pathlib.Path":
 
 def read_benchmark_holdings() -> "pandas.DataFrame":
     """
-    The index's daily holdings as the Analytics Factory keys them: dates down, listings across, each
-    a weight.
+    The index's daily holdings as the desk keys them: dates down, listings across, each a weight.
 
     A listing absent on a date weighs zero, never null, because both the membership rule and the
     attribution library read a missing weight as a hole rather than as a name that was not held.
@@ -172,8 +190,8 @@ def read_benchmark_returns() -> "pandas.Series":
     """
     The index's daily return, in date order, under the index's own name.
 
-    The file writes its dates day first, so they are parsed with the format stated, never guessed:
-    the fourth of January and the first of April are the same string read two ways.
+    The dates are parsed with the format stated, never guessed: an earlier file wrote them day
+    first, and the fourth of January and the first of April are the same string read two ways.
     """
     path = benchmark_directory() / BENCHMARK_RETURNS_NAME
     returns = pandas.read_csv(path)
@@ -188,7 +206,7 @@ def read_benchmark_returns() -> "pandas.Series":
             dates,
             name=LIBRARY_DATE_HEADER,
         ),
-        name=return_column,
+        name=BENCHMARK_RETURNS_SERIES_NAME,
     )
 
     return series.sort_index()
@@ -200,9 +218,8 @@ def read_factor_returns() -> dict[str, "pandas.DataFrame"]:
 
     Every file is read as a factor, so a stray file is a stray factor.  The date column arrives
     unnamed and as strings; a string date aligns with nothing and the factor attribution comes back
-    with zero rows rather than an error, so it is parsed here. The listings stay keyed as the
-    Analytics Factory keys them; `read_listing_keys` renames them where a caller needs the price
-    files' keys.
+    with zero rows rather than an error, so it is parsed here.  The listings stay keyed as the desk
+    keys them; `read_listing_keys` renames them where a caller needs the price files' keys.
     """
     factors = {}
     directory = factor_directory()
@@ -229,13 +246,12 @@ def read_factor_returns() -> dict[str, "pandas.DataFrame"]:
 
 def read_listing_keys() -> dict[str, str]:
     """
-    The Analytics Factory's key for each listing the seed carries, mapped to the key of its price
-    file.
+    The desk's key for each listing the seed carries, mapped to the key of its price file.
 
     Read from the seed, the one place both keys are written.  A listing the seed does not carry --
-    one with no FMP symbol, or one FMP prices under another ticker, such as `BRK.B` -- is absent
-    from the map, and the caller decides what absence means; the universe notebook writes every such
-    listing into `Universe/Data_Issues.csv`.
+    one Sharadar does not price, or the older half of a recycled symbol -- is absent from the map,
+    and the caller decides what absence means; the universe notebook writes every such listing
+    into `Universe/Data_Issues.csv`.
     """
     seed = pandas.read_csv(
         SEED_PATH,
@@ -316,13 +332,11 @@ def report_missing() -> list[str]:
 
 def _analytics_directory() -> "pathlib.Path | None":
     """
-    The Analytics Factory's folder when `KN_ANALYTICS_PATH` names one, taken from the environment
-    first.
+    The desk's folder when `KN_ANALYTICS_PATH` names one, taken from the environment first.
 
     `Config/.env` is loaded without overriding what the environment already holds, so a scheduler
     that sets the variable wins.  A path that does not exist is an error, not a fallback: reading
-    the drop-in folder when the Analytics Factory's was meant is how two sets of numbers start to
-    circulate.
+    the drop-in folder when the desk's was meant is how two sets of numbers start to circulate.
     """
     dotenv.load_dotenv(
         ENVIRONMENT_PATH,
@@ -351,8 +365,8 @@ def _first_existing(
     """
     The first of the names that is a folder under the parent, or the first name when none is.
 
-    The Analytics Factory renamed its folders once; reading both layouts keeps a strategy running
-    across the change, and a missing folder is reported under the newest name.
+    The desk renamed its folders once; reading both layouts keeps a strategy running across the
+    change, and a missing folder is reported under the newest name.
     """
     for name in names:
         candidate = parent / name

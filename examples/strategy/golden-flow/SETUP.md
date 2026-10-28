@@ -6,47 +6,36 @@ end, and a person can read it in a few minutes.
 
 <!-- example: begin -->
 
-> **On the example.** This folder is for reading. To run it, `init-example` copies it into a folder
-> of its own — step 1 — and step 5 is skipped: this README is already the strategy's.
->
-> **What a run needs.**
->
-> - **An FMP key**, `KNDC_API_KEY_FMP`. FMP is this experiment's provider, and its symbols are the
->   seed's main identifier. A later experiment may use another provider, with the main identifier
->   KaxaNuk supplies for it. **Without one, Yahoo Finance can run it for learning**, with no key,
->   through the Data Curator's Yahoo Finance extension, after the changes the README's *Run it*
->   names — but it has no data for the 178 names in the seed that left the market, and no
->   unadjusted price or VWAP, from which the record builds the traded value, the fill and the
->   commission. For a precise experiment use FMP, which the record used, or Sharadar or LSEG.
-> - **Three products of KaxaNuk's Analytics Factory**, below. No provider sells them.
->   `Data/hand_supplied.py` reads them under the Factory's own names, from where step 3 says.
-> - **The Backtest Engine and Attribution Analysis licences.** Every performance and attribution
->   figure here came from Backtest Engine 0.66.0 and Attribution Analysis 0.2.0. Without them the
->   notebooks still write the portfolios, then report what is missing and skip.
-> - **Portfolio Construction is not needed.** It is not installed:
->   `Experiments/portfolio_construction.py` sizes the book itself.
->
-> | Product | File | What it holds |
-> | --- | --- | --- |
-> | KN US Equity Core, holdings | `KN_US_Equity_Benchmark_Holdings.csv`, 46,388,746 bytes, md5 `eba4bf64ffa8de5d650e4e2c4b21844d` | the index's daily weights: `m_date` first, in ISO dates, then one column per listing keyed by the index's own ticker; about 600 members a day, 1,399 listings, 2000-01-03 to 2026-08-14 |
-> | KN US Equity Core, returns | `KN_US_Equity_Benchmark_Returns.csv`, md5 `1668b564582f1871d7e4a6f39896e50a` | `m_date` written day first, then the index's daily return under the Factory's own header, `kn600` |
-> | KN US Equity Factor Model | twenty files, about 1 GB | `Beta`, `Momentum`, `Residual_Volatility`, `Size`, `Value`, the eleven GICS sectors, `Market`, `Total_Factor_Returns`, `Total_Excess_Returns` and `Idyo_Returns`; the sector files hold no values, so sector attribution reads zero |
->
-> Golden Flow's own run read these two index files, byte for byte, as
-> `KN_US_Equity_Core_Holdings.csv` and `KN_US_Equity_Core_Returns.csv`; its journal uses those
-> names. An older, smaller holdings file of the same name is the KN US Equity 600, another index:
-> replace it. **Without the holdings, only the download runs**: every later stage reads membership
-> from them.
->
-> **The seed is committed.** `Universe/seed.py` rebuilds it only from the index's master of
-> listings, a file of the Analytics Factory not in its published folders (ask
-> `analytics@kaxanuk.mx`). Running it overwrites the committed seed.
->
-> **Times recorded on 2026-10-06.** The curator took 1 hour 37 minutes for 892 names, and 2 minutes
-> for its second pass. The universe notebook took 17 seconds, once `seed.py` had filled the profile
-> cache; a copy skips `seed.py`, so it first asks FMP for the profiles of the seed's 883 symbols.
-> The refinery took 3 minutes. The analyzer's and the experiment's times were not recorded; the
-> experiment prices 47 weight files in ten engine processes.
+**On the example.** This folder is for reading. To run it, `init-example` copies it into a folder
+of its own — step 1 — and step 5 is skipped: this README is already the strategy's.
+
+**What a run needs.**
+
+- **A Sharadar key**, `KNDC_API_KEY_SHARADAR`, served by Sharadar's own API
+  (`api.sharadar.com`). Sharadar is this experiment's only provider, by the owner's decision of
+  2026-10-23: it keeps delisted securities, and its tickers are the seed's main identifier. The
+  seed builder, the curator and the universe notebook read the key; without it nothing downloads.
+- **Two products of KaxaNuk's Analytics Factory**, below. No provider sells them.
+  `Data/hand_supplied.py` reads them under the names they were supplied with, from where step 3
+  says.
+- **The Backtest Engine and Attribution Analysis licences.** Every performance and attribution
+  figure here came from Backtest Engine 0.67.0 and Attribution Analysis 0.5.0. Without them the
+  notebooks still write the portfolios, then report what is missing and skip.
+- **Portfolio Construction is not needed.** It is not installed:
+  `Experiments/portfolio_construction.py` sizes the book itself.
+
+| Product | Files | What it holds |
+| --- | --- | --- |
+| KN US Equity Core, of 2026-10-22 | `index_daily_holdings_1998.csv` and `backtest_returns.csv`, with `backtest_components_mask.csv` and `tickers.csv` beside them | the index's daily weights from 1998-12-31, `m_date` first in ISO dates, then one column per listing keyed by Sharadar's ticker; its daily return; and the same membership as 0 and 1 with the listings' tickers, which the universe notebook checks against the two and never reads for a number |
+| KN US Equity Factor Model, its Experiment 1 | one file per factor, `Factors/<Name>.csv` | dates down in an unnamed first column, listings across, keyed like the holdings; momentum skips the latest month; provisional, its owner's review pending |
+
+**Without the holdings, nothing past the download runs**: the seed and every later stage read
+membership from them.
+
+**The seed is committed**, tickers and dates only, and `Universe/seed.py` still runs first. It
+fetches Sharadar's tickers catalogue into `Universe/Provider_Cache/`, which the universe notebook
+reads for each listing's name and permanent identifier, and writes the seed again from the
+index's holdings and that catalogue. A newer catalogue can move a live listing's last date.
 
 <!-- example: end -->
 
@@ -87,11 +76,11 @@ committed.
 ## Step 1 — Get the repository
 
 **`init-example` makes it.** It is a skill of the
-[KaxaNuk Researcher](https://github.com/KaxaNuk/KaxaNuk-Researcher), installed for your user as
+[KaxaNuk Researcher](https://github.com/KaxaNuk/Researcher), installed for your user as
 step 4 says. A script copies the worked example inside the researcher package, byte for byte, into
 a new folder, `golden-flow` unless you choose another place. It then makes that folder a git
 repository and commits it once. That folder is the root. You can read the example
-[on GitHub](https://github.com/KaxaNuk/KaxaNuk-Researcher/tree/main/examples/strategy/golden-flow)
+[on GitHub](https://github.com/KaxaNuk/Researcher/tree/main/examples/strategy/golden-flow)
 without making anything.
 
 **On Windows, keep the path short.** `D:\Research\...` is fine; a deep synced path such as
@@ -119,9 +108,11 @@ From the root:
 uv sync --group notebook --inexact
 ```
 
-That creates `.venv/` and installs the pipeline with the `notebook` group: JupyterLab, and
-`nbconvert` to run a notebook or strip its outputs from the command line. **If neither Python 3.12
-nor 3.13 is on the machine, `uv` downloads 3.13**; there is nothing to install by hand.
+That creates `.venv/` and installs the pipeline with the `notebook` group: marimo, the notebook
+every stage is written in. A marimo notebook is a Python file: `uv run python <file>` runs it as a
+script, `uv run marimo edit <file>` opens it to read and run cell by cell, and it saves no output in
+itself, so there is nothing to strip before a commit. **If neither Python 3.12 nor 3.13 is on the
+machine, `uv` downloads 3.13**; there is nothing to install by hand.
 
 **Why 3.13 and not the newest.** Every performance figure comes from the Backtest Engine, which is
 documented for Python 3.12 or 3.13. The Data Curator allows 3.12 to 3.14, so 3.13 satisfies both.
@@ -171,9 +162,9 @@ The four `PAPER_TRADING_*` lines configure step 7. Once a book is on paper,
 
 <!-- example: begin -->
 
-**In this example, `Paper_Trading_1` is Experiment 1's book**, frozen on 2026-10-06 and kept as a
-record. It does not run from this copy, for the reasons
-[`Paper_Trading/BITACORA.md`](Paper_Trading/BITACORA.md) gives.
+**In this example no book is on paper.** Experiment 1 reads as sound and regime-dependent, which is
+not paper traded alone, so `BOOKS` in `Paper_Trading/daily_update.py` is empty and nothing reads the
+`PAPER_TRADING_*` lines; [`Paper_Trading/BITACORA.md`](Paper_Trading/BITACORA.md) says why.
 
 <!-- example: end -->
 
@@ -194,15 +185,15 @@ record. It does not run from this copy, for the reasons
 
 **Nothing to install here.** KaxaNuk's agent skills (how each Lab library is called, how an
 experiment is structured, how attribution is read, the house rules) and the
-[KaxaNuk Researcher](https://github.com/KaxaNuk/KaxaNuk-Researcher)'s own are installed once for
+[KaxaNuk Researcher](https://github.com/KaxaNuk/Researcher)'s own are installed once for
 your user, not per repository, by the same command that gave you step 1:
 
 ```bash
-uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/KaxaNuk-Researcher --target claude
+uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/Researcher --target claude
 ```
 
 For another assistant, put `codex`, `cursor` or its name in place of `claude`; the researcher
-package's [`SETUP.md`](https://github.com/KaxaNuk/KaxaNuk-Researcher/blob/main/SETUP.md) says what
+package's [`SETUP.md`](https://github.com/KaxaNuk/Researcher/blob/main/SETUP.md) says what
 each receives.
 
 The skills then work in every folder, this one included, and
@@ -235,7 +226,7 @@ stands. Replace the whole file with this, filled in, and leave the process to th
 > **Status: set up, nothing measured.** Replace this line as the strategy moves, and the banner at
 > the top of `AGENTS.md` with it.
 
-Built on the [KaxaNuk Strategy Template](https://github.com/KaxaNuk/KaxaNuk-Researcher/blob/main/templates/strategy/README.md):
+Built on the [KaxaNuk Strategy Template](https://github.com/KaxaNuk/Researcher/blob/main/templates/strategy/README.md):
 eight steps as a folder structure. Its README says what each folder is for, where each
 kind of logic goes and, under *Starting your own strategy*, the order to work in; this one does not
 repeat it. **Next:** [`OBJECTIVE.md`](OBJECTIVE.md), the idea and its claims, before any paper is
@@ -249,7 +240,7 @@ read.
 | [`SETUP.md`](SETUP.md) | how this repository is set up on a new machine |
 
 Research, never investment advice: *What it is, and what it is not*, in the
-[KaxaNuk Researcher's README](https://github.com/KaxaNuk/KaxaNuk-Researcher#readme).
+[KaxaNuk Researcher's README](https://github.com/KaxaNuk/Researcher#readme).
 ```
 
 Put the same status line in place of the banner at the top of `AGENTS.md`. In `pyproject.toml`,
@@ -295,7 +286,9 @@ your repository keeps one. Everything else setup produced is ignored, as *The ru
 <!-- example: begin -->
 
 **In this example, `uv.lock` shows up untracked,** and nothing is wrong: the example commits none,
-so its library versions resolve when `uv sync` runs.
+so its library versions resolve when `uv sync` runs. After a run, which begins with
+`Universe/seed.py`, the seed may show as changed where a newer catalogue moved a live listing's
+last date.
 
 <!-- example: end -->
 
@@ -328,7 +321,7 @@ strategy of your own is `init-strategy <name>`.
 
 The first thing to write is `OBJECTIVE.md`: the idea and its claims, before any paper is read. The
 order after it is *Starting your own strategy* in the
-[template's README](https://github.com/KaxaNuk/KaxaNuk-Researcher/blob/main/templates/strategy/README.md);
+[template's README](https://github.com/KaxaNuk/Researcher/blob/main/templates/strategy/README.md);
 [`AGENTS.md`](AGENTS.md) says how work is done here.
 
 <!-- example: begin -->

@@ -15,16 +15,17 @@ factor needs something closer to 3.0 to be credible.
 
 ## What it implies for Golden Flow
 
-> Rewritten on 2026-10-07 for this copy, after FINDINGS_1.md reported.
+> Rewritten on 2026-10-27 for this copy, after FINDINGS_1.md reported on Sharadar.
 >
 > **Claims 1 and 2 were screened before any book, and this paper is why a screen is not evidence.**
-> The analyzer gave both halves a small positive information coefficient — how well a feature orders
-> the returns that follow — on the pool, the fifty most traded members.
+> The analyzer gave the golden cross a small positive information coefficient — how well a feature
+> orders the returns that follow — on the pool, the fifty most traded members.
 >
-> The golden cross scores +0.0275 over 63 days, positive on 58.0% of dates, and the traded-value
-> rank +0.0977 over a year, positive on 73.6%. Before 2015 the same two read −0.0138 and −0.0494
-> ([`RESULTS.md`](../../RESULTS.md), *Before any experiment*, rows 3 and 8). Consecutive windows
-> share 62 and 251 days, so the dates are not independent and the ratios overstate the evidence.
+> The cross scores +0.0189 over 63 days, at an information ratio of 0.092, with the expected sign on
+> 53.0% of dates, and about nothing in 2009–2017; the traded-value rank +0.0130 over a year, on
+> 51.0% of dates ([`RESULTS.md`](../../RESULTS.md), *Before any experiment*, rows 3 and 8).
+> Consecutive windows share 62 and 251 days, so the dates are not independent and the ratios
+> overstate the evidence.
 >
-> Those coefficients licensed a backtest, not a belief. The trial count, 107 books, sits beside the
+> Those coefficients licensed a backtest, not a belief. The trial count, 152 books, sits beside the
 > result so a reader can discount it.

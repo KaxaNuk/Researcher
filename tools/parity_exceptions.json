@@ -39,7 +39,7 @@
         "step 4 says. A script copies the worked example inside the researcher package, byte for byte, into",
         "a new folder, `golden-flow` unless you choose another place. It then makes that folder a git",
         "repository and commits it once. That folder is the root. You can read the example",
-        "[on GitHub](https://github.com/KaxaNuk/KaxaNuk-Researcher/tree/main/examples/strategy/golden-flow)",
+        "[on GitHub](https://github.com/KaxaNuk/Researcher/tree/main/examples/strategy/golden-flow)",
         "without making anything."
       ],
       "template": [
@@ -47,7 +47,7 @@
         "folder named after the strategy, so every strategy made from the same package version starts",
         "identical. It then makes that folder a git repository and commits it once. That folder is the root.",
         "You can read the template",
-        "[on GitHub](https://github.com/KaxaNuk/KaxaNuk-Researcher/tree/main/templates/strategy) before",
+        "[on GitHub](https://github.com/KaxaNuk/Researcher/tree/main/templates/strategy) before",
         "making anything."
       ]
     },

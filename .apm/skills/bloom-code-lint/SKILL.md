@@ -9,7 +9,7 @@ description: >
   non-Python files, nor as a substitute for the project's configured linter or formatter (ruff,
   flake8, black), which cover PEP 8.
 metadata:
-  version: 0.2.1
+  version: 0.3.0
 ---
 
 # Bloom Code Lint

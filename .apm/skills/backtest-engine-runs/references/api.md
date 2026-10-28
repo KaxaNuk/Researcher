@@ -1,10 +1,10 @@
 # Backtest Engine — the public surface
 
 Taken from the official documentation on 2026-09-06, the `main()` section from a run of **0.66.0**
-on 2026-09-17, and the `Configuration` section from the worked example's code, run on 0.66.0 on
-2026-10-06 — never from the engine's code. Where a page could not be reached, this file says so
-rather than guessing: **an invented signature is worse than a missing one.** The URLs are at the end
-of `SKILL.md`.
+on 2026-09-17, and the `Configuration` and batch sections from the worked example's code, run on
+**0.67.0** on 2026-10-24 (Golden Flow 0.17.0) — never from the engine's code. Where a page could not
+be reached, this file says so rather than guessing: **an invented signature is worse than a missing
+one.** The URLs are at the end of `SKILL.md`.
 
 ## `main()` — the whole run, verified on 0.66.0
 
@@ -46,45 +46,56 @@ licence that does not validate comes back as `success=False` with the licence er
 any data is read; 0.66.0 raised it instead.
 
 **The keys a strategy quotes**, as the worked example's
-`Experiments/Experiment_1/experiment_1.ipynb` reads them from `portfolio_stats` for
+`Experiments/Experiment_1/experiment_1_marimo.py` reads them from `portfolio_stats` for
 `Backtest/summary.csv`, each with `.get`: `Annualized Return (CAGR)`, `Annualized Volatility`,
 `Portfolio Sharpe Ratio`, `Portfolio Sortino Ratio`, `Max Drawdown`, `Alpha`, `Information Ratio`,
-`Total Commissions` and `Total Slippage Costs`. It reads `benchmarks_stats`, one entry per
-benchmark, under the same first five names, for each benchmark over the same window.
+`Total Commissions`, `Total Slippage Costs` and `Total Financing Costs`, and `Risk_free_rate` from
+the result itself. A single run's `benchmarks_stats` holds one entry per benchmark under the same
+first five names; a batch returns none (*The batch mode* below).
 
-**What those figures are defined as is not verified here.** Which risk-free rate the Sharpe ratio
-subtracts, and how many periods a year each annualised figure assumes, are not established by any
-run or page this file was taken from. `compute_portfolio_statistics`, in *The `metrics` module*
-below, defaults to `risk_free_rate=0.0` and `periods_per_year=252`, but nothing here shows that it
-is what fills `portfolio_stats` or the Excel report. Do not state a definition for a quoted figure
-until one is read from the engine's documentation or checked against a run.
+**What those figures are defined as is only partly verified here.** With `financing_benchmark_rate`
+set, the worked example's findings read `Risk_free_rate` as the rate file averaged over the window
+— 2.04% for FRED's `DFF` over 2000–2026 — and every Sharpe ratio as excess of it, on 0.67.0. How
+many periods a year each annualised figure assumes is not established by any run or page this file
+was taken from. `compute_portfolio_statistics`, in *The `metrics` module* below, defaults to
+`risk_free_rate=0.0` and `periods_per_year=252`, and the worked example calls it with the run's
+`years` and `Risk_free_rate` to measure the benchmarks of a batch; nothing here shows that it is
+what fills `portfolio_stats` or the Excel report. Do not state any other definition for a quoted
+figure until one is read from the engine's documentation or checked against a run.
 
 ## `entities.Configuration` and the input handlers, as the worked example calls them
 
-Read from the worked example's `Experiments/backtest_engine.py`, run on **0.66.0** on 2026-10-06.
+Read from the worked example's `Experiments/backtest_engine.py`, run on **0.67.0** on 2026-10-24.
 These are the keyword arguments it passes, not the full signature: a field it does not set is not
 listed, and nothing here says what its default is.
 
 | Field | The example's value | What it decides |
 | --- | --- | --- |
-| `initial_capital` | `1_000_000` | the starting cash |
+| `initial_capital` | `1_000_000`; `100_000` in the small-account row | the starting cash |
 | `start_date`, `end_date` | `datetime.date` | the window asked for; compare with `data["start_date"]` and `data["end_date"]` after the run |
-| `cash_reserve_percentage` | `0.01` | cash held back to pay commission; `0` truncates the run (`SKILL.md`, section 6) |
-| `commission_cents` | `0.05`; `0.006` in the realistic row | the commission rate; not cents per share (`SKILL.md`, section 6) |
-| `commission_model` | `"per_share"` | how commission is charged |
-| `slippage_model`, `slippage_basis_points` | `"basis_points"`, `5.0` | slippage |
+| `cash_reserve_percentage` | `0.01` | cash held back to pay for a rebalance; `0` truncates the run (`SKILL.md`, section 6) |
+| `commission_model` | `"basis_points"` | commission as a share of the notional traded |
+| `commission_basis_points` | `1.0`; `5.0` in the stress row | the commission rate, in basis points |
+| `commission_cents` | `0.0` | required whatever the model — a `TypeError` without it, on 0.66.0 — and unused with basis points |
+| `slippage_model` | `"spread_plus_impact"`; `"basis_points"` in the flat and stress rows | a half-spread from the day's range plus square-root impact from its volume, or a flat half-spread |
+| `slippage_basis_points` | `5.0`; `10.0` in the stress row | the half-spread where a day's range is missing, or the flat half-spread |
+| `spread_estimator` | `"corwin_schultz"` | the spread estimate from the day's high and low; the engine's other, Abdi–Ranaldo, also reads the close |
+| `user_column_high`, `user_column_low`, `user_column_close` | `"m_high_split_adjusted"`, `"m_low_split_adjusted"`, `"m_close_split_adjusted"` | the range the spread is estimated from: a ratio, so split-adjusted prices give the tape's estimate |
+| `user_column_volume` | `"c_volume_dividend_and_split_adjusted"` | the volume impact is read from, on the fill's basis |
+| `financing_benchmark_rate` | `"DFF"` | the rate the cash earns: a file of that name in the market-data directory, its last observation on or before each day; also the risk-free rate of the Sharpe ratios |
+| `cash_interest_spread` | `-0.005` | what the broker keeps below that rate |
 | `market_data_input_format`, `portfolio_input_format` | `"csv"` | the format of each input |
-| `input_market_data_directory` | `Data/Curator/Time_Series`, as a `str` | one `{TICKER}.csv` per security, the benchmarks' included |
+| `input_market_data_directory` | `Data/Curator/Engine`, as a `str` | one `{TICKER}.csv` per security, the benchmarks' and the rate file included: a CSV copy of the columns the engine reads (`SKILL.md`, section 6) |
 | `input_portfolio_directory` | `Experiments/Experiment_N/Portfolio`, as a `str` | where the weight file is |
 | `portfolio_name` | `"portfolio_weights"` | the weight file's name, without `.csv` |
 | `benchmark_file_name` | `"KN_US_Equity_Core,SPY"` | the benchmarks' price files in the market-data directory, without `.csv`, as one comma-separated name; every alpha and information ratio is measured against the first |
 | `backtest_results_output_directory` | `Experiments/Experiment_N/Backtest`, as a `str` | where the results land |
 | `user_column_date` | `"m_date"` | the date column |
-| `user_column_commission_price` | `"c_vwap"` | the price commission is charged on: **unadjusted** |
-| `user_column_trade_execution_price` | `"c_vwap_dividend_and_split_adjusted"` | the fill price, on the total-return basis |
-| `user_column_mark_to_market_price` | `"m_close_dividend_and_split_adjusted"` | the daily valuation, on the total-return basis |
+| `user_column_commission_price` | `"c_open"` | the price a ticket is written in: **unadjusted** |
+| `user_column_trade_execution_price` | `"c_open_dividend_and_split_adjusted"` | the fill, the next day's open, on the total-return basis |
+| `user_column_mark_to_market_price` | `"c_close_dividend_and_split_adjusted"` | the daily valuation, on the total-return basis |
 | `rebalance_date_handling` | `"next_trading_day"` | a rebalance date that is not a trading day moves to the next one |
-| `delisted_position_handling` | `"sell_at_last_price"` | a position whose prices stop is sold on its last priced day: one day of hindsight |
+| `delisted_position_handling` | `"sell_at_last_price"` | a position whose prices stop is sold at its last price, booked that day: no day of hindsight |
 
 `commission_model` and `slippage_model` here are strings; the `PyArrowBacktester` arguments of the
 same names take model objects. The input handlers each take a directory as a `str`, and `main()`
@@ -100,6 +111,55 @@ csv_portfolio_input_handler = kaxanuk.backtest_engine.input_handlers.CsvPortfoli
     portfolio_directory,
 )
 ```
+
+## The batch mode — `MultiPortfolioBacktester`
+
+As the worked example's `price_batch` calls it, run on **0.67.0**: one load of the market data for
+every book of a batch that shares all its settings but its weights.
+
+```python
+import kaxanuk.backtest_engine.backtest
+import kaxanuk.backtest_engine.config_handlers
+import kaxanuk.backtest_engine.input_handlers.csv_input
+
+batch_configuration = kaxanuk.backtest_engine.config_handlers.BatchConfigParser.parse_dict({
+    "global_defaults": defaults,
+    "portfolios": [
+        {"name": portfolio_name, "inline_weights": inline_weights},
+    ],
+    "output": {
+        "directory": output_directory,
+        "batch_name": "batch",
+        "ranking_metric": "sharpe_ratio",
+    },
+})
+market_data = kaxanuk.backtest_engine.input_handlers.csv_input.CsvInput(
+    input_dir=market_data_directory,
+)
+backtester = kaxanuk.backtest_engine.backtest.MultiPortfolioBacktester(
+    input_handlers=[market_data],
+    portfolio_handlers=[],
+)
+results = backtester.run(batch_config=batch_configuration)
+```
+
+- **`global_defaults`** is the `Configuration`'s fields as plain values: numbers as floats — the
+  configuration holds some as PyArrow decimals and the parser compares them as floats — settings as
+  strings rather than enums, dates in ISO form, and `initial_capital` as an integer.
+- **`inline_weights`** maps each rebalance date to its identifiers and their non-zero weights, so
+  no portfolio file is read and `portfolio_handlers` is empty; a name absent on a date is held at
+  zero.
+- **`results["entries"]`**, one per book: `name`, `success`, `error_message` when it failed, and
+  `result`, a dict with the keys of a single run's `data` — `Register_df`, `Daily_Weights`,
+  `orders_df`, `Commission_df`, `Slippage_df`, `Execution_costs_df`, `Financing_df`,
+  `portfolio_stats`, `Risk_free_rate`, `start_date`, `end_date`, `years` — and `benchmarks`, each
+  benchmark's daily table with `date_column`, `bench_value` and `daily_return`. **There are no
+  benchmark statistics**: the example computes them with
+  `kaxanuk.backtest_engine.modules.metrics.compute_portfolio_statistics` over that series, on the
+  book's window, `years` and `Risk_free_rate`.
+- **The engine draws its report's charts into a file of one fixed name in the working folder**, so
+  the example runs each batch, and each single run, from a temporary folder of its own after
+  loading the licence with `load_config_env(<path to Config/.env>)`.
 
 ## `PyArrowBacktester`
 
@@ -227,6 +287,7 @@ These appear in the API overview, but their signature pages could not be retriev
 component pages before calling them; do not infer a signature from the name.**
 
 - `MultiPortfolioBacktester.generate_individual_reports` — under Backtest Components, Orchestrators.
+  `MultiPortfolioBacktester(...).run(batch_config=...)` is run above; its other methods are not.
 - `arrow_to_pandas_for_analysis()` — the helper that turns returned PyArrow tables into pandas.
 - Cost models, execution, interfaces and enums — Backtest Components lists them as Commission,
   slippage and trading-record models; portfolio state, trade broker and reporting engine; abstract

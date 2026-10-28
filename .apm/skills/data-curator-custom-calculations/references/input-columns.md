@@ -31,13 +31,13 @@ The documentation lists them. Read the lists rather than memory, and never the i
   for Sharadar, since 0.51.0. The prefixes are on
   <https://kaxanuk-data-curator.readthedocs.io/en/stable/data_providers/data_tag_homogenization.html>.
   A tag missing from the provider's page is one that provider does not supply: FMP's page has no
-  unadjusted `m_vwap`, which the worked example rebuilds as `c_vwap` because FMP leaves it empty.
+  unadjusted `m_vwap`, and Sharadar's no VWAP in any variant.
 - **Built-in calculations** — every `c_*` the library ships — on the Features page,
   <https://kaxanuk-data-curator.readthedocs.io/en/stable/api_reference/features.html>, one page per
   function with the columns it reads, what it returns and its formula. Add the project's own
   custom modules.
 
-The `stable` pages follow the newest release, 0.50.0 when this skill was checked; on another build,
+The `stable` pages follow the newest release, 0.51.0 when this skill was checked; on another build,
 read the release notes there before trusting a list.
 
 ## Market data columns
@@ -53,7 +53,8 @@ split-adjusted open, high, low and close.
 `m_close` unadjusted and `m_close_dividend_and_split_adjusted`: no VWAP in any variant and no
 unadjusted open, high, low or volume, as its documentation page lists and a strategy's run on
 2026-10-23 found. Every price arrives rounded to three decimals, the adjusted ones included, as
-`SKILL.md`'s *Known provider faults* says. Its identifiers are its own tickers: a delisted name
+`SKILL.md`'s *Known provider faults* says, so the worked example rebuilds every adjusted price it
+reads from the exact `m_close`. Its identifiers are its own tickers: a delisted name
 under its final ticker (AAMRQ, LEHMQ), a recycled ticker suffixed (DD1). Its catalogue,
 `/data/tickers?years=full`, comes as one zip of the whole table.
 
@@ -75,18 +76,21 @@ documentation does not say it is added for you.
 These blocks report discrete events. The provider pages list their tags: `d_declaration_date`,
 `d_ex_dividend_date`, `d_record_date`, `d_payment_date`, `d_dividend` and
 `d_dividend_split_adjusted` for dividends; `s_split_date`, `s_numerator` and `s_denominator` for
-splits. The names of the columns a run writes from them — whether a date and an amount are joined
-into one name — are on no documentation page and in no recorded run: they come from a run. Before
-a calculation depends on one, select it in a short run in a scratch copy, read the output's header,
-and record what it was.
+splits. The names of the columns a run writes from them are on no documentation page: they come
+from a run. The worked example's, on Sharadar and 0.51.0, joins the event's date and its amount in
+one name — `d_ex_dividend_date_dividend_split_adjusted`, `s_split_date_numerator` and
+`s_split_date_denominator` — and reads them so, as a `c_*` parameter or a selected column. For
+another provider or another field, select it in a short run in a scratch copy, read the output's
+header, and record what it was.
 
 Dividends and splits are data blocks of their own, each mapped to a provider in
 `data_block_providers` (the changelog, 0.50.0).
 
-**Under Sharadar on 0.51.0 none of them can be asked for**, whatever its documentation page lists:
-any `d_*` or `s_*` column stops the run, as `SKILL.md`'s 0.51.0 notes say
-(<https://github.com/KaxaNuk/Data-Curator/issues/39>). The page also says Sharadar publishes a
-dividend only adjusted for later splits, so the amount as paid is a custom calculation.
+**Under Sharadar on 0.51.0 a shorter tag stops the run** — `s_numerator`, `d_dividend` — as
+`SKILL.md`'s 0.51.0 notes say (<https://github.com/KaxaNuk/Data-Curator/issues/39>, closed as a
+wrong column name); the joined names above are read. The page also says Sharadar publishes a
+dividend only adjusted for later splits, so the amount as paid is a custom calculation. A spin-off
+is not in its dividend column at all.
 
 ## Fundamental columns
 

@@ -4,8 +4,9 @@ description: >
   Load this skill whenever a run of the KaxaNuk Backtest Engine is being set up, executed, debugged
   or read. Use it when the user asks to install `kaxanuk-backtest-engine`, initialise its project
   files, shape a portfolio weight file or market-data files for it, fill in
-  `backtest_engine_parameters.xlsx`, call `PyArrowBacktester` or the `kaxanuk.backtest_engine` CLI,
-  attach a commission or slippage model, add a benchmark, or read the returned tables and the Excel
+  `backtest_engine_parameters.xlsx`, call `PyArrowBacktester`, the batch mode
+  (`MultiPortfolioBacktester`) or the `kaxanuk.backtest_engine` CLI, price commission, slippage and
+  the cash's interest inside the engine, add a benchmark, or read the returned tables and the Excel
   report (CAGR, Sharpe, Sortino, VaR, CVaR, drawdown, annual returns). It covers the two inputs the
   engine reads and the layouts it detects, the licence and its environment variable, and how the
   engine is called from a KaxaNuk Strategy Template repository. It does NOT cover the research process or
@@ -13,8 +14,8 @@ description: >
   `attribution-analysis-runs`), reading attribution output (use `alpha-decomposition`), or authoring
   Data Curator `c_*` columns (use `data-curator-custom-calculations`).
 metadata:
-  version: 0.4.1
-  library_version: 0.66.0
+  version: 0.5.0
+  library_version: 0.67.0
 ---
 
 # Running the KaxaNuk Backtest Engine
@@ -22,10 +23,11 @@ metadata:
 Step 5 of the KaxaNuk Investment Lab: the rules are run over history, with costs and no look-ahead,
 and a track record comes back. The engine is **licensed** and closed-source — it is not on public
 PyPI, and it is deliberately absent from the KaxaNuk Strategy Template's `pyproject.toml` so its
-index URL and key never enter version control. This skill was verified on build **0.66.0** of the
-engine, the frontmatter's `library_version`: compare it with the installed build `uv pip list`
-shows, and on a newer minor or major version treat every trap here as unproven until it is checked
-again.
+index URL and key never enter version control. This skill was verified on build **0.67.0** of the
+engine, the frontmatter's `library_version`, by the worked example's run on it (Golden Flow 0.17.0,
+2026-10-24, every book priced in the batch mode); a line that names 0.66.0 was measured on that
+build and not repeated. Compare it with the installed build `uv pip list` shows, and on a newer
+minor or major version treat every trap here as unproven until it is checked again.
 
 **What this skill knows comes from the documentation, the changelog and runs — never from the
 engine's code.** Never open, search, print or inspect its installed files, and never read a source
@@ -33,7 +35,8 @@ page its documentation site links to. What neither the documentation nor a run s
 a run settles it, and a difference from this file goes to `lab@kaxanuk.mx`. An error is reported by
 the call, its type and its message, never by the engine's own traceback lines.
 
-**Changed in 0.67.0, from its changelog — not yet checked by a run here.** The licence is checked
+**Since 0.67.0, from its changelog; the worked example's licence validated on 0.67.0 for every book
+it priced.** The licence is checked
 through `kaxanuk-license-client`, a new dependency from KaxaNuk's private index — the one the
 install command below names, which serves it to any valid licence — for the product
 `backtest-engine`: a licence without it is refused, naming the products it holds. Offline, a saved
@@ -153,6 +156,34 @@ In code, `main()` and `PyArrowBacktester` take a `kaxanuk.backtest_engine.entiti
 The fields the worked example sets, the three price roles among them, and the two CSV input
 handlers it passes are listed in `references/api.md`.
 
+**Every cost and the cash are the engine's settings, never a calculation beside it** — the worked
+example's, run on 0.67.0:
+
+- **Commission in basis points of the notional:** `commission_model = "basis_points"` and
+  `commission_basis_points`. `Configuration` still requires `commission_cents` whatever the model —
+  without it, a `TypeError` (on 0.66.0) — so the example passes `0.0`, unused.
+- **Slippage from the day's range and volume:** `slippage_model = "spread_plus_impact"`, a
+  half-spread estimated from the day's high and low (`spread_estimator = "corwin_schultz"`; the
+  engine's other estimator, Abdi–Ranaldo, also reads the close) plus square-root impact from the
+  volume, with `slippage_basis_points` the half-spread where a range is missing. Those columns are
+  roles, like the prices: `user_column_high`, `user_column_low`, `user_column_close` and
+  `user_column_volume`. `slippage_model = "basis_points"` is a flat half-spread instead.
+- **The cash's interest:** `financing_benchmark_rate` names a rate file in the market-data folder,
+  read at its last observation on or before each day, and `cash_interest_spread` is what the broker
+  keeps below it — `"DFF"` and `-0.005` in the example, FRED's effective federal funds rate less
+  half a point, as Interactive Brokers pays on a dollar balance. **The same rate is the risk-free
+  rate of every Sharpe ratio the engine reports**, so those Sharpe ratios are excess of cash.
+- **A delisted position**, whose prices stop: `delisted_position_handling = "sell_at_last_price"`
+  sells it at its last price, booked that day, with no day of hindsight.
+
+**A range-based spread overstates the most traded names.** In the worked example the engine's
+Corwin–Schultz estimate charged the rule $362,502 of slippage against $15,573 of commission at 1 bp
+— about 23 bp a trade, 40 to 55 bp on some dates, on AAPL, MSFT and NVDA — and Abdi–Ranaldo was no
+better, 7 to 40 bp, median by year (measured on 0.66.0; no engine figure of a book moved on 0.67.0).
+Its stress row, 5 bp commission and 10 bp flat, came out cheaper than the base. So **price every
+book again at a flat half-spread beside the model**, and register that row in the blueprint before
+the run, so it is never a forking path afterwards.
+
 ## 5. Run it
 
 The CLI, from the project root, outside a KaxaNuk Strategy Template repository — inside one the
@@ -181,6 +212,21 @@ results = backtester.run_with_benchmark()
 `run()` is `run_with_benchmark()` without the comparison arm. Full signatures, the properties an
 instance exposes, and where each came from are in `references/api.md`.
 
+**Many books at once: the batch mode, run on 0.67.0.** A single run loads the market data for its
+one book; an experiment of a hundred books spent most of its time loading the same files — 445 of
+452 engine minutes in the worked example. `MultiPortfolioBacktester` prices a batch of books that
+share every setting but their weights against one load. The worked example parses a batch with
+`config_handlers.BatchConfigParser.parse_dict` — `global_defaults`, the configuration's fields as
+plain numbers, strings and ISO dates, the capital an integer; `portfolios`, each a `name` and its
+`inline_weights`, rebalance date to identifier to weight; and an `output` folder — and runs
+`MultiPortfolioBacktester(input_handlers=[...], portfolio_handlers=[]).run(batch_config=...)`. Each
+of `results["entries"]` carries `name`, `success`, `error_message` and `result`, the same tables as
+a single run's `data`, but **no benchmark statistics**: it returns each benchmark's daily value and
+return, and the example measures them with the engine's own `compute_portfolio_statistics`, on the
+book's window, years and risk-free rate. Read that way, the KN US Equity Core's Sharpe is 0.315,
+where the figure reported beside a single run was 0.308 — one no series of the index reproduces.
+`references/api.md` has the shapes.
+
 **Attach the real cost model.** On a high-turnover book the difference between a flat cost
 assumption and real per-share commission can be a third of the edge, so results are accepted **net,
 or not at all**. `commission_model` and `slippage_model` are constructor arguments precisely so this
@@ -191,15 +237,17 @@ is a decision somebody makes rather than a default nobody read.
 `run()` returns a `BacktestResultDict`, and the `main()` entry point wraps it in a `BacktestResult`
 with `success`, `error` and `data`. Tables arrive as PyArrow or pandas; the Excel report carries
 CAGR, Sharpe, Sortino, alpha, VaR, CVaR, maximum drawdown, annual returns, drawdown analysis and
-portfolio weights. `references/api.md` lists the keys of `data`, verified on 0.66.0.
+portfolio weights. `references/api.md` lists the keys of `data`, verified on 0.66.0 and read on
+0.67.0 by the worked example's batch.
 
 **`Daily_Weights` is the book as the engine actually held it**, one row per trading day, its columns
 the holdings plus the benchmark and `CASH_RESERVE`. That is the drifted daily series **step 6
 reads** — the attribution library rejects a file that only carries the rebalance dates — so it is
 written out beside the other results rather than recomputed later from the weight file. **Each row
 is struck at that day's close**: shares at the day's mark over the day's value, on 0.66.0, so it
-already holds the day's return. It earns the next day's; `attribution-analysis-runs` says how step 6
-moves it one day on.
+already holds the day's return — and on 0.67.0 the worked example's first cut, both weight tables
+moved one day on, reconciles to the index within 0.22 points a year. It earns the next day's;
+`attribution-analysis-runs` says how step 6 moves it one day on.
 
 The `metrics` module is public, so a figure quoted in a document can be recomputed from the returned
 series rather than copied out of a cell: `sharpe_ratio`, `sortino_ratio`, `annualize_rets`,
@@ -207,19 +255,24 @@ series rather than copied out of a cell: `sharpe_ratio`, `sortino_ratio`, `annua
 `information_ratio` and `compute_portfolio_statistics` among them — all listed in
 `references/api.md`.
 
-**The engine's years are weekday steps over 252.** The worked example's window, 2015-01-02 to
-2026-06-01, is 11.81 years as the engine counts them — 2,976 weekday steps after the first day —
-against a calendar span of 11.41 years, so its CAGR sits a little below one taken over calendar
-years. Label a quoted CAGR as the engine's.
+**The engine's years are weekday steps over 252**, measured on 0.66.0: a window of 2015-01-02 to
+2026-06-01 was 11.81 years as the engine counts them — 2,976 weekday steps after the first day —
+against a calendar span of 11.41 years, so a CAGR sits a little below one taken over calendar
+years. The worked example's window, 2000-01-03 to 2026-08-14, is 27.56 years as the engine counts
+them. Label a quoted CAGR as the engine's.
 
 **Read the run before believing it.** A truncated run — one that stopped valuing the book partway —
 still produces a clean-looking summary over the stub. Check the last valued date against the window
 that was asked for, and when they differ the variant is excluded **by name, with its reason**, never
-quietly dropped. In a KaxaNuk Strategy Template repository the check is the experiment notebook's
-section 8, Verify, which raises rather than prints. It counts the days each engine run valued
-against the trading days of the window it was asked for, never against a fixed floor, which a run
-that stopped years early can clear. The worked example holds each run to at least 99% of those days
-valued and no more than five unvalued at the end — a rule of its own, not a sourced figure.
+quietly dropped. In a KaxaNuk Strategy Template repository the experiment notebook's section 4
+counts the days each engine run valued against the trading days of the window it was asked for,
+never against a fixed floor, which a run that stopped years early can clear, and **excludes a short
+run by name, with its reason**, in `Backtest/excluded_runs.csv`; no cell after it reads that run,
+and a gate criterion that needs it reads "not evidenced". Section 8, Verify, raises if a run is
+neither read whole nor excluded, or if a book the verdict stands on — the rule, its control, the
+arms the blueprint names — is among the excluded. The worked example holds each run to at least 99%
+of those days valued and no more than five unvalued at the end — a rule of its own, not a sourced
+figure.
 
 **What a truncated run looks like, reproduced on 0.66.0.** A book whose weights sum to exactly 1.0
 run with `cash_reserve_percentage = 0` cannot pay commission at a rebalance. The engine prints one
@@ -236,42 +289,53 @@ Both runs wrote an Excel report, and the shorter one annualised over its stub, s
 higher of the two. **The check that catches it:** `data["end_date"]` and `data["years"]` describe
 the window the engine *valued*, not the one the configuration asked for — compare them with the
 configured dates before reading a single metric. **The cure is `cash_reserve_percentage`**, a
-fraction: in a Strategy Template repository the weight file always sums to one (section 7), so the
-reserve is the only cash that pays commission. No reserve is safe for every book and window, so
-check every run's valued days: the worked example holds 1%, and every engine run of its record was
-valued to the last day of its window.
+fraction, the cash held back to pay for a rebalance. No reserve is safe for every book and window,
+so check every run's valued days: the worked example holds 1%, and twenty-one of its runs still
+stopped at a rebalance whose costs outran the reserve, random books most of them; each is excluded
+by name, as its `FINDINGS_1.md` lists them. A reserve raised after the result is a change to the
+experiment, not a fix.
 
-Configuration guards worth knowing before a first run: `commission_cents` is rejected outside
-`[0.00, 0.10]`, and the engine checks on every rebalancing date that each position it touches has a
-price and that no position outlives its price series. **"Touches" includes every open position, not
-only the names traded.** A book that still holds a name across a gap in its prices — a corporate
-event, a provider's missing days — is refused on the first rebalance date inside the gap, with a
-data-integrity error naming the ticker and the date. No configuration field waives it. The cure is
-in the rule, not the engine: sell the name at *t−1*, the last day it is priced, as the
-`portfolio-construction-runs` skill sets out.
+Configuration guards worth knowing before a first run, measured on 0.66.0: `commission_cents` is
+rejected outside `[0.00, 0.10]`, and the engine checks on every rebalancing date that each position
+it touches has a price and that no position outlives its price series. **"Touches" includes every
+open position, not only the names traded.** A book that still holds a name across a gap in its
+prices — a corporate event, a provider's missing days — is refused on the first rebalance date
+inside the gap, with a data-integrity error naming the ticker and the date. No configuration field
+waives it. A name whose prices simply stop is `delisted_position_handling`'s to sell; a gap inside
+a series is the register's: the worked example lists the name as a blocking row of
+`Universe/Data_Issues.csv`, excludes it by name from every book and prices the run again, so no
+book trades off its own dates (`portfolio-construction-runs`).
 
-**`commission_cents` is not cents per share, measured on 0.66.0.** On one stock bought once, the
-worked example's `0.05` charged $0.041 a share on SPY and $0.035 on KO, and its realistic row's
-`0.006` charged $0.0049 and $0.0042. That is neither a flat amount per share nor a share of the
-price, so its blueprint states the setting and those measurements, not a rate. Before a figure is
-frozen in a blueprint, run it once and compare `Total_commissions` with the shares traded in
-`orders_df`.
+**`commission_cents` is not cents per share, measured on 0.66.0** and not repeated on 0.67.0, since
+the worked example now charges basis points. On one stock bought once, a setting of `0.05` charged
+$0.041 a share on SPY and $0.035 on KO, and `0.006` charged $0.0049 and $0.0042: neither a flat
+amount per share nor a share of the price. Before a per-share figure is frozen in a blueprint, run
+it once and compare `Total_commissions` with the shares traded in `orders_df`.
+
+**Two traps of the inputs, met by the worked example.** The engine reads weights as fixed-scale
+decimals and refuses a value it cannot hold exactly, so a third written as 0.3333333333333333 fails
+before the first fill: the example writes six places, each rounded down, so no column sums above
+one. And on 0.66.0 its Parquet reader refused the example's curated Parquet files, so the example
+stages a CSV copy of the columns the engine reads, `Data/Curator/Engine/`, and points it there.
 
 ## 7. Inside a KaxaNuk Strategy Template repository
 
 The engine is not called from a notebook directly. `Experiments/backtest_engine.py` is the seam, and
-it owns four things: writing the weight file the engine reads, running the engine, reading the
-results back, and aligning variants onto one window so they can be compared. Everything specific to
-a strategy stays in that strategy's notebook.
+it owns five things: writing the weight file the engine reads, setting every cost and the cash in
+the engine's configuration, pricing books — many at once, in the batch mode, each answer cached
+under the hash of its weight file and its settings — reading the results back, and aligning
+variants onto one window so they can be compared. Everything specific to a strategy stays in that
+strategy's notebook, `Experiments/Experiment_N/experiment_N_marimo.py`, a marimo notebook run as a
+script.
 
 - `Experiments/Experiment_N/Portfolio/portfolio_weights.csv` — the book, in the shape section 3
   describes.
 - `Experiments/Experiment_N/Backtest/` — where results land, and **nothing in it is committed**: no
   workbooks, no charts. The numbers reach `FINDINGS_N.md`, and `RESULTS.md` is compiled from those.
-- Target weights, what the rule returns, sum to **at most** one; the weight file sums to
-  **exactly** one. It has no cash row, so `backtest_engine.py` writes the residual as a weight in
-  the cash proxy (`write_weight_file` and `CASH_IDENTIFIER` in the worked example): going to cash
-  buys a real, priced instrument and pays commission.
+- Target weights, what the rule returns, sum to **at most** one, and so does every column of the
+  weight file. There is no cash fund and no cash row: what the weights leave stays as cash in the
+  engine, which pays it the rate file's rate less the broker's spread (section 4).
+- `Backtest/excluded_runs.csv` — every run excluded by name, with its reason (section 6).
 
 ## Where the documentation is
 

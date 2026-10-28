@@ -11,7 +11,7 @@ panel built.
 What is expected here is one function signature and a few things behind it:
 
 - The signature.  Given the securities eligible today, a returns history that has already been
-  cut off before today and, for a scheme that sizes by a score, that score as it stood before
+  cut off before today and, for a scheme that sizes by a feature, that feature as it stood before
   today, return one weight per security, summing to at most 1.0.  Every weighting scheme -- equal
   weight, proportional to a score, or any sizing method the library registers whose configuration
   has no required field: inverse volatility, risk parity, hierarchical risk parity -- is the same
@@ -23,40 +23,35 @@ What is expected here is one function signature and a few things behind it:
   inside a guard -- it is KaxaNuk's own library, installed by hand -- and stop with an error that
   names a method needing it when it is absent.  Equal weight needs nothing.
 - At most one, not exactly one.  A strategy that can go to cash cannot satisfy the stricter form;
-  the residual becomes a real, priced cash position when the weight file is written.
+  what the weights leave is cash, which the engine holds and pays interest on.
 - The constraints every scheme respects, as arguments of `build_weights`: a maximum weight and a
   minimum holding count.  One the blueprint does not name is switched off, and a lever a later
   experiment has to earn by beating the book without it.  Bounds the blueprint names -- a cap and a
   floor on each weight -- are the design, not levers to earn: the blueprint says whether a capped
   name's excess goes to cash or to the other names, and the control holds the same bounds.
-- The two timing helpers that cannot be forgotten if they live here: lag the eligibility so the
-  set used on rebalance date t is the one observed at t-1, and rebalance only on the dates that set
-  changes -- a signal that has not moved is not a reason to pay commission.
-- Sell before a price series stops.  A name is tradable on t only if it is priced on t and on t+1,
-  so a delisting, or a corporate event that leaves a gap in the provider's file, triggers a
-  re-strike on the last priced day, t-1, and the name is sold there at a real price.  The engine
-  refuses a rebalance date on which an open position has no price, so a book that holds a name
-  through a gap cannot be re-struck at all.  It is one day of hindsight, the leak `AGENTS.md`
-  names; take it in the eligibility, once, for the book and every counterfactual alike.
+- The timing helpers that cannot be forgotten if they live here: lag the eligibility so the set
+  used on rebalance date t is the one observed at t-1; rebalance on a calendar -- the first trading
+  day of each month, decided on the close before it -- or only on the dates that set changes; and a
+  no-trade band, so a held name whose target barely moved is left as it drifted.  A weight that has
+  not moved is not a reason to pay commission, nor an order anyone wants to place by hand.  The
+  band is decided at the close and written at the next open, and what the kept names hold over
+  their targets comes out of the traded names, so the book never exceeds one.
+- No day of hindsight for a delisting.  The engine sells a position whose prices stop at its last
+  price.  A gap inside a series, which the engine cannot price, is a blocking row of
+  `Universe/Data_Issues.csv`, and the name is excluded by name from every book rather than traded
+  around, so no book ever trades off its own dates.
 - Causality by construction.  A weigher never sees a date, only a history -- and a score, where
   the scheme sizes by one -- already cut off before the date it sizes, so it cannot reach into the
   future even by accident.  The module makes that cut once, for the book and its control alike.
 
 It produces the `REBALANCE_DATES x securities` target weights the rule cell hands to the
-diagnostics and the weight file.
+diagnostics and the weight file, and, under a band, the weights actually struck.
 
 It prevents a good signal in a portfolio nobody could hold -- and a weighting difference that reads
 as a signal difference because each notebook invented its own sizing.
 """
 
 # --- example: begin ---
-
-# The rule sizes with `bounded_book`: traded value as the score, cut at the prior close, a
-# 20% cap whose excess is spread over the other names, and a 1% floor past which no name is
-# added, so the bounds set the count.  `exit_before_price_stops` sells before a price series
-# stops, and `rebalance_dates_on_change` re-strikes when the held set changes.  `weigh`, which
-# the rule does not call, is where the KaxaNuk Portfolio Construction library is called, where
-# it is installed; the rule's bounded sizing runs without it.
 
 import importlib.util
 
@@ -65,10 +60,12 @@ import pandas
 
 __all__ = [
     "LIBRARY_INSTALLED",
+    "banded_book",
     "bounded_book",
     "bounded_by_score",
     "build_weights",
     "exit_before_price_stops",
+    "first_trading_days_of_month",
     "lag_eligibility",
     "rebalance_dates_on_change",
     "select_rebalance_dates",
@@ -80,6 +77,64 @@ __all__ = [
 LIBRARY_INSTALLED = importlib.util.find_spec("kaxanuk.portfolio_construction") is not None
 
 
+def banded_book(
+    targets: "pandas.DataFrame",
+    decision_prices: "pandas.DataFrame",
+    fill_prices: "pandas.DataFrame",
+    band: float,
+) -> "pandas.DataFrame":
+    """
+    The book actually struck on each rebalance date: the target, except where a trade is too small.
+
+    A name held since the last rebalance and still in the target keeps the weight it drifted to
+    when its target differs from that weight by no more than `band`; every other name -- an entry,
+    an exit, a held name whose target moved further -- takes its target.  The decision is made on
+    `decision_prices`, the close before the fill, so it uses nothing the person placing the orders
+    could not see; the kept weight is then written as it stands at `fill_prices`, the fill, which is
+    how "leave this name alone" is said in a weight file.  What the kept names hold over their
+    targets comes out of the traded names in proportion, so the book never exceeds one; what they
+    hold under it is left in cash.  Cash is carried flat between rebalances: its interest is the
+    engine's, and a few basis points of it moves no decision.
+    """
+    dates = list(targets.index)
+    struck_rows = {
+        dates[0]: targets.loc[dates[0]],
+    }
+
+    for previous_date, date in zip(
+        dates[:-1],
+        dates[1:],
+        strict=True,
+    ):
+        target = targets.loc[date]
+        previous_weights = struck_rows[previous_date]
+        decided = _drifted(
+            previous_weights,
+            decision_prices.loc[previous_date],
+            decision_prices.loc[date],
+        )
+        at_fill = _drifted(
+            previous_weights,
+            fill_prices.loc[previous_date],
+            fill_prices.loc[date],
+        )
+        held_both = (previous_weights > 0) & (target > 0)
+        small = (target - decided).abs() <= band
+        kept = held_both & small & at_fill.notna()
+        kept_total = float(at_fill[kept].sum())
+        traded_total = float(target[~kept].sum())
+        room = 1.0 - kept_total
+        scale = min(1.0, room / traded_total) if traded_total > 0 else 1.0
+        traded = target.where(~kept, 0.0) * scale
+        struck = traded.where(~kept, at_fill)
+        struck_rows[date] = struck.fillna(0.0)
+
+    return pandas.DataFrame.from_dict(
+        struck_rows,
+        orient="index",
+    )
+
+
 def bounded_book(
     eligibility: "pandas.DataFrame",
     scores: "pandas.DataFrame",
@@ -89,10 +144,11 @@ def bounded_book(
     """
     The target book on every date: the eligible names by score, the bounds setting how many.
 
-    The score a date is sized on is the prior close's: the matrix is moved one row down its own
-    calendar, the panel's trading calendar, here; the rule lags its eligibility itself.  Each date
-    is then sized by `bounded_by_score`.  The book on every date, not only on rebalance dates, is
-    what lets a rule re-strike exactly when the held set changes.
+    The score is cut here, once, to the value it had at the close before each date -- the matrix
+    is moved one row down its own calendar, which is the panel's trading calendar -- so no notebook
+    writes a `.shift(1)` of its own.  Each date is then sized by `bounded_by_score`.  The book on
+    every date, not only on rebalance dates, is what lets a rule re-strike exactly when the held set
+    changes.
     """
     scores_before = scores.shift(1)
     rows = {}
@@ -235,6 +291,23 @@ def exit_before_price_stops(
     )
 
     return tradable & tomorrow.astype(bool)
+
+
+def first_trading_days_of_month(
+    calendar: "pandas.DatetimeIndex",
+) -> "pandas.DatetimeIndex":
+    """
+    The first trading day of every month in the calendar, the first day of the calendar included.
+
+    A monthly book is decided on the month's last close and filled at the next open, so it is dated
+    on the first trading day of the next month: the weight file's date is the day the orders go in,
+    and everything the rule reads on that date was known at the close before it.
+    """
+    months = calendar.to_period("M")
+    starts = months != numpy.roll(months, 1)
+    starts[0] = True
+
+    return calendar[starts]
 
 
 def lag_eligibility(
@@ -426,5 +499,26 @@ def _capped_proportional(
         numpy.full(capped_count, maximum_weight),
         values[capped_count:] * scale,
     ])
+
+
+def _drifted(
+    weights: "pandas.Series",
+    prices_then: "pandas.Series",
+    prices_now: "pandas.Series",
+) -> "pandas.Series":
+    """
+    Where last rebalance's weights stand now, after the prices moved and the cash stood still.
+
+    A name with no price now drifts to nothing: it cannot be kept, only traded or sold by the
+    engine at its last price.
+    """
+    held = weights[weights > 0]
+    growth = prices_now.reindex(held.index) / prices_then.reindex(held.index)
+    grown = held * growth
+    cash = 1.0 - float(held.sum())
+    total = float(grown.sum(skipna=True)) + cash
+    shares = grown / total
+
+    return shares.reindex(weights.index)
 
 # --- example: end ---

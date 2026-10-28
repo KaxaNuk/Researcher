@@ -30,7 +30,7 @@ first, when:
   for them: `objective`, then `read`.
 - **`Universe/Investable_Universe.csv` has no identifier under its header** — the investable
   universe comes before the hypothesis about it.
-- **`Experiments/Experiment_N/experiment_N.ipynb` already holds a rule in its section 2** — a
+- **`Experiments/Experiment_N/experiment_N_marimo.py` already holds a rule in its section 2** — a
   hypothesis written after its test is not a hypothesis.
 - **`BLUEPRINT_N.md` is already filled** — it carries the line this command writes under the
   experiment's heading, `**Written YYYY-MM-DD, before any rule was coded.**` It does not change once
@@ -185,9 +185,13 @@ read, not built: one query run in the shell and never saved, which takes that da
 panel, filters and sorts them as *Rules* say, and quotes each name's signal value and its rank in
 that column from the files. No weight, return or other figure about the book is stated: where the
 count depends on the sizing, the edge is explained in words — which bound stops the book — and the
-weights are left to the rule cell. Ask *Is this the book you mean?* A no is a new draft of *Rules*,
-back through *Step 4*. On yes, the plan adds a `JOURNAL_N.md` entry, *the rule read back* — the
-sentence, the worked date's book and the owner's yes in their words — saved before the blueprint.
+weights are left to the rule cell. **Where *Rules* name a no-trade band, read the band back beside
+the rule**, on the worked date and the rebalance before it: the names held on both, and which of
+them the band leaves as they drifted and which it trades — named, not weighed, read from the panel
+the same way and never coded into the notebook. Ask *Is this the book you mean?* A no is a new
+draft of *Rules*, back through *Step 4*. On yes, the plan adds a `JOURNAL_N.md` entry, *the rule
+read back* — the sentence, the worked date's book, the band where there is one, and the owner's yes
+in their words — saved before the blueprint.
 With no refined panel yet, read back the sentence alone, and say, in chat and in the entry, that
 the worked date is owed before the rule cell.
 

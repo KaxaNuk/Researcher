@@ -27,8 +27,8 @@ What is expected here:
 - Take the book as a daily series, from `Backtest/`, never from `Portfolio/portfolio_weights.csv`.
   The library rejects a weight file that is not daily once it spans a year, and the rebalance-date
   file the engine read is exactly what it refuses.  The book it attributes is the one the engine
-  held each trading day, drift and the cash proxy included; the benchmark's holdings follow the
-  same rule.
+  held each trading day, drift and its cash included; the benchmark's holdings follow the same
+  rule.
 - Hold both weight tables overnight.  The engine's daily weights and the index's holdings are
   struck at a day's close, after that day's return has moved them, and the library pairs a weight
   with the return of its own date.  Paired as they arrive, a weight that already holds a day's
@@ -47,12 +47,18 @@ What is expected here:
   what it holds is compared against the fraction of the index it happens to own, and the
   difference is reported as alpha, most of it filed under interaction, where nobody looks.  Drop
   the engine's benchmark column on the way, which it returns at zero, and keep the cash position.
-- Shape the hand-supplied files into what the library's loader accepts, which is decided by **one
-  cell**: the first header.  `Ticker` means securities down and dates across; `date_column` means
-  dates down and securities across.  Anything else -- `date`, `m_date`, the name a provider happened
-  to use -- raises before a number is read.  The same rule governs the book, the benchmark's
-  holdings and the benchmark's return series, and none of them may carry nulls.  That is why the
-  shaping lives here and not in a notebook.
+- Shape what the library reads in one place, never in a notebook: no nulls, each side's weights
+  summing to one, and the cash the rule leaves uninvested a segment of its own, at a zero return,
+  so the book's cash is neither dropped nor read as a security.  Where the library loads files, its
+  loader decides the layout by **one cell**, the first header: `Ticker` means securities down and
+  dates across; `date_column` means dates down and securities across; anything else -- `date`,
+  `m_date`, the name a provider happened to use -- raises before a number is read.  Where it takes
+  tables in memory, through its own pipeline, hand them over there and write nothing.
+- Name the methodology once, as the owner chose it before the first run: the formula of the first
+  cut, the groups it allocates across -- sectors, say, each security in the one the factor model
+  classifies it in -- and how daily effects are carried over the window.  A sum of daily effects
+  and a compounded, linked one differ by many points over decades, and a change of either moves
+  every attribution figure while no engine figure moves.
 - Say what the factor directory has to look like, because it holds nothing but factor files: one
   CSV per factor, named by its file name, a date column first -- its header may be empty -- and
   one column per security after it.  Four names belong to the model's own series, matched exactly
@@ -79,7 +85,8 @@ The follow-ups are counterfactual books the engine can already price.  `AGENTS.m
 reasoning.
 
 It produces `Attribution/` -- the tables of the two decompositions and the third pass, and the
-figures where they are kept -- for `FINDINGS_N.md`, and the answer to graduation criterion 2.
+figures where they are kept -- for `FINDINGS_N.md`, and the answer to the gate's performance
+criterion P2.
 
 It prevents selling factor beta as if it were alpha, crediting a book with a day's return its
 weights already held or with an unpriced member's return, and a run that stops at its first file

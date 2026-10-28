@@ -2,26 +2,26 @@
 name: init-example
 description: >
   Copy a KaxaNuk worked example — today one, the strategy golden-flow — into a new folder to study
-  or run it, or one of its worked files, such as Data/analyzer.ipynb, into a folder of its own to
+  or run it, or one of its worked files, such as Data/analyzer_marimo.py, into a folder of its own to
   read beside a strategy's own, from the copy inside the researcher package, by a script; with
   several examples, it asks which. Only when the owner runs it by name. It does NOT start a
   strategy of the owner's own (use `init-strategy`), does NOT bring back a template file a strategy
   lacks (`init-strategy`'s script with `--only` does), and never builds on the example.
 metadata:
-  version: 0.5.3
+  version: 0.5.4
 ---
 
 # Init example — a worked example, whole or one piece at a time
 
 The examples sit in the package by kind, as the templates do: `examples/<kind>/<name>/`, the kind
-being what the example is an example of — `strategy`, worked through the KaxaNuk Strategy
-Template. Today there is one, `examples/strategy/golden-flow/`: one strategy worked through every
-folder of the template — the objective and its claims, the notes, the universe, the data, the
-experiment and its documents, the findings, the results and the paper-trading gate. An example's
-own lines sit between example markers — `<!-- example: begin -->` and `<!-- example: end -->` in
-Markdown, `# --- example: begin ---` in Python, `# EXAMPLE-ONLY CELL` on a notebook cell — beside
-the template's description of what belongs in each file. Every example is also readable without
-installing anything, in `examples/<kind>/<name>/` of `KaxaNuk/KaxaNuk-Researcher`.
+being what the example is an example of — `strategy`, worked through the KaxaNuk Strategy Template.
+Today there is one, `examples/strategy/golden-flow/`: one strategy worked through every folder of
+the template — the objective and its claims, the notes, the universe, the data, the experiment and
+its documents, the findings, the results and the paper-trading gate. An example's own lines sit
+between example markers — `<!-- example: begin -->` and `<!-- example: end -->` in Markdown,
+`# --- example: begin ---` and `# --- example: end ---` in Python, a marimo notebook included —
+beside the template's description of what belongs in each file. Every example is also readable
+without installing anything, in `examples/<kind>/<name>/` of `KaxaNuk/KaxaNuk-Researcher`.
 
 **The list is the package's, never yours.** Which examples there are, and the line on what each
 shows, come from the script, which reads them from the package's folders and READMEs: never name
@@ -32,9 +32,9 @@ or describe an example from memory.
 - **A whole example, in a new folder** — *init-example*, *init-example golden-flow*, *give me the
   example to look at*. To read it, run its notebooks, or see what a finished experiment looks like.
 - **The examples of one kind** — *init-example strategy*: the same, chosen among that kind only.
-- **One worked file, to read beside your own** — *init-example Data/analyzer.ipynb*, *show me the
-  example's blueprint*. A strategy's copy of a file says what belongs in it; the example's shows it
-  filled. The piece goes into a folder of its own, never into the strategy, and nothing is built
+- **One worked file, to read beside your own** — *init-example Data/analyzer_marimo.py*, *show me
+  the example's blueprint*. A strategy's copy of a file says what belongs in it; the example's shows
+  it filled. The piece goes into a folder of its own, never into the strategy, and nothing is built
   on it.
 - Not to bring back a file a strategy lacks — lost, or never there because the strategy was made
   before template 0.10.0 shipped the drivers, notebooks and documents. That file comes back from
@@ -60,7 +60,7 @@ or describe an example from memory.
    more, ask the kind first, and with more than four of one kind, ask as a numbered list in chat
    instead. Without a question tool — Codex, Gemini — ask in one chat message, the examples numbered
    beneath it, each with its line, *Other — your own words* last. Any other word —
-   `Data/analyzer.ipynb`, `Experiments/Experiment_1`, `Universe` — is a path of the example, one
+   `Data/analyzer_marimo.py`, `Experiments/Experiment_1`, `Universe` — is a path of the example, one
    piece of the example chosen the same way.
 
 2. **Whole or one piece, and where.** A path means that one piece; no path means the whole
@@ -106,7 +106,8 @@ or describe an example from memory.
 
 5. **For one piece, say what it shows.** Everything between the markers in what was copied is the
    example's own work, and so, whole, is every file only the example has — for `golden-flow`, its
-   seed, its notes, `Universe/seed.py`, a frozen book's `FREEZE.json` and the files it hashes.
+   seed, its notes and `Universe/seed.py`; an example with a book on paper adds that book's
+   `FREEZE.json` and the files it hashes.
    Around the markers is the template's description, which the strategy's copy already holds. Name
    the path it landed at, to read beside the strategy's file; never copy its lines into the
    strategy.
@@ -114,15 +115,14 @@ or describe an example from memory.
 6. **Hand over**, for the whole example, in three short lines — for `golden-flow`:
    - *Read*, with nothing installed: `OBJECTIVE.md`, `RESULTS.md`, then `BLUEPRINT_1.md` and
      `FINDINGS_1.md` in `Experiments/Experiment_1/`, then `Paper_Trading/BITACORA.md`.
-   - *Run*: its README's *Run it*, in a **new** session opened in the folder — an FMP key of their
-     own, the Analytics Factory's KN US Equity Core and factor model files, and the Backtest Engine
-     and Attribution Analysis, which come with their licences in the KaxaNuk Investment Lab, sold by
-     KaxaNuk. For the files, write to `analytics@kaxanuk.mx`; for the licences, to
+   - *Run*: its README's *Run it*, in a **new** session opened in the folder — a Sharadar key of
+     their own, the Analytics Factory's KN US Equity Core and factor model files, and the Backtest
+     Engine and Attribution Analysis, which come with their licences in the KaxaNuk Investment Lab,
+     sold by KaxaNuk. For the files, write to `analytics@kaxanuk.mx`; for the licences, to
      `lab@kaxanuk.mx`, saying which library and what it is for, with *via KaxaNuk Researcher* in the
-     subject — <https://www.kaxanuk.mx/lab> shows the Lab. The download takes about an hour and a
-     half.
-   - *Own*: a strategy of your own is `init-strategy <name>`; nothing is built on the example, and
-     its paper book, `Paper_Trading/Paper_Trading_1/`, is a record that does not run.
+     subject — <https://www.kaxanuk.mx/lab> shows the Lab.
+   - *Own*: a strategy of your own is `init-strategy <name>`; nothing is built on the example. Its
+     Experiment 1 reads as sound and regime-dependent, so it has no book on paper.
 
    For another example, the same three lines from its own README: what to read first, how it runs,
    and the `init-<kind>` that starts one of the owner's own.

@@ -75,7 +75,7 @@ available elsewhere.**
 
 A researcher reads these notes to fine-tune the claims in [`../OBJECTIVE.md`](../OBJECTIVE.md) and
 to draft the thesis and predictions in each `BLUEPRINT_N.md`. It may be a person, or yours, made
-with `init-researcher` from the [KaxaNuk Researcher](https://github.com/KaxaNuk/KaxaNuk-Researcher).
+with `init-researcher` from the [KaxaNuk Researcher](https://github.com/KaxaNuk/Researcher).
 **Every prediction it writes cites the note it came from**, so each line of the hypothesis points
 back to something somebody read.
 
@@ -104,7 +104,7 @@ process itself.
 | Is there value apart from price? | Graham & Dodd (1934), Damodaran (1994) | valuation is a model with explicit assumptions, not a number | `BLUEPRINT_N.md`: state the mechanism before the test |
 | How is capital allocated across many bets? | Markowitz (1952) | risk lives in covariance; portfolios over assets | step 4, and the Portfolio Construction module |
 | Which risk is rewarded? | Sharpe (1964), Lintner (1965) | beta earns a premium — **performance attribution is born** | step 6's first cut: market exposure against everything else |
-| What is skill, measurably? | Jensen (1968) | alpha is the residual after the risk adjustment; measurement precedes belief | graduation criterion 2 asks for **idiosyncratic** alpha |
+| What is skill, measurably? | Jensen (1968) | alpha is the residual after the risk adjustment; measurement precedes belief | graduation criterion P2 asks for **idiosyncratic** alpha |
 | Must alpha be proven? | Fama (1970) | alpha is rare; evidence beats intuition | the bar in `AGENTS.md`, and *the five ways a backtest lies* |
 | How many risks are there? | Ross (1976) | multiple priced factors, even when unnamed | why step 6 uses a multi-factor model, not a single beta |
 | Which factors, empirically? | Fama & French (1992, 1993), Carhart (1997) | value, size, momentum; research becomes systematic | the factor sets step 6 reads |
@@ -137,15 +137,16 @@ under the chapter table a book's index holds. The claim each note serves is its 
 | 1 | [Sullivan, Timmermann & White (1999) — *Data-Snooping, Technical Trading Rule Performance, and the Bootstrap*](Papers/Sullivan_Timmermann_White_1999_Data_Snooping_Technical_Trading_Rules.md) | **against**: moving-average crossovers are in the class of rules this paper deflates |
 | 1 | [Han, Zhou & Zhu (2016) — *Taming Momentum Crashes: A Simple Stop-Loss Strategy*](Papers/Han_Zhou_Zhu_2016_Taming_Momentum_Crashes.md) | **against**: the cross is the slowest possible stop |
 | 1 | [Kaminski & Lo (2014) — *When Do Stop-Loss Rules Stop Losses?*](Papers/Kaminski_Lo_2014_When_Do_Stop_Loss_Rules_Stop_Losses.md) | **against**: a stop whipsaws where prices mean-revert |
+| 1 | [Daniel & Moskowitz (2016) — *Momentum Crashes*](Papers/Daniel_Moskowitz_2016_Momentum_Crashes.md) | **against**: after a panic the beaten-down names rip upward, and a trend filter has left them; a key risk of `BLUEPRINT_1.md` |
 | 2 | [Amihud (2002) — *Illiquidity and Stock Returns*](Papers/Amihud_2002_Illiquidity_And_Stock_Returns.md) | **against**: the least traded names earn more |
 | 2 | [Datar, Naik & Radcliffe (1998) — *Liquidity and Stock Returns*](Papers/Datar_Naik_Radcliffe_1998_Liquidity_And_Stock_Returns.md) | **against**: the closest published analogue to ranking by traded value, pointing the other way |
 | 2 | [Ibbotson, Chen, Kim & Hu (2013) — *Liquidity as an Investment Style*](Papers/Ibbotson_Chen_Kim_Hu_2013_Liquidity_As_An_Investment_Style.md) | **against**: the strongest published case |
 | 3 | [Asness, Moskowitz & Pedersen (2013) — *Value and Momentum Everywhere*](Papers/Asness_Moskowitz_Pedersen_2013_Value_And_Momentum_Everywhere.md) | **for**: value and momentum move against each other, so a trend filter screens out value traps |
 
-Five more were read for an earlier form of the idea and are leads here, their notes not carried into
-this copy: Daniel & Moskowitz (2016) — *Momentum Crashes*; Novy-Marx (2012) —
-*Is Momentum Really Momentum?*; Barroso & Santa-Clara (2015) — *Momentum Has Its Moments*; George &
-Hwang (2004) — *The 52-Week High and Momentum Investing*; and Moreira & Muir (2017), Part 3's lead.
+Four more were read for an earlier form of the idea and are leads here, their notes not carried
+into this copy: Novy-Marx (2012) — *Is Momentum Really Momentum?*; Barroso & Santa-Clara (2015) —
+*Momentum Has Its Moments*; George & Hwang (2004) — *The 52-Week High and Momentum Investing*; and
+Moreira & Muir (2017), Part 3's lead.
 
 <!-- example: end -->
 
@@ -243,6 +244,6 @@ more here than a citation.
 
 In this example the signal is not fitted: the golden cross is arithmetic on past prices. Its causal
 and smoothed readings are the same series, so this audit has nothing to compare, and
-`Data/analyzer.ipynb` says so.
+`Data/analyzer_marimo.py` says so.
 
 <!-- example: end -->

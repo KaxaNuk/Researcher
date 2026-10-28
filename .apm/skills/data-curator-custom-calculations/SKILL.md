@@ -13,8 +13,8 @@ description: >
   composition, wiring the column into the output, for configuration files and runs of `main()`,
   and whether a wrong value is the provider's or the library's.
 metadata:
-  version: 0.6.0
-  library_version: 0.50.0
+  version: 0.7.0
+  library_version: 0.51.0
 ---
 
 # Data Curator Custom Calculations
@@ -23,32 +23,45 @@ A custom calculation is a plain Python function whose name starts with `c_`. The
 turns each such function into one output column with the exact same name as the function, and
 injects each of the function's parameters with the data of the column named after that parameter.
 
-This skill was checked against Data Curator **0.50.0**, the frontmatter's `library_version`:
-compare it with the build `uv pip list` shows, and on a newer minor or major version treat every
-trap here as unproven until it is checked again.
+This skill was checked against Data Curator **0.51.0**, the frontmatter's `library_version`:
+checked on 0.51.0 by Golden Flow's run of 2026-10-24, from emptied data folders — the worked
+example's pipeline, from the download to the experiment's Verify, on Sharadar. Compare it with the
+build `uv pip list` shows, and on a newer minor or major version treat every trap here as unproven
+until it is checked again. FMP's lines below stay as checked on 0.50.0, by the example's earlier
+runs.
 
-**Changed in 0.51.0, from its changelog — not yet checked by a run of the worked example.** The
-first release with the Sharadar provider, released 2026-10-23. `main()` now requires
+**0.51.0** is the first release with the Sharadar provider, released 2026-10-23. `main()` requires
 `data_block_providers`, and `ExcelConfigurator` needs `data_blocks`; a parameter workbook from an
 earlier build is brought up to date with `kaxanuk.data_curator update excel`. It asks for pyarrow
 26 or later. Each column's prefix is checked against the data blocks of the run, so a `d_*` or `s_*`
 column with no dividends or splits block mapped stops the run before anything is fetched.
 
-**Sharadar on 0.51.0, measured on 2026-10-23 by a strategy's own run** — the only runs of the
-provider so far; FMP's lines below stay as checked on 0.50.0:
+**Sharadar on 0.51.0**, as the worked example's runs of 2026-10-23 and 2026-10-24 found it:
 
-- **Any `d_*` or `s_*` column stops the run**, selected in `Configuration.columns` or only a
-  parameter of a `c_*`, even with the dividends and splits blocks mapped to the provider:
-  `[CRITICAL] Column not available under prefix 's': s_denominator`, and the same for
-  `s_split_date`, `s_numerator`, `d_ex_dividend_date`, `d_dividend` and
-  `d_dividend_split_adjusted`, although the documentation's Sharadar page lists some of them.
-  Reported, <https://github.com/KaxaNuk/Data-Curator/issues/39>. Until it is fixed, a split or
-  dividend comes from Sharadar's own `actions` table, read outside the Curator, as *Known provider
-  faults* below says.
+- **Dividends and splits are read through their joined names**, once the dividends and splits
+  blocks are mapped to Sharadar in `data_block_providers`:
+  `d_ex_dividend_date_dividend_split_adjusted`, the cash a share in today's split-adjusted shares
+  on its ex-date, and `s_split_date_numerator` and `s_split_date_denominator`, new shares to old on
+  the split's date. A shorter tag — `s_numerator`, `s_denominator`, `d_dividend` — stops the run,
+  `[CRITICAL] Column not available under prefix 's': s_denominator`: what
+  <https://github.com/KaxaNuk/Data-Curator/issues/39> reported, closed as a wrong column name.
 - **The built-in `c_daily_traded_value` is empty on every row**: Sharadar sends no VWAP.
-  Reported, <https://github.com/KaxaNuk/Data-Curator/issues/40>. Build the traded value as
-  `m_close_split_adjusted` × `m_volume_split_adjusted` in a `c_*` of your own, under a name of its
-  own.
+  Reported, <https://github.com/KaxaNuk/Data-Curator/issues/40>. Build the traded value in a `c_*`
+  of your own, under a name of its own: the example's `c_traded_value`, the split-adjusted close
+  times `m_volume_split_adjusted`, with the volume adjusted twice at a split corrected.
+- **A spin-off is not in the dividend column** — GE's GE HealthCare and GE Vernova among them. The
+  example adds it after the download from Sharadar's `actions` table, whose `spinoffdividend` rows
+  carry its cash value a share in today's split-adjusted shares; asked of the Curator,
+  <https://github.com/KaxaNuk/Data-Curator/issues/43>.
+- **A refused request is logged, not raised**: `main()` logs a rate limit or a refused batch and
+  returns normally, so the example reads what the `kaxanuk` logger recorded at error level to tell
+  a name Sharadar has nothing for from a batch refused today, and asks the second again after a
+  pause. It also sets `socket.setdefaulttimeout` before the call, so a connection that hangs raises
+  instead of hanging the run.
+- **`ParquetOutput` writes each file's prices as decimals of that file's own precision, and its
+  volume as integers**, so two files do not stack as they come. The example rewrites every file it
+  downloads into one schema — the date as `date32`, every other column as `float64` — through its
+  `Data/time_series.py`, before anything reads it.
 - **The key and its server.** Sharadar's startup subscription, <https://sharadar.com/startup>, is
   served by Sharadar's own API, `https://api.sharadar.com/v1.0`, with the key as the `api_key`
   parameter or the `x-api-key` header. Nasdaq Data Link, `data.nasdaq.com`, answers that key with
@@ -112,18 +125,23 @@ loads its own.
 functions go in `Data/Curator/custom_calculations.py`. `Data/curator.py`, the step-3 driver, loads
 that file and passes the output columns to `main()` as `Configuration.columns`; in the worked
 example's driver they are the `OUTPUT_COLUMNS` tuple. The identifiers are the seed's
-`main_identifier`, chosen per experiment with its provider; FMP in the worked example is that
+`main_identifier`, chosen per experiment with its provider; Sharadar in the worked example is that
 experiment's choice. Never create `Config/custom_calculations.py` there. The template ships both
 as descriptions — a docstring each — to be filled in. In a strategy made from a template before
 0.10.0 they are missing: they come back from the template, never from the example, through
 `init-strategy`'s script run from the strategy's root —
 `scaffold.py strategy . --only Data/curator.py` and `--only Data/Curator/custom_calculations.py`,
-which never overwrite. Two kinds of column are not `c_*` columns, even when asked for as a
+which never overwrite. Since template 0.20.0 every per-security file is Parquet, written and read
+through `Data/time_series.py`; a strategy made earlier gets that description the same way,
+`--only Data/time_series.py`. Two kinds of column are not `c_*` columns, even when asked for as a
 "signal". One compares securities on a date (a rank, a breadth reading); the other has a setting
 an experiment will sweep (a fitted model, or a window such as the 50- and 200-day averages the
 example builds as `r_trend_50_200`). Both are `r_*` columns in
 `Data/Refinery/custom_calculations.py`, which the worked example's `Data/refinery.py` computes
-and this skill does not cover. Only their frozen arithmetic inputs are `c_*` columns.
+and this skill does not cover. Only their frozen arithmetic inputs are `c_*` columns. **When a new
+experiment can use the data already downloaded, its signals are `r_*` columns too**, computed from
+the `c_*` columns the Curator wrote — the daily total-return log returns, the traded value —
+never by widening the Curator's columns and downloading again.
 
 Anywhere else, if a project has no surface yet, default to (a): create
 `Config/custom_calculations.py` and confirm the entry script imports it.
@@ -152,7 +170,8 @@ Do not write code until the inputs and the output name are settled. Resolve at l
 - Price adjustment: raw (`m_close`), split-adjusted (`m_close_split_adjusted`), or
   dividend-and-split-adjusted (`m_close_dividend_and_split_adjusted`). This changes the result;
   never pick it silently. A provider fills only some of them: under Sharadar, `m_close` is the one
-  unadjusted price, as `references/input-columns.md` says.
+  unadjusted price, as `references/input-columns.md` says, and the one exact price, so the worked
+  example rebuilds its adjusted ones from it, as *Known provider faults* below says.
 - Window and horizon (`5d` / `21d` / `63d` / `252d`, rolling vs exponential) if the concept has one.
 - For fundamentals: whether the configured `period` is `annual` or `quarterly`, since the same
   function yields different values for each, and last-twelve-months logic only makes sense for
@@ -217,13 +236,15 @@ Run every check, and fix until all pass:
       averaged or ranked on it — is checked for continuity at every split before anything reads
       it, as `universe-point-in-time`'s register says. A provider's unadjusted volume can already
       be in post-split shares before the split date, and the split adjustment then counts it twice.
-      Under Sharadar, `c_daily_traded_value` is empty: build it as the 0.51.0 notes above say.
+      Under Sharadar, `c_daily_traded_value` is empty: build it as the 0.51.0 notes above say, and
+      correct it where the volume is adjusted twice, as *Known provider faults* below says.
 - [ ] The code parses: `uv run --no-project python -m py_compile <file>` for a file, or a clean run
       of the cell for a notebook, and the linter the project uses passes.
 - [ ] If the calculation depends, directly or transitively, on any `f_*`, `fbs_*`, `fcf_*`, `fis_*`,
       `d_*` or `s_*` column, the run needs a provider for the fundamentals, dividends or splits
       block in `data_block_providers`. For the fundamental blocks the result also depends on the
-      configured `period`. Under Sharadar on 0.51.0, any `d_*` or `s_*` dependency stops the run.
+      configured `period`. Under Sharadar on 0.51.0, a `d_*` or `s_*` dependency reads the joined
+      names the 0.51.0 notes above give; a shorter tag stops the run.
 
 ## 7. Report
 
@@ -264,13 +285,29 @@ dividend-and-split-adjusted. An early adjusted series of a name split many times
 about 0.8% or more, which is noise in a daily return, not the market. The Curator maps
 `m_close_split_adjusted` and `m_close_dividend_and_split_adjusted` straight to Sharadar's `close`
 and `closeadj`, as the documentation's Sharadar page says, so the rounding is Sharadar's; an open
-fill on `m_open_split_adjusted` keeps it too. What a strategy did, measured on 2026-10-23: rebuild
-the split factor and the total-return close from the exact unadjusted `m_close` and Sharadar's
-`actions` table, downloaded whole with `/data/actions?years=full`. In it a split's value is the
-ratio new shares over old, and a `dividend` or `spinoffdividend` value is cash per share in
-today's split-adjusted shares. Where `closeadj` is $10 or more, the rebuilt daily returns matched
-its own within 1e-4 for AAPL, KO, LEHMQ, NVDA, SPY and GE. Asked of the Curator as a feature,
+fill on `m_open_split_adjusted` keeps it too. What the worked example does, checked by its run of
+2026-10-24: rebuild the split factor and the total-return close as `c_*` calculations, from the
+exact unadjusted `m_close` and the joined dividend and split columns of the 0.51.0 notes above. A
+split after the window — NFE's 1-for-50 of 2026-09-14 — is in every earlier Sharadar price and
+dividend but not in the window's split columns, and one listing's split-adjusted prices carry a
+factor no split records (NVTP): both are a constant between Sharadar's basis and the window's
+splits, taken from Sharadar's own split-adjusted close where its decimals are fine. Spin-offs are
+added from the `actions` table, downloaded whole with `/data/actions?years=full`. Then every file
+is read back and compared with Sharadar's own adjusted close wherever both of its prices are $10 or
+more: of 2,199 files, three had a day whose rebuilt return differs from Sharadar's by more than
+0.5% — BILL and IOT on 2025-06-03, a one-day glitch in Sharadar's adjusted close the rebuild does
+not share, and CXW in 1998, dividends Sharadar books on other dates than its `actions` table — and
+none a split-adjusted close off Sharadar's. Asked of the Curator as a feature,
 <https://github.com/KaxaNuk/Data-Curator/issues/41>.
+
+**Sharadar's volume is adjusted twice at some splits too**, FMP's fault on another provider: at 82
+splits in 77 listings — BBWI on 2000-05-31, FAST on 2002-05-13, GILD on 2002-03-08 among them —
+traded value steps by the split's own factor while the shares the tape printed stay flat. The
+worked example's `c_traded_value` divides the volume before such a split by its factor, where
+traded value lands within 10% of the factor in logs and the shares move by less than 15%, over 30
+trading days on each side, for splits of five shares for four or more; the universe notebook's
+register reads the same signature and finds none left. Filed with Sharadar's other faults the
+example found, <https://github.com/KaxaNuk/Data-Curator/issues/42>.
 
 ## References
 

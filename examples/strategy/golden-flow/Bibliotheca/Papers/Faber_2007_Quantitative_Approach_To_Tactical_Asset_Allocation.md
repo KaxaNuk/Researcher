@@ -16,15 +16,15 @@ device.
 
 ## What it implies for Golden Flow
 
-> Rewritten on 2026-10-07 for this copy, after FINDINGS_1.md reported.
+> Rewritten on 2026-10-27 for this copy, after FINDINGS_1.md reported on Sharadar.
 >
 > **Claim 1, the signal.** The paper reads a moving-average filter as a drawdown control, and that
-> is what Golden Flow's book shows most strongly. Its worst drawdown is −32.47%, against −46.32% for
-> the control, the same rule with the golden cross removed
-> ([`FINDINGS_1.md`](../../Experiments/Experiment_1/FINDINGS_1.md), prediction 2). The filter also
-> added return here, which the paper does not promise: 20.33% a year against 19.73%, and a Sharpe of
-> 0.842 against 0.763.
+> is prediction 2 of `BLUEPRINT_1.md`, which held. The book's worst drawdown is −82.6%, against
+> −91.7% for the control, the same rule with the golden cross removed, and its volatility 25.7%
+> against 29.5% ([`FINDINGS_1.md`](../../Experiments/Experiment_1/FINDINGS_1.md), prediction 2). The
+> filter also added return, which the paper does not promise: 6.21% a year against 4.91%.
 >
-> Two things it does not license. Its filter runs on asset-class indices, not on single names. And
-> its "else cash" leg has only a partial counterpart: the rule moves to `BIL` only when fewer than
-> five names are eligible, which never happened.
+> Two things it does not license. Its filter runs on asset-class indices, not on single names, and
+> a drawdown of −82.6% is no bond-like drawdown: read once a month, the cross left the bubble's most
+> traded names late. And its "else cash" leg has only a partial counterpart: what the bounds cannot
+> place is cash, a mean of 1.3% of the book.

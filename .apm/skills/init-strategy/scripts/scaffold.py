@@ -18,7 +18,7 @@ Usage:
     uv run --no-project python scaffold.py examples
     uv run --no-project python scaffold.py examples --kind strategy
     uv run --no-project python scaffold.py python-library <destination>
-    uv run --no-project python scaffold.py strategy <strategy root> --only Data/analyzer.ipynb
+    uv run --no-project python scaffold.py strategy <strategy root> --only Data/analyzer_marimo.py
     uv run --no-project python scaffold.py example <a folder of its own> --only Experiments/Experiment_1
 
 An example is a folder `examples/<kind>/<name>/` that holds a `README.md`: its kind is what it is
@@ -91,6 +91,7 @@ CACHE_FOLDERS = frozenset({
     '.pytest_cache',
     '.ruff_cache',
     '.venv',
+    '__marimo__',
     '__pycache__',
     '_build',
     'dist',

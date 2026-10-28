@@ -3,15 +3,15 @@
 The canonical tree of a KaxaNuk Investment Lab strategy repository, as the **KaxaNuk Strategy
 Template** holds it — `templates/strategy/` in `KaxaNuk/KaxaNuk-Researcher`, copied into a new
 folder by `init-strategy`. The template ships the shape and every file the process expects in it:
-the six folders, the documents at the root, and inside the folders each driver, module, notebook
-and document. Each is a description of what belongs there — a `.py` file as its docstring, a
+the six folders, the documents at the root, and inside the folders each driver, module, notebook and
+document. Each is a description of what belongs there — a `.py` file as its docstring, a marimo
 notebook as its markdown cells — to be filled in with the strategy's own. The same files, worked
 through for one strategy, are the example beside it, `examples/strategy/golden-flow/`, with that
 strategy's own lines between example markers. **The template is the source of truth for this tree;
 this file is a copy of what it looked like at the version named below**, kept by hand. When they
 disagree, the template wins.
 
-Template version: **0.19.3**. The template ships `Experiments/Experiment_1/` and
+Template version: **0.20.0**. The template ships `Experiments/Experiment_1/` and
 `Paper_Trading/Paper_Trading_1/`; the blanks for every experiment after the first are this skill's
 `references/`. `Bibliotheca/Papers/`, `Books/` and `Notes/` appear with their first note.
 
@@ -40,7 +40,7 @@ Template version: **0.19.3**. The template ships `Experiments/Experiment_1/` and
 ├── Universe/                    # step 2
 │   ├── Investable_Universe.csv  #   THE SEED, committed: main_identifier is the only required column
 │   ├── seed.py                  #   only in the worked example: how its seed was built
-│   └── universe.ipynb           #   -> Security_Master.csv, Data_Issues.csv, Provider_Cache/ (gitignored)
+│   └── universe_marimo.py       #   -> Security_Master.csv, Data_Issues.csv, Provider_Cache/ (gitignored)
 ├── Data/                        # step 3
 │   ├── curator.py               #   Data Curator driver; --end-date refreshes it for paper trading
 │   ├── hand_supplied.py         #   reads the Analytics Factory's index and factor files, in place or dropped in
@@ -53,7 +53,7 @@ Template version: **0.19.3**. The template ships `Experiments/Experiment_1/` and
 │   ├── Refinery/
 │   │   ├── custom_calculations.py   # r_* columns: cross-sectional, fitted, or with a setting to sweep
 │   │   └── Time_Series/         #   derived, gitignored — the panel every experiment reads, + current_*
-│   ├── analyzer.ipynb           #   where a feature earns a backtest or is dropped
+│   ├── analyzer_marimo.py       #   where a feature earns a backtest or is dropped
 │   └── Analyzer/                #   charts and the signal table, gitignored
 ├── Experiments/                 # steps 4-6
 │   ├── securities_panel.py      #   the one panel loader; names no strategy column
@@ -62,13 +62,13 @@ Template version: **0.19.3**. The template ships `Experiments/Experiment_1/` and
 │   ├── attribution_analysis.py  #   the hand-supplied inputs and the book's daily weights; what is missing, first
 │   └── Experiment_N/            #   Experiment_1 ships, the first rule; N > 1 from this skill's references/
 │       ├── BLUEPRINT_N.md  JOURNAL_N.md  FINDINGS_N.md
-│       ├── experiment_N.ipynb
+│       ├── experiment_N_marimo.py
 │       ├── Portfolio/           #   step 4 output, gitignored, kept by .gitkeep
 │       ├── Backtest/            #   step 5 output, gitignored, kept by .gitkeep
 │       └── Attribution/         #   step 6 output, gitignored, kept by .gitkeep
 └── Paper_Trading/               # step 7
-    ├── BITACORA.md              #   the graduation gate — a contract, not a log
-    ├── promote.py               #   freezes a graduated experiment into Paper_Trading_N/
+    ├── BITACORA.md              #   the graduation gate: soundness S1-S5, performance P1-P3
+    ├── promote.py               #   freezes an experiment that graduated into Paper_Trading_N/
     ├── daily_update.py          #   runs every frozen book each day; record.py keeps the record
     ├── record.py                #   the six tables, to CSV files, a DuckDB database or both
     └── Paper_Trading_N/         #   one frozen book: paper_trading_N.py, its files, FREEZE.json
@@ -76,23 +76,26 @@ Template version: **0.19.3**. The template ships `Experiments/Experiment_1/` and
 
 ## What is committed, and what is not
 
-**Only source is committed:** code, notebooks with outputs stripped, documents and the notes, the
-folder skeleton kept by `.gitkeep`, `LICENSE`, and one seed file —
-`Universe/Investable_Universe.csv`. A strategy repository also commits `uv.lock`, which pins what
-its results came from; the template and the example ship none. Everything under `Data/` except
-code, every `Portfolio/`, `Backtest/` and `Attribution/`, the PDFs and `Bibliotheca/Extracts/`,
-every chart, workbook and parquet is regenerated by running a stage or supplied by hand, and is
-gitignored by extension and by path. `Config/.env` is gitignored **because it is secret**; the
-template is committed. Everything APM would install — `.claude/`, `.agents/`, `.codex/`, `.cursor/`,
+**Only source is committed:** code, the marimo notebooks, documents and the notes, the folder
+skeleton kept by `.gitkeep`, `LICENSE`, and one seed file — `Universe/Investable_Universe.csv`. A
+strategy repository also commits `uv.lock`, which pins what its results came from; the template and
+the example ship none. Everything under `Data/` except code, every `Portfolio/`, `Backtest/` and
+`Attribution/`, the PDFs and `Bibliotheca/Extracts/`, every chart, workbook and parquet and marimo's
+`__marimo__/` cache is regenerated by running a stage or supplied by hand, and is gitignored by
+extension and by path. `Config/.env` is gitignored **because it is secret**; the template is
+committed. Everything APM would install — `.claude/`, `.agents/`, `.codex/`, `.cursor/`,
 `apm_modules/`, `apm.lock.yaml`, `.mcp.json` — is gitignored as well, though a strategy installs
 nothing: the skills are installed once for the user, by
 `uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/KaxaNuk-Researcher --target <agent>`.
 
-Strip notebook outputs before committing. `--group notebook` adds JupyterLab, which a bare
-`uv sync` leaves out; `uv run` adds it without removing a hand-installed engine:
+**A marimo notebook saves no output in itself**, so there is nothing to strip before a commit. It
+is a Python file: run it as a script, or open it to read and run cell by cell. `--group notebook`
+adds marimo, which a bare `uv sync` leaves out; `uv run` adds it without removing a hand-installed
+engine:
 
 ```bash
-uv run --group notebook jupyter nbconvert --clear-output --inplace Universe/universe.ipynb Data/analyzer.ipynb Experiments/*/experiment_*.ipynb
+uv run python Experiments/Experiment_1/experiment_1_marimo.py
+uv run --group notebook marimo edit Experiments/Experiment_1/experiment_1_marimo.py
 ```
 
 ## Starting a strategy from the template
@@ -118,9 +121,9 @@ done
 ```
 
 Then copy the three templates from this skill's `references/` into `$base/`, renaming `N`, and copy
-`experiment-notebook.ipynb` to `$base/experiment_$N.ipynb`. The notebook is Experiment 1's: retitle
-it `Experiment N`, replace every `_1` in it with `_N`, and delete the sentences that only apply to
-Experiment 1. Then, in the notebook, declare the experiment's columns in section 0, import the
-panel loader from `Experiments/securities_panel.py` in section 1, write the rule in section 2 and
-hand its sizing to `portfolio_construction.py`.
-**`BLUEPRINT_N.md` is written before the rule**, and does not change afterwards.
+`experiment-notebook_marimo.py` to `$base/experiment_${N}_marimo.py`. The notebook is Experiment
+1's: retitle it `Experiment N`, replace every `_1` in it with `_N`, and delete the sentences that
+only apply to Experiment 1. Then, in the notebook, declare the experiment's columns in section 0,
+import the panel loader from `Experiments/securities_panel.py` in section 1, write the rule in
+section 2 and hand its sizing to `portfolio_construction.py`. **`BLUEPRINT_N.md` is written before
+the rule**, and does not change afterwards.

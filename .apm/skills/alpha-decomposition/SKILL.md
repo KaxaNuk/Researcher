@@ -7,11 +7,12 @@ description: >
   factor model, Brinson-Fachler again on the residual — to decompose idiosyncratic return into
   selection, sizing and timing by building counterfactual books the Backtest Engine can price, to
   run the exclusion-filter test when the factor model is blind to an absolute rule, and to evidence
-  graduation criterion 2. It does NOT run the engine or the attribution library for you — it says
-  which books to price and how to read the numbers that come back. Shaping the attribution library's
-  inputs and calling it is `attribution-analysis-runs`; pricing a book is `backtest-engine-runs`.
+  the gate's performance criterion P2. It does NOT run the engine or the attribution library for
+  you — it says which books to price and how to read the numbers that come back. Shaping the
+  attribution library's inputs and calling it is `attribution-analysis-runs`; pricing a book is
+  `backtest-engine-runs`.
 metadata:
-  version: 0.4.4
+  version: 0.5.0
 ---
 
 # Alpha decomposition — is the signal doing anything?
@@ -54,18 +55,21 @@ the residual series from the factor model's output: `calc_pct_area()` names it `
 say in `FINDINGS_N.md` that it was done that way. Getting those tables out at all is
 `attribution-analysis-runs`.
 
-**Know what the library calls allocation.** KaxaNuk's Attribution Analysis computes the three
-effects **per asset and per date** — its methodology page gives the formulas, and
-`attribution-analysis-runs` repeats them — not by group. An allocation number is a statement about
-groups only when the inputs were aggregated to groups first; `FINDINGS_N.md` says which was run.
+**Know what the library calls allocation.** On 0.2.0, KaxaNuk's Attribution Analysis computes the
+three effects **per asset and per date** — its methodology page gives the formulas, and
+`attribution-analysis-runs` repeats them — not by group; the worked example, on 0.5.0, runs the
+textbook formula by KN sector, the book's cash a segment of its own. An allocation number is a
+statement about groups only when the effects were computed by group; `FINDINGS_N.md` says which was
+run, and whether its cumulative figures are summed daily effects or linked, compounded ones.
 
 **Check the benchmark is whole and aligned before reading any of it.** The first cut prices only
 the securities the book's weight file names, so a book that lists only its holdings is compared
 with the part of the index it owns. In the run that proved it, that part was 6% of the index's
 return, with alpha five times too large and the excess filed under interaction. And a weight struck
 at a day's close earns the next day's return, the close of t−1 earning day t: paired with its own
-day, every pass reads larger — in the worked example, an idiosyncratic return of 61.02 points
-against the 13.84 that stands. Compare the first cut's `benchmark_returns` with the index's own
+day, every pass reads larger — in the worked example's earlier Experiment 1, on Attribution
+Analysis 0.2.0, an idiosyncratic return of 61.02 points against the 13.84 that stood. Compare the
+first cut's `benchmark_returns` with the index's own
 return over the same window; if they are not close, the book was not widened to every constituent
 or not held overnight (`attribution-analysis-runs`, section 3) and no row of the table can be read
 yet.
@@ -75,7 +79,8 @@ Two readings, both of which count as answers:
 - **Allocation ≈ 0 with selection and interaction positive**, on inputs aggregated to groups, means
   a large group tilt is *not* where the money comes from. Say so plainly; it is the opposite of what
   the tilt makes a reader assume.
-- **A roughly even factor / idiosyncratic split** is a *pass with a qualification* on criterion 2.
+- **A roughly even factor / idiosyncratic split** is a *pass with a qualification* on the gate's
+  performance criterion P2.
   There is real idiosyncratic alpha, and half the excess is exposure available more cheaply
   elsewhere. Report both halves with equal weight.
 
@@ -106,13 +111,15 @@ counterfactuals, or the comparison is dominated by residual slivers nobody was b
 
 Each counterfactual keeps everything about the real book except one thing. The Sharpe difference
 between the real book and the counterfactual, over the same engine window, is that one thing's
-contribution. All three read the objects the experiment notebook already has: `selected_matrix`,
-`REBALANCE_DATES`, `target_weights`, and the eligibility matrix the rule built them from, lagged as
-the rule lagged it and called `eligible_matrix` below. Price each new `target_weights` the way the
-worked example's notebook prices its arms: `securities_panel.expand_to_identifiers`, then
-`backtest_engine.write_weight_file` under a name of its own, then `backtest_engine.price_books`
-with the real book's window and costs, which runs `build_configuration` and `run_backtest` for
-each.
+contribution. All three read the objects the experiment notebook already has: `REBALANCE_DATES`,
+`target_weights`, and the eligibility matrix the rule built them from, lagged as the rule lagged it
+and called `eligible_matrix` below. Under a no-trade band, strike each counterfactual's targets
+under the same band, as the rule's `struck_weights` were, so the band is no difference between
+them. Price each new book the way the worked example's notebook prices its arms:
+`securities_panel.expand_to_identifiers`, then `backtest_engine.write_weight_file` under a name of
+its own, then `backtest_engine.price_books` with the real book's window and costs, which prices
+them in the engine's batch mode, each answer cached under its weight file and settings. A run the
+engine stopped early is excluded by name, and a reading that needs it is "not evidenced".
 
 ### 3a. Sizing skill — equalise positions within each date
 
@@ -201,7 +208,7 @@ applies: **the same book with the signal switched off.**
 
 ```python
 # the rule's eligibility with only the signal's condition dropped; in the worked example
-# `eligible & (trend_before > 0)` loses its last term, which is `daily_book(use_cross=False)`
+# `eligible & (trend_before > 0)` loses its last term, which is `target_book(use_cross=False)`
 eligible_without_signal = tradable_matrix                               # signal removed
 # then re-run the experiment's own selection and weighting on this eligibility matrix
 ```
@@ -218,51 +225,58 @@ column". That is worth knowing and belongs in `OBJECTIVE.md` as a falsified clai
 
 The KaxaNuk Strategy Template works one strategy through the process in its worked example,
 `examples/strategy/golden-flow/` in `KaxaNuk/KaxaNuk-Researcher`, which `init-example` copies into a
-folder of its own. Its strategy, **Golden Flow**, owns the KN US Equity Core members whose 50-day
-simple moving average is above the 200-day, ranked and weighted by 63-day traded value, none above
-20% and none below 1%, re-struck only when the held set changes. Steps 1 to 7 have run: criteria 1
-to 4 of the gate passed, and the book was signed into paper trading on 2026-10-06. So the numbers
-below are measured, not made up for illustration: the example's in-sample backtest, priced by the
-engine and attributed by Attribution Analysis over 2015-01-02 to 2026-06-01, and reported in
+folder of its own. Its strategy, **Golden Flow**, owns once a month the KN US Equity Core members
+whose 50-day simple moving average is above the 200-day, ranked and weighted by 63-day traded
+value, none above 20% and none below 1%, a held name left alone when its target moved by half a
+point or less. Steps 1 to 6 have run, and its gate reads **sound and regime-dependent**: every
+soundness criterion holds, and the book loses to its index over the window while it earns in named
+periods. So the numbers below are measured, not made up for illustration: the example's in-sample
+backtest over 2000-01-03 to 2026-08-14, priced by the engine at the flat 5 bp half-spread the gate
+is read at, and attributed by Attribution Analysis 0.5.0 — Brinson-Fachler by KN sector, every
+cumulative effect linked, in points of compounded return — as reported in
 `Experiments/Experiment_1/FINDINGS_1.md`; hypothetical, never traded.
 
 | Arm | What it removes | CAGR | Sharpe | **Idiosyncratic** |
 | --- | --- | ---: | ---: | ---: |
-| The rule | — | 20.33% | 0.842 | **+13.84** |
-| The control | the golden cross | 19.73% | 0.763 | **−9.48** |
-| Equal weight | traded-value sizing | 14.53% | 0.722 | **−30.03** |
-| Random, twenty seeds | the cross and the ranking together | 6.55% to 15.76% | 0.330 to 0.782 | **−84.50 to −3.77** |
+| The rule | — | 7.72% | 0.221 | **+285.0** |
+| The control | the golden cross | 5.48% | 0.117 | **+167.1** |
+| Equal weight | traded-value sizing | 5.67% | 0.157 | **+87.8** |
+| Random, the 19 of twenty seeds priced whole | the cross and the ranking together | — | — | **−57.7 to +679.8**, median +117.6 |
 
 What the arms teach this skill:
 
-- **The signal the book is named after cuts beta.** Against the control, the golden cross more
-  than halves the beta exposure, 10.39 points against 22.15, and turns the idiosyncratic return
-  from −9.48 to +13.84: the control earns more from factors and loses it in the residual. Read the
-  arms, not the name, before saying what a signal does.
-- **The control prices a filter whatever the model shows.** Here the cross shows in the factor
-  model as that cut in beta, with a little momentum added — the model is not blind to it, so
-  section 2's case stays as theory in this example. The exclusion-filter test of section 4 answers
-  either way: +0.080 of Sharpe and +0.60 points of CAGR over the control.
-- **The rule beats every random book, for two reasons at once.** Its +13.84 is above all twenty,
-  every one of them negative. Each draw replaces both the cross and the ranking, so section 3b
-  credits the two together; no arm isolated the ranking.
+- **The control prices a filter whatever the model shows.** The golden cross adds +0.105 of Sharpe
+  and +2.24 points of CAGR over the control, with a maximum drawdown of −78.4% against −91.0%. In
+  the factor model the two books carry almost the same beta, −207.6 against −209.9, and the rule a
+  little more momentum, +90.5 against +75.9: the exclusion-filter test of section 4 measured what
+  the factor split barely shows. Read the arms, not the name, before saying what a signal does.
+- **A large residual is not yet selection.** The rule's +285.0 is above 15 of the 19 random books
+  priced whole, short of the gate's 16 of 20, and the random books' own residuals run from −57.7
+  to +679.8. Alpha is the residual's *expected* value: read it against the random books, never by
+  its level. Each draw replaces both the cross and the ranking, so section 3b credits the two
+  together; no arm isolated the ranking.
 - **Sizing is measured here, not assumed.** Traded-value weighting against the same names equally
-  weighted: 0.842 against 0.722 of Sharpe, +13.84 against −30.03 idiosyncratic. A rule that weights
+  weighted: 0.221 against 0.157 of Sharpe, +285.0 against +87.8 idiosyncratic. A rule that weights
   equally across whatever passes its screen has sizing skill zero by construction — report it as
   zero, not as a finding.
 - **Timing was never priced, and the findings say so.** No shifted-entry arm was run, so section 3c
   reports nothing. An arm you did not run is reported as not run, never inferred from the ones you
   did.
-- **Read the sub-periods, not only the window.** Over the window the rule beats its control on
-  return and on Sharpe, with a drawdown 13.85 points shallower, and it loses 2023 to 2026 by 11.4
-  points a year. A filter can as well lose on return and win on Sharpe; a decomposition that read
-  return alone, or the whole window alone, would misjudge either.
-- **Nine tenths of the excess return is factor exposure.** Of the factor model's 137.35 points,
-  123.50 are factors, 88.10 of them the market, and 13.84 idiosyncratic: a market-and-trend book
-  with a thin residual edge. Report both parts, as section 1 asks.
-- **Interaction, not selection, carries most of each Brinson-Fachler pass**: 77.05 of 96.87 points
-  in the first cut, 40.67 of 43.71 in the third. Per asset, heavy weights in names that then rose
-  are not split cleanly into choosing and sizing; say so beside any selection figure.
+- **Read the sub-periods, not only the window.** The rule beats its control on Sharpe and CAGR in
+  2000–2008 and 2018–2026 and loses to it in 2009–2017; it loses to the KN US Equity Core over the
+  window, its whole shortfall in 2000–2008, and beats it by about eleven points a year since 2018. A
+  decomposition that read the whole window alone would miss both, and the gate's outcome rests on
+  them.
+- **Three fifths of the holdings' return is factor exposure.** Of 685.4 compounded points, 400.4
+  are factors — the market 539.8, momentum +90.5 the largest style, technology +85.0, beta −207.6 —
+  and 285.0 idiosyncratic. Report both parts, as section 1 asks.
+- **Summed and linked figures are different numbers.** Summed daily effects put the rule's
+  idiosyncratic return at +43.2 on Attribution Analysis 0.2.0, with the model's own residual file;
+  linked over 26 years, and computed by 0.5.0, it is +285.0. Say which a figure is before comparing
+  two.
+- **By sector, interaction offsets the bets**: allocation −201.9, selection −73.2, interaction
+  +206.6 in the first cut — the book is heavy where its picks did well — and the third pass's
+  selection is +6.7. Say so beside any selection figure.
 
 ## What this skill will not let you do
 

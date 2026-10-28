@@ -15,12 +15,13 @@ upward.
 
 ## What it implies for Golden Flow
 
-> Rewritten on 2026-10-07 for this copy, after FINDINGS_1.md reported.
+> Rewritten on 2026-10-27 for this copy, after FINDINGS_1.md reported on Sharadar.
 >
-> **Claims 1 to 3 inherit the gap this paper names.** The last row of a delisted name is whatever
-> FMP, this experiment's provider, supplies, and it has never been audited here.
+> **Claims 1 to 3 inherit the gap this paper names, narrowed.** A delisted name is sold by the
+> engine at Sharadar's last trade, which needs no hindsight. That trade may be over the counter,
+> where the exchange dropped the name, and a hand-traded account may not reach it
+> ([`FINDINGS_1.md`](../../Experiments/Experiment_1/FINDINGS_1.md), *Caveats*).
 >
-> Every exit before a price stops — a delisting or a corporate event — uses one day of hindsight,
-> applied to every book alike ([`FINDINGS_1.md`](../../Experiments/Experiment_1/FINDINGS_1.md),
-> caveat 3). `Universe/Data_Issues.csv` is where the audit belongs. [`AGENTS.md`](../../AGENTS.md)
-> lists it under lie 1, as what the process still does not do.
+> A name with a gap inside its series is excluded by name from every book, and
+> `Universe/Data_Issues.csv` names it. [`AGENTS.md`](../../AGENTS.md) lists the last day of a
+> delisted name under lie 1, as what the process still does not audit.

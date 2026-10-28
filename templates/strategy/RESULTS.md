@@ -4,8 +4,8 @@
 >
 > Experiment sections are compiled from the `FINDINGS_N.md` files and cite each one. **When a number
 > changes, change it in `FINDINGS_N.md` first**, then here, as `AGENTS.md` says. The one exception
-> is step 3, `Data/analyzer.ipynb`: its findings go straight into *Before any experiment* below,
-> because notebook outputs are stripped before committing.
+> is step 3, `Data/analyzer_marimo.py`: its findings go straight into *Before any experiment*
+> below, because a notebook saves no output.
 >
 > Every performance figure comes from the **KaxaNuk Backtest Engine**, the only backtest here.
 >
@@ -22,9 +22,9 @@ and which was rejected.
 
 ## Before any experiment: what the data already says
 
-Findings from step 3, `Data/analyzer.ipynb`: whether a candidate feature carries information, over
-what horizon and with which sign, and anything else measured about the signal that needs no book.
-Cite the section each number came from.
+Findings from step 3, `Data/analyzer_marimo.py`: whether a candidate feature carries information,
+over what horizon and with which sign, and anything else measured about the signal that needs no
+book. Cite the section each number came from.
 
 **State the horizon and the overlap**, item 11 of the bar in `AGENTS.md`: a coefficient over *h*
 days, measured every day, shares *h − 1* days with the next one. Beside any coefficient or ratio,
@@ -46,11 +46,12 @@ between experiments.
 
 **Each row names the claim it moved**: the claim of `OBJECTIVE.md` its blueprint set out to move,
 and the status it reached. A row that beats its benchmarks and moves no claim is a number, not a
-finding.
+finding. **Its status is the gate's outcome**, as `Paper_Trading/BITACORA.md` reads it: graduates,
+sound and regime-dependent with its periods named, or not sound with the soundness row that failed.
 
 | Exp | Book | CAGR | Sharpe | Max DD | Control Sharpe | vs control | Status | Claim moved | Findings |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- | --- | --- |
-| **1** | the first rule, in five words | | | | — | — | kept or rejected | the claim's number, and its new status | [`FINDINGS_1.md`](Experiments/Experiment_1/FINDINGS_1.md) |
+| **1** | the first rule, in five words | | | | — | — | the gate's outcome | the claim's number, and its new status | [`FINDINGS_1.md`](Experiments/Experiment_1/FINDINGS_1.md) |
 
 ### Against the world
 

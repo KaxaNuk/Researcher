@@ -15,14 +15,15 @@ global factors rather than asset-specific stories.
 
 ## What it implies for Golden Flow
 
-> Rewritten on 2026-10-07 for this copy, after FINDINGS_1.md reported.
+> Rewritten on 2026-10-27 for this copy, after FINDINGS_1.md reported on Sharadar.
 >
 > **Claim 3, the construction.** Value and momentum move against each other, which is why a trend
 > filter can screen out value traps with no valuation model. A screen that works by exclusion leaves
 > no trace in the book. Only the control can show it: the same rule without the golden cross,
 > holding what the cross excludes.
 >
-> Against that control the cross added 0.080 of Sharpe and cut the worst drawdown from −46.32% to
-> −32.47% ([`FINDINGS_1.md`](../../Experiments/Experiment_1/FINDINGS_1.md)). In 2023 to 2026 the
-> excluded names rose faster, and the control won that sub-period by 11.4 points a year. Not every
-> name the screen kept out was a trap.
+> Against that control the cross added 0.065 of Sharpe and cut the worst drawdown from −91.7% to
+> −82.6% over 2000–2026 ([`FINDINGS_1.md`](../../Experiments/Experiment_1/FINDINGS_1.md)). The
+> factor model reads value at −40.1 points for the rule and −27.4 for the control, at the flat row.
+> In 2009–2017 the control won on both Sharpe and CAGR: not every name the screen kept out was a
+> trap.

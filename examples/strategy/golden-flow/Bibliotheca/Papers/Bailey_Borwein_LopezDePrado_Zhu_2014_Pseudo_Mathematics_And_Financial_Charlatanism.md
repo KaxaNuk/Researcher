@@ -15,13 +15,13 @@ performance.
 
 ## What it implies for Golden Flow
 
-> Rewritten on 2026-10-07 for this copy, after FINDINGS_1.md reported.
+> Rewritten on 2026-10-27 for this copy, after FINDINGS_1.md reported on Sharadar.
 >
-> **Claims 1 and 2 are confirmed in sample, and this paper is why that is not yet evidence.** Paper
-> trading is the first test the search did not touch.
+> **Every claim here is measured in sample, and this paper is why that is not yet evidence.** Paper
+> trading is the first test the search did not touch, and no Golden Flow book has one.
 >
-> The book was frozen on 2026-10-06. Its kill switch — the result that retires it instead of tuning
-> it — is first read on 2027-10-06 ([`BITACORA.md`](../../Paper_Trading/BITACORA.md)). Its
-> parameters froze with it: a paper-trading script re-fits nothing. Nothing in this copy is out of
-> sample; only days on paper can be
-> ([`FINDINGS_1.md`](../../Experiments/Experiment_1/FINDINGS_1.md), open item 1).
+> Experiment 1 reads as sound and regime-dependent, which is not paper traded alone
+> ([`BITACORA.md`](../../Paper_Trading/BITACORA.md)). Its periods, 2000–2008 failed and 2018–2026
+> earned, were fixed by the blueprint before the run, so they are not cut around the result; they
+> are still in sample. Nothing after 2026-08-14 exists in the index or the factor model
+> ([`FINDINGS_1.md`](../../Experiments/Experiment_1/FINDINGS_1.md), *Caveats*).

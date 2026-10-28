@@ -21,7 +21,7 @@ root; if you were not told which strategy or which `N`, ask your caller and stop
 4. Every `Bibliotheca/` note the draft cites, through `Bibliotheca/BIBLIOGRAPHY.md`, which also says
    which sources are still leads with no note.
 5. `RESULTS.md`, section *Before any experiment* — the analyzer's measurements, each with the
-   section of `Data/analyzer.ipynb` it came from.
+   section of `Data/analyzer_marimo.py` it came from.
 6. `Experiments/Experiment_N/JOURNAL_N.md`, its entry *the rule read back* — or the read-back your
    caller handed you, when it is not saved yet: the rule in one plain sentence and one worked
    date's book.
