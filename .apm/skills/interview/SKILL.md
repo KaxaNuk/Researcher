@@ -354,7 +354,7 @@ description: >
   written from here. It does NOT answer from the library (the `query` skill, or the `<slug>` agent,
   does).
 metadata:
-  version: 0.5.1
+  version: 0.5.2
 ---
 
 <Name> is the home at `<absolute path to the home>`: the library, <owner>'s voice and questions in

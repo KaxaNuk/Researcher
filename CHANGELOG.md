@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
+## [1.25.1] - 2026-10-27
+Your researcher's own skill now knows the package's new address too, and `update` brings it.
+
+**What to do differently:** say `update` in your home; `next` reminds you, as your researcher's
+skill is now behind the package.
+### Changed
+- **`interview`**, the researcher's skill template: 0.5.2. Its *which version are you?* reads the
+  package's lock entry under `kaxanuk/researcher` or the former `kaxanuk/kaxanuk-researcher`, and a
+  command on an assistant with none is read under the new folder, as 1.25.0 left them, so `update`
+  writes a home's skill again, its owner's own lines kept. A frozen file, changed on the owner's
+  word of 2026-10-27 to finish the move; its fingerprint in `FROZEN.json` moves with it.
+
 ## [1.25.0] - 2026-10-27
 Your researcher now installs from the package's new address on GitHub, KaxaNuk/Researcher, and
 moves an older install there when you say `update`.
