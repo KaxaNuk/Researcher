@@ -29,6 +29,7 @@ LEFT_BEHIND_FILES = [
     'Config/.env',
     'Data/.ipynb_checkpoints/analyzer-checkpoint.ipynb',
     'Data/Prices.ENV',
+    'Data/__marimo__/session/analyzer_marimo.py.json',
     '__pycache__/module.cpython-313.pyc',
     'apm_modules/KaxaNuk/KaxaNuk-Researcher/apm.yml',
     'dist/fcf_screen-0.1.0.tar.gz',
@@ -370,12 +371,12 @@ def test_main_only_copies_one_path_and_never_overwrites(
         'strategy',
         str(strategy),
         '--only',
-        'Data/analyzer.ipynb',
+        'Data/analyzer_marimo.py',
         '--package',
         str(REPOSITORY),
     ]
-    template_file = REPOSITORY / 'templates' / 'strategy' / 'Data' / 'analyzer.ipynb'
-    copied_file = strategy / 'Data' / 'analyzer.ipynb'
+    template_file = REPOSITORY / 'templates' / 'strategy' / 'Data' / 'analyzer_marimo.py'
+    copied_file = strategy / 'Data' / 'analyzer_marimo.py'
     first_run = scaffold.main(only)
     copied = copied_file.read_bytes()
     second_run = scaffold.main(only)
@@ -391,7 +392,7 @@ def test_main_only_copies_one_path_and_never_overwrites(
     assert third_run == 1
     assert 'Nothing was copied; these files already exist with other content:' in printed_third
     assert copied_file.read_bytes() == b'{"cells": []}\n'
-    assert _copied_files(strategy) == ['Data/analyzer.ipynb']
+    assert _copied_files(strategy) == ['Data/analyzer_marimo.py']
 
 
 @pytest.mark.parametrize(
