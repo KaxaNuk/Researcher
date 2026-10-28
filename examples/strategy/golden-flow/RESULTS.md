@@ -20,6 +20,13 @@
 > of `Paper_Trading/BITACORA.md`. Versions such as 0.15.0 and 0.16.0 below are Golden Flow's own;
 > the earlier ones are not in this copy. A table whose row reads as an instruction is the template's
 > shape, and Golden Flow's follows it.
+>
+> **0.22.0: Experiment 1 reads as sound and regime-dependent, and goes to paper on probation** as
+> `Paper_Trading_1`, on the owner's sign-off of 2026-10-27 — the book as it is, no regime filter,
+> at the flat 5 bp row, for 12 months to a review on 2027-10-27 against the KN US Equity Core and
+> its control. No number moves: the gate in two layers is in
+> [`FINDINGS_1.md`](Experiments/Experiment_1/FINDINGS_1.md), and the book's registration in
+> [`Paper_Trading/BITACORA.md`](Paper_Trading/BITACORA.md).
 
 <!-- example: end -->
 
@@ -47,7 +54,8 @@ whole (Attribution Analysis 0.5.0, textbook Brinson-Fachler by KN sector, Carino
 
 **It reads as sound and regime-dependent, and it is tradeable.** Every soundness criterion of the
 gate holds; over the whole window the book loses to its index at both cost rows, and it earned in
-2018–2026 alone of the blueprint's three sub-periods. It is not paper traded alone. Twelve dates a
+2018–2026 alone of the blueprint's three sub-periods. It goes to paper on probation as
+`Paper_Trading_1`, on the owner's sign-off of 2026-10-27. Twelve dates a
 year, about twenty orders on each, two turns a year.
 
 <!-- example: end -->
@@ -136,7 +144,7 @@ sound and regime-dependent with its periods named, or not sound with the soundne
 
 | Exp | Book | CAGR | Sharpe | Max DD | Control Sharpe | vs control | Status | Claim moved | Findings |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- | --- | --- |
-| **1** | KN US Equity Core members above the golden cross, ranked and weighted by 63-day traded value, cap 20%, floor 1%, **monthly**, next-open fill, a half-point band, cash at Fed funds less half a point; Sharadar, 2000–2026 | **6.21%** (flat 5 bp: 7.72%) | **0.162** (0.221) | −82.6% (−78.4%) | 0.097 (0.117) | **+0.065** (+0.105) | **sound and regime-dependent**: S1 to S5 hold; P1 and P3 fail at both cost rows and P2 is not evidenced; it earned in 2018–2026 and failed in 2000–2008 and 2009–2017; not paper traded | 1, the signal: **confirmed against its control only**; 2, the sizing: **confirmed as a book against equal weight**; 3: true on the targets | [`FINDINGS_1.md`](Experiments/Experiment_1/FINDINGS_1.md) |
+| **1** | KN US Equity Core members above the golden cross, ranked and weighted by 63-day traded value, cap 20%, floor 1%, **monthly**, next-open fill, a half-point band, cash at Fed funds less half a point; Sharadar, 2000–2026 | **6.21%** (flat 5 bp: 7.72%) | **0.162** (0.221) | −82.6% (−78.4%) | 0.097 (0.117) | **+0.065** (+0.105) | **sound and regime-dependent**: S1 to S5 hold; P1 and P3 fail at both cost rows and P2 is not evidenced; it earned in 2018–2026 and failed in 2000–2008 and 2009–2017; on paper on probation as `Paper_Trading_1` from 2026-10-27 | 1, the signal: **confirmed against its control only**; 2, the sizing: **confirmed as a book against equal weight**; 3: true on the targets | [`FINDINGS_1.md`](Experiments/Experiment_1/FINDINGS_1.md) |
 | 1, earlier, on FMP | KN US Equity Core members above the golden cross, ranked and weighted by 63-day traded value, cap 20%, floor 1%, on change; FMP, 2015–2026 | 20.33% | 0.842 | −32.5% | 0.763 | +0.080 | replaced; under the gate's earlier form, criteria 1 to 4 passed and the owner signed it into paper trading on 2026-10-06; retired on 2026-10-24, when Sharadar became the only provider | 1 and 2 confirmed as a book on that window, which no longer stands | not part of this example |
 | 1, earlier, another index | an earlier version, on another index | 24.69% | 0.948 | −34.6% | 0.842 | +0.106 | replaced | the objective of its time; none of it carries over | not part of this example |
 
@@ -328,7 +336,8 @@ The single highest-value run outstanding, and what it would settle. Then the nex
 4. **The deflated Sharpe** against 152 trials. Publishing the count is the minimum, not the answer.
 5. **The shifted-entry timing arm**, not run by the gate written before the run, so timing skill is
    not separated from selection.
-6. **Paper days.** No book is on paper, so nothing here has an out-of-sample test.
+6. **Paper days.** `Paper_Trading_1` is on paper on probation from 2026-10-27, to its review on
+   2027-10-27; until it has days on paper, nothing here has an out-of-sample test.
 
 <!-- example: end -->
 
@@ -366,7 +375,8 @@ a complete one.**
 
 **Limitations 1, 2, 4 and 6 hold here, with qualifications.**
 
-- **1.** No book is on paper, and nothing after 2026-08-14 exists in the Core or the factor model.
+- **1.** The book went to paper on probation only on 2026-10-27, and nothing after 2026-08-14
+  exists in the Core or the factor model.
 - **2.** The control that differs in exactly one thing exists: the golden cross off, on the rule's
   own dates. With the equal-weight arm and the random books, it separates the filter, the sizing and
   the selection. What is missing is the shifted-entry timing arm.

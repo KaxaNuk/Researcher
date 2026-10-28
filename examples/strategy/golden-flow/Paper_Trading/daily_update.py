@@ -1,17 +1,17 @@
 """
-The daily run over every graduated book -- step 7 of the KaxaNuk Strategy Template.
+The daily run over every book on paper -- step 7 of the KaxaNuk Strategy Template.
 
 In plain words: once a day, after the market closes, refresh the data, run each frozen strategy
-exactly as it was when it graduated, price it with the engine, and write down what happened --
+exactly as it was frozen, price it with the engine, and write down what happened --
 how the book is doing over its whole history and since the day it was frozen, and anything that
 does not look like the backtest said it would.
 
-A graduated book is a frozen copy of the strategy, made once by `promote.py`: the files it needs,
-copied byte for byte into `Paper_Trading_N/` in the strategy's own layout, with `FREEZE.json`
-naming the commit, the date and the hash of each.  Every path in those copies resolves inside the
-book's folder, so an experiment under construction can change the shared modules and the graduated
-book never moves.  **A paper-trading run re-fits nothing**: a run that tunes anything is a
-backtest wearing a costume, and it answers a question nobody asked.
+A book on paper, graduated or on probation, is a frozen copy of the strategy, made once by
+`promote.py`: the files it needs, copied byte for byte into `Paper_Trading_N/` in the strategy's
+own layout, with `FREEZE.json` naming the commit, the date and the hash of each.  Every path in
+those copies resolves inside the book's folder, so an experiment under construction can change
+the shared modules and the book never moves.  **A paper-trading run re-fits nothing**: a run
+that tunes anything is a backtest wearing a costume, and it answers a question nobody asked.
 
 What one run does, in order:
 
@@ -51,16 +51,11 @@ passes to get here.
 
 # --- example: begin ---
 
-# Golden Flow has no book on paper: its Experiment 1 reads as sound and regime-dependent, which is
-# not paper traded alone, as `Paper_Trading/BITACORA.md` says.  This is the working daily run a
-# book that graduates would take.
-
 import argparse
 import datetime
 import hashlib
 import importlib.metadata
 import importlib.util
-import io
 import json
 import os
 import pathlib
@@ -79,19 +74,21 @@ __all__ = [
     "main",
 ]
 
-# The graduated books, by folder name.  A book is added here in the commit that freezes it, and
-# removed in the commit that sends it to production or retires it.  None is on paper, as
-# `BITACORA.md` records.
-BOOKS = ()
+# The books on paper, by folder name.  A book is added here in the commit that freezes it, and
+# removed in the commit that sends it to production or retires it.  `Paper_Trading_1` is Experiment
+# 1 on paper on probation, frozen on 2026-10-27; the folder's earlier book, the 0.15.2 one on FMP
+# data, was retired on 2026-10-24, as `BITACORA.md` records.
+BOOKS = (
+    "Paper_Trading_1",
+)
 
 PAPER_TRADING_DIRECTORY = pathlib.Path(__file__).parent
 REPOSITORY_ROOT = PAPER_TRADING_DIRECTORY.parent
 CURATOR_CALCULATIONS_PATH = REPOSITORY_ROOT / "Data" / "Curator" / "custom_calculations.py"
 CURATOR_DIRECTORY = REPOSITORY_ROOT / "Data" / "Curator" / "Time_Series"
 CURATOR_SCRIPT = REPOSITORY_ROOT / "Data" / "curator.py"
-# The Analytics Factory's drop zones, linked into a book's folder beside the raw files, because the
-# frozen reader of the Analytics Factory's files looks for them next to itself when
-# `KN_ANALYTICS_PATH` is empty.
+# The desk's drop zones, linked into a book's folder beside the raw files, because the frozen
+# reader of the desk's files looks for them next to itself when `KN_ANALYTICS_PATH` is empty.
 HAND_SUPPLIED_DIRECTORIES = (
     "Benchmarks",
     "Factors",
@@ -103,13 +100,21 @@ LOG_DIRECTORY = PAPER_TRADING_DIRECTORY / "Logs"
 RECORD_DIRECTORY = PAPER_TRADING_DIRECTORY / "Record"
 RECORD_PATH = PAPER_TRADING_DIRECTORY / "record.py"
 SEED_PATH = REPOSITORY_ROOT / "Universe" / "Investable_Universe.csv"
+TIME_SERIES_PATH = REPOSITORY_ROOT / "Data" / "time_series.py"
+# The Sharadar pipeline writes every price file as Parquet; the raw files linked into a book's
+# folder, and the day's manifest, are these.
+RAW_FILE_SUFFIX = ".parquet"
 
-# The cash proxy and the benchmark every book is priced with.  A day they have not reached is a day
-# no book can be valued on.
-CASH_AND_BENCHMARK = (
-    "BIL",
-    "SPY",
-)
+# The benchmark every book is priced with: a day it has not reached is a day no book can be valued
+# on, so its newest day is the day the books run on.  The cash rate the engine pays may trail it --
+# the engine reads its last observation on or before each day -- and is flagged when it trails by
+# more than a weekend and a holiday.
+BENCHMARK_IDENTIFIER = "SPY"
+CASH_RATE_IDENTIFIER = "DFF"
+# The columns the newest-day checks read: the open every book is filled at, and the close it is
+# marked at, both dividend-and-split adjusted.
+CLOSE_COLUMN = "c_close_dividend_and_split_adjusted"
+FILL_COLUMN = "c_open_dividend_and_split_adjusted"
 DEFAULT_DATABASE = "Paper_Trading/paper_trading.duckdb"
 EXIT_CLEAN = 0
 EXIT_FAILED = 2
@@ -122,12 +127,11 @@ IMPOSSIBLE_MOVE = 6.0
 BAND_TOLERANCE = 1e-9
 # No run takes this long, so a lock older than this was left by a run that was killed.
 STALE_LOCK_HOURS = 12
-# The cash proxy and the benchmark may trail the day asked for by a weekend and a holiday.
+# The benchmark and the cash rate may trail the day asked for by a weekend and a holiday.
 STALE_PRICE_DAYS = 4
-# The Analytics Factory's index files are refreshed by hand; older than this, membership is being
-# held at their last date and every run says so.
+# The desk's index files are refreshed by hand; older than this, membership is being held at their
+# last date and every run says so.
 STALE_INDEX_DAYS = 7
-TAIL_BYTES = 16384
 
 
 def check_market_data(
@@ -136,27 +140,44 @@ def check_market_data(
     """
     Read the newest rows of every price file and say what is wrong with the day, before any book.
 
-    Returns the day the books are run on -- the last day the cash proxy and the benchmark both
-    reached, never later than the day asked for -- and the flags.  Only the last two rows of each
-    file are read, so the check costs seconds, not the minutes a full read of the panel would.
+    Returns the day the books are run on -- the last day the benchmark reached, never later than
+    the day asked for -- and the flags.  Only the date and the two price columns of each file are
+    read, so the check costs seconds, not the minutes a full read of the panel would.
     """
+    reader = _load_module(
+        "paper_trading_time_series",
+        TIME_SERIES_PATH,
+    )
     flags = []
-    newest_dates = []
-
-    for identifier in CASH_AND_BENCHMARK:
-        reference_rows = _read_last_rows(CURATOR_DIRECTORY / f"{identifier}.csv")
-        newest_date = reference_rows["m_date"].max()
-        newest_dates.append(newest_date.date())
-
+    benchmark_rows = _read_last_rows(
+        reader,
+        BENCHMARK_IDENTIFIER,
+        ("m_date",),
+    )
+    benchmark_end = benchmark_rows["m_date"].max().date()
     effective = min(
-        min(newest_dates),
+        benchmark_end,
         as_of,
     )
 
     if effective < as_of - datetime.timedelta(days=STALE_PRICE_DAYS):
         flags.append(_flag(
             "stale-input",
-            f"the cash proxy and the benchmark end {effective}, the day asked for is {as_of}",
+            f"the benchmark ends {effective}, the day asked for is {as_of}",
+            "flag",
+        ))
+
+    rate_rows = _read_last_rows(
+        reader,
+        CASH_RATE_IDENTIFIER,
+        ("m_date",),
+    )
+    rate_end = rate_rows["m_date"].max().date()
+
+    if rate_end < effective - datetime.timedelta(days=STALE_PRICE_DAYS):
+        flags.append(_flag(
+            "stale-input",
+            f"the cash rate ends {rate_end}: the engine pays its last observation until it moves",
             "flag",
         ))
 
@@ -164,14 +185,17 @@ def check_market_data(
     identifiers = seed["main_identifier"].dropna()
 
     for identifier in identifiers:
-        path = CURATOR_DIRECTORY / f"{identifier}.csv"
+        path = reader.path_for(
+            CURATOR_DIRECTORY,
+            identifier,
+        )
 
         if not path.is_file():
             continue
 
         flags.extend(_check_newest_row(
+            reader,
             identifier,
-            path,
             effective,
         ))
 
@@ -302,12 +326,11 @@ def _band_flags(
 def _benchmark_frame(
     book: str,
     window: str,
-    benchmark_table: object,
+    frame: "pandas.DataFrame",
 ) -> "pandas.DataFrame":
     """
     The engine's benchmark over the book's own window, as rows of the performance table.
     """
-    frame = benchmark_table.to_pandas()
     dates = pandas.to_datetime(frame["date_column"])
     iso_dates = [
         timestamp.date().isoformat()
@@ -325,15 +348,23 @@ def _benchmark_frame(
 
 
 def _check_newest_row(
+    reader: "types.ModuleType",
     identifier: str,
-    path: "pathlib.Path",
     effective: "datetime.date",
 ) -> list[dict[str, str]]:
     """
-    The two checks a security's newest day has to pass: a fill price, and a possible move.
+    The two checks a security's newest day has to pass: an open to fill at, and a possible move.
     """
     flags = []
-    rows = _read_last_rows(path)
+    rows = _read_last_rows(
+        reader,
+        identifier,
+        (
+            "m_date",
+            FILL_COLUMN,
+            CLOSE_COLUMN,
+        ),
+    )
     newest = rows.iloc[-1]
     newest_date = newest["m_date"].date()
 
@@ -341,16 +372,16 @@ def _check_newest_row(
 
         return flags
 
-    if pandas.isna(newest["c_vwap_dividend_and_split_adjusted"]):
+    if pandas.isna(newest[FILL_COLUMN]):
         flags.append(_flag(
             "missing-fill-price",
-            f"{identifier} closed on {effective} with no fill price",
+            f"{identifier} closed on {effective} with no open to fill at",
             "stop",
         ))
 
     if len(rows) > 1:
-        previous_close = rows.iloc[-2]["m_close_dividend_and_split_adjusted"]
-        ratio = newest["m_close_dividend_and_split_adjusted"] / previous_close
+        previous_close = rows.iloc[-2][CLOSE_COLUMN]
+        ratio = newest[CLOSE_COLUMN] / previous_close
 
         if ratio > IMPOSSIBLE_MOVE or ratio < 1 / IMPOSSIBLE_MOVE:
             flags.append(_flag(
@@ -387,15 +418,20 @@ def _engine_tables(
     """
     The engine's daily values and statistics for each window and series, as the record keys them.
 
-    The benchmark is read from the book's own run, so it is priced on the same days.  Only numbers
-    the engine returned are copied; nothing here computes one.
+    Each answer is the frozen engine module's, a dictionary of plain pandas objects: the daily
+    register, the statistics, and each benchmark's daily values and statistics, the first benchmark
+    priced -- the index, or `SPY` while the index lags the day -- recorded as the book's.  The
+    benchmark is read from the book's own run, so it is priced on the same days.  Only numbers the
+    engine returned are copied; nothing here computes one.
     """
     performance_frames = []
     statistic_rows = []
     as_of = run.as_of.isoformat()
 
     for (window, series), result in run.results.items():
-        register = result.data["Register_df"]
+        register = result["register"]
+        benchmark_values = result["benchmark_values"]
+        benchmark_identifier = next(iter(benchmark_values))
         dates = [
             timestamp.date().isoformat()
             for timestamp in register.index
@@ -412,11 +448,11 @@ def _engine_tables(
             performance_frames.append(_benchmark_frame(
                 book,
                 window,
-                result.data["benchmark"],
+                benchmark_values[benchmark_identifier],
             ))
 
         statistic_rows.extend(_statistic_rows(
-            result.data["portfolio_stats"],
+            result["portfolio_stats"],
             [
                 book,
                 as_of,
@@ -427,7 +463,7 @@ def _engine_tables(
 
         if series == "book":
             statistic_rows.extend(_statistic_rows(
-                result.data["benchmark_stats"],
+                result["benchmarks_stats"][benchmark_identifier],
                 [
                     book,
                     as_of,
@@ -538,7 +574,7 @@ def _hash_inputs() -> str:
     """
     digest = hashlib.sha256()
 
-    for path in sorted(CURATOR_DIRECTORY.glob("*.csv")):
+    for path in sorted(CURATOR_DIRECTORY.glob(f"*{RAW_FILE_SUFFIX}")):
         digest.update(path.name.encode("utf-8"))
         digest.update(path.read_bytes())
 
@@ -549,12 +585,11 @@ def _link_hand_supplied(
     book_directory: "pathlib.Path",
 ) -> int:
     """
-    Give the book's folder the Analytics Factory's index and factor files, linked as the raw files
-    are.
+    Give the book's folder the desk's index and factor files, linked as the raw files are.
 
     The frozen `Data/hand_supplied.py` resolves its drop zones from where it sits, so a book reads
-    the index from its own folder; the files are the Analytics Factory's and never the book's, which
-    is why `.gitignore` keeps them out of git.
+    the index from its own folder; the files are the desk's and never the book's, which is why
+    `.gitignore` keeps them out of git.
     """
     linked = []
 
@@ -597,10 +632,10 @@ def _link_raw_files(
         exist_ok=True,
     )
 
-    for stale in target.glob("*.csv"):
+    for stale in target.glob(f"*{RAW_FILE_SUFFIX}"):
         stale.unlink()
 
-    sources = sorted(CURATOR_DIRECTORY.glob("*.csv"))
+    sources = sorted(CURATOR_DIRECTORY.glob(f"*{RAW_FILE_SUFFIX}"))
 
     for source in sources:
         destination = target / source.name
@@ -648,32 +683,27 @@ def _note(
 
 
 def _read_last_rows(
-    path: "pathlib.Path",
+    reader: "types.ModuleType",
+    identifier: str,
+    columns: tuple[str, ...],
 ) -> "pandas.DataFrame":
     """
-    The header and the last two rows of a price file, without reading the rest of it.
+    The last two rows of a price file, in the columns asked for, read through `Data/time_series.py`.
+
+    A Parquet file is read by column, so three columns of a whole file cost milliseconds.
     """
-    with path.open("rb") as handle:
-        header_bytes = handle.readline()
-        size = handle.seek(0, os.SEEK_END)
-        handle.seek(max(0, size - TAIL_BYTES))
-        tail_bytes = handle.read()
-
-    header = header_bytes.decode("utf-8-sig")
-    tail = tail_bytes.decode("utf-8", errors="replace")
-    complete_lines = tail.splitlines()[1:]
-    lines = [
-        line
-        for line in complete_lines
-        if line.strip()
-    ]
-    body = "\n".join(lines[-2:])
-    buffer = io.StringIO(f"{header}{body}\n")
-
-    return pandas.read_csv(
-        buffer,
-        parse_dates=["m_date"],
+    path = reader.path_for(
+        CURATOR_DIRECTORY,
+        identifier,
     )
+    frame = reader.read_frame(
+        path,
+        columns,
+    )
+    dates = pandas.to_datetime(frame["m_date"])
+    dated = frame.assign(m_date=dates)
+
+    return dated.tail(2).reset_index(drop=True)
 
 
 def _read_settings(

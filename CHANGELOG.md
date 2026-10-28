@@ -33,9 +33,12 @@ copy of Golden Flow.
 - **The worked example, Golden Flow 0.18.0**, is curated again from its live repository at 0.21.0,
   Experiment 1 only, on the owner's decision of 2026-10-27, which sets aside once `AGENTS.md`'s
   rule that nothing is taken from a live strategy after the copy: Sharadar from 1998, a monthly
-  rule, every cost inside the engine. Its Experiment 1 reads as sound and regime-dependent;
-  `Paper_Trading_1`, the earlier FMP book, leaves it; its seed holds tickers and dates only. Its
-  step 6 needs Attribution Analysis 0.5.0.
+  rule, every cost inside the engine. Its Experiment 1 reads as sound and regime-dependent, and is
+  **on paper on probation** as `Paper_Trading_1`, frozen at the live strategy's commit `0041695` on
+  2026-10-27 to a review on 2027-10-27, in place of the earlier FMP book: its registration in
+  `BITACORA.md`, its frozen files and `daily_update.py`, which runs it each day, show step 7 as a
+  book on paper reads. Its seed holds tickers and dates only, so in this copy the book is a record
+  the daily run stops at its seed's hash. Its step 6 needs Attribution Analysis 0.5.0.
 - **The Lab's skills follow it**: `universe-point-in-time` 0.4.0 and `data-analyzer-runs` 0.3.0;
   `data-curator-custom-calculations` 0.7.0, its `library_version` 0.51.0, checked by Golden Flow's
   run of 2026-10-24 from emptied data folders; `backtest-engine-runs` 0.5.0, its `library_version`

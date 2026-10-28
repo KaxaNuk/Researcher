@@ -2,12 +2,12 @@
 The frozen book of Experiment 1 -- step 7 of 8.  `Paper_Trading_N` mirrors the `Experiment_N` it
 was promoted from, so the lineage of a paper-traded book is never in question.
 
-In plain words: the rule that graduated, **copied out of the experiment notebook and then left
-alone**.  The notebook is the record of how the rule was *chosen*, including everything tried and
-rejected, and it stays free for the next piece of research.  This file is the record of what is
+In plain words: the rule that went to paper, **copied out of the experiment notebook and then
+left alone**.  The notebook is the record of how the rule was *chosen*, including everything tried
+and rejected, and it stays free for the next piece of research.  This file is the record of what is
 *being traded*, and a change to it is a change to a live book, not a change to an experiment.
 
-What it holds, once its experiment graduates:
+What it holds, once its experiment graduates or a person puts it on paper on probation:
 
 - the rule's settings, copied from the experiment notebook, and its costs;
 - the rule itself, in the form the notebook ran it, with its control -- the same rule with one
@@ -34,7 +34,7 @@ name of its own, never the shared one in `Experiments/`: that is what keeps it f
 nothing, and it computes no performance figure -- the engine does.
 
 `../daily_update.py` calls into here; it never re-derives the rule itself.  A strategy with no
-graduated book keeps this file as it is: the contract, with no logic.
+book on paper keeps this file as it is: the contract, with no logic.
 
 See `../BITACORA.md` for the gate, and `../../RESULTS.md` for the numbers a candidate is judged on.
 """

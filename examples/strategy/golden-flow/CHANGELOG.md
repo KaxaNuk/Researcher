@@ -48,8 +48,8 @@ Experiment 1 only, on the owner's decision of 2026-10-27: Sharadar prices and th
 from 1998, a monthly rule from 2000 to 2026, every cost and the cash's interest inside the engine.
 Read through the new two-layer gate, Experiment 1 is **sound and regime-dependent**: every
 soundness criterion holds; the book beats its control in 2000–2008 and 2018–2026 and the Core only
-in 2018–2026, and loses to the Core and `SPY` on Sharpe over the whole window. It is not paper
-traded.
+in 2018–2026, and loses to the Core and `SPY` on Sharpe over the whole window. It is **on paper on
+probation**, by the owner's sign-off of 2026-10-27, for 12 months to a review on 2027-10-27.
 
 **What to do differently:** say `init-example` for a fresh copy. Running it needs a Sharadar key,
 the Lab's licences and, for step 6, Attribution Analysis 0.5.0.
@@ -67,10 +67,14 @@ the Lab's licences and, for step 6, Attribution Analysis 0.5.0.
 - **`Bibliotheca/`**: Daniel and Moskowitz (2016), which the blueprint cites, is carried in; every
   note's implications are rewritten for the Sharadar figures.
 
-### Removed
-
-- **`Paper_Trading/Paper_Trading_1/`**, the FMP book of 2026-10-06, retired as the live repository
-  retired it on 2026-10-24. The step-7 scripts stay, with no book in `BOOKS`.
+- **`Paper_Trading/Paper_Trading_1/`** is Experiment 1 on paper on probation, frozen at Golden
+  Flow's commit `0041695` on 2026-10-27, in place of the FMP book of 2026-10-06, which the live
+  repository retired on 2026-10-24: `FREEZE.json` and the files it hashes, `paper_trading_1.py`,
+  and its registration in `BITACORA.md`, with the findings, journal entry and status carried from
+  the live strategy's 0.22.0. The book's seed copy keeps tickers and dates only, so in this copy
+  it is a record, which `daily_update.py` stops at its seed's hash.
+- **The step-7 scripts** are the live strategy's: `daily_update.py` reads the Sharadar files, and
+  `promote.py` freezes only on a committed sign-off line. `BOOKS` names `Paper_Trading_1`.
 
 ## 0.17.9 (2026-10-27)
 

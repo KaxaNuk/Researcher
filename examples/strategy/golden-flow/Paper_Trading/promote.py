@@ -12,10 +12,14 @@ its own folder, the copies read and write inside the book's folder alone: an exp
 construction can change the shared modules tomorrow, and the graduated book never moves.
 
 What it copies is listed in `FROZEN_FILES`, and it refuses to run on a working tree with changes
-to tracked files: a freeze of code nobody committed is a freeze nobody can reproduce.  The rule
-itself is not copied here -- it lives in a cell of the experiment's marimo notebook -- so
-`paper_trading_N.py` carries it, written from the experiment's cells and committed before the
-promotion.
+to tracked files: a freeze of code nobody committed is a freeze nobody can reproduce.  It refuses
+too unless the book's section of the committed `BITACORA.md`, headed `### Paper_Trading_N`, holds
+exactly one sign-off line -- a person, a date and one of the two outcomes that put a book on
+paper, graduating or sound and regime-dependent, on paper on probation -- and, for a book on
+probation, the terms it is read against at its review.  It checks that a person signed, never what
+the gate should have said, which is theirs.  The rule itself is not copied here -- it lives in a
+cell of the experiment's marimo notebook -- so `paper_trading_N.py` carries it, written from the
+experiment's cells and committed before the promotion.
 
 Two things cannot be copied, because every book shares them: the raw price files, and the
 calculations the Curator runs while it writes them.  `FREEZE.json` records the hash of those
@@ -27,8 +31,8 @@ the provider's data.  It is copied from disk and hashed like the rest, and `.git
 book's copy out of git, as it keeps the one in `Universe/`: it stays on the machine that froze the
 book, backed up with the record.
 
-It produces `Paper_Trading_N/` with its frozen files and `FREEZE.json`, committed by a person, all
-but the security master.
+It produces `Paper_Trading_N/` with its frozen files and `FREEZE.json` -- the sign-off it froze on
+among them -- committed by a person, all but the security master.
 
 It prevents a graduated book changing because somebody improved the code it was frozen on.
 """
@@ -41,6 +45,7 @@ import hashlib
 import importlib.metadata
 import json
 import pathlib
+import re
 import subprocess
 import sys
 
@@ -51,14 +56,15 @@ __all__ = [
 
 PAPER_TRADING_DIRECTORY = pathlib.Path(__file__).parent
 REPOSITORY_ROOT = PAPER_TRADING_DIRECTORY.parent
+BITACORA_PATH = "Paper_Trading/BITACORA.md"
 
 # Everything between the raw price files and the priced book, from the commit: the refinery and its
-# calculations, the reader of the Analytics Factory's files, the shared modules the rule calls, and
-# the seed.
+# calculations, the reader of the desk's files, the shared modules the rule calls, and the seed.
 FROZEN_FILES = (
     "Data/Refinery/custom_calculations.py",
     "Data/hand_supplied.py",
     "Data/refinery.py",
+    "Data/time_series.py",
     "Experiments/backtest_engine.py",
     "Experiments/portfolio_construction.py",
     "Experiments/securities_panel.py",
@@ -74,6 +80,23 @@ LIBRARIES = (
     "kaxanuk-data-curator",
     "numpy",
     "pandas",
+    "pyarrow",
+)
+# The two outcomes of the gate that put a book on paper, as a sign-off line in the book's section
+# of `BITACORA.md` says them: "Signed off by <name> on <YYYY-MM-DD>, as <outcome>".
+SIGN_OFF_OUTCOMES = (
+    "graduating",
+    "sound and regime-dependent, on paper on probation",
+)
+SIGN_OFF_PATTERN = re.compile(
+    r"Signed off by (?P<person>[^*]+?) on (?P<date>\d{4}-\d{2}-\d{2}), as (?P<outcome>[^*.]+)",
+)
+# What a book on probation registers beside its sign-off, each a bold label in its section.
+PROBATION_TERMS = (
+    "**The regime prediction.**",
+    "**The probation.**",
+    "**The kill switch",
+    "**The bands**",
 )
 SHARED_CALCULATIONS = "Data/Curator/custom_calculations.py"
 
@@ -119,6 +142,10 @@ def main() -> int:
 
         raise SystemExit(dirty_message)
 
+    sign_off = _read_sign_off(
+        arguments.number,
+        _git_bytes(f"HEAD:{BITACORA_PATH}").decode("utf-8"),
+    )
     commit = _git(
         "rev-parse",
         "HEAD",
@@ -151,6 +178,7 @@ def main() -> int:
         "freeze_date": arguments.freeze_date,
         "files": hashes,
         "libraries": libraries,
+        "sign_off": sign_off,
         "shared_inputs": {
             SHARED_CALCULATIONS: shared_hash.hexdigest(),
             "kaxanuk-data-curator": libraries["kaxanuk-data-curator"],
@@ -168,6 +196,7 @@ def main() -> int:
     )
     print(f"froze Paper_Trading_{arguments.number} at {commit[:12]}")
     print(f"on paper from {arguments.freeze_date}")
+    print(f"signed off by {sign_off['person']} on {sign_off['date']}, as {sign_off['outcome']}")
     relative_book = book_directory.relative_to(REPOSITORY_ROOT)
     print(f"commit it: git add {relative_book.as_posix()}")
     generated_names = ", ".join(GENERATED_FILES)
@@ -214,6 +243,94 @@ def _git_bytes(
     )
 
     return completed.stdout
+
+
+def _read_sign_off(
+    number: int,
+    bitacora: str,
+) -> dict[str, str]:
+    """
+    The sign-off of book N, read from its sections of the committed `BITACORA.md`, or a refusal.
+
+    A section of book N is one headed `### Paper_Trading_N`, up to the next heading of its level or
+    above; a folder retired and later reused keeps its earlier section, never edited, so there may
+    be several.  Exactly one sign-off line must name a person, a date and one of the two outcomes
+    that put a book on paper, its lines read as one, however the paragraph wraps; a book on
+    probation must also carry, in that section, the terms it is read against at its review.
+    """
+    sections = _sections_of_book(
+        number,
+        bitacora,
+    )
+    signed = [
+        (match, section)
+        for section in sections
+        for match in SIGN_OFF_PATTERN.finditer(section)
+        if match.group("outcome").strip() in SIGN_OFF_OUTCOMES
+    ]
+
+    if len(signed) != 1:
+        sign_off_message = " ".join([
+            f"{BITACORA_PATH} holds no single sign-off for Paper_Trading_{number}, as graduating",
+            "or as sound and regime-dependent, on paper on probation: a person signs first",
+        ])
+
+        raise SystemExit(sign_off_message)
+
+    match, section = signed[0]
+    sign_off = {
+        "person": match.group("person").strip(),
+        "date": match.group("date"),
+        "outcome": match.group("outcome").strip(),
+    }
+    missing = [
+        term
+        for term in PROBATION_TERMS
+        if term not in section
+    ]
+
+    if sign_off["outcome"] != SIGN_OFF_OUTCOMES[0] and len(missing) > 0:
+        missing_terms = ", ".join(missing)
+        terms_message = f"Paper_Trading_{number} is on probation and lacks {missing_terms}"
+
+        raise SystemExit(terms_message)
+
+    return sign_off
+
+
+def _sections_of_book(
+    number: int,
+    bitacora: str,
+) -> list[str]:
+    """
+    Every section of `BITACORA.md` headed for book N, each with its lines joined by single spaces.
+    """
+    heading = re.compile(rf"^### Paper_Trading_{number}(?!\d)")
+    lines = bitacora.splitlines()
+    boundaries = [
+        position
+        for position, line in enumerate(lines)
+        if line.startswith("## ") or line.startswith("### ")
+    ]
+    ends = [
+        *boundaries[1:],
+        len(lines),
+    ]
+    sections = []
+
+    for start, end in zip(
+        boundaries,
+        ends,
+        strict=True,
+    ):
+        if not heading.match(lines[start]):
+            continue
+
+        joined = " ".join(lines[start:end])
+        words = joined.split()
+        sections.append(" ".join(words))
+
+    return sections
 
 
 def _write(

@@ -198,10 +198,16 @@ Each graduated book gets a section in *Current status*, written and committed be
 under it, dated. It holds:
 
 - the experiment it mirrors, the variant, the commit and the freeze date;
-- the gate, row by row, both layers, and the sign-off: a person's name and date;
+- the gate, row by row, both layers, and the sign-off: a person's name and date, in one line,
+  `Signed off by <name> on <YYYY-MM-DD>, as <outcome>`, the outcome *graduating* or *sound and
+  regime-dependent, on paper on probation*: `promote.py` freezes no book without it;
 - **the bands**: for each diagnostic `daily_update.py` reads, the range `FINDINGS_N.md` measured
   over the backtest, which the book's `BANDS` carries too;
 - **the kill switch**: the result that retires the book instead of tuning it;
+- for a book on probation, **the regime prediction** — where it should earn and where it should
+  lag, from its findings — and **the probation**: its length, at least 12 months, its review date
+  and the benchmarks it is read against, its index and its control. `promote.py` looks for each,
+  the bands and the kill switch too, as a bold label in the section;
 - the review dates, and the period it has to be watched before anyone proposes production;
 - what the record cannot show, said before anyone is tempted to read it there.
 

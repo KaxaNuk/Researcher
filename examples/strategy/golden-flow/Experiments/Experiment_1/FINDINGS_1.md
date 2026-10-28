@@ -29,7 +29,9 @@ claim of `OBJECTIVE.md` the blueprint named, and the status it reached — or wh
 <!-- example: begin -->
 
 **Experiment 1, rewritten on Sharadar from 2000 with a monthly rule, ran end to end on 2026-10-24
-and does not graduate.** The golden cross earns its keep against its control — the falsifier does
+and does not graduate; read in the gate's two layers on 2026-10-27, it is sound and
+regime-dependent, and the owner put it on paper on probation that day** (*The gate, in two
+layers*). The golden cross earns its keep against its control — the falsifier does
 not fire — but the book **loses to the KN US Equity Core and to `SPY` on Sharpe over 2000–2026**,
 under both cost rows, and so does every setting of the sweep: gate criteria 1 and 3 fail.
 Criterion 2 is not evidenced, because the random books the gate needs were truncated by the engine
@@ -164,9 +166,14 @@ analyzer found the cross carrying information on the pool and failed where it fo
 −0.0009 in 2009–2017 (`RESULTS.md`, rows 2 and 3). Both readings name the periods after the fact;
 neither is a condition that could be read in advance.
 
-**It is not paper traded alone.** It may be paired with another signal in a later experiment, or
-used at a portfolio manager's discretion — the decision, and its risk, are theirs. This is not a
-recommendation, and no sign-off is asked.
+**On paper on probation, by the owner's decision of 2026-10-27** (`JOURNAL_1.md`). The book goes
+to paper as it is, frozen unchanged, at the flat 5 bp row — **with no regime filter**, since the
+periods above are named only after the fact and no condition readable in advance tells them apart
+— for 12 months, read at its review against the KN US Equity Core and its control, the same rule
+without the golden cross. Its regime prediction, its bands and its kill switch are registered in
+`Paper_Trading/BITACORA.md`, *Paper_Trading_1*, before its first day. **Paper alone never sends it
+to production**: at the review the owner decides — continue, stop, or a new experiment. This is the
+owner's decision, not a recommendation.
 
 <!-- example: end -->
 

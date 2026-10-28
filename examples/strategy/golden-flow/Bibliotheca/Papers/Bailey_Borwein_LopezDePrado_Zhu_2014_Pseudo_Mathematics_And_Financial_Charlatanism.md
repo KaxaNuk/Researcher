@@ -18,10 +18,12 @@ performance.
 > Rewritten on 2026-10-27 for this copy, after FINDINGS_1.md reported on Sharadar.
 >
 > **Every claim here is measured in sample, and this paper is why that is not yet evidence.** Paper
-> trading is the first test the search did not touch, and no Golden Flow book has one.
+> trading is the first test the search did not touch, and Golden Flow's book began it only on
+> 2026-10-27.
 >
-> Experiment 1 reads as sound and regime-dependent, which is not paper traded alone
-> ([`BITACORA.md`](../../Paper_Trading/BITACORA.md)). Its periods, 2000–2008 failed and 2018–2026
-> earned, were fixed by the blueprint before the run, so they are not cut around the result; they
-> are still in sample. Nothing after 2026-08-14 exists in the index or the factor model
+> Experiment 1 reads as sound and regime-dependent, and went to paper on probation on 2026-10-27
+> ([`BITACORA.md`](../../Paper_Trading/BITACORA.md)), with no paper day read yet. Its periods,
+> 2000–2008 failed and 2018–2026 earned, were fixed by the blueprint before the run, so they are not
+> cut around the result; they are still in sample. Nothing after 2026-08-14 exists in the index or
+> the factor model
 > ([`FINDINGS_1.md`](../../Experiments/Experiment_1/FINDINGS_1.md), *Caveats*).

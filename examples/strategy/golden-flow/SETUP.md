@@ -162,9 +162,11 @@ The four `PAPER_TRADING_*` lines configure step 7. Once a book is on paper,
 
 <!-- example: begin -->
 
-**In this example no book is on paper.** Experiment 1 reads as sound and regime-dependent, which is
-not paper traded alone, so `BOOKS` in `Paper_Trading/daily_update.py` is empty and nothing reads the
-`PAPER_TRADING_*` lines; [`Paper_Trading/BITACORA.md`](Paper_Trading/BITACORA.md) says why.
+**In this example one book is on paper, `Paper_Trading_1`**: Experiment 1, sound and
+regime-dependent, on probation from 2026-10-27, which `BOOKS` in `Paper_Trading/daily_update.py`
+names and the `PAPER_TRADING_*` lines configure. In this copy it is a record: its seed keeps
+tickers and dates only and its security master stayed where it was frozen, so the daily run
+stops it; [`Paper_Trading/BITACORA.md`](Paper_Trading/BITACORA.md) registers its terms.
 
 <!-- example: end -->
 

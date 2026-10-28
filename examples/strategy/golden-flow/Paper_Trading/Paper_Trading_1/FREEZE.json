@@ -1,0 +1,32 @@
+{
+ "book": 1,
+ "commit": "0041695f1d9f5ce2ab9c5e1815aa85a4f7fb39b3",
+ "files": {
+  "Data/Refinery/custom_calculations.py": "9b3e913007f779b7423bb2dcdf3ec26b3b01ac85c8c2259f100f26b7e14b303a",
+  "Data/hand_supplied.py": "c9153bcb0e77b7308ca4aab51c55d11f717cecabcf99aab992553a93a2c5a0a1",
+  "Data/refinery.py": "250fb8a1c52c7f3714f62bc10730154ffa2c74a466ca7d4f153a1cc180586544",
+  "Data/time_series.py": "bf84017b1bb2f2e9f6a70f0a5e3cef791c428e180a04d88b3fd78a02cd6ea9f5",
+  "Experiments/backtest_engine.py": "e7d9f47da0b93bb5485f08872f3ea2b57445cf34c3f64e5b66adf50625d70b78",
+  "Experiments/portfolio_construction.py": "9b09b71ffcd035c83be15f7e80f55137be8aad71952ebbbc4f443b665b835955",
+  "Experiments/securities_panel.py": "38c442893b4d71ff463acc79af90c4b2b7338256b1acdfed3510b3d230518345",
+  "Universe/Investable_Universe.csv": "864bfa85b2151a4179fb411277f9344ba16f4180e901615beee7183de83e78c6",
+  "Universe/Security_Master.csv": "b565a66b37620137870d6e02d4b665cfa60f71c8955a4c819d055746eaa3fbb8"
+ },
+ "freeze_date": "2026-10-27",
+ "libraries": {
+  "kaxanuk-backtest-engine": "0.67.0",
+  "kaxanuk-data-curator": "0.51.0",
+  "numpy": "2.5.3",
+  "pandas": "2.3.3",
+  "pyarrow": "26.0.0"
+ },
+ "shared_inputs": {
+  "Data/Curator/custom_calculations.py": "7f76bde60f31e228aeaa54c8240e501595b75e1b8b243b3a369abfcb44675b58",
+  "kaxanuk-data-curator": "0.51.0"
+ },
+ "sign_off": {
+  "date": "2026-10-27",
+  "outcome": "sound and regime-dependent, on paper on probation",
+  "person": "Arturo Aguilar"
+ }
+}

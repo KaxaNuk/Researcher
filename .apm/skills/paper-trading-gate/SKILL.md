@@ -106,8 +106,9 @@ and regime-dependent, on probation.
 paper-traded book is never in question; the experiment's notebook stays where it is, as the record
 of how the rule was chosen. The template ships `Paper_Trading_1/` as the contract of a frozen book,
 named for the experiment it would mirror: it becomes Experiment 1's book if Experiment 1 graduates
-or goes on probation, and a later experiment takes its own number. The worked example has no book on
-paper: its Experiment 1 reads as sound and regime-dependent.
+or goes on probation, and a later experiment takes its own number. The worked example's
+Experiment 1 reads as sound and regime-dependent, and is on paper on probation as
+`Paper_Trading_1`, signed off and frozen on 2026-10-27, its review on 2027-10-27.
 
 A strategy's `1.0.0` waits for more than its first graduation: the changelog reserves it for this
 strategy's first book on paper trading, its results reproduced from a clean clone.
@@ -119,14 +120,19 @@ A graduated book is the strategy, frozen. After the sign-off, the rule is writte
 `Paper_Trading/promote.py N`, on a clean tree, copies byte for byte from that commit every file the
 book needs — the refinery and its calculations, the reader of the Analytics Factory's files, the
 shared modules the rule calls and the seed — into `Paper_Trading_N/` in the strategy's own layout,
-with the security master from disk. It writes `FREEZE.json`: the commit, the freeze date, the hash
-of every file, the library versions, and the hash of what it cannot copy, the Curator's
-calculations. The security master is the provider's data, so `.gitignore` keeps the book's copy out
-of git: it stays on the machine that froze the book, backed up with the record, and is brought
-across by hand to any other machine that runs it. Every module resolves its paths from its own
-folder, so the copies read and write inside the book's folder: an experiment under construction can
-change the shared modules and the book never moves. A frozen book is never frozen again; a new
-freeze is a new book, with its own number.
+with the security master from disk. It freezes nothing unless the book's `### Paper_Trading_N`
+section of the committed `BITACORA.md` holds exactly one line `Signed off by <name> on
+<YYYY-MM-DD>, as <outcome>`, the outcome *graduating* or *sound and regime-dependent, on paper on
+probation*, and, on probation, the regime prediction, the probation, the bands and the kill switch,
+each a bold label there: it checks that a person signed, never what the gate should have said. It
+writes `FREEZE.json`: the commit, the freeze date, the hash of every file, the library versions,
+the sign-off, and the hash of what it cannot copy, the Curator's calculations. The security master
+is the provider's data, so `.gitignore` keeps the book's copy out of git: it stays on the machine
+that froze the book, backed up with the record, and is brought across by hand to any other machine
+that runs it. Every module resolves its paths from its own folder, so the copies read and write
+inside the book's folder: an experiment under construction can change the shared modules and the
+book never moves. A frozen book is never frozen again; a new freeze is a new book, with its own
+number.
 
 **The days after the window are the first any code reads**, so the book is tried once before the
 real freeze — frozen in a scratch clone, never committed, and run with `--dry-run` for a day past
@@ -164,7 +170,7 @@ behind the day, hides a new flag among the old ones: read the flags, not only th
 The record has six tables — runs, books, performance, statistics, diagnostics, flags — keyed so a
 second run of a day replaces that day's rows. A past value the engine now prices differently is a
 **restatement**: flagged, never overwritten. The template ships these files as their contract in a
-docstring; the worked example carries them working, with no book in `BOOKS`.
+docstring; the worked example carries them working, with `Paper_Trading_1` in `BOOKS`.
 
 **A paper-trading script re-fits nothing.** A run that tunes anything is a backtest wearing a
 costume, and it re-introduces exactly the search that produces negative out-of-sample performance.
@@ -233,9 +239,13 @@ to follow for the second outcome.
   Researcher package — the gate read once, both layers, every row evidenced from `FINDINGS_1.md`:
   S1 to S5 hold; P1 and P3 fail over 2000–2026 and P2 is not evidenced; the book earned in
   2018–2026 and lost in 2000–2008. Sound and regime-dependent, read on the owner's word of
-  2026-10-27, and not paper traded. Its `promote.py`, `daily_update.py` and `record.py` are the
-  working step-7 scripts, with no book in `BOOKS`. The template's copies are the same files with
-  the example's lines removed.
+  2026-10-27, and put on paper on probation that day: its section `### Paper_Trading_1 —
+  Experiment 1, on paper on probation` registers the sign-off, the regime prediction, the 12
+  months to the review of 2027-10-27, the bands and the kill switch, and is the model of a book
+  on probation. `Paper_Trading/Paper_Trading_1/` is that book as frozen, `FREEZE.json` with the
+  sign-off among it, its seed copy cut to tickers and dates; its `promote.py`, `daily_update.py`,
+  whose `BOOKS` names the book, and `record.py` are the working step-7 scripts. The template's
+  copies are the same files with the example's lines removed.
 - The strategy's `AGENTS.md`, *Research integrity — the five ways a backtest lies* and *What
   attribution must report*, which S1 to S4 and P2 rest on.
 - `CHANGELOG.md` in the strategy, *What a version number means here* — `1.0.0` and the gate.

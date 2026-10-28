@@ -81,6 +81,10 @@ then performance.
 - **Paper trading**: `BITACORA.md` and `promote.py` freeze an experiment that graduates, or one
   signed off as sound and regime-dependent on probation: its regime prediction, at least 12 months
   and its review registered before day one, and paper alone never sending it to production.
+  `promote.py` freezes a book only on one sign-off line, `Signed off by <name> on <YYYY-MM-DD>, as
+  <outcome>`, in its committed `### Paper_Trading_N` section, and records it in `FREEZE.json`;
+  `daily_update.py` reads a strategy's Parquet files; `paper_trading_1.py`'s contract covers a
+  book on probation; `.gitignore` keeps a book's `Data/Curator/Engine/` copy out.
 - **`AGENTS.md`, `README.md`, `SETUP.md`, `RESULTS.md`**: marimo throughout, the two-layer gate,
   the band, the costs and the cash in the engine, and the `r_*` rule.
 

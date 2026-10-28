@@ -1,17 +1,17 @@
 """
-The daily run over every graduated book -- step 7 of the KaxaNuk Strategy Template.
+The daily run over every book on paper -- step 7 of the KaxaNuk Strategy Template.
 
 In plain words: once a day, after the market closes, refresh the data, run each frozen strategy
-exactly as it was when it graduated, price it with the engine, and write down what happened --
+exactly as it was frozen, price it with the engine, and write down what happened --
 how the book is doing over its whole history and since the day it was frozen, and anything that
 does not look like the backtest said it would.
 
-A graduated book is a frozen copy of the strategy, made once by `promote.py`: the files it needs,
-copied byte for byte into `Paper_Trading_N/` in the strategy's own layout, with `FREEZE.json`
-naming the commit, the date and the hash of each.  Every path in those copies resolves inside the
-book's folder, so an experiment under construction can change the shared modules and the graduated
-book never moves.  **A paper-trading run re-fits nothing**: a run that tunes anything is a
-backtest wearing a costume, and it answers a question nobody asked.
+A book on paper, graduated or on probation, is a frozen copy of the strategy, made once by
+`promote.py`: the files it needs, copied byte for byte into `Paper_Trading_N/` in the strategy's
+own layout, with `FREEZE.json` naming the commit, the date and the hash of each.  Every path in
+those copies resolves inside the book's folder, so an experiment under construction can change
+the shared modules and the book never moves.  **A paper-trading run re-fits nothing**: a run
+that tunes anything is a backtest wearing a costume, and it answers a question nobody asked.
 
 What one run does, in order:
 

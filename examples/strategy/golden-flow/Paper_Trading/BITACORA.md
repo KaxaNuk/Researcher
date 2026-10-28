@@ -198,10 +198,16 @@ Each graduated book gets a section in *Current status*, written and committed be
 under it, dated. It holds:
 
 - the experiment it mirrors, the variant, the commit and the freeze date;
-- the gate, row by row, both layers, and the sign-off: a person's name and date;
+- the gate, row by row, both layers, and the sign-off: a person's name and date, in one line,
+  `Signed off by <name> on <YYYY-MM-DD>, as <outcome>`, the outcome *graduating* or *sound and
+  regime-dependent, on paper on probation*: `promote.py` freezes no book without it;
 - **the bands**: for each diagnostic `daily_update.py` reads, the range `FINDINGS_N.md` measured
   over the backtest, which the book's `BANDS` carries too;
 - **the kill switch**: the result that retires the book instead of tuning it;
+- for a book on probation, **the regime prediction** — where it should earn and where it should
+  lag, from its findings — and **the probation**: its length, at least 12 months, its review date
+  and the benchmarks it is read against, its index and its control. `promote.py` looks for each,
+  the bands and the kill switch too, as a bold label in the section;
 - the review dates, and the period it has to be watched before anyone proposes production;
 - what the record cannot show, said before anyone is tempted to read it there.
 
@@ -212,27 +218,14 @@ arrives when an experiment's `FINDINGS_N.md` reports.
 
 <!-- example: begin -->
 
-**Experiment 1 reads as sound and regime-dependent, on the owner's word of 2026-10-27.** It does
-not graduate, and it is not paper traded alone. The rule is the KN US Equity Core members whose
-golden cross holds at the month's last close, ranked and weighted by 63-day traded value inside 1%
-and 20%, bought on the first trading day of each month at the open with a half-point band; Sharadar
-prices from 1998, every cost and the cash's interest inside the engine, 2000-01-03 to 2026-08-14
-([`../Experiments/Experiment_1/BLUEPRINT_1.md`](../Experiments/Experiment_1/BLUEPRINT_1.md), its
-gate written before the run). Every figure below is from
-[`../Experiments/Experiment_1/FINDINGS_1.md`](../Experiments/Experiment_1/FINDINGS_1.md) and
-[`../RESULTS.md`](../RESULTS.md), on Backtest Engine 0.67.0 and Attribution Analysis 0.5.0.
-
-| # | Criterion | Reading | Evidence |
-| --- | --- | --- | --- |
-| S1 | No survivorship bias | **holds** | the seed lists every listing the KN US Equity Core held from 1998-12-31, departed ones kept; Sharadar prices departed listings, and the one member it does not carry, `UB`, is named in `Universe/Data_Issues.csv`, at most 0.11% of the index on any day; the window opens on 2000-01-03, the members priced and signalled holding 96.5% of the index's weight on its worst day (`RESULTS.md`, *Before any experiment*, rows 14 and 15) |
-| S2 | No look-ahead | **holds** | the cross read at the month's last close and filled at the next open; a delisted name sold at Sharadar's last trade, which needs no hindsight; the rule, three predictions, five leads and the falsifier registered in `BLUEPRINT_1.md` before the rule cell held code |
-| S3 | No overfitting | **holds** | 152 books in the trial count, the flat 5 bp row counted beside them as a forking path; the sweep read as a curve, the margin over each setting's own control positive at all eight, +0.06 to +0.12 Sharpe at the flat row; the control priced at both cost rows; 19 of the 20 random books priced whole at the flat row; the twenty-one truncated runs excluded by name and counted. The deflated Sharpe is not computed |
-| S4 | Costs and capacity stated | **holds** | commission 1 bp, the engine's slippage and a flat 5 bp re-pricing beside it, cash at FRED's `DFF` less half a point; one-way turnover 2.16 a year, about twenty orders on each of twelve dates a year; at 1% of a name's 63-day traded value the worst trade allows $25.9M and the median $3.25bn; what the engine does not model is said: a delisted name's last trade over the counter, a flat cash spread |
-| S5 | Reproducible | **holds** | the pipeline ran from a working copy whose data folders were emptied first — download, rebuild, universe, refinery, analyzer, experiment — and every notebook reached the end of its Verify section, the experiment's 71 checks |
-| P1 | Beats the benchmarks and its control, over the whole window | **fails** | Sharpe 0.162 at the pre-registered costs and 0.221 at the flat row, against the Core's 0.315 and `SPY`'s 0.313; the control limb holds, +0.065 and +0.105 Sharpe |
-| P2 | Idiosyncratic alpha in both layers | **not evidenced** | the first cut's benchmark reconciles to 0.22 points a year; by KN sector, compounded, the first cut's selection is −73.2, the idiosyncratic +285.0 and the residual selection +6.7; the rule beats 15 of the 19 random books priced whole at the flat row, where the bar is 16 of 20 |
-| P3 | Survives perturbation | **fails** | every setting keeps the sign of its margin over its own control; none of the eight beats the Core on Sharpe at the flat row |
-| — | Sign-off | **not sought** | not paper traded alone |
+**Experiment 1 reads as sound and regime-dependent, and goes to paper on probation as
+`Paper_Trading_1`, on the owner's sign-off of 2026-10-27.** It does not graduate: over 2000-01-03
+to 2026-08-14 at the flat 5 bp row, every soundness criterion holds, P1 and P3 fail and P2 is not
+evidenced; against the KN US Equity Core and its control the book earned in 2018–2026, lost to the
+Core in 2000–2008 while it beat its control, and lost to both in 2009–2017. Its gate in both
+layers, its regime prediction and the terms of its probation are registered in *Paper_Trading_1 —
+Experiment 1, on paper on probation* below, before its first day; the gate as its blueprint wrote
+it, five criteria read on 2026-10-24, follows that section.
 
 **The periods, named before the run.** The blueprint judges the book in three sub-periods,
 2000-01-03 to 2008-12-31, 2009 to 2017 and 2018 to 2026-08-14, each priced from its first
@@ -252,9 +245,117 @@ traded-value rank on the pool, over a year, read −0.0504 in 2000–2008 and +0
 (`RESULTS.md`, *Before any experiment*, row 8). That describes the window; it does not say which
 period comes next.
 
-**Not paper traded alone, and never a recommendation.** Pairing it with another signal is a later
-experiment's, against this one; using it at a portfolio manager's discretion is that manager's
-decision, and its risk is theirs. No book is frozen, and `BOOKS` in `daily_update.py` is empty.
+<!-- example: end -->
+
+When one does, record it here: which experiment, which variant, each criterion of both layers with
+its evidence, and the outcome it reaches. Above all, record which criteria do not hold and why:
+**the blocking items are the content of this section, not the passing ones.** A sound,
+regime-dependent experiment names its periods and the condition between them, and its sign-off row
+reads the owner's name and date when they put it on paper on probation, else *not sought*; one
+that is not sound names the soundness row that failed and what will be
+fixed.
+
+**A frozen book's folder is named for the experiment it mirrors.** The template ships
+`Paper_Trading_1/` as that contract: it becomes Experiment 1's frozen book if Experiment 1
+graduates or goes on probation, a later experiment takes its own number, and until one does, the folder
+holds the contract and nothing else.
+
+<!-- example: begin -->
+
+### Paper_Trading_1 — Experiment 1, on paper on probation
+
+**Registered on 2026-10-27, before `daily_update.py` first runs the book, and never edited
+afterwards: a later observation is a new line under it, dated.** The folder's earlier book, on FMP
+data, retired on 2026-10-24, keeps its own section below.
+
+- **What it mirrors.** Experiment 1 as `experiment_1_marimo.py` ran it on 2026-10-24, from
+  `BLUEPRINT_1.md` of 2026-10-23: on the first trading day of each month, at the open, the KN US
+  Equity Core members at the prior close with a 200-day history, the golden cross — the 50-day
+  average above the 200-day — at 1, a 63-day traded value then and an open that day; ranked and
+  weighted by 63-day traded value, none above 20%, added in rank order while the smallest weight
+  stays at or above 1%; a held name whose target moved by half a point or less left as it drifted;
+  the rest in US dollar cash, paid FRED's `DFF` less half a point; a delisted holding sold by the
+  engine at its last price; `FPS`, `H1`, `ILA.A`, `MDLN`, `Q`, `SUNB` and `TXCCQ` excluded by name.
+  Its control, the same rule without the cross's sign, on the rule's own dates under the same band,
+  is priced beside it every day. **The variant is the flat 5 bp row**, the row the gate is read at:
+  commission 1 bp of the notional, a flat 5 bp half-spread, a 1% cash reserve, on $1,000,000.
+  **No regime filter**: the book is the experiment's, unchanged.
+  `Paper_Trading_1/paper_trading_1.py` carries the rule; `Paper_Trading_1/FREEZE.json` names the
+  commit it is frozen at — the commit of this section, which the first dated line under it
+  records — the freeze date, 2026-10-27, the hash of every frozen file and the sign-off below.
+- **The gate, both layers**, from
+  [`../Experiments/Experiment_1/FINDINGS_1.md`](../Experiments/Experiment_1/FINDINGS_1.md), *The
+  gate, in two layers*, read on 2026-10-27 from the run of 2026-10-24 on Backtest Engine 0.67.0 and
+  Attribution Analysis 0.5.0, at the flat 5 bp row:
+
+  | # | Criterion | Reading | Evidence, as the findings give it |
+  | --- | --- | --- | --- |
+  | S1 | No survivorship bias | **holds** | the universe is the KN US Equity Core's members as of each date, priced by Sharadar to each name's last trade; the share of the Core no price covers is 0.11% on its worst day; the window was fixed by the universe notebook's coverage rule before any rule existed, the Core priced and signalled at 96.5% on its worst day in the window. Stated, not settled: the Core's history before its live date is a backtest of its own rules |
+  | S2 | No look-ahead | **holds** | everything the rule reads on a rebalance date is read at the close before it and filled at the next open; the blueprint, its rule and its predictions were written on 2026-10-23, before the rule cell held a line of this version; every invariant of the notebook's section 2.1 is raised in its Verify |
+  | S3 | No overfitting | **holds**, with what it discloses | the trial count, 152 books, is published, the flat-row re-pricing named a forking path and **the deflated Sharpe not computed**; the sweep read as a curve, the cross's margin over its control positive at every setting, +0.06 to +0.12 Sharpe; 19 of the 20 random books priced whole, random book 17 excluded by name |
+  | S4 | Costs and capacity stated | **holds** | one-way turnover 2.16 a year; commission, slippage and cash interest at the pre-registered, flat, stress and $100,000 rows; 348 engine orders a year; capacity at 1% of a name's 63-day traded value, the worst trade $25.9M; the rule at $100,000 excluded, a cash error on 2003-01-31 |
+  | S5 | Reproducible | **holds** | the pipeline ran from a working copy whose data folders were emptied first, and every notebook reached the end of its Verify section, the experiment's 71 checks |
+  | P1 | Beats the benchmarks and its control, over the whole window | **fails** | Sharpe 0.221 against the Core's 0.315 and `SPY`'s 0.313; the control margins, +0.105 Sharpe and +2.24 points of CAGR, and 2 of 3 sub-periods hold |
+  | P2 | Idiosyncratic alpha in both layers | **not evidenced** | the first cut's benchmark reconciles to 0.22 points a year; the first cut's selection is −73.2, the idiosyncratic +285.0, residual selection +6.7; the rule beats 15 of the 19 random books priced whole, where the bar is 16 of 20 |
+  | P3 | Survives perturbation | **fails** | 8 of 8 settings keep the sign of their margin over their own control; 0 of 8 beat the Core |
+
+  **The outcome: sound and regime-dependent.**
+- **The sign-off.** *Signed off by Arturo Aguilar on 2026-10-27, as sound and regime-dependent, on
+  paper on probation.* The deflated Sharpe is not computed (S3).
+- **The regime prediction.** From `FINDINGS_1.md`'s sub-periods at the flat row, each priced from
+  its first rebalance date, and stated before the paper period:
+  - **It should earn where the most traded names are the ones still rising**, as in 2018–2026: a
+    Sharpe of 0.819 against the Core's 0.579 and the control's 0.764, 26.24% a year against 14.19%
+    and 25.45%.
+  - **It should lag the Core in a fall the most traded names lead**, as in 2000–2008, when the
+    bubble's names were held into the fall and a monthly cross left late: −11.71% a year against
+    the Core's −3.41%, a Sharpe of −0.506 against −0.303 — **and still beat its control**, −19.05%
+    and −0.611, the cross cutting the drawdown over the window to −78.4% against −91.0%.
+  - **It should lag both in a broad recovery**, as in 2009–2017, where the analyzer found the cross
+    carrying almost nothing on the pool (−0.0027 and −0.0009 at 21 and 63 days): 12.83% a year
+    against the control's 16.29% and the Core's 14.39%, a Sharpe of 0.763 against 0.827 and 0.837.
+  - **It does not say which comes next.** The findings name these periods after the fact, and no
+    condition that could be read in advance tells them apart: that is why the book goes on paper
+    with no regime filter.
+- **The probation.** 12 months on paper, from the freeze date, to **the review of 2027-10-27**,
+  read against the KN US Equity Core and against its control, the same rule without the golden
+  cross. **Paper alone never sends it to production**: at the review the owner reads the book
+  against the index, the control and the regime prediction above, and decides — continue, stop, or
+  a new experiment. The record's behaviour — holdings, orders, invested share, flags — is read on
+  2027-01-27, 2027-04-27 and 2027-07-27, each reading a dated line under this section; no
+  performance figure is read for a decision before 2027-10-27.
+- **The bands**, which `BANDS` in `paper_trading_1.py` carries, from `FINDINGS_1.md`'s structural
+  table: names held from 19 to 58; the invested share from 92.8% to 100%; at most 75 rule orders on
+  a rebalance date; the largest target weight up to 20%, the rule's own cap; and no held name with
+  its cross at 0 at the close before the last rebalance, which the experiment's invariants never
+  allowed. The record keeps, with no band: effective names (24.1 on average over the backtest), the
+  names the band left alone on the last rebalance date (a median of 31), the largest sector's
+  share, the trade dates in the last 63 days, and whether the book traded that day.
+- **The kill switch: the blueprint's falsifier, read on paper days, at the flat row.** The book is
+  retired, never tuned, if over its paper days it misses its control by +0.03 of Sharpe or by +0.5
+  points of CAGR. **Read first at the review of 2027-10-27**, and at each anniversary after if the
+  owner continues it; before then no performance figure retires or promotes it, and the bands only
+  flag. Proposed from `BLUEPRINT_1.md`'s *What would falsify it* and confirmed by the owner on
+  2026-10-27.
+- **What the record cannot show.** Skill: a year of paper cannot show an information ratio, as
+  *What a paper-trading run is* says. The regime: a year is one draw of one market, and a year
+  that looks like 2018–2026 or like 2000–2008 neither confirms the prediction nor says which
+  regime comes next. What the backtest already priced: the book is priced from the experiment's
+  first day, and every figure to 2026-08-14 is the experiment's own window; the record reports the
+  days after it and the days since the freeze apart, each from its first rebalance date. The cost
+  row: the flat 5 bp half-spread is an assumption, since the spread on the most traded US stocks is
+  still open (`FINDINGS_1.md`, *What is open*, item 1). And the index as it is: the desk's files end
+  on 2026-08-14, so until they are refreshed membership is held at that date and the book is
+  priced against `SPY`, each day flagged; the frozen seed fixes the universe, so a name that joins
+  the index after the freeze can never be held.
+
+**2026-10-27.** Frozen by `promote.py 1` at commit `0041695`, the commit of this section, on paper
+from 2026-10-27, the sign-off in `FREEZE.json`; `BOOKS` in `daily_update.py` names it from the
+commit after.
+
+*In this copy of the worked example*, the section above, registered in Golden Flow's own repository,
+keeps its words. The earlier FMP book's section it points to stands there, at tag `0.15.2`, not in
+this copy, which carries the book on probation alone.
 
 ### Experiment 1: the gate as its blueprint wrote it
 
@@ -275,24 +376,5 @@ the run from a wiped working copy, is S5. Read on 2026-10-24, as the record has 
 pre-registered slippage read a megacap's daily range as spread (about 23 bp a trade), so every book
 was priced again at the blueprint's own 5 bp fallback, a forking path counted in the trials. The
 verdict does not depend on it: criterion 1 fails at both.
-
-<!-- example: end -->
-
-When one does, record it here: which experiment, which variant, each criterion of both layers with
-its evidence, and the outcome it reaches. Above all, record which criteria do not hold and why:
-**the blocking items are the content of this section, not the passing ones.** A sound,
-regime-dependent experiment names its periods and the condition between them, and its sign-off row
-reads the owner's name and date when they put it on paper on probation, else *not sought*; one
-that is not sound names the soundness row that failed and what will be
-fixed.
-
-**A frozen book's folder is named for the experiment it mirrors.** The template ships
-`Paper_Trading_1/` as that contract: it becomes Experiment 1's frozen book if Experiment 1
-graduates or goes on probation, a later experiment takes its own number, and until one does, the folder
-holds the contract and nothing else.
-
-<!-- example: begin -->
-
-**In this example there is no `Paper_Trading_1/`.** No experiment graduated, so no book was frozen.
 
 <!-- example: end -->

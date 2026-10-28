@@ -94,6 +94,8 @@ Paper_Trading/*/Data/Curator/Time_Series/
 Paper_Trading/*/Data/Curator/Benchmarks/
 Paper_Trading/*/Data/Curator/Factors/
 Paper_Trading/*/Data/Refinery/Time_Series/
+# The engine's copy of the linked raw files, which a book's frozen engine module writes beside them.
+Paper_Trading/*/Data/Curator/Engine/
 Paper_Trading/*/Portfolio/
 Paper_Trading/*/Backtest/
 Paper_Trading/Logs/

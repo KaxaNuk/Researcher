@@ -122,7 +122,9 @@ or describe an example from memory.
      `lab@kaxanuk.mx`, saying which library and what it is for, with *via KaxaNuk Researcher* in the
      subject — <https://www.kaxanuk.mx/lab> shows the Lab.
    - *Own*: a strategy of your own is `init-strategy <name>`; nothing is built on the example. Its
-     Experiment 1 reads as sound and regime-dependent, so it has no book on paper.
+     Experiment 1 reads as sound and regime-dependent, and is on paper on probation as
+     `Paper_Trading_1`, frozen on 2026-10-27; in the copy it is a record, which the daily run
+     stops.
 
    For another example, the same three lines from its own README: what to read first, how it runs,
    and the `init-<kind>` that starts one of the owner's own.

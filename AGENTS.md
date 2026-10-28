@@ -34,7 +34,8 @@ the body of `OBJECTIVE.md`; the entries of `CHANGELOG.md`; the name and version 
 `pyproject.toml`; and, whole, the example's `README.md` (its own, as a strategy's is after
 `SETUP.md` step 5), its seed CSV and every file only the example has — its notes and
 `Universe/seed.py`. An example with a book on paper adds that book's `FREEZE.json` and the files it
-hashes; `golden-flow` has none. `paper_trading_N.py` stays shared and marked.
+hashes; `golden-flow` has one, `Paper_Trading_1`, on probation from 2026-10-27, whose seed copy
+keeps tickers and dates only. `paper_trading_N.py` stays shared and marked.
 
 ## Rules
 
@@ -133,8 +134,8 @@ hashes; `golden-flow` has none. `paper_trading_N.py` stays shared and marked.
    names the build to install.
 5. **An Analytics Factory change** — a folder, a file name, a header, a date order — changes
    `Data/hand_supplied.py` in the template and the example (which keeps reading the older names),
-   `attribution-analysis-runs` and `investment-lab.md`; a frozen book's copy, where an example
-   has one, stays as it was.
+   `attribution-analysis-runs` and `investment-lab.md`; a frozen book's copy, as `golden-flow`'s
+   `Paper_Trading_1`, stays as it was.
 6. **A library that replaces a hand-rolled stage** (the Data Refinery, the Data Analyzer) gets its
    own `*-runs` skill with a `library_version`, and the stage's seam file, `experiment-lifecycle`
    and `investment-lab.md` move with it.
@@ -144,8 +145,9 @@ hashes; `golden-flow` has none. `paper_trading_N.py` stays shared and marked.
    which is the index's own, with its first and last price dates in Sharadar's catalogue — the
    columns `main_identifier`, `index_identifier`, `valid_from` and `valid_to`, never a name, a
    permanent identifier or any other vendor field. It is an example release, re-run where a figure
-   moves. An example with a frozen book keeps that book's seed as it is; never restore a hashed
-   original to satisfy its `FREEZE.json`.
+   moves. An example with a frozen book, as `golden-flow` with `Paper_Trading_1`, keeps that
+   book's seed as it is, tickers and dates only; never restore a hashed original to satisfy its
+   `FREEZE.json`.
 8. **A new worked example** — an ETF strategy, or one users ask for — is a folder of its own,
    `examples/<kind>/<name>/`, where `<kind>` is the template it is worked through, as
    `templates/<kind>/` names it: `examples/strategy/<name>/` for an ETF strategy. It is curated as

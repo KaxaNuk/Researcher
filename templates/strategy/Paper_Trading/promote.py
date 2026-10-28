@@ -12,10 +12,14 @@ its own folder, the copies read and write inside the book's folder alone: an exp
 construction can change the shared modules tomorrow, and the graduated book never moves.
 
 What it copies is listed in `FROZEN_FILES`, and it refuses to run on a working tree with changes
-to tracked files: a freeze of code nobody committed is a freeze nobody can reproduce.  The rule
-itself is not copied here -- it lives in a cell of the experiment's marimo notebook -- so
-`paper_trading_N.py` carries it, written from the experiment's cells and committed before the
-promotion.
+to tracked files: a freeze of code nobody committed is a freeze nobody can reproduce.  It refuses
+too unless the book's section of the committed `BITACORA.md`, headed `### Paper_Trading_N`, holds
+exactly one sign-off line -- a person, a date and one of the two outcomes that put a book on
+paper, graduating or sound and regime-dependent, on paper on probation -- and, for a book on
+probation, the terms it is read against at its review.  It checks that a person signed, never what
+the gate should have said, which is theirs.  The rule itself is not copied here -- it lives in a
+cell of the experiment's marimo notebook -- so `paper_trading_N.py` carries it, written from the
+experiment's cells and committed before the promotion.
 
 Two things cannot be copied, because every book shares them: the raw price files, and the
 calculations the Curator runs while it writes them.  `FREEZE.json` records the hash of those
@@ -27,8 +31,8 @@ the provider's data.  It is copied from disk and hashed like the rest, and `.git
 book's copy out of git, as it keeps the one in `Universe/`: it stays on the machine that froze the
 book, backed up with the record.
 
-It produces `Paper_Trading_N/` with its frozen files and `FREEZE.json`, committed by a person, all
-but the security master.
+It produces `Paper_Trading_N/` with its frozen files and `FREEZE.json` -- the sign-off it froze on
+among them -- committed by a person, all but the security master.
 
 It prevents a graduated book changing because somebody improved the code it was frozen on.
 """

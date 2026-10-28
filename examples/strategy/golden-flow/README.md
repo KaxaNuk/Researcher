@@ -5,8 +5,9 @@
 Golden Flow buys the stocks of a US index that trade the most, but only while each one's price
 trend is up. Over 2000 to 2026 its trend filter earned its keep against the same book without it,
 and the book still lost to its index: all of the shortfall came in 2000–2008, and since 2018 it has
-beaten the index. Its gate reads it as **sound and regime-dependent**, so it is not paper traded.
-Nothing needs installing to read it: *How to read it*, below, says where to start.
+beaten the index. Its gate reads it as **sound and regime-dependent**, and its owner put it on
+paper **on probation** on 2026-10-27, as `Paper_Trading_1`, to a review on 2027-10-27. Nothing
+needs installing to read it: *How to read it*, below, says where to start.
 
 > **Hypothetical results.** Every return, Sharpe and drawdown in this README is simulated, never
 > traded: no money was at stake, and past returns do not guarantee future returns. They come from a
@@ -18,7 +19,8 @@ Nothing needs installing to read it: *How to read it*, below, says where to star
 proportion to what they trade** — none above a fifth of the book, none too small to matter.
 
 > **Status, as curated on 2026-10-27: Experiment 1 ran in sample on Sharadar and reads as sound and
-> regime-dependent; it does not graduate, and no book is on paper.** In a backtest, net of every
+> regime-dependent; it does not graduate, and its book is on paper on probation as
+> `Paper_Trading_1`, frozen on 2026-10-27, its review on 2027-10-27.** In a backtest, net of every
 > cost the engine prices, 2000-01-03 to 2026-08-14: 6.21% a year at a Sharpe of 0.162, 7.72% and
 > 0.221 at a flat 5 bp half-spread, against 0.097 without the golden cross and 8.12% and 0.315 for
 > the KN US Equity Core. The whole shortfall is 2000–2008; since 2018 it beats the Core.
@@ -32,8 +34,9 @@ goes to your own private GitHub only when you ask. It is free under the MIT lice
 without warranty; your data provider, your assistant and the Investment Lab's libraries, which
 KaxaNuk sells, each have their own terms. The worked example's figures come from a backtest on past
 prices, shown to teach the method, never a promise or a recommendation. A sound, regime-dependent
-book is not a recommendation either: whether to use one, paired with another signal or at a
-portfolio manager's discretion, is a person's decision, and its risk is theirs.
+book is not a recommendation either: whether to use one — on paper on probation, paired with
+another signal or at a portfolio manager's discretion — is a person's decision, and its risk is
+theirs.
 
 This is the worked example `init-example` copies, built on the
 [KaxaNuk Strategy Template](https://github.com/KaxaNuk/Researcher/blob/main/templates/strategy/README.md):
@@ -64,8 +67,9 @@ in this copy. "The desk" is KaxaNuk's Analytics Factory. "The worked example" in
 - **Golden cross**: a stock's 50-day average price above its 200-day one; here, the trend filter
   that makes a name eligible.
 - **Book**: the portfolio a rule holds day by day — which stocks, and how much of each.
-- **Paper trading**: a frozen book run on days after the freeze, with no money in it. Only a book
-  that graduates is paper traded; this one is not.
+- **Paper trading**: a frozen book run on days after the freeze, with no money in it. A book that
+  graduates is paper traded, and a sound, regime-dependent one may be, on probation, on its
+  owner's sign-off; this one is, from 2026-10-27.
 - **Sharpe**: return per unit of risk taken, excess of cash, as the Backtest Engine reports it;
   higher is better.
 - **Seed**: `Universe/Investable_Universe.csv`, every listing in the index at any time from
@@ -80,7 +84,8 @@ in this copy. "The desk" is KaxaNuk's Analytics Factory. "The worked example" in
 - **Performance, P1 to P3**: the second layer — beats its benchmarks and its control over the whole
   window, idiosyncratic alpha in both layers of attribution, conclusions that survive perturbation.
 - **Sound and regime-dependent**: every soundness criterion holds, and performance holds only in
-  named periods. Not paper traded alone.
+  named periods. It may go to paper on probation, on the owner's sign-off, and paper alone never
+  sends it to production.
 - **In sample**: measured on the history the rule was chosen on.
 - **Information coefficient**: the rank correlation of a feature with the returns that follow it.
 - **The first rule's book**: Experiment 1's, the first rule tested against the benchmark; every
@@ -117,7 +122,7 @@ its own before the rule cell held code; the record is `FINDINGS_1.md`.
 | 4. Portfolio | **Portfolio Construction**, licensed: not installed | the strategy's own weigher sizes the book inside the bounds, and the band leaves small moves alone | `portfolio-construction-runs` |
 | 5. Backtest | **Backtest Engine**, licensed | prices the book, its control and the other books it is compared with, with commission, slippage and the cash's interest inside it, against the KN US Equity Core and `SPY` | `backtest-engine-runs` |
 | 6. Attribution | **Attribution Analysis**, licensed; the Core's holdings and returns and the KN US Equity Factor Model, from the Analytics Factory | Brinson-Fachler by KN sector, then the factor model, then Brinson-Fachler on what the factors leave | `attribution-analysis-runs`, `alpha-decomposition` |
-| 7. Paper trading | the Data Curator, the Backtest Engine and the Factory's files, when a book runs | the gate read row by row: sound and regime-dependent, so no book is frozen; the step-7 scripts are here, working, with none to run | `paper-trading-gate` |
+| 7. Paper trading | the Data Curator, the Backtest Engine and the Factory's files, when a book runs | the gate read row by row: sound and regime-dependent, and on paper on probation as `Paper_Trading_1`, frozen on 2026-10-27, its review on 2027-10-27; `daily_update.py` runs it daily | `paper-trading-gate` |
 | 8. Production | — | nothing here deploys | — |
 
 `experiment-lifecycle` holds the documents around the steps: the blueprint, the journal and the
@@ -168,9 +173,13 @@ uv run python Experiments/Experiment_1/experiment_1_marimo.py
   listing's name and permanent identifier, and writes the seed again from the index's holdings,
   tickers and dates only. A newer catalogue can move a live listing's last date: `git diff` shows
   it.
-- **Step 7 has no book to run.** `Paper_Trading/promote.py` freezes only an experiment that
-  graduates, and `BOOKS` in `Paper_Trading/daily_update.py` is empty, for the reasons
-  [`Paper_Trading/BITACORA.md`](Paper_Trading/BITACORA.md) gives.
+- **Step 7 runs one book, `Paper_Trading_1`**: Experiment 1 on paper on probation, frozen by
+  `Paper_Trading/promote.py 1` on 2026-10-27, its review on 2027-10-27.
+  [`Paper_Trading/BITACORA.md`](Paper_Trading/BITACORA.md) registers its terms, and
+  `Paper_Trading/daily_update.py`, whose `BOOKS` names it, runs it daily after the close, as that
+  file's *Running it daily* says. **In this copy the book is a record**: its seed keeps tickers
+  and dates only, so it no longer matches its hash in `FREEZE.json`, and its frozen security
+  master stayed on the machine that froze it; `daily_update.py` stops a book on either.
 
 ## What a correct run shows
 

@@ -13,7 +13,8 @@ survive before anyone believes it.
 > README's *Hypothetical results* says more.
 >
 > **Status, as curated on 2026-10-27: Experiment 1 ran in sample on Sharadar and reads as sound and
-> regime-dependent; it does not graduate, and no book is on paper.** In a backtest, net of every
+> regime-dependent; it does not graduate, and its book is on paper on probation as
+> `Paper_Trading_1`, frozen on 2026-10-27, its review on 2027-10-27.** In a backtest, net of every
 > cost the engine prices, 2000-01-03 to 2026-08-14: 6.21% a year at a Sharpe of 0.162, 7.72% and
 > 0.221 at a flat 5 bp half-spread, against 0.097 without the golden cross and 8.12% and 0.315 for
 > the KN US Equity Core. The whole shortfall is 2000–2008; since 2018 it beats the Core.

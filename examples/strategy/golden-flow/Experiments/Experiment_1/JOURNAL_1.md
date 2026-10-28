@@ -49,8 +49,8 @@ and which are traded.
 
 **What this copy of the journal holds.** Golden Flow's entries from 2026-10-05 to 2026-10-24, whole
 and word for word, with the entry the package wrote on 2026-10-07, when it first copied the
-strategy, in its place among them; then one entry of 2026-10-27, on the owner's decision about the
-gate.
+strategy, in its place among them; then Golden Flow's entry of 2026-10-27, whole, on the owner's
+decisions about the gate and the probation.
 
 - **Left out:** every entry dated before 2026-10-05, including the 2026-09-23 entries that one
   entry below cites; the 2026-10-06 entry that retired `BRAINSTORMING_1.md`, with the brainstorming
@@ -64,7 +64,9 @@ gate.
     another index; 0.15.0 to 0.15.2 are this experiment's earlier version, on FMP prices;
   - "the desk" is KaxaNuk's Analytics Factory;
   - "the worked example", in entries dated before 2026-10-07, is the package's earlier example;
-  - `Paper_Trading_1`, the paper book of 0.15.2, was retired on 2026-10-24 and is not in this copy.
+  - `Paper_Trading_1`, the paper book of 0.15.2, was retired on 2026-10-24 and is not in this copy;
+    the folder now holds Experiment 1's book on probation, frozen on 2026-10-27, and that book's
+    section of `Paper_Trading/BITACORA.md` is the only one this copy holds.
 
 <!-- example: end -->
 
@@ -1096,16 +1098,20 @@ gate.
 
 <!-- example: begin -->
 
-## 2026-10-27 — The gate has two layers, and Experiment 1 reads as sound and regime-dependent
+## 2026-10-27 — The gate in two layers; Experiment 1 sound and regime-dependent, on probation
 
 - Idea / question: the entry of 2026-10-24 kept the gate as it was, five criteria, and set aside
   the owner's idea of a book that works only in some periods. Under it, Experiment 1 simply does
   not graduate. Does a book that was tested correctly, and fails over the whole window while it
-  earns in named periods, have an outcome of its own?
-- What we tried / considered: the five criteria as they stood; and a gate in two layers, which
-  asks first whether the experiment was done correctly and then whether the book earns its place.
+  earns in named periods, have an outcome of its own — and may it be watched on paper?
+- What we tried / considered: the five criteria as they stood; a gate in two layers, which asks
+  first whether the experiment was done correctly and then whether the book earns its place; and,
+  for a book that reads as sound and regime-dependent, paper trading with or without a regime
+  filter.
 - Outcome / decision: the owner decided on 2026-10-27 that **the gate has two layers and three
-  outcomes**, in `Paper_Trading/BITACORA.md` for every experiment from now on.
+  outcomes**, in `Paper_Trading/BITACORA.md` for every experiment from now on, and that **a sound,
+  regime-dependent book may go to paper on probation**. This corrects the entry of 2026-10-24,
+  which kept the five criteria.
   - **Soundness**, each row with its evidence, a row without evidence not holding: S1 no
     survivorship bias, S2 no look-ahead, S3 no overfitting, S4 costs and capacity stated, S5
     reproducible. **Performance**, the former criteria 1 to 3: P1 beats the benchmarks and its
@@ -1114,16 +1120,36 @@ gate.
     regime-dependent*, when every soundness row holds and performance fails over the whole window
     but holds in named periods; *not sound*, when a soundness row fails — no conclusion is drawn,
     and the experiment is fixed and run again.
+  - **Probation**, for a sound, regime-dependent book, on the owner's sign-off: the book frozen
+    unchanged, as a graduate is, and its section of `BITACORA.md`, committed before day one and
+    never edited, registering its regime prediction from its findings, a period of at least 12
+    months and its review date, the benchmarks it is read against — its index and its control —
+    its bands and its kill switch. **Paper alone never sends it to production**: at the review the
+    owner reads it against the index, the control and the regime prediction, and decides —
+    continue, stop, or a new experiment.
   - **Experiment 1 reads as sound and regime-dependent**, at the flat 5 bp row the gate is read at,
     on the run of 2026-10-24; no figure is computed again. S1 to S5 hold on the evidence
     `FINDINGS_1.md` quotes; P1 and P3 fail and P2 is not evidenced. Against its control the book
     earned in 2000–2008 and 2018–2026 and lost in 2009–2017; against the KN US Equity Core it
     earned in 2018–2026 only. `FINDINGS_1.md`'s gate section is rewritten in the two layers.
-  - **It is not paper traded alone.** It may be paired with another signal in a later experiment,
-    or used at a portfolio manager's discretion; the decision, and its risk, are theirs. Nothing
-    here recommends either.
+  - **Experiment 1 goes to paper on probation, signed off by the owner on 2026-10-27**: the
+    book as it is, frozen unchanged, at the flat 5 bp row, **with no regime filter** — the findings
+    name the periods where it earned only after the fact, and no condition that could be read in
+    advance tells them apart — for 12 months, to a review on 2027-10-27, read against the KN US
+    Equity Core and its control, the same rule without the golden cross. It takes the folder
+    `Paper_Trading/Paper_Trading_1/`, named for the experiment it mirrors, which the FMP book
+    retired on 2026-10-24 left empty; that book's section of `BITACORA.md` stays as it was.
+  - **Prepared before the freeze, nothing frozen yet.** `Paper_Trading_1/paper_trading_1.py` carries
+    the rule, the monthly calendar, the band, the bounds, the costs of the flat row and the
+    exclusions, copied from `experiment_1_marimo.py`'s setup and rule cells; its `BANDS` come from
+    `FINDINGS_1.md`'s structural table. `promote.py` now freezes a book only on a sign-off in its
+    section of the committed `BITACORA.md`, as graduating or as sound and regime-dependent on
+    probation, and records the sign-off in `FREEZE.json`; it freezes `Data/time_series.py` too,
+    which the Sharadar pipeline's modules import. `daily_update.py` reads the Parquet price files
+    the Sharadar pipeline writes; its `BOOKS` stays empty until the freeze.
 - Open threads: the condition that tells the periods apart. The evidence names them after the fact
   — the bubble's most traded names held into the fall of 2000–2008, left late by a monthly cross —
-  and no signal that could be read in advance; a later experiment would have to find one.
+  and no signal that could be read in advance; a later experiment would have to find one. The
+  freeze, `promote.py 1`, and the book's first run wait for the owner's reading of its registration.
 
 <!-- example: end -->
