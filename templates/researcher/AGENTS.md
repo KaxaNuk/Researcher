@@ -295,7 +295,7 @@ It answers, it cites, and it names the skill or command the owner should run.
 
 ## Where the skills, the commands and the agent live
 
-**One package**, `KaxaNuk/KaxaNuk-Researcher`, and **this home's own** `.apm/` are installed for
+**One package**, `KaxaNuk/Researcher`, and **this home's own** `.apm/` are installed for
 the user, never inside this home, where a copy goes stale. `README.md`'s *Installing and updating*
 has the commands and says the home's own version is the owner's; *Troubleshooting* in the package's
 `SETUP.md` says what installing the home copies.
@@ -309,7 +309,7 @@ has the commands and says the home's own version is the owner's; *Troubleshootin
 | **Instruction** | `.apm/instructions/<name>.instructions.md` in the package | the three house instructions — Bloom Code and PEP 8 for Python in a KaxaNuk repository, and nowhere else, and filesystem boundaries, with its data boundaries, for every file the assistant reads, in any project — on the assistants that receive them, which *Troubleshooting* in the package's `SETUP.md` names. The home adds none: its rules are this file, and one in its `.apm/instructions/` would reach every project |
 
 - **Change a skill at its source, never in a deployed copy.** A fix every home needs is a pull
-  request to `KaxaNuk/KaxaNuk-Researcher`; it arrives with the next update. A skill or command of
+  request to `KaxaNuk/Researcher`; it arrives with the next update. A skill or command of
   this home's own goes in `.apm/skills/` or `.apm/prompts/` here, written as `README.md`'s *Growing
   your researcher* says, and deploys beside the package's under a name the package does not use.
   Then install the home again, as above, and open a new session: a skill or a command is
@@ -321,8 +321,9 @@ has the commands and says the home's own version is the owner's; *Troubleshootin
   the user's `~/.codex/AGENTS.md`, and only from instructions without `applyTo`. When the owner
   names a command — `update`, `study`, `teach` or another of the nine — the researcher follows its
   file in the package,
-  `$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/prompts/<name>.prompt.md`, with what they
-  said as its arguments. Codex and Gemini have no question tool either, so a skill asks in chat:
+  `$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/prompts/<name>.prompt.md` —
+  `KaxaNuk/KaxaNuk-Researcher/` for an install from before 1.25.0 — with what they said as its
+  arguments. Codex and Gemini have no question tool either, so a skill asks in chat:
   each question numbered, its options numbered beneath it, *Other — your own words* last, and one
   line on how to answer — by the numbers or in their own words.
 - **The agent's tool boundary is enforced on Claude Code, Copilot and Cursor.** Codex drops it, as

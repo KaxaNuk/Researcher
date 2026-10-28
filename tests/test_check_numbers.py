@@ -150,14 +150,6 @@ def test_check_note_is_unchecked_without_a_pdf_or_its_extract(
     ]
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=' '.join([
-        'check_note and note_files read a note as plain UTF-8, so a byte order mark hides its',
-        'frontmatter and the note is unchecked, no local_copy; library.py reads every file as',
-        'utf-8-sig',
-    ]),
-)
 def test_check_note_reads_a_note_saved_with_a_byte_order_mark(
     tmp_path: pathlib.Path,
 ) -> None:
@@ -477,13 +469,6 @@ def test_normalise_drops_the_sign_the_separators_and_the_percent() -> None:
     ]
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=' '.join([
-        'split_blocks knows only backtick fences, so a figure in code fenced with tildes is checked',
-        "as the note's own; library.py's fenced_lines reads a tilde fence as a fence too",
-    ]),
-)
 def test_split_blocks_leaves_out_code_fenced_with_tildes() -> None:
     """
     A fence of tildes opens fenced code as one of backticks does, and no line inside it is a block.

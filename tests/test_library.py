@@ -4,8 +4,6 @@ of its markdown files is, a file's frontmatter and its links, and the file a not
 """
 import pathlib
 
-import pytest
-
 import library
 
 __all__ = []
@@ -206,14 +204,6 @@ def test_find_library_reads_a_strategy_by_its_bibliotheca(
     )
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=' '.join([
-        'is_local_target tests the target as written, angle brackets and all, so a web address',
-        'between them, [x](<https://example.com/a b.pdf>), reads as a file and check_library.py',
-        'reports it as a broken link',
-    ]),
-)
 def test_is_local_target_reads_a_web_address_in_angle_brackets_as_an_address() -> None:
     """
     CommonMark lets a link's target sit between angle brackets: a web address there is still a web

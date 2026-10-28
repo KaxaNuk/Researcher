@@ -12,7 +12,7 @@ the version and its date.
 
 ## [Unreleased]
 
-Started from the KaxaNuk Python Library Template 0.1.2: a Python library laid out like the KaxaNuk
+Started from the KaxaNuk Python Library Template 0.1.3: a Python library laid out like the KaxaNuk
 Data Curator, with one example module, its test, its documentation and a workflow that publishes a
 tag to PyPI.
 

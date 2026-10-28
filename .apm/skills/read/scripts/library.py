@@ -325,7 +325,9 @@ def is_local_target(
     Whether a link's target is a file of this computer: not a web address, a mail address or an
     anchor in the same file.
     """
-    bare = target.strip()
+    stripped = target.strip()
+    is_bracketed = stripped.startswith('<') and stripped.endswith('>')
+    bare = stripped[1:-1].strip() if is_bracketed else stripped
     is_anchor = bare.startswith('#') or not bare
     is_drive = bool(WINDOWS_DRIVE.match(bare))
     has_scheme = bool(URL_SCHEME.match(bare)) and not is_drive

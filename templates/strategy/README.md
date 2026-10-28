@@ -5,7 +5,7 @@ steps as a folder structure, with the conventions that let two people share a to
 explaining it first. Building the data needs a data-provider key; the backtest and attribution,
 steps 5 and 6, also need the licensed Backtest Engine and Attribution Analysis. It is research,
 never investment advice: *What it is, and what it is not*, in the
-[KaxaNuk Researcher's README](https://github.com/KaxaNuk/KaxaNuk-Researcher#readme).
+[KaxaNuk Researcher's README](https://github.com/KaxaNuk/Researcher#readme).
 
 The universe is one CSV whose only required column is `main_identifier`, and every stage reads it
 without knowing what is in it: **equities, ETFs, FX, crypto, commodities or futures all run the
@@ -19,7 +19,7 @@ improves in public.
 
 This template is the shape and every file the process expects in it, each a description of what
 belongs there; *What is in here* says what each file is for. The
-[example](https://github.com/KaxaNuk/KaxaNuk-Researcher/tree/main/examples/strategy/golden-flow)
+[example](https://github.com/KaxaNuk/Researcher/tree/main/examples/strategy/golden-flow)
 is the same files worked through for one strategy, `golden-flow`.
 
 ---
@@ -55,14 +55,14 @@ Three jobs, one tool for each. Install once, use for every strategy.
 
 **KaxaNuk's agent skills teach whichever assistant you pick** the Lab modules and this process:
 what each does, how it is called, and what it must never be asked to do. They are one package,
-[`KaxaNuk/KaxaNuk-Researcher`](https://github.com/KaxaNuk/KaxaNuk-Researcher), installed once for
+[`KaxaNuk/Researcher`](https://github.com/KaxaNuk/Researcher), installed once for
 your user and there in every strategy, so **a strategy installs nothing**. Nothing here needs them
 to be read; a filled-in repository is faster with them.
 
 ### A researcher beside the process
 
 A researcher is a separate project, one per person rather than per strategy, made once with
-`init-researcher`, a skill of the [KaxaNuk Researcher](https://github.com/KaxaNuk/KaxaNuk-Researcher):
+`init-researcher`, a skill of the [KaxaNuk Researcher](https://github.com/KaxaNuk/Researcher):
 a companion you name and teach, with its own library of what you have read. Its commands serve the
 parts below: `objective` drafts the claims in `OBJECTIVE.md` and rewrites their evidence from the
 notes (A, B); `read` writes the notes in `Bibliotheca/` (B, F); `blueprint` drafts each
@@ -179,7 +179,7 @@ What goes in each folder, written down only here, so keep this table current:
 be filled in with the strategy's own: a `.py` file as its docstring, a notebook as its markdown
 cells, a document as its prose.
 
-The [example](https://github.com/KaxaNuk/KaxaNuk-Researcher/tree/main/examples/strategy/golden-flow)
+The [example](https://github.com/KaxaNuk/Researcher/tree/main/examples/strategy/golden-flow)
 works the same files through, its own lines beside that description between the example markers:
 `<!-- example: begin -->` and `<!-- example: end -->` in Markdown, `# --- example: begin ---` in
 Python, `# EXAMPLE-ONLY CELL` on a notebook cell. To read the example, or run it, copy it whole

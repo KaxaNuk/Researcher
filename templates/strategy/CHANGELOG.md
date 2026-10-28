@@ -41,6 +41,18 @@ for somebody who was not in the room:
 
 ---
 
+## 0.19.5 (2026-10-27)
+
+**PATCH** — the KaxaNuk Researcher's address on GitHub is now `KaxaNuk/Researcher`. Nothing about
+any result changes.
+
+**What to do differently:** nothing.
+
+### Changed
+
+- **`SETUP.md`**, **`AGENTS.md`**, **`README.md`** and **`Bibliotheca/BIBLIOGRAPHY.md`**: every link
+  to the package and its install line name `KaxaNuk/Researcher`.
+
 ## 0.19.4 (2026-10-21)
 
 **PATCH** — the rules say what never leaves a strategy, and the `security` skill checks it before a

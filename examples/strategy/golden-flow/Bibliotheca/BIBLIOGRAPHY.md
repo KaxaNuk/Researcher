@@ -75,7 +75,7 @@ available elsewhere.**
 
 A researcher reads these notes to fine-tune the claims in [`../OBJECTIVE.md`](../OBJECTIVE.md) and
 to draft the thesis and predictions in each `BLUEPRINT_N.md`. It may be a person, or yours, made
-with `init-researcher` from the [KaxaNuk Researcher](https://github.com/KaxaNuk/KaxaNuk-Researcher).
+with `init-researcher` from the [KaxaNuk Researcher](https://github.com/KaxaNuk/Researcher).
 **Every prediction it writes cites the note it came from**, so each line of the hypothesis points
 back to something somebody read.
 

@@ -35,7 +35,7 @@ KaxaNuk sells, each have their own terms. The worked example's figures come from
 prices, shown to teach the method, never a promise or a recommendation.
 
 This is the worked example `init-example` copies, built on the
-[KaxaNuk Strategy Template](https://github.com/KaxaNuk/KaxaNuk-Researcher/blob/main/templates/strategy/README.md):
+[KaxaNuk Strategy Template](https://github.com/KaxaNuk/Researcher/blob/main/templates/strategy/README.md):
 eight steps as a folder structure, whose README says what each folder is for. It is for reading and
 running, never for building on; a strategy of your own starts from `init-strategy`.
 

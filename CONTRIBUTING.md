@@ -11,7 +11,7 @@ says what the package is for.
 
 ```bash
 uv tool install apm-cli==0.33.0
-uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/KaxaNuk-Researcher --target claude
+uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/Researcher --target claude
 ```
 
 For another assistant, put `codex`, `gemini`, `cursor` or another in place of `claude`. Claude Code
@@ -21,7 +21,7 @@ installed this way keeps its files through the next update only once it is on AP
 `~/.apm/apm.yml`:
 
 ```bash
-uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/skills/init-researcher/scripts/user_targets.py" add codex
+uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/init-researcher/scripts/user_targets.py" add codex
 ```
 
 `uvx --from apm-cli==0.33.0 apm update -g` brings every new version. Then open a new session,
@@ -212,10 +212,10 @@ and `USERPROFILE` are a new empty folder under `$K`: once Claude, then Codex; on
 Claude.
 
 - On the first assistant, install the package as `SETUP.md`'s step 2 does, with the archive in
-  place of `KaxaNuk/KaxaNuk-Researcher`. Run `init-researcher` there, which runs `interview`, for a
+  place of `KaxaNuk/Researcher`. Run `init-researcher` there, which runs `interview`, for a
   researcher whose name has an accent, *Sofía*: its home under `$K`, its files deployed as `sofia`.
   The archive installs as `_local/KaxaNuk-Researcher`, so wherever the files name
-  `$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/`, tell the assistant to read
+  `$HOME/.apm/apm_modules/KaxaNuk/Researcher/`, tell the assistant to read
   `$HOME/.apm/apm_modules/_local/KaxaNuk-Researcher/` instead.
 - On the second, install the package and the home for it, as `SETUP.md`'s *another assistant* does,
   then update:

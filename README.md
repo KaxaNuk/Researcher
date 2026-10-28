@@ -3,7 +3,7 @@
 | |
 |---|
 | [![Works with](https://img.shields.io/badge/works%20with-Claude%20Code%20%7C%20Codex%20%7C%20Gemini%20CLI%20%7C%20Cursor%20%7C%20Copilot-blue)](#install--three-steps-no-coding) [![License](https://img.shields.io/github/license/KaxaNuk/Researcher?color=blue)](LICENSE) |
-| [![Version](https://img.shields.io/github/v/tag/KaxaNuk/KaxaNuk-Researcher?sort=semver&label=version&logo=github)](CHANGELOG.md) [![APM](https://img.shields.io/badge/installs%20with-APM%200.33.0-blue)](https://github.com/microsoft/apm) |
+| [![Version](https://img.shields.io/github/v/tag/KaxaNuk/Researcher?sort=semver&label=version&logo=github)](CHANGELOG.md) [![APM](https://img.shields.io/badge/installs%20with-APM%200.33.0-blue)](https://github.com/microsoft/apm) |
 | [![Languages](https://img.shields.io/badge/speaks-any%20language%20you%20choose-blue)](#install--three-steps-no-coding) [![Powered by KaxaNuk](https://img.shields.io/badge/powered%20by-KaxaNuk-orange?colorB=orange)](https://kaxanuk.mx) |
 
 **Train your own research companion, for whatever you do.** A lawyer, a CFO, an engineer, someone
@@ -180,9 +180,12 @@ researcher's own agent and skill, under the name `uvx --from apm-cli==0.33.0 apm
 your home:
 
 ```bash
-uvx --from apm-cli==0.33.0 apm uninstall -g KaxaNuk/KaxaNuk-Researcher
+uvx --from apm-cli==0.33.0 apm uninstall -g KaxaNuk/Researcher
 uvx --from apm-cli==0.33.0 apm uninstall -g "_local/<your home, as deps list names it>"
 ```
+
+A package installed before 1.25.0, and not yet moved by `update`, is named
+`KaxaNuk/KaxaNuk-Researcher` in the first line instead, as `deps list -g` shows.
 
 On Claude Code, `~/.claude/skills`, `commands`, `agents` and `rules` then hold no KaxaNuk file. A
 daily brief's task stays in the Claude desktop app's scheduled tasks until you delete it there. Your

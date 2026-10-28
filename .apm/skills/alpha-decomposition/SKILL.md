@@ -217,7 +217,7 @@ column". That is worth knowing and belongs in `OBJECTIVE.md` as a falsified clai
 ## 5. The worked example — `golden-flow`
 
 The KaxaNuk Strategy Template works one strategy through the process in its worked example,
-`examples/strategy/golden-flow/` in `KaxaNuk/KaxaNuk-Researcher`, which `init-example` copies into a
+`examples/strategy/golden-flow/` in `KaxaNuk/Researcher`, which `init-example` copies into a
 folder of its own. Its strategy, **Golden Flow**, owns the KN US Equity Core members whose 50-day
 simple moving average is above the 200-day, ranked and weighted by 63-day traded value, none above
 20% and none below 1%, re-struck only when the held set changes. Steps 1 to 7 have run: criteria 1

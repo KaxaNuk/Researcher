@@ -82,6 +82,11 @@ FIGURE = re.compile(
 PAGE_NUMBER = re.compile(r'\d+(?:,\d{3})*(?:\.\d+)?')
 PAGE_MARKER = re.compile(r'<!--\s*p\.(\d+)\s*-->')
 # The markdown a note is split and cleaned by.
+# What opens or closes a fenced code block, after any indent: backticks or tildes.
+FENCE_OPENINGS = (
+    '```',
+    '~~~',
+)
 FRONTMATTER_FIELD = re.compile(r'^(\w+):\s*(.*)$')
 HEADING = re.compile(r'^#{1,6}\s')
 HEADING_NUMBER = re.compile(r'^(#{1,6}\s+)(?:[A-Z]\.)?\d+(?:\.\d+)*\.?(?=\s)')
@@ -254,7 +259,7 @@ def check_note(
     """
     Every cited figure of one note against its extract, or the reason it cannot be checked.
     """
-    text = note_path.read_text(encoding='utf-8')
+    text = note_path.read_text(encoding='utf-8-sig')
     fields = frontmatter_fields(text)
     raw_local_copy = fields.get('local_copy', '')
     local_copy = raw_local_copy.strip().strip('"\'')
@@ -632,7 +637,7 @@ def note_files(
         for candidate
         in candidates
         if candidate.name not in SKIPPED_NOTE_NAMES
-        and 'type' not in frontmatter_fields(candidate.read_text(encoding='utf-8'))
+        and 'type' not in frontmatter_fields(candidate.read_text(encoding='utf-8-sig'))
     ]
 
     return notes
@@ -902,10 +907,11 @@ def _fenced_lines(
     lines: list[str],
 ) -> frozenset[int]:
     """
-    The indexes of the lines that open, hold or close a fenced code block.
+    The indexes of the lines that open, hold or close a fenced code block, fenced with backticks or
+    tildes.
     """
     fence_flags = [
-        line.lstrip().startswith('```')
+        line.lstrip().startswith(FENCE_OPENINGS)
         for line
         in lines
     ]

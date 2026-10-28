@@ -32,11 +32,13 @@ each question marked *through the question tool* is one chat message, its option
 and *Other — your own words* last.
 
 **The package**, where a step reads or runs one of its files — `<the package>` in a command below —
-is `$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/`, or
-`$HOME/.apm/apm_modules/_local/KaxaNuk-Researcher/` when it was installed from an archive or a
-folder. A path not found there: list `$HOME/.apm/apm_modules` and use the package it shows; never
-end the turn on it. `$HOME` expands in a command, but a file-reading tool does not expand it: give
-that tool the full path, the home folder spelled out — `C:\Users\<user>\.apm\...` on Windows.
+is `$HOME/.apm/apm_modules/KaxaNuk/Researcher/`;
+`$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/` when it was installed before 1.25.0, under
+the repository's former name; or `$HOME/.apm/apm_modules/_local/KaxaNuk-Researcher/` when it was
+installed from an archive or a folder. A path not found there: list `$HOME/.apm/apm_modules` and
+use the package it shows; never end the turn on it. `$HOME` expands in a command, but a
+file-reading tool does not expand it: give that tool the full path, the home folder spelled out —
+`C:\Users\<user>\.apm\...` on Windows.
 
 ## When to Use
 

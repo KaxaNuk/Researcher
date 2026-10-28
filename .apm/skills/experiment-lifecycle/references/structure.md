@@ -1,7 +1,7 @@
 # Repository structure
 
 The canonical tree of a KaxaNuk Investment Lab strategy repository, as the **KaxaNuk Strategy
-Template** holds it — `templates/strategy/` in `KaxaNuk/KaxaNuk-Researcher`, copied into a new
+Template** holds it — `templates/strategy/` in `KaxaNuk/Researcher`, copied into a new
 folder by `init-strategy`. The template ships the shape and every file the process expects in it:
 the six folders, the documents at the root, and inside the folders each driver, module, notebook
 and document. Each is a description of what belongs there — a `.py` file as its docstring, a
@@ -86,7 +86,7 @@ gitignored by extension and by path. `Config/.env` is gitignored **because it is
 template is committed. Everything APM would install — `.claude/`, `.agents/`, `.codex/`, `.cursor/`,
 `apm_modules/`, `apm.lock.yaml`, `.mcp.json` — is gitignored as well, though a strategy installs
 nothing: the skills are installed once for the user, by
-`uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/KaxaNuk-Researcher --target <agent>`.
+`uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/Researcher --target <agent>`.
 
 Strip notebook outputs before committing. `--group notebook` adds JupyterLab, which a bare
 `uv sync` leaves out; `uv run` adds it without removing a hand-installed engine:

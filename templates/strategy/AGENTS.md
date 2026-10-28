@@ -1,7 +1,7 @@
 # Agents — how work is done here
 
 The
-[template's README](https://github.com/KaxaNuk/KaxaNuk-Researcher/blob/main/templates/strategy/README.md)
+[template's README](https://github.com/KaxaNuk/Researcher/blob/main/templates/strategy/README.md)
 says what this process **is** and where each kind of logic goes; read it first. This file says
 **how work is done**: who writes each document, the restrictions, and the bar a result has to
 survive before anyone believes it.
@@ -44,7 +44,7 @@ reviewed, or for two lines of work that must not mix; they are never a gate. Del
 it is merged or abandoned: `main` is the only branch that stays.
 
 **The template and the worked example, `golden-flow`, live in the
-[KaxaNuk Researcher](https://github.com/KaxaNuk/KaxaNuk-Researcher)** package. The example is for
+[KaxaNuk Researcher](https://github.com/KaxaNuk/Researcher)** package. The example is for
 reading, never for building on: nothing in a strategy is brought across from it. Issues and pull
 requests about the process go there. So does a trap found in a Lab library while running a
 strategy, as an issue or a word to `lab@kaxanuk.mx`, so that it goes into that library's skill and
@@ -90,7 +90,7 @@ blockquote.
 | Document | Who writes it | Changes when |
 | --- | --- | --- |
 | `OBJECTIVE.md` | a person, first | the idea and the claims' wording almost never — a change is a *different* strategy; each claim's evidence and status move as notes arrive (B) and as findings report (H) |
-| the notes in `Bibliotheca/` | a person, or a researcher made with `init-researcher` from the [KaxaNuk Researcher](https://github.com/KaxaNuk/KaxaNuk-Researcher), with its `read` skill — one per paper, one per chapter of a book somebody chose, after a plan and a go | a source is read. A later note corrects an earlier one with a callout above the claim, never by smoothing it away |
+| the notes in `Bibliotheca/` | a person, or a researcher made with `init-researcher` from the [KaxaNuk Researcher](https://github.com/KaxaNuk/Researcher), with its `read` skill — one per paper, one per chapter of a book somebody chose, after a plan and a go | a source is read. A later note corrects an earlier one with a callout above the claim, never by smoothing it away |
 | `Bibliotheca/BIBLIOGRAPHY.md` | a person adds the leads; whoever writes a note adds its row | a source is added, or read |
 | `Bibliotheca/LOG.md` | whoever reads a source or audits the folder appends it; the researcher's `read` and `audit` do so themselves | append only. Past entries are never edited |
 | `RESULTS.md` | the AI, from the findings files | a `FINDINGS_N.md` changes |

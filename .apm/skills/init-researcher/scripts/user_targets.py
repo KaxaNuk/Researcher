@@ -16,7 +16,7 @@ Usage:
 The assistant is claude, codex, copilot, cursor, gemini, opencode or windsurf; the slug is the
 researcher's name as its files take it, `sofia` for Sofía.  In a conversation where the
 init-researcher skill is not loaded yet, run it from the installed package, `<package>` standing
-for `$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher` — `$HOME`, never `~`, which a program
+for `$HOME/.apm/apm_modules/KaxaNuk/Researcher` — `$HOME`, never `~`, which a program
 handed it does not expand:
     uv run --no-project python "<package>/.apm/skills/init-researcher/scripts/user_targets.py" add codex
 

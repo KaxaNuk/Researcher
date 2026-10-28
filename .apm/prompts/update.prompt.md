@@ -20,7 +20,7 @@ between experiments. The home's own files are updated from the home: say so in o
 
 The researcher arrives in two parts, and each updates its own way:
 
-- **The skills and commands** are one package, `KaxaNuk/KaxaNuk-Researcher`, installed once for
+- **The skills and commands** are one package, `KaxaNuk/Researcher`, installed once for
   the user. `apm update -g` brings its next version to every folder at once, and nothing in the
   home's history changes.
 - **The home's own files** — `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `README.md`, `LICENSE`,
@@ -65,7 +65,7 @@ this folder, nothing else.
    update is the migration, which *Step 4* carries out:
    - `.apm/skills/` or `.apm/prompts/` holding `read`, `query` or the researcher's commands;
    - `scripts/extract.py` or `references/note.md` at the root;
-   - `apm.yml` naming any KaxaNuk package under `dependencies` — `KaxaNuk/KaxaNuk-Researcher`,
+   - `apm.yml` naming any KaxaNuk package under `dependencies` — `KaxaNuk/Researcher`,
      `KaxaNuk/KaxaNuk-Agent-Skills/researcher` or `.../kaxanuk`.
    Edits the owner made to those skill copies are named in the plan, one line each —
    `git log --oneline -- .apm/skills .apm/prompts scripts references` shows whether there are any —
@@ -88,12 +88,14 @@ this folder, nothing else.
 
 - **The package.** The installed version is the `version:` of the package's entry in
   `~/.apm/apm.lock.yaml`, read with the file tool — the entry whose `repo_url` or
-  `materialization_repo_url` is `kaxanuk/kaxanuk-researcher` in any case, never a `source: local`
-  one. `uvx --from apm-cli==0.33.0 apm deps list -g` names the same. The newest is the first tag
+  `materialization_repo_url` is `kaxanuk/researcher`, or `kaxanuk/kaxanuk-researcher` for an
+  install from before 1.25.0, in any case, never a `source: local` one; an install under that former
+  name moves to the new one, as *Step 4* says. `uvx --from apm-cli==0.33.0 apm deps list -g`
+  names the same. The newest is the first tag
   this prints, `v` and the version:
 
   ```bash
-  git -c http.lowSpeedLimit=1000 -c http.lowSpeedTime=10 ls-remote --tags --refs --sort=-v:refname https://github.com/KaxaNuk/KaxaNuk-Researcher
+  git -c http.lowSpeedLimit=1000 -c http.lowSpeedTime=10 ls-remote --tags --refs --sort=-v:refname https://github.com/KaxaNuk/Researcher
   ```
 
   The copy under `~/.apm/apm_modules/` stays at the installed version until *Step 4*, so what is
@@ -105,8 +107,8 @@ this folder, nothing else.
   prints one file of that `main` whole, by its path in the package.
 
   ```bash
-  uv run --no-project python -X utf8 -c "import sys,urllib.request as u;f,v=sys.argv[1:3];t=u.urlopen('https://raw.githubusercontent.com/KaxaNuk/KaxaNuk-Researcher/main/'+f,timeout=10).read().decode().splitlines();h=[i for i,l in enumerate(t) if l[:3]=='## '];e=[i for i in h if t[i].split()[1:2] in ([v],['['+v+']'])];print('\n'.join(t[h[0]:e[0]]) if e else 'No entry for '+v+' in '+f)" CHANGELOG.md <installed version>
-  uv run --no-project python -X utf8 -c "import sys,urllib.request as u;sys.stdout.write(u.urlopen('https://raw.githubusercontent.com/KaxaNuk/KaxaNuk-Researcher/main/'+sys.argv[1],timeout=10).read().decode())" templates/researcher/AGENTS.md
+  uv run --no-project python -X utf8 -c "import sys,urllib.request as u;f,v=sys.argv[1:3];t=u.urlopen('https://raw.githubusercontent.com/KaxaNuk/Researcher/main/'+f,timeout=10).read().decode().splitlines();h=[i for i,l in enumerate(t) if l[:3]=='## '];e=[i for i in h if t[i].split()[1:2] in ([v],['['+v+']'])];print('\n'.join(t[h[0]:e[0]]) if e else 'No entry for '+v+' in '+f)" CHANGELOG.md <installed version>
+  uv run --no-project python -X utf8 -c "import sys,urllib.request as u;sys.stdout.write(u.urlopen('https://raw.githubusercontent.com/KaxaNuk/Researcher/main/'+sys.argv[1],timeout=10).read().decode())" templates/researcher/AGENTS.md
   ```
 
   Offline, or a command that fails: say so in one line and stop, since nothing can be compared.
@@ -246,7 +248,9 @@ this folder, nothing else.
 
 ## Step 3: Show the plan, wait for the go
 
-In chat: the pinned APM install, when *Step 1* asked for it; the package versions before and after;
+In chat: the pinned APM install, when *Step 1* asked for it; the package's move to its new address,
+`KaxaNuk/Researcher`, when it is installed under its former one; the package versions before and
+after;
 for each home file, the sections to bring across, quoted, in the home's own names, the `targets:`
 lines to add to `apm.yml`, and each file the home lacks, to bring across whole — `Studies/.gitkeep`
 among them, when the folder is missing; what a migration removes; each move out of `Projects/` and
@@ -272,8 +276,19 @@ through the question tool — *Go*, described as *update it and save a version*;
    skill, when it has one; then update:
 
    ```bash
-   uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/skills/init-researcher/scripts/user_targets.py" add <the assistant in use>
+   uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/init-researcher/scripts/user_targets.py" add <the assistant in use>
    uvx --from apm-cli==0.33.0 apm update -g --yes
+   ```
+
+   **A package installed under its former address**, `KaxaNuk/KaxaNuk-Researcher` — its lock
+   entry's `repo_url` is `kaxanuk/kaxanuk-researcher` — moves to `KaxaNuk/Researcher` in place of
+   that update: the same `add`, from its folder, then the former package out and the new one in,
+   for every assistant on APM's list. The home's own package stays installed.
+
+   ```bash
+   uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/skills/init-researcher/scripts/user_targets.py" add <the assistant in use>
+   uvx --from apm-cli==0.33.0 apm uninstall -g KaxaNuk/KaxaNuk-Researcher
+   uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/Researcher
    ```
 
    A package without the script — 1.3.5 and older — updates first; then run `add` from the updated
@@ -282,7 +297,7 @@ through the question tool — *Go*, described as *update it and save a version*;
 
    The owner's go in *Step 3* is the confirmation, so `--yes` skips APM's own `[y/N]` prompt,
    which an agent's shell cannot answer; without it the update stops with an error. Then check
-   `uvx --from apm-cli==0.33.0 apm deps list -g`: it lists `KaxaNuk/KaxaNuk-Researcher` at the new
+   `uvx --from apm-cli==0.33.0 apm deps list -g`: it lists `KaxaNuk/Researcher` at the new
    version; a package it still marks orphaned deploys nothing any more. The old
    `KaxaNuk-Agent-Skills` packages deployed skills under the same names as the package's, so if any
    of the package's skills or commands is missing afterwards, deploy it again with the command
@@ -291,7 +306,7 @@ through the question tool — *Go*, described as *update it and save a version*;
    For a migration, install it instead — it is new at user scope — then `add`, as above:
 
    ```bash
-   uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/KaxaNuk-Researcher --target <the owner's agent>
+   uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/Researcher --target <the owner's agent>
    ```
 
    Either way, the date `next` keeps for its weekly version line then moves a week on, in the
@@ -344,7 +359,7 @@ through the question tool — *Go*, described as *update it and save a version*;
 
    ```bash
    uvx --from apm-cli==0.33.0 apm install -g "<absolute path to the home>"
-   uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/skills/init-researcher/scripts/user_targets.py" check <the assistant in use> <slug>
+   uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/init-researcher/scripts/user_targets.py" check <the assistant in use> <slug>
    ```
 
    — and delete each copy *Step 2* listed: the agent's inside the home, and the skill and the agent
@@ -360,10 +375,10 @@ through the question tool — *Go*, described as *update it and save a version*;
    its `check`, with the home installed once after the last `add`:
 
    ```bash
-   uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/KaxaNuk-Researcher --target <assistant>
-   uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/skills/init-researcher/scripts/user_targets.py" add <assistant>
+   uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/Researcher --target <assistant>
+   uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/init-researcher/scripts/user_targets.py" add <assistant>
    uvx --from apm-cli==0.33.0 apm install -g "<absolute path to the home>"
-   uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/skills/init-researcher/scripts/user_targets.py" check <assistant> <slug>
+   uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/init-researcher/scripts/user_targets.py" check <assistant> <slug>
    ```
 
    Then the git settings the plan named, in the home only: `git config user.email <it>`, with

@@ -13,7 +13,7 @@ Laid out like the [KaxaNuk Data Curator](https://github.com/KaxaNuk/Data-Curator
 open-source Python library for financial data: the package in `src/`, its tests in `tests/`, its
 documentation in `docs/` for Read the Docs, and one workflow that tests every push and publishes
 each tagged version to PyPI. Started from the KaxaNuk Python Library Template, in the
-[KaxaNuk Researcher](https://github.com/KaxaNuk/KaxaNuk-Researcher).
+[KaxaNuk Researcher](https://github.com/KaxaNuk/Researcher).
 
 ## Documentation
 

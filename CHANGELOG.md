@@ -6,6 +6,44 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
+## [1.25.0] - 2026-10-27
+Your researcher now installs from the package's new address on GitHub, KaxaNuk/Researcher, and
+moves an older install there when you say `update`.
+
+**What to do differently:** say `update` in your home: it moves the package to its new address,
+asking first. Nothing else changes, and a researcher installed before keeps working until then.
+### Changed
+- **The address**: the package's repository on GitHub is now `KaxaNuk/Researcher` (the former
+  `KaxaNuk/KaxaNuk-Researcher` redirects there). Every link, install line and lookup names it:
+  `README.md`, `SETUP.md`, `CONTRIBUTING.md`, `ONBOARDING.md`, the home, strategy and Python
+  library templates, the worked example, and the skills and commands that read the package's
+  newest tag and changelog on GitHub. `apm.yml`'s `name:`, `kaxanuk-researcher`, is unchanged.
+- **Where the package is found**: a new install lands in `~/.apm/apm_modules/KaxaNuk/Researcher/`.
+  `scaffold.py`'s `INSTALLED_PACKAGE_PATHS`, the files `SETUP.md`, `init-researcher`, `interview`,
+  `next`, `philosophy`, `blueprint`, `challenge` and `update` follow, and the home's `AGENTS.md`
+  look there first, then under the former `KaxaNuk/KaxaNuk-Researcher/`, which an install from
+  before 1.25.0 keeps until `update` moves it; a lock entry's `repo_url` is matched under either
+  name.
+- **`update`** moves an install under the former address: the assistant in use put on APM's list,
+  the former package uninstalled and `KaxaNuk/Researcher` installed for every assistant on the
+  list, the home's own package left installed. `tools/install_check.py --migrate-from` tries that
+  move: from 1.23.2 under the former name, both assistants held every file afterwards and nothing
+  of the former package was left.
+- **The frozen files**, on the owner's word of 2026-10-27, to clean the onboarding while keeping its
+  flow and its questions: `SETUP.md`, `init-researcher` with `user_targets.py`, `interview` and
+  `ONBOARDING.md` take the new address and name the former folder; their fingerprints in
+  `FROZEN.json` move with them.
+- **`AGENTS.md`**: a fork changes every line naming `KaxaNuk/Researcher` or `KaxaNuk-Researcher`.
+- **The home template** 0.32.1, **the strategy template** 0.19.5, **the worked example** 0.17.9
+  and **the Python library template** 0.1.3 carry the new address.
+### Fixed
+- **`check_library.py`** (`audit`): a link written in angle brackets to a web address,
+  `[x](<https://…>)`, is no longer reported as a broken link.
+- **`check_numbers.py`** (`read`): a note saved with a byte order mark keeps its frontmatter, and a
+  figure in code fenced with tildes is no longer checked as the note's own.
+- **`bloom_code_check.py`**: the report stays in ASCII when a path holds a character the console
+  cannot write, `Łucja` written `\u0141ucja`, instead of stopping with `UnicodeEncodeError`.
+
 ## [1.24.0] - 2026-10-27
 Every release of your researcher is now tested and installed before it reaches you, by checks the
 package runs on itself.

@@ -45,12 +45,12 @@ committed.
 ## Step 1 — Get the repository
 
 **`init-strategy <strategy-name>` makes it.** It is a skill of the
-[KaxaNuk Researcher](https://github.com/KaxaNuk/KaxaNuk-Researcher), installed for your user as
+[KaxaNuk Researcher](https://github.com/KaxaNuk/Researcher), installed for your user as
 step 4 says. A script copies the template inside the researcher package, byte for byte, into a new
 folder named after the strategy, so every strategy made from the same package version starts
 identical. It then makes that folder a git repository and commits it once. That folder is the root.
 You can read the template
-[on GitHub](https://github.com/KaxaNuk/KaxaNuk-Researcher/tree/main/templates/strategy) before
+[on GitHub](https://github.com/KaxaNuk/Researcher/tree/main/templates/strategy) before
 making anything.
 
 **On Windows, keep the path short.** `D:\Research\...` is fine; a deep synced path such as
@@ -145,15 +145,15 @@ The four `PAPER_TRADING_*` lines configure step 7. Once a book is on paper,
 
 **Nothing to install here.** KaxaNuk's agent skills (how each Lab library is called, how an
 experiment is structured, how attribution is read, the house rules) and the
-[KaxaNuk Researcher](https://github.com/KaxaNuk/KaxaNuk-Researcher)'s own are installed once for
+[KaxaNuk Researcher](https://github.com/KaxaNuk/Researcher)'s own are installed once for
 your user, not per repository, by the same command that gave you step 1:
 
 ```bash
-uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/KaxaNuk-Researcher --target claude
+uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/Researcher --target claude
 ```
 
 For another assistant, put `codex`, `cursor` or its name in place of `claude`; the researcher
-package's [`SETUP.md`](https://github.com/KaxaNuk/KaxaNuk-Researcher/blob/main/SETUP.md) says what
+package's [`SETUP.md`](https://github.com/KaxaNuk/Researcher/blob/main/SETUP.md) says what
 each receives.
 
 The skills then work in every folder, this one included, and
@@ -186,7 +186,7 @@ stands. Replace the whole file with this, filled in, and leave the process to th
 > **Status: set up, nothing measured.** Replace this line as the strategy moves, and the banner at
 > the top of `AGENTS.md` with it.
 
-Built on the [KaxaNuk Strategy Template](https://github.com/KaxaNuk/KaxaNuk-Researcher/blob/main/templates/strategy/README.md):
+Built on the [KaxaNuk Strategy Template](https://github.com/KaxaNuk/Researcher/blob/main/templates/strategy/README.md):
 eight steps as a folder structure. Its README says what each folder is for, where each
 kind of logic goes and, under *Starting your own strategy*, the order to work in; this one does not
 repeat it. **Next:** [`OBJECTIVE.md`](OBJECTIVE.md), the idea and its claims, before any paper is
@@ -200,7 +200,7 @@ read.
 | [`SETUP.md`](SETUP.md) | how this repository is set up on a new machine |
 
 Research, never investment advice: *What it is, and what it is not*, in the
-[KaxaNuk Researcher's README](https://github.com/KaxaNuk/KaxaNuk-Researcher#readme).
+[KaxaNuk Researcher's README](https://github.com/KaxaNuk/Researcher#readme).
 ```
 
 Put the same status line in place of the banner at the top of `AGENTS.md`. In `pyproject.toml`,
@@ -264,5 +264,5 @@ seed exist.
 
 The first thing to write is `OBJECTIVE.md`: the idea and its claims, before any paper is read. The
 order after it is *Starting your own strategy* in the
-[template's README](https://github.com/KaxaNuk/KaxaNuk-Researcher/blob/main/templates/strategy/README.md);
+[template's README](https://github.com/KaxaNuk/Researcher/blob/main/templates/strategy/README.md);
 [`AGENTS.md`](AGENTS.md) says how work is done here.

@@ -345,15 +345,6 @@ def test_main_prints_each_violation_and_exits_one(
     ]
 
 
-@pytest.mark.xfail(
-    strict=True,
-    raises=UnicodeEncodeError,
-    reason=' '.join([
-        'main prints each path as given, though the checker promises ASCII output: a path holding a',
-        'character the console cannot write, such as the first letter of Łucja through a pipe on',
-        'Windows, raises UnicodeEncodeError instead of printing the report',
-    ]),
-)
 def test_main_reports_a_path_outside_ascii_on_any_console(
     monkeypatch: pytest.MonkeyPatch,
     tmp_path: pathlib.Path,

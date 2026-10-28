@@ -124,7 +124,8 @@ blueprint saved with its rule, or after it, cannot be told from one written afte
 The process can move under an experiment too: `blueprint`, `blueprint-critic` and this command come
 from one package, updated for every strategy at once. Read the version this run uses as `blueprint`
 does, in `~/.apm/apm.lock.yaml`: the entry under `dependencies:` whose `repo_url` or
-`materialization_repo_url` is `kaxanuk/kaxanuk-researcher`, ignoring case, as `next` reads it. A
+`materialization_repo_url` is `kaxanuk/researcher`, or `kaxanuk/kaxanuk-researcher` for an install
+from before 1.25.0, ignoring case, as `next` reads it. A
 `source: local` entry is read only when its `local_path` holds `templates/researcher/`, the
 package's own checkout, never a home. Compare that version with the blueprint's stamp. The same
 version is one line of the report. A different one names both, and the entries of the package's

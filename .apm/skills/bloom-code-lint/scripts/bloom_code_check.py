@@ -1159,11 +1159,14 @@ def _exit_spacing_violations(
 
 def _format_violation(file_violation: FileViolation) -> str:
     """
-    One report line: path:line: CODE message.
+    One report line, in ASCII whatever the path holds: path:line: CODE message. A character a
+    console might not write, the first letter of Łucja, is written as its escape, `\u0141`.
     """
     violation = file_violation.violation
+    path_text = str(file_violation.path)
+    ascii_path = path_text.encode('ascii', 'backslashreplace').decode('ascii')
     parts = [
-        str(file_violation.path),
+        ascii_path,
         ':',
         str(violation.line),
         ': ',

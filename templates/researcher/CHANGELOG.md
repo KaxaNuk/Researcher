@@ -6,6 +6,19 @@ Every notable change to this repository, newest first: `## X.Y.Z (YYYY-MM-DD)` w
 This is the home template's changelog, which `init-researcher` copies into every home and `update`
 extends with a *Brought to template* entry at the top; the home's own entries go there too.
 
+## 0.32.1 (2026-10-27)
+
+**PATCH** — the package's address on GitHub is now `KaxaNuk/Researcher`.
+
+**What to do differently:** say `update` in your home: it moves the package to its new address and
+brings these lines as a diff.
+
+### Changed
+
+* **`AGENTS.md`**, **`README.md`** and **`apm.yml`**'s comment name `KaxaNuk/Researcher`, and the
+  package's folder under `apm_modules/`, with the former `KaxaNuk/KaxaNuk-Researcher/` for an
+  install from before the package's 1.25.0.
+
 ## 0.32.0 (2026-10-23)
 
 **MINOR** — your researcher makes interactive presentations from your own work with `deck`.

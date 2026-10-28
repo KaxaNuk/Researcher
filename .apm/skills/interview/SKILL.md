@@ -55,9 +55,11 @@ own words; a message with two questions numbers them, *1: 2 · 2: 1, 3*. Never a
 2 at once, in one message or in one call.
 
 **The package's files.** Where a step below looks for, reads or runs a file under
-`$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/`, a package installed from an archive or a
-folder is under `$HOME/.apm/apm_modules/_local/KaxaNuk-Researcher/` instead; a file in neither is
-found by listing `$HOME/.apm/apm_modules`, never by ending the turn on it. A file-reading tool takes
+`$HOME/.apm/apm_modules/KaxaNuk/Researcher/`, a package installed before 1.25.0, under the
+repository's former name, is under `$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/` instead,
+and one installed from an archive or a folder under
+`$HOME/.apm/apm_modules/_local/KaxaNuk-Researcher/`; a file in none of them is found by listing
+`$HOME/.apm/apm_modules`, never by ending the turn on it. A file-reading tool takes
 the full path, `$HOME` spelled out — `C:\Users\<user>\…`, `/Users/<user>/…` — since it does not
 expand it.
 
@@ -86,9 +88,9 @@ expand it.
    `references/note.md` and `references/reading-map.md` in its folder: in the user's skills folder
    for the assistant in use — `$HOME/.claude/skills/` on Claude Code, `$HOME/.agents/skills/` on
    Codex — or in the package, when the install ran in this conversation, under
-   `$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/skills/read/`. If it is missing, go on:
+   `$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/read/`. If it is missing, go on:
    the hand-over says so, with the fix — *Step 5*'s `add`, then
-   `uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/KaxaNuk-Researcher --target <agent>`, then a
+   `uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/Researcher --target <agent>`, then a
    new session — and that until then `read` cannot extract a PDF and has no note shape to follow.
    Never write any of the three from memory: a map from memory would invent citations.
 4. **What is already known**, taken without asking:
@@ -364,8 +366,9 @@ and it changes; the home is what persists and grows. <owner> gives the judgement
    someone else. If the home cannot be read, say so, *this is <engine> without <Name>'s library*,
    and name the fix: add the folder to the session. Asked *which version are you?*, give the two
    a problem report to `lab@kaxanuk.mx` names: the package's, the `version:` of its entry in
-   `$HOME/.apm/apm.lock.yaml` — `repo_url` or `materialization_repo_url`
-   `kaxanuk/kaxanuk-researcher` in any case, never a `source: local` entry — and the home's
+   `$HOME/.apm/apm.lock.yaml` — `repo_url` or `materialization_repo_url` `kaxanuk/researcher`,
+   or `kaxanuk/kaxanuk-researcher` for an install from before 1.25.0, in any case, never a
+   `source: local` entry — and the home's
    template, from the newest *Brought to template* entry of its `CHANGELOG.md`, or else its newest
    version heading.
 2. **Read the home first.** Before research work, read `RESEARCHER.md` and `AGENTS.md` there; they
@@ -407,7 +410,7 @@ and it changes; the home is what persists and grows. <owner> gives the judgement
    in the home's git config. Nothing more unless asked.
 6. **A command, where the assistant has none.** On an assistant with no commands — Codex — a
    command <owner> names, such as `update`, `study` or `teach`, is followed from its file in the
-   package, `$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/prompts/<command>.prompt.md`,
+   package, `$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/prompts/<command>.prompt.md`,
    with what they said as its arguments.
 7. **A tool's code is never read, quoted or copied.** <Name> knows the research process and how to
    use KaxaNuk's tools — the Investment Lab's libraries and the Analytics Factory — from their
@@ -450,9 +453,9 @@ run these yourself — the owner types nothing, and may not know what any of the
    there:
 
    ```bash
-   uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/skills/init-researcher/scripts/user_targets.py" add <the assistant in use>
+   uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/init-researcher/scripts/user_targets.py" add <the assistant in use>
    uvx --from apm-cli==0.33.0 apm install -g "<absolute path to the home>"
-   uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/skills/init-researcher/scripts/user_targets.py" check <the assistant in use> <slug>
+   uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/init-researcher/scripts/user_targets.py" check <the assistant in use> <slug>
    ```
 
    APM copies the home into `$HOME/.apm/apm_modules/_local/<folder name>/` and deploys only its
@@ -481,7 +484,7 @@ run these yourself — the owner types nothing, and may not know what any of the
    `git -C "<absolute path to the home>" config kaxanuk.updatenext <today + 7 days, YYYY-MM-DD>`.
 
 Nothing else is installed: the home's `apm.yml` declares no dependency, and every KaxaNuk skill
-and command comes in the one package, `KaxaNuk/KaxaNuk-Researcher`, installed once for the user.
+and command comes in the one package, `KaxaNuk/Researcher`, installed once for the user.
 
 ## Step 6: Hand over
 
@@ -547,7 +550,7 @@ same message closes with these lines, and never before:
    - *`init-python-library <name>`: a Python library of your own*;
    - *keep a copy: your home on a private GitHub repository*.
 
-   Then one line: *More on each, step by step:* <https://github.com/KaxaNuk/KaxaNuk-Researcher/blob/main/USE-CASES.md>
+   Then one line: *More on each, step by step:* <https://github.com/KaxaNuk/Researcher/blob/main/USE-CASES.md>
 4. *Next: <the one next thing>* — from the first row below whose pick is on the *Here for* line,
    with its command.
 5. *Not sure what's next? Say `next`.* (*¿No sabes qué sigue? Di `next`.*)

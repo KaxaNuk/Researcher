@@ -21,7 +21,7 @@ experiment and its documents, the findings, the results and the paper-trading ga
 own lines sit between example markers — `<!-- example: begin -->` and `<!-- example: end -->` in
 Markdown, `# --- example: begin ---` in Python, `# EXAMPLE-ONLY CELL` on a notebook cell — beside
 the template's description of what belongs in each file. Every example is also readable without
-installing anything, in `examples/<kind>/<name>/` of `KaxaNuk/KaxaNuk-Researcher`.
+installing anything, in `examples/<kind>/<name>/` of `KaxaNuk/Researcher`.
 
 **The list is the package's, never yours.** Which examples there are, and the line on what each
 shows, come from the script, which reads them from the package's folders and READMEs: never name

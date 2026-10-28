@@ -3,9 +3,10 @@
 From nothing to a researcher you can talk to, in one conversation. This file is written for the
 assistant — Claude, Codex, Gemini, Cursor, Copilot — that was told *please install this repo for
 me and set up my researcher, start to finish in this conversation — install everything it needs
-without asking first:* `https://github.com/KaxaNuk/KaxaNuk-Researcher`, or, from an older README,
-*please install this repo for me, with everything it needs* or *please help me install this repo*:
-all three ask for the same, a researcher set up from start to finish. Told instead *please install
+without asking first:* `https://github.com/KaxaNuk/Researcher`, or its former address,
+`https://github.com/KaxaNuk/KaxaNuk-Researcher`, or, from an older README, *please install this
+repo for me, with everything it needs* or *please help me install this repo*: all three ask for the
+same, a researcher set up from start to finish. Told instead *please install
 this repo for me and bring back my researcher from my private copy on GitHub*, it asks for the same
 install and a researcher brought back, not made: step 3 says how.
 
@@ -38,20 +39,22 @@ install and a researcher brought back, not made: step 3 says how.
 **The files you follow**, once step 2 has installed the package. `$HOME` is the user's home folder
 — `C:\Users\<user>` on Windows — and expands in PowerShell, bash and zsh alike, also in a path
 handed to a program, where `~` does not; a file-reading tool expands neither, so give it the path
-with the home folder spelled out. The paths are the same on every assistant; a package installed
-from an archive or a folder sits at `$HOME/.apm/apm_modules/_local/KaxaNuk-Researcher/` instead:
+with the home folder spelled out. The paths are the same on every assistant. A package installed
+before 1.25.0, under the repository's former name, sits at
+`$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/` instead, and one installed from an archive or
+a folder at `$HOME/.apm/apm_modules/_local/KaxaNuk-Researcher/`:
 
 | For | Follow or run |
 | --- | --- |
-| step 2 and the done check, the assistants APM keeps | `$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/skills/init-researcher/scripts/user_targets.py` |
-| steps 3 and 4, the researcher's home | `$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/skills/init-researcher/SKILL.md` |
-| the copy it makes | `$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/skills/init-strategy/scripts/scaffold.py` |
-| step 5, the interview | `$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/skills/interview/SKILL.md` |
-| step 6, `read`, only if the user brings a document now | `$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/skills/read/SKILL.md` |
-| step 6, `philosophy`, only if the user takes it now | `$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/skills/philosophy/SKILL.md` |
-| step 6, `init-example`, only if the user asks for the worked example now | `$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/skills/init-example/SKILL.md` |
-| step 6, `study`, only if the user starts the study now | `$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/prompts/study.prompt.md` |
-| step 3, a researcher brought back from GitHub | `$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/skills/backup/SKILL.md`, its *Step 10*, then `$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/prompts/update.prompt.md` |
+| step 2 and the done check, the assistants APM keeps | `$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/init-researcher/scripts/user_targets.py` |
+| steps 3 and 4, the researcher's home | `$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/init-researcher/SKILL.md` |
+| the copy it makes | `$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/init-strategy/scripts/scaffold.py` |
+| step 5, the interview | `$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/interview/SKILL.md` |
+| step 6, `read`, only if the user brings a document now | `$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/read/SKILL.md` |
+| step 6, `philosophy`, only if the user takes it now | `$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/philosophy/SKILL.md` |
+| step 6, `init-example`, only if the user asks for the worked example now | `$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/init-example/SKILL.md` |
+| step 6, `study`, only if the user starts the study now | `$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/prompts/study.prompt.md` |
+| step 3, a researcher brought back from GitHub | `$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/backup/SKILL.md`, its *Step 10*, then `$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/prompts/update.prompt.md` |
 
 ---
 
@@ -93,8 +96,8 @@ git config --global user.email "<>"
 
 ```bash
 uv tool install apm-cli==0.33.0
-uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/KaxaNuk-Researcher --target <the assistant you are>
-uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/skills/init-researcher/scripts/user_targets.py" add <the assistant you are>
+uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/Researcher --target <the assistant you are>
+uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/init-researcher/scripts/user_targets.py" add <the assistant you are>
 ```
 
 The target is the assistant you are: `claude`, `codex`, `gemini`, `cursor`, `copilot`, `opencode` or
@@ -123,7 +126,7 @@ First look in `$HOME/.apm/apm_modules/_local/` for a home already made — a fol
 one, follow *One researcher per person*, below: it asks whether to use it, unless the user already
 asked for another. Otherwise read `init-researcher` now, in the same turn, and follow it from its
 step 2, with the language already chosen; its file is
-`$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/skills/init-researcher/SKILL.md`, and its
+`$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/init-researcher/SKILL.md`, and its
 own questions take the name, then the place and the go in one. If the file is not there, list
 `$HOME/.apm/apm_modules` to find it; if it still cannot be found, say so in one line and offer to
 install again.
@@ -162,7 +165,7 @@ they came for, and *not sure what's next? say `next`*.
 line for each file missing:
 
 ```bash
-uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/skills/init-researcher/scripts/user_targets.py" check <the assistant you are> <slug>
+uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/init-researcher/scripts/user_targets.py" check <the assistant you are> <slug>
 ```
 
 On Claude Code, `$HOME/.claude/skills/` also holds `init-strategy`, `read`, `query`, `interview`,
@@ -211,7 +214,7 @@ and each agent in `~/.codex/agents/<name>.toml`, without its tool list: APM warn
 it, so on Codex an agent has no tool boundary. No instruction lands either. So the steps a newcomer
 needs — `init-researcher`, `interview`, `next`, `read`, `query`, `philosophy`, `brief` — are all
 skills. A command, such as `objective` or `blueprint`, is run there by naming its file — *follow
-`$HOME/.apm/apm_modules/KaxaNuk/KaxaNuk-Researcher/.apm/prompts/objective.prompt.md`* — and once
+`$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/prompts/objective.prompt.md`* — and once
 the interview has run, the researcher's own skill does this for the user: they name the command,
 and it follows the file.
 
