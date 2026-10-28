@@ -78,8 +78,9 @@ then performance.
   read back and the evidence for each soundness row; the findings read the gate in two layers,
   soundness S1 to S5 and performance P1 to P3, with three outcomes — graduates, sound and
   regime-dependent, not sound; the journal reads the band back beside the rule.
-- **Paper trading**: `BITACORA.md` and `promote.py` freeze only an experiment that graduates; a
-  sound, regime-dependent book is not paper traded alone.
+- **Paper trading**: `BITACORA.md` and `promote.py` freeze an experiment that graduates, or one
+  signed off as sound and regime-dependent on probation: its regime prediction, at least 12 months
+  and its review registered before day one, and paper alone never sending it to production.
 - **`AGENTS.md`, `README.md`, `SETUP.md`, `RESULTS.md`**: marimo throughout, the two-layer gate,
   the band, the costs and the cash in the engine, and the `r_*` rule.
 

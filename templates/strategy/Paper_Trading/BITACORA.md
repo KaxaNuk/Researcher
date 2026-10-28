@@ -62,9 +62,13 @@ figure was also computed.
   this file: the book is frozen and paper traded.
 - **Sound and regime-dependent** — every soundness criterion holds; performance fails over the
   whole window but holds in named periods. The findings name the periods where it earned and where
-  it failed, and the condition that tells them apart as far as the evidence goes. It is not paper
-  traded alone. It may be paired with another signal in a later experiment, or used at a portfolio
-  manager's discretion — the decision, and its risk, are theirs. Never a recommendation.
+  it failed, and the condition that tells them apart as far as the evidence goes. It may go to
+  paper **on probation**, on the owner's sign-off: frozen unchanged, with its regime prediction, a
+  period of at least 12 months and its review date registered in this file before day one, and
+  read at the review against its index and its control — continue, stop, or a new experiment.
+  **Paper alone never sends it to production.** Otherwise it may be paired with another signal in
+  a later experiment, or used at a portfolio manager's discretion — the decision, and its risk, are
+  theirs. Never a recommendation.
 - **Not sound** — a soundness criterion fails: no conclusion is drawn; fix it and run again.
 
 The sign-off stays a person's name and date. **Graduation is a decision, not a threshold that trips
@@ -210,10 +214,11 @@ When one does, record it here: which experiment, which variant, each criterion o
 its evidence, and the outcome it reaches. Above all, record which criteria do not hold and why:
 **the blocking items are the content of this section, not the passing ones.** A sound,
 regime-dependent experiment names its periods and the condition between them, and its sign-off row
-reads *not sought*; one that is not sound names the soundness row that failed and what will be
+reads the owner's name and date when they put it on paper on probation, else *not sought*; one
+that is not sound names the soundness row that failed and what will be
 fixed.
 
 **A frozen book's folder is named for the experiment it mirrors.** The template ships
 `Paper_Trading_1/` as that contract: it becomes Experiment 1's frozen book if Experiment 1
-graduates, a later experiment that graduates takes its own number, and until one does, the folder
+graduates or goes on probation, a later experiment takes its own number, and until one does, the folder
 holds the contract and nothing else.

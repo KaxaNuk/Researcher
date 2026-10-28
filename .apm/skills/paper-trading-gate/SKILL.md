@@ -81,9 +81,13 @@ is no substitute to name, which means there is also no excuse.
   `BITACORA.md`: the book is frozen and paper traded.
 - **Sound and regime-dependent** — every soundness criterion holds; performance fails over the
   whole window but holds in named periods. The findings name the periods where it earned and where
-  it failed, and the condition that tells them apart as far as the evidence goes. It is not paper
-  traded alone. It may be paired with another signal in a later experiment, or used at a portfolio
-  manager's discretion — the decision, and its risk, are theirs. Never a recommendation.
+  it failed, and the condition that tells them apart as far as the evidence goes. It may go to
+  paper **on probation**, on the owner's sign-off: frozen unchanged, with its regime prediction, a
+  period of at least 12 months and its review date registered in `BITACORA.md` before day one, and
+  read at the review against its index and its control — continue, stop, or a new experiment.
+  **Paper alone never sends it to production.** Otherwise it may be paired with another signal in
+  a later experiment, or used at a portfolio manager's discretion — the decision, and its risk, are
+  theirs. Never a recommendation.
 - **Not sound** — a soundness criterion fails: no conclusion is drawn; fix it and run again.
 
 The sign-off stays a person's name and date. The assistant never decides a gate.
@@ -96,12 +100,13 @@ book held, what the market did — and never as a forecast of which regime comes
 
 ## The promotion
 
-An experiment is **promoted, not copied**, and only an experiment that graduates.
+An experiment is **promoted, not copied**: one that graduates, or one a person signed off as sound
+and regime-dependent, on probation.
 `Paper_Trading/Paper_Trading_N/` mirrors the `Experiment_N` it came from, so the lineage of a
 paper-traded book is never in question; the experiment's notebook stays where it is, as the record
 of how the rule was chosen. The template ships `Paper_Trading_1/` as the contract of a frozen book,
-named for the experiment it would mirror: it becomes Experiment 1's book if Experiment 1 graduates,
-and a later experiment that graduates takes its own number. The worked example has no book on
+named for the experiment it would mirror: it becomes Experiment 1's book if Experiment 1 graduates
+or goes on probation, and a later experiment takes its own number. The worked example has no book on
 paper: its Experiment 1 reads as sound and regime-dependent.
 
 A strategy's `1.0.0` waits for more than its first graduation: the changelog reserves it for this
@@ -174,6 +179,14 @@ sign-off; the bands for each diagnostic, from `FINDINGS_N.md`'s structural table
 `BANDS` in the book; the kill switch; the review dates and the period to watch before production;
 and what the record cannot show.
 
+**A book on probation registers more**, in the same section, before day one: its regime
+prediction — where it should earn and where it should lag, each with the figure from
+`FINDINGS_N.md` it rests on; its period, at least 12 months unless the owner registers another, and
+the review date; the benchmarks it is read against, its index and its control; and that paper
+alone never sends it to production. At the review the owner reads it against those and decides:
+continue, stop, or a new experiment. The prediction is the findings', stated before the paper
+period, never cut afterwards around where the book did well.
+
 ## The status section
 
 *Current status* in `BITACORA.md` is the gate's record. Until an experiment reports it says so —
@@ -185,7 +198,8 @@ section, not the passing ones.**
 - **Graduates:** every row holds, and the sign-off is a person's name and date.
 - **Sound and regime-dependent:** every S row holds; each P row that fails says so, and beside it
   the named periods where it earned and where it failed, and the condition that tells them apart.
-  The sign-off row reads *not sought: not paper traded alone*.
+  The sign-off row reads the owner's name and date when they put it on paper on probation, with
+  the probation's terms; else *not sought*.
 - **Not sound:** the S row that fails, and what will be fixed before the next run. No P row is
   read.
 
@@ -196,9 +210,11 @@ to follow for the second outcome.
 
 - **Decide a gate.** The assistant lays both layers out, each row evidenced or not, names the
   outcome the rows reach and stops; the reading and the sign-off are a person's.
-- **Recommend a sound, regime-dependent book** — for paper trading alone, for a portfolio, or for a
-  period it might earn in. Pairing it with another signal is a later experiment's blueprint; using
-  it at discretion is a portfolio manager's decision and risk.
+- **Recommend a sound, regime-dependent book** — for probation, for a portfolio, or for a period it
+  might earn in. Probation is the owner's decision; pairing it with another signal is a later
+  experiment's blueprint; using it at discretion is a portfolio manager's decision and risk.
+- **Move a book on probation toward production.** Paper alone never does: at its review the owner
+  decides to continue, stop, or start a new experiment.
 - **Compute a performance number**, a deflated Sharpe included. Every figure is quoted from
   `FINDINGS_N.md` or `RESULTS.md` with its source; a missing one is a re-run to ask for, never a
   value to supply.

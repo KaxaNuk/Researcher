@@ -115,12 +115,12 @@ empty after the work was done.
 | G | The cycle | section 2 of `experiment_N_marimo.py` holds the rule; on this machine `Portfolio/`, `Backtest/` and `Attribution/` hold output; `FINDINGS_N.md` reports, every prediction of the blueprint evaluated | the first of `portfolio-construction-runs`, `backtest-engine-runs`, `attribution-analysis-runs` whose output is missing; `alpha-decomposition` to read it; then `challenge N` once `FINDINGS_N.md` reports. When the engine or the attribution library is not installed, which the notebook's guarded import reports, say the step is skipped for want of a licence and give the access line of `references/investment-lab.md`, in this skill's folder, naming that library; when attribution is installed and reports its index or factor files missing instead, that file's Analytics Factory line. Then move on to what can still be done — `FINDINGS_N.md` for the book, and the journal's open threads |
 | H | The results | `RESULTS.md` has the experiment's row citing `FINDINGS_N.md`; the claim has moved — where `BLUEPRINT_N.md` names one under *The claim this moves*, `OBJECTIVE.md` gives that claim the status `FINDINGS_N.md` says it reached, and so does the row's *Claim moved* where `RESULTS.md` has that column; where the blueprint names none, the statuses in `OBJECTIVE.md` of the claims it tests have moved; and `CHANGELOG.md` has the entry | the missing one of those three |
 
-A to H done for the newest experiment: the next thing is the gate — `Paper_Trading/BITACORA.md`,
-the `paper-trading-gate` skill — its soundness criteria S1 to S5 first, then performance, P1 to
-P3; or Experiment N+1, as section 6 of `experiment-lifecycle` says, starting again at E. An
-experiment that reads as sound and regime-dependent is not paper traded alone; a later experiment
-may pair it with another signal. The objective, the universe and the data are the strategy's and
-stay.
+A to H done for the newest experiment: the next thing is the gate — `Paper_Trading/BITACORA.md`, the
+`paper-trading-gate` skill — its soundness criteria S1 to S5 first, then performance, P1 to P3; or
+Experiment N+1, as section 6 of `experiment-lifecycle` says, starting again at E. An experiment that
+reads as sound and regime-dependent may go to paper on probation, on the owner's sign-off, or a
+later experiment may pair it with another signal. The objective, the universe and the data are the
+strategy's and stay.
 
 ## Step 4: Report
 

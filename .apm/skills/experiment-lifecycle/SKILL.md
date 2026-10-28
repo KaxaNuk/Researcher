@@ -222,9 +222,10 @@ gate has two layers, read in order.** Soundness, S1 to S5: no survivorship bias,
 overfitting, costs and capacity stated, reproducible from a working copy whose data folders were
 emptied first. Then performance, P1 to P3: beats the benchmarks and its control over the whole
 window, idiosyncratic alpha in both layers, conclusions that survive perturbation. Three outcomes:
-it graduates, and is frozen and paper traded once a person signs; it is sound and
-regime-dependent, its periods named, and is not paper traded alone; or it is not sound, and no
-conclusion is drawn. A person reads the gate; the assistant never decides it.
+it graduates, and is frozen and paper traded once a person signs; it is sound and regime-dependent,
+its periods named, and may go to paper on probation once a person signs, never to production from
+paper alone; or it is not sound, and no conclusion is drawn. A person reads the gate; the assistant
+never decides it.
 
 Every file those parts name is in the template, and so in a strategy made from it: each a
 description of what belongs in it, to be filled in — the worked example's drivers, modules,

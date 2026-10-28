@@ -125,7 +125,8 @@ run `next` at any moment: it reads the folder and says which part comes next.
 
 Then the gate in `Paper_Trading/BITACORA.md` — soundness first, S1 to S5, then performance, P1 to
 P3 — or Experiment 2, from E again. An experiment that is sound and earns only in named periods is
-read as such and not paper traded alone.
+read as such, and may go to paper on probation on the owner's sign-off, never to production from
+paper alone.
 
 ---
 

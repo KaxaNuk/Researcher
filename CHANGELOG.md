@@ -18,9 +18,12 @@ copy of Golden Flow.
   `BITACORA.md` and `promote.py`). Soundness first: no survivorship bias, no look-ahead, no
   overfitting, costs and capacity stated, reproducible from emptied data folders, each row with its
   evidence. Then performance, the former criteria 1 to 3. Three outcomes: **graduates**, frozen and
-  paper traded; **sound and regime-dependent**, not paper traded alone, its findings naming where it
-  earned and where it failed — a later experiment may pair it with another signal, or a portfolio
-  manager use it at their discretion, theirs to decide; **not sound**, no conclusion drawn.
+  paper traded; **sound and regime-dependent**, its findings naming where it earned and where it
+  failed, which may go to paper **on probation** on the owner's sign-off — its regime prediction,
+  at least 12 months and its review registered before day one, read against its index and its
+  control, paper alone never sending it to production — or be paired with another signal in a
+  later experiment, or used at a portfolio manager's discretion, theirs to decide; **not sound**, no
+  conclusion drawn.
 - **The strategy template 0.20.0** adopts the proposals of issue KaxaNuk/Researcher#41: marimo
   notebooks and no Jupyter; Sharadar in the curator; the adjustment rebuilt from the exact close;
   every per-security file in Parquet through `Data/time_series.py`; every cost and the cash inside

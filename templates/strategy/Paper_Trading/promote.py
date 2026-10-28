@@ -1,8 +1,8 @@
 """
-The promotion of a graduated experiment -- step 7 of 8.  Run once, when an experiment graduates:
+The promotion of an experiment to paper -- step 7 of 8.  Run once, when an experiment graduates --
 every soundness and every performance criterion of the gate in `BITACORA.md` holds, and a person
-has signed it there.  Never again for the same book, and never for an experiment that reads as
-sound and regime-dependent, which is not paper traded alone.
+has signed it there -- or when a person has signed it there as sound and regime-dependent, on
+probation, its terms registered.  Never again for the same book.
 
 In plain words: freeze the strategy.  Every file the book needs to go from raw prices to a priced
 book is copied byte for byte, from the commit that graduated, into `Paper_Trading/Paper_Trading_N/`

@@ -47,8 +47,9 @@ A criterion that needs a run excluded by name reads *not evidenced*, which is no
 - **Sound and regime-dependent** — every soundness criterion holds; performance fails over the
   whole window but holds in named periods. Name the periods where it earned and where it failed,
   against its control and its benchmarks, and the condition that tells them apart as far as the
-  evidence goes. It is not paper traded alone. It may be paired with another signal in a later
-  experiment, or used at a portfolio manager's discretion — the decision, and its risk, are
+  evidence goes. It may go to paper on probation, on the owner's sign-off, as `BITACORA.md` says;
+  paper alone never sends it to production. Otherwise it may be paired with another signal in a
+  later experiment, or used at a portfolio manager's discretion — the decision, and its risk, are
   theirs. Never a recommendation.
 - **Not sound** — a soundness criterion fails: no conclusion is drawn; fix it and run again.
 
