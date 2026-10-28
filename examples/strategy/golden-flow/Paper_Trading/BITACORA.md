@@ -353,6 +353,13 @@ data, retired on 2026-10-24, keeps its own section below.
 from 2026-10-27, the sign-off in `FREEZE.json`; `BOOKS` in `daily_update.py` names it from the
 commit after.
 
+**2026-10-27, day one.** `daily_update.py` ran by hand through 2026-10-27, its Sharadar download
+included: exit 1, flagged as registered — the desk's index holdings and returns end on 2026-08-14,
+so membership is held at that date and the book is priced against `SPY`. No band was crossed. The
+book last traded on 2026-10-01, its monthly rebalance. The day's log is
+`Paper_Trading/Logs/2026-10-27.log`; the engine's figures are in the record,
+`Paper_Trading/Record/`, and none is read for a decision before the review of 2027-10-27.
+
 *In this copy of the worked example*, the section above, registered in Golden Flow's own repository,
 keeps its words. The earlier FMP book's section it points to stands there, at tag `0.15.2`, not in
 this copy, which carries the book on probation alone.
