@@ -6,6 +6,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
+## [1.27.1] - 2026-10-29
+The researcher now knows Attribution Analysis 0.6.0, and the package checks every week that its
+record of the Investment Lab's libraries is current.
+
+**What to do differently:** say `update` in your home. If your strategy runs Attribution Analysis
+0.4.0 or later, read the new *Changed in 0.4.0 to 0.6.0* paragraph of `attribution-analysis-runs`
+first: its numbers change by default, and the class names its examples use were renamed.
+### Changed
+- **Attribution Analysis 0.6.0 is recorded** as the newest build in `investment-lab.md`, which
+  recorded 0.3.0, and `attribution-analysis-runs` 0.7.0 gains a *Changed in 0.4.0 to 0.6.0*
+  paragraph from the library's changelog, not yet checked by a run: the textbook Brinson-Fachler
+  formula and linked cumulative effects by default, the classes renamed from `Brinston` to
+  `Brinson` (the old names fail since 0.5.0), results as data with `run_attribution()` and
+  `run_attribution_from_backtest()`, and the Excel report every `main()` writes. Its
+  `library_version` stays 0.2.0 until a run of the worked example on 0.6.0 checks it.
+### Added
+- **`tools/lab_versions.py`** reads each Lab library's changelog on GitHub, never its code, and
+  compares its newest release with the package's record and its skill's `library_version`: a
+  library *behind* the record, a record *ahead* of its changelog, a library released while
+  recorded as *coming*, and a skill due a run. `release.py` shows its report before the checks,
+  and never stops on it; a task on the owner's computer runs it every Monday. On its first run it
+  found Attribution Analysis behind, and Portfolio Construction recorded at 2.0.1, which its
+  changelog has no entry for yet.
+
 ## [1.27.0] - 2026-10-29
 Installing the researcher no longer leaves parts out silently when you already have a skill or
 command of the same name: it tells you, and offers to keep both.

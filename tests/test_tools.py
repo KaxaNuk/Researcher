@@ -1,13 +1,14 @@
 """
 The harness's own rules, in tools/: the Markdown rules, the version order, how a shared file of the
-strategy template and its example is compared, the sentence a release's tag quotes, and which APM
-lines are a warning.
+strategy template and its example is compared, the sentence a release's tag quotes, which APM
+lines are a warning, and how the record of each Lab library stands against its changelog.
 """
 import pathlib
 import subprocess
 
 import check
 import install_check
+import lab_versions
 import release
 
 __all__ = []
@@ -167,6 +168,70 @@ def test_hunks_name_each_place_two_copies_differ() -> None:
         },
     ]
     assert no_hunks == []
+
+
+def test_lab_versions_read_the_newest_dated_release_and_the_record() -> None:
+    """
+    The newest release is the first dated entry, `[Unreleased]` and undated ones aside; the record's
+    *Latest* is a version, or `coming`; a skill names the build it was checked on.
+    """
+    changelog = '\n'.join([
+        '## [Unreleased]',
+        '## [0.6.0] - 2026-10-24',
+        '## [0.5.0] - 2026-10-21',
+        '',
+    ])
+    undated = '## [0.1.0] - unreleased\n'
+    record = '\n'.join([
+        '| Library | Step | What it does | Latest | How to get it |',
+        '| **Attribution Analysis** | 6 | splits the return | 0.3.0 (2026-09-27) | in the Lab |',
+        '| **Data Refinery** | 3 | cleans | *coming* | in the Lab |',
+        '',
+    ])
+    skill = '---\nmetadata:\n  version: 0.7.0\n  library_version: 0.2.0\n---\n'
+
+    assert lab_versions.newest_release(changelog) == '0.6.0'
+    assert lab_versions.newest_release(undated) == ''
+    assert lab_versions.recorded_latest(record, 'Attribution Analysis') == '0.3.0'
+    assert lab_versions.recorded_latest(record, 'Data Refinery') == 'coming'
+    assert lab_versions.recorded_latest(record, 'Data Analyzer') == ''
+    assert lab_versions.skill_version(skill) == '0.2.0'
+
+
+def test_lab_versions_say_how_each_record_stands() -> None:
+    """
+    A record older than the newest release is behind; one the changelog lacks is ahead; `coming`
+    with a release is the owner's call; a skill checked on an older build is due a run.
+    """
+    library = lab_versions.LIBRARIES[0]
+    changelog = '## [2.0.0] - 2026-09-27\n## [1.28.0] - 2026-09-02\n'
+    skill = '  library_version: 1.28.0\n'
+    cases = {
+        '1.28.0': 'behind',
+        '2.0.1': 'ahead',
+        '*coming*': 'coming',
+        '2.0.0': 'skill',
+    }
+    states = {
+        latest: lab_versions.reading(
+            library,
+            changelog,
+            f'| **{library.name}** | 3 | pulls | {latest} | free |\n',
+            skill,
+        ).state
+        for latest
+        in cases
+    }
+    checked = lab_versions.reading(
+        library,
+        changelog,
+        f'| **{library.name}** | 3 | pulls | 2.0.0 | free |\n',
+        '  library_version: 2.0.0\n',
+    )
+
+    assert states == cases
+    assert checked.state == 'ok'
+    assert checked.line.startswith('ok       Data Curator')
 
 
 def test_marked_lines_are_left_out_markers_too() -> None:

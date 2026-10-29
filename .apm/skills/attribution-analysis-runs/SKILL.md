@@ -13,7 +13,7 @@ description: >
   does NOT cover what the numbers mean for a strategy (use `alpha-decomposition`) or running the
   backtest that produced the book (use `backtest-engine-runs`).
 metadata:
-  version: 0.6.0
+  version: 0.7.0
   library_version: 0.2.0
 ---
 
@@ -52,6 +52,37 @@ licence errors are also `kaxanuk.license_client.LicenseError`. `validate_license
 keyword-only `ValidationResult` (`ok`, `message`, `expires_at`): code that built the old one by
 position names its fields. The log file is UTF-8, and a console that cannot encode the offline
 warning still shows it.
+
+**Changed in 0.4.0 to 0.6.0, from its changelog — not yet checked by a run here.** Until a run
+checks them, read every section below as written for 0.2.0, and these first:
+
+- **The numbers change by default (0.4.0).** Brinson-Fachler is the textbook formula of 1985 by
+  segment, `brinson_fachler_formula = textbook`, and each date's effects must reconcile to
+  `R_p - R_b` or the run stops; the former asset-level numbers are `legacy`, deprecated. Cumulative
+  effects are linked, `linking_method = carino` (or `grap`, or `none` for the former running sums),
+  so they add up to the compounded return. The first price date, which has no return, is left out.
+  Net weights under 1 are topped up with `cash_ticker` (`CASH`), which earns 0. In the factor model
+  `f_market` is an ordinary factor, the aggregate files `f_total_factor_returns`,
+  `f_total_excess_returns` and `f_idyo_returns` are no longer loaded, and `f_carry.csv` and
+  `f_dividends.csv` are components of their own, not factors.
+- **The classes this file names were renamed (0.4.0), and the old names fail since 0.5.0:**
+  `BrinstonFachlerArrowAttribution` is `BrinsonFachlerArrowAttribution`, `.brinston_fach_indexes`
+  is `.brinson_fachler_indexes`, `cummulative_pct_decomp()` is `cumulative_pct_decomp()`, and
+  `returns_investible_assets` is `returns_investable_assets`. The code in section 6 below runs only
+  on 0.2.0 to 0.4.x as written.
+- **Results come back as data (0.4.0).** `run_attribution(configuration)` returns an
+  `AttributionResult` and writes nothing; `main()` returns it too. `run_attribution_from_backtest()`
+  attributes a finished Backtest Engine 0.67.0 run in memory, with an `implementation` table that
+  splits the engine's return into holdings return and costs. New settings: `factor_return_type`
+  (`log` restates log factor files as simple returns), `risk_free_rate` for the Sharpe ratio, and
+  `active_factor_model`, the factor model on the benchmark's weights too. Weights files must be
+  daily. The dashboard binds to `127.0.0.1`, debug mode off.
+- **`main()` writes an Excel report (0.5.0)**, `<portfolio>_<UTC time>_attribution_results.xlsx`, to
+  `output_directory` (`Output` by default), and raises `OSError` if it cannot;
+  `output_handlers=()` writes nothing. `AttributionResult.diagnostics` keeps every warning a run
+  logged, each with a stable `code`. 0.6.0 adds `benchmark_stats`, `relative_stats` (tracking error
+  and information ratio, defined as the Backtest Engine's) and results `by_year`, and lays the
+  report out as professional attribution reports are.
 
 **This skill gets the numbers out. It does not read them.** What allocation, selection and the
 idiosyncratic residual mean for a strategy — and the counterfactual books that turn the residual

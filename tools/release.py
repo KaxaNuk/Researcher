@@ -12,6 +12,8 @@ Before anything is pushed, in this order, each stopping the release when it fail
     version     apm.yml's version opens the CHANGELOG, its entry opens with a sentence, and no tag
                 has that version yet, here or on GitHub
     security    the security check finds nothing to fix
+    Lab         tools/lab_versions.py, each Lab library's newest release against the package's
+                record; a library behind it is shown, and never stops the release
     checks      tools/check.py, every check, the tests too
     install     tools/install_check.py, on an archive of the release
 With --go, then: dev is pushed, main fast-forwarded to it, the release tagged `vX.Y.Z` there with
@@ -86,6 +88,7 @@ def main(
         _github_gate,
         _version_gate,
         _security_gate,
+        _lab_gate,
         _checks_gate,
         _install_gate,
     ):
@@ -263,6 +266,27 @@ def _install_gate() -> check.CheckResult:
     result = check.CheckResult(
         name='install',
         problems=[] if passed else ['tools/install_check.py failed: see its report above'],
+    )
+
+    return result
+
+
+def _lab_gate() -> check.CheckResult:
+    """
+    The record of the Lab's libraries against their changelogs, tools/lab_versions.py, its report
+    shown as it runs; a library behind its record is said, and the release goes on.
+    """
+    print('--- tools/lab_versions.py', flush=True)
+    exit_code = _run_tool('lab_versions.py')
+    notes = {
+        0: '',
+        1: "a library is behind the package's record: see above",
+        2: 'not every changelog could be read: see above',
+    }
+    result = check.CheckResult(
+        name='Lab',
+        problems=[],
+        note=notes.get(exit_code, 'tools/lab_versions.py failed: see above'),
     )
 
     return result
