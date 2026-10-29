@@ -309,6 +309,19 @@ through the question tool — *Go*, described as *update it and save a version*;
    uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/Researcher --target <the owner's agent>
    ```
 
+   Then, for each assistant on APM's list, look for the owner's own skills, commands and agents
+   under the package's names — a new version may bring a name the owner already uses — which an
+   install keeps and leaves the package's out for, by the updated package's script:
+
+   ```bash
+   uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/init-researcher/scripts/user_targets.py" clashes <the assistant>
+   ```
+
+   When it exits 1, ask the `Same name` question of `SETUP.md`'s step 2, in its words; on *Rename
+   mine*, run the same script's `keep-mine <the assistant>`, then
+   `uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/Researcher` and `clashes` once more. The
+   question is the one this update asks after the plan's go.
+
    Either way, the date `next` keeps for its weekly version line then moves a week on, in the
    home's git config — from a strategy too, at the home the researcher's skill names; it is never
    saved or sent anywhere:
@@ -418,6 +431,8 @@ In chat and nowhere else:
   name or path when either changed; and, once `check` passes, that the home is now installed for
   the user, so the researcher is in every folder — else what it found missing, and an offer to try
   again;
+- each of the owner's own skills, commands or agents that kept the package's of the same name
+  out, and whether it was renamed to `<name>-mine` or kept, leaving that part of the package out;
 - what was set up from `settings.yml` — each assistant installed for and its `check`, the git
   settings set — and what was not: each connector to connect again, by name, with its fix;
 - that the new skills and commands appear in a **new** session, not this one.

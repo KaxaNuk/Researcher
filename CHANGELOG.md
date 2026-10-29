@@ -6,6 +6,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
+## [1.27.0] - 2026-10-29
+Installing the researcher no longer leaves parts out silently when you already have a skill or
+command of the same name: it tells you, and offers to keep both.
+
+**What to do differently:** say `update` in your home. If you have a skill, command or agent of your
+own named like one of the researcher's — `read`, `next`, `study` — it asks whether to rename yours
+to `<name>-mine`; yours keeps working under its new name, and nothing is deleted.
+### Added
+- **Name clashes are found at install, and both kept.** APM never overwrites a file it did not
+  install: where the user already had a skill, command or agent of their own under one of the
+  package's names, the install kept theirs, left the package's out with a one-line warning, and
+  the researcher ran without that part — without its own `read`, say, so with no extractor and no
+  note shape. `user_targets.py` (in `init-researcher` 0.9.0) gains `clashes`, which reads APM's lock
+  file and names each one of the user's own, and `keep-mine`, which renames each to `<name>-mine`,
+  never over a file. `SETUP.md`'s step 2 and `init-researcher` run `clashes` after the install or
+  update and, when it finds one, ask `Same name` before the researcher's name; `update` asks it
+  after every package update, since a new version can bring a name the owner already uses. A clean
+  machine never sees the question: the onboarding, frozen, is unchanged, and `ONBOARDING.md` says
+  so on the owner's word. Tried by installing over a hand-made `read`, `next`, `study`, `audit` and
+  `blueprint-critic` for Claude Code and Codex, then renaming them and installing again.
+
 ## [1.26.0] - 2026-10-27
 The worked example, Golden Flow, now shows a strategy done correctly that earns only in some
 markets, and every strategy's notebooks are marimo.

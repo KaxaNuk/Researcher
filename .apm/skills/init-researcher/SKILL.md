@@ -9,7 +9,7 @@ description: >
   of the install SETUP.md walks through; never per strategy. It does NOT create a strategy (use
   `init-strategy`), nor ask how the owner works or invests (`philosophy` does, later).
 metadata:
-  version: 0.8.7
+  version: 0.9.0
 ---
 
 # Init researcher — a home for the library, once
@@ -144,6 +144,19 @@ past four options, *Stop* is left out and the other homes are named in the line 
    the home is made from the version installed, and `update` brings it forward later. Old
    `KaxaNuk-Agent-Skills` packages the update may list as orphaned are harmless; leave them
    unmentioned.
+
+   After an update that ran, look for the owner's own skills, commands and agents under the
+   package's names, which an install keeps and leaves the package's out for, by the package's
+   script, without asking:
+
+   ```bash
+   uv run --no-project python "<the package>/.apm/skills/init-researcher/scripts/user_targets.py" clashes <assistant>
+   ```
+
+   When it exits 1, ask the `Same name` question of `SETUP.md`'s step 2, in its words, before step
+   6; on *Rename mine*, run the same script's `keep-mine <assistant>`, then
+   `uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/Researcher` and `clashes` once more. When it
+   exits 0, nothing is said about it.
 
 6. **Copy.** The script is in the `init-strategy` skill's folder, beside this one; in the
    conversation that installed the package, where the skill is not loaded yet, run it from the

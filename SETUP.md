@@ -98,19 +98,34 @@ git config --global user.email "<>"
 uv tool install apm-cli==0.33.0
 uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/Researcher --target <the assistant you are>
 uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/init-researcher/scripts/user_targets.py" add <the assistant you are>
+uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/init-researcher/scripts/user_targets.py" clashes <the assistant you are>
 ```
 
 The target is the assistant you are: `claude`, `codex`, `gemini`, `cursor`, `copilot`, `opencode` or
-`windsurf`. Run all three without asking. `-g` installs for the user, whatever folder you are in,
+`windsurf`. Run all four without asking. `-g` installs for the user, whatever folder you are in,
 and `add` keeps your assistant in APM's list, `~/.apm/apm.yml`, so that a later install or update
 does not remove what it put there. uv may warn that its tool folder is not on the PATH; leave it.
 **If `add` cannot find the script**, an older package was already installed, and an install keeps
 the version it had: run `uvx --from apm-cli==0.33.0 apm update -g --yes`, then the install above
 again, then `add`. If `add` exits 1, say why in one line at the opening of step 3's question, and go
-on. Every command that runs APM names `apm-cli==0.33.0` itself; *Troubleshooting* below says why,
+on.
+
+**If `clashes` exits 1**, the user already has a skill, command or agent of their own under one of
+the package's names: the install kept theirs, left the package's out, and the researcher would run
+without it. Before step 3, ask one question, header `Same name` (`Mismo nombre`), the names it
+printed in place of `<names>`: *You already have your own `<names>`. I kept yours, so mine weren't
+installed. Rename yours to `<name>-mine` so both work?* (*Ya tienes tus propios `<names>`. Dejé los
+tuyos, así que los míos no se instalaron. ¿Renombro los tuyos a `<name>-mine` para que funcionen
+ambos?*) — *Rename mine (recommended)*, described as *yours keep working under the new name;
+nothing is deleted*, and *Keep mine as they are*, described as *the researcher works without those
+parts*. On *Rename*, run the same script's `keep-mine <the assistant you are>`, the install above
+again and `clashes` once more, without asking. When `clashes` exits 0, nothing is said about it.
+
+Every command that runs APM names `apm-cli==0.33.0` itself; *Troubleshooting* below says why,
 and what to do if the install fails. **The package is not the researcher yet:** never report the
-install on its own. Go on to step 3 in the same turn, and let your next message to the user be step
-3's first question, opening with one line: *The package is installed; now your researcher.*
+install on its own. Go on to step 3 in the same turn — after the `Same name` question, when there
+is one — and let your next message to the user be step 3's first question, opening with one line:
+*The package is installed; now your researcher.*
 
 ## Step 3 — The researcher's name, and where it lives
 

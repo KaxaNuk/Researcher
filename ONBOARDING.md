@@ -14,7 +14,11 @@
 > concept pages by script; this run is unchanged, its paper having a text layer and its concept
 > pages being new. At 1.19.0, on the owner's word, `SETUP.md` gains a way back for a researcher
 > kept on GitHub — a second line to paste, step 3's first paragraph, *Later*'s *A new machine* —
-> which a newcomer's run never reaches: this run is unchanged.
+> which a newcomer's run never reaches: this run is unchanged. At 1.27.0, on the owner's word,
+> `SETUP.md`'s step 2, `init-researcher` after its update, and `user_targets.py`'s `clashes` and
+> `keep-mine` look for a skill, command or agent of the user's own under one of the package's
+> names, which the install keeps while leaving the package's out, and ask `Same name` to rename it
+> `<name>-mine` — a branch a clean machine never reaches: this run is unchanged.
 
 What varies from run to run: the language — in Spanish every line is in Spanish, with the headers
 the skills give — the names proposed, the paths, the owner's answers and what is proposed from
