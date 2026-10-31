@@ -6,18 +6,20 @@ description: >
   in a folder of its own. Only when the owner asks for a deck, a presentation or slides, or the
   same in their language. It writes the brief and every slide's content from the owner's files,
   every claim cited and every figure quoted from the file that holds it, and builds the deck with
-  HyperFrames' `slideshow` skill, installed from its own source on the owner's go. Plan first, the
-  owner's go, then build. It does NOT render a video (HyperFrames' own skills do), compute a
+  HyperFrames' `slideshow` skill, installed from its own source on the owner's go, and hands it over
+  as one HTML file that opens offline, beside a PDF. Plan first, the owner's go, then build. It
+  does NOT render a video (HyperFrames' own skills do), compute a
   figure, give advice, upload a deck the owner did not ask to publish, or write in the home or a
   strategy.
 metadata:
-  version: 0.1.0
+  version: 0.2.0
 ---
 
 # Deck — an interactive presentation from your own work
 
 A deck is a HyperFrames project: HTML slides the owner presents in a browser, with reveals,
-branches and a presenter view with notes, kept as a PDF to send. HyperFrames,
+branches and a presenter view with notes, handed over as one HTML file that opens with a double
+click, without internet, and a PDF. HyperFrames,
 <https://github.com/heygen-com/hyperframes>, is open source and changes every week, so **this
 skill keeps none of its internals**: it settles what the deck says and where each line comes from,
 and HyperFrames' `slideshow` skill, kept fresh from its own source, builds it. On how to build,
@@ -95,10 +97,28 @@ file, and `check` passes again after it.
 
 ## Step 5: Share it
 
-- **A file, by default.** The deck stays in its folder: its HTML, and a PDF printed from the
-  browser, landscape with backgrounds on, or made as HyperFrames' own docs say.
-- **Before it leaves this computer** — sent, shared or uploaded — the `security` skill's check runs
-  on the folder, and a finding stops it.
+- **One HTML file, the default to share.** While `present` serves the deck, this skill's script
+  writes it whole into its folder as `<deck-name>.html` — the folder's name unless the owner gives
+  another — from the address `present` printed:
+
+  ```bash
+  uv run --no-project python -I <this skill's folder>/scripts/one_file.py http://localhost:3004 "<folder>/<deck-name>.html"
+  ```
+
+  It saves the page `present` serves, with every script, stylesheet, font, image, sound and scene
+  file the deck loads put inside it, so it opens with a double click, offline, with its slides,
+  reveals, branches and presenter notes. It reads what `present` serves rather than how HyperFrames
+  builds it, so it keeps none of HyperFrames' internals, and it installs nothing; it reads only
+  that address and the ones the deck itself loads, and writes only that file. Exit 0 means
+  nothing is left outside it. On exit 2 it names what the file would still fetch, or an address
+  that gave no answer: say so in one line, and fix it in the deck or share the folder instead. A
+  file it names as *not in the deck, as under `present`* — a sound effect the deck never had — is
+  missing under `present` too. Open the file once from the folder and step through it before it
+  is shared.
+- **A PDF beside it**, printed from the browser, landscape with backgrounds on, or made as
+  HyperFrames' own docs say, for whoever wants pages.
+- **Before it leaves this computer** — sent, shared or uploaded, the HTML file or the PDF — the
+  `security` skill's check runs on the folder, and a finding stops it.
 - **`publish` only when asked.** `npx hyperframes publish <folder>` uploads the deck to HeyGen, the
   company behind HyperFrames, and gives a link, private by default. Run it only when the owner
   asks to publish, after the check, saying in one line that the deck then leaves the computer and

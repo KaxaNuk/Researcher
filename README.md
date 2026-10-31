@@ -119,7 +119,7 @@ prices, shown to teach the method, never a promise or a recommendation.
 | bring it into any project | open your assistant in that folder and say its name | your researcher, with what it knows; it writes there only on your go |
 | learn a topic | `teach <topic>` | a lesson a session from what you have read, with a quiz |
 | stay informed, on the days you choose | `brief setup`, then `brief` | a dated file: your work, your markets, news on your holdings beside your own rules, and once a week your update ready to paste into team chat; never advice |
-| present your work | `deck` | an interactive presentation in a folder of its own, built with HyperFrames from your files: every claim cited, every figure quoted, a PDF to send |
+| present your work | `deck` | an interactive presentation in a folder of its own, built with HyperFrames from your files: every claim cited, every figure quoted, one HTML file that opens offline and a PDF to send |
 | keep your keys, personal data and confidential files safe | `security`, before you share or push | a check of the folder, values never shown, and what to do if a key leaked |
 | write down how you work or invest, and see it evolve | `philosophy` | a short interview; your typed answers, word for word, in `Philosophy/` |
 | know what to do next | `next`, wherever you are | where you stand, and the one thing to do next |

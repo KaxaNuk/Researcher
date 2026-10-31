@@ -6,6 +6,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
+## [1.28.0] - 2026-10-31
+A deck made with `deck` now ends as one HTML file you can open with a double click and share,
+without internet, beside its PDF.
+
+**What to do differently:** say `update` in your home. The next deck you make is handed over as
+`<deck-name>.html` in its folder; for a deck you already made, serve it with
+`npx hyperframes present <folder>` and ask for its HTML file.
+### Added
+- **`deck` 0.2.0 writes the deck as one HTML file**, `<deck-name>.html` in its folder, in *Step 5*,
+  the default file to share, with the PDF beside it; the `security` check still runs on the folder
+  before either leaves the computer. Its new script, `scripts/one_file.py`, saves the page
+  `npx hyperframes present` serves with everything it loads inside it: the player's scripts, the
+  deck in the player's `srcdoc`, its scripts, stylesheets, fonts, images, sounds and scene files
+  as text or data, and the runtime the player's code names put in the deck first. It reads what
+  `present` serves, never how HyperFrames builds it, so the skill still keeps none of HyperFrames'
+  internals and installs nothing. It reads only the deck's address on this computer and the ones
+  the deck loads, writes only the file, and names anything still outside it. Tried on a
+  three-slide deck from HyperFrames 0.8.225: opened from the folder with every host blocked, it
+  stepped through its slides with its own font and fetched nothing. `tests/test_one_file.py`
+  tests it on a fake server.
+
 ## [1.27.1] - 2026-10-29
 The researcher now knows Attribution Analysis 0.6.0, and the package checks every week that its
 record of the Investment Lab's libraries is current.
