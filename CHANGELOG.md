@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
+## [1.28.1] - 2026-10-31
+The README's picture of the interview shows someone who works in finance again.
+
+**What to do differently:** nothing.
+### Changed
+- **`assets/readme/first-you.svg`**, on the owner's word: the answer to the interview's first
+  question is a portfolio analyst who wants to build and test equity strategies and keep up with
+  the research behind them, in place of the employment lawyer, and `RESEARCHER.md` beside it fills
+  in as the interview would from that answer — *Here for* organising the reading and building and
+  testing a strategy, *Domains* Finance. Its description says the same.
+
 ## [1.28.0] - 2026-10-31
 A deck made with `deck` now ends as one HTML file you can open with a double click and share,
 without internet, beside its PDF.

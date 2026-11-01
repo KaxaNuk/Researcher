@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600" role="img" aria-labelledby="title desc">
   <title id="title">First you, then its voice</title>
-  <desc id="desc">The interview takes two questions and about three minutes, and asks nothing about markets. Your researcher, Arya, asks: tell me more about yourself, what you do, and the kinds of projects and topics we will be working on together. An employment lawyer answers, and RESEARCHER.md fills in beside the chat: name, works for, here for, domains. The second question asks how it should talk to you. You can change its voice and everything else later.</desc>
+  <desc id="desc">The interview takes two questions and about three minutes, and asks nothing about markets. Your researcher, Arya, asks: tell me more about yourself, what you do, and the kinds of projects and topics we will be working on together. A portfolio analyst at an asset manager answers, and RESEARCHER.md fills in beside the chat: name, works for, here for, domains. The second question asks how it should talk to you. You can change its voice and everything else later.</desc>
   <style>
     .sans { font-family: "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif; }
     .heavy { font-family: "Archivo Black", "Arial Black", "Helvetica Neue", Arial, sans-serif; font-weight: 900; }
@@ -26,10 +26,10 @@
 
   <rect x="150" y="338" width="528" height="124" fill="#E23B2A"/>
   <g class="sans" font-size="17" fill="#fff">
-    <text x="168" y="366">I’m an employment lawyer. I review contracts and</text>
-    <text x="168" y="390">internal policies for clients, I’m preparing a talk on</text>
-    <text x="168" y="414">remote-work law, and I want help keeping up with new</text>
-    <text x="168" y="438">rulings without drowning in them.</text>
+    <text x="168" y="366">I work in finance, as a portfolio analyst at an asset</text>
+    <text x="168" y="390">manager. I want to build and test equity strategies,</text>
+    <text x="168" y="414">and keep up with the research behind them without</text>
+    <text x="168" y="438">drowning in papers.</text>
   </g>
   <text x="62" y="510" class="sans" font-size="15" fill="#8C8983">2 of 2 · How should I talk to you?  Explain as you go · Thorough · Brief …</text>
 
@@ -40,14 +40,15 @@
   <g class="mono" font-size="14" fill="#111">
     <text x="748" y="246" font-weight="700"># Arya</text>
     <text x="748" y="282"><tspan font-weight="700">Name:</tspan> Arya</text>
-    <text x="748" y="312"><tspan font-weight="700">Works for:</tspan> Sofía, employment</text>
-    <text x="748" y="332">lawyer — contracts, policies,</text>
-    <text x="748" y="352">a talk on remote-work law</text>
+    <text x="748" y="312"><tspan font-weight="700">Works for:</tspan> Sofía, portfolio</text>
+    <text x="748" y="332">analyst — equity strategies</text>
+    <text x="748" y="352">and the research behind them</text>
     <text x="748" y="382"><tspan font-weight="700">Here for:</tspan> Organise what I read,</text>
-    <text x="748" y="402">and help with my projects</text>
-    <text x="748" y="432"><tspan font-weight="700">Domains:</tspan> Law, Business</text>
-    <text x="748" y="470" font-weight="700">## How it speaks</text>
-    <text x="748" y="494" fill="#8C8983">← question 2</text>
+    <text x="748" y="402">and help with my projects;</text>
+    <text x="748" y="422">Build and test a strategy</text>
+    <text x="748" y="452"><tspan font-weight="700">Domains:</tspan> Finance</text>
+    <text x="748" y="486" font-weight="700">## How it speaks</text>
+    <text x="748" y="510" fill="#8C8983">← question 2</text>
   </g>
 
   <text x="40" y="574" class="sans" font-size="16" fill="#3A3A3A">You can change its voice, and everything else, later</text>
