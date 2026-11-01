@@ -9,7 +9,7 @@ description: >
   of the install SETUP.md walks through; never per strategy. It does NOT create a strategy (use
   `init-strategy`), nor ask how the owner works or invests (`philosophy` does, later).
 metadata:
-  version: 0.9.1
+  version: 0.9.2
 ---
 
 # Init researcher — a home for the library, once
@@ -53,7 +53,9 @@ file-reading tool does not expand it: give that tool the full path, the home fol
 `RESEARCHER.md` is filled — no angle-bracketed slot left — and at the researcher's skill loaded in
 this session, whose description names its home. With none, go on to step 1. With one, <Existing> is
 the *Name* in its `RESEARCHER.md`, and where it lives is the path the description of its skill
-gives, `.apm/skills/<slug>/SKILL.md` in that copy, asked of the owner only when it is missing:
+gives, `.apm/skills/<slug>/SKILL.md` in that copy, asked of the owner only when it is missing. The
+copy under that `_local/` folder is never the home: it is never named as the home, opened to work
+in, or written to; the home is the path its researcher's skill names. So:
 
 - **When the owner did not ask for another** — *a test researcher*, *a second one*, *another one*,
   in any words — say where it is in one line, install nothing yet, and ask once, in the language the
@@ -143,7 +145,8 @@ past four options, *Stop* is left out and the other homes are named in the line 
    plain line, as a progress note sent with step 6's command, and go on to step 6 in the same turn:
    the home is made from the version installed, and `update` brings it forward later. Old
    `KaxaNuk-Agent-Skills` packages the update may list as orphaned are harmless; leave them
-   unmentioned.
+   unmentioned. On Codex, a command its sandbox refuses is asked to run outside it, as `SETUP.md`'s
+   step 2 says, never left undone.
 
    After an update that ran, look for the owner's own skills, commands and agents under the
    package's names, which an install keeps and leaves the package's out for, by the package's

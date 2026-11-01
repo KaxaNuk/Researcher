@@ -21,7 +21,10 @@
 > `<name>-mine` — a branch a clean machine never reaches: this run is unchanged. At 1.29.0, on the
 > owner's word, `SETUP.md`, `init-researcher`, `interview` and `user_targets.py` name the five
 > assistants the researcher is tried on — Claude Code, Codex, Copilot, Cursor and Antigravity, which
-> replaced the Gemini CLI — in place of seven: this run, on Claude Code, is unchanged.
+> replaced the Gemini CLI — in place of seven: this run, on Claude Code, is unchanged. At 1.29.1, on
+> the owner's word, `SETUP.md` and `init-researcher` ask Codex to run outside its sandbox the
+> commands it refuses, and say the copy of a home under `_local/` is never the home — a run on
+> Codex, and a home already made, which this run on Claude Code never reaches: it is unchanged.
 
 What varies from run to run: the language — in Spanish every line is in Spanish, with the headers
 the skills give — the names proposed, the paths, the owner's answers and what is proposed from

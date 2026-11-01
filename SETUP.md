@@ -110,6 +110,11 @@ install keeps the version it had: run `uvx --from apm-cli==0.33.0 apm update -g 
 install above again, then `add`. If `add` exits 1, say why in one line at the opening of step 3's
 question, and go on.
 
+**On Codex, its sandbox.** The install writes in the user's own folder — `~/.apm/`, `~/.agents/`,
+`~/.codex/` — outside the folder Codex was opened in, which its sandbox keeps it to. When the
+sandbox refuses a command, ask to run it outside the sandbox, which Codex puts to the user to
+approve, and go on: never stop there, and never ask the user to type it.
+
 **If `clashes` exits 1**, the user already has a skill, command or agent of their own under one of
 the package's names: the install kept theirs, left the package's out, and the researcher would run
 without it. Before step 3, ask one question, header `Same name` (`Mismo nombre`), the names it
@@ -137,12 +142,14 @@ clones it into a short folder and runs `update` there, which sets this computer 
 its interview came back with it.
 
 First look in `$HOME/.apm/apm_modules/_local/` for a home already made — a folder with a filled
-`RESEARCHER.md` — and at a researcher's skill loaded in this session, which names its home. With
-one, follow *One researcher per person*, below: it asks whether to use it, unless the user already
-asked for another. Otherwise read `init-researcher` now, in the same turn, and follow it from its
-step 2, with the language already chosen; its file is
-`$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/init-researcher/SKILL.md`, and its
-own questions take the name, then the place and the go in one. If the file is not there, list
+`RESEARCHER.md` — and at a researcher's skill loaded in this session, which names its home. The copy
+under `_local/` is never the home: it is never named as the home, opened to work in, or written to;
+the home is the path its researcher's skill names. With one, follow *One researcher per person*,
+below: it asks whether to use it, unless the user already asked for another. Otherwise read
+`init-researcher` now, in the same turn, and follow it from its step 2, with the language already
+chosen; its file is
+`$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/init-researcher/SKILL.md`, and its own
+questions take the name, then the place and the go in one. If the file is not there, list
 `$HOME/.apm/apm_modules` to find it; if it still cannot be found, say so in one line and offer to
 install again.
 
@@ -233,7 +240,9 @@ either. So the steps a newcomer needs — `init-researcher`, `interview`, `next`
 by naming its file — *follow
 `$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/prompts/objective.prompt.md`* — and once the
 interview has run, the researcher's own skill does this for the user: they name the command, and it
-follows the file.
+follows the file. Codex's sandbox keeps it to the folder it was opened in, so each command that
+writes in the user's folder — the installs, `add`, `check` — is asked to run outside it, as step 2
+says.
 
 **Why APM is pinned at 0.33.0.** APM 0.33.0 installs this package cleanly, on Windows too. APM
 0.29.1 to 0.31.0 staged every package under long folders, and on Windows the worked example's

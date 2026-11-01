@@ -6,6 +6,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
+## [1.29.1] - 2026-10-31
+On Codex, setting up the researcher no longer stops when Codex's sandbox refuses to write in your
+user folder: it asks you to approve the command instead.
+
+**What to do differently:** nothing; on Codex, approve the commands it asks to run outside its
+sandbox while it installs.
+### Fixed
+- **Codex's sandbox**, found by the owner's run of 2026-10-31: Codex keeps itself to the folder it
+  was opened in, so it was refused writing `~/.apm/apm.yml` and `~/.codex/agents/`, and stopped
+  until told to go on. `SETUP.md`'s step 2 and *Troubleshooting*, and `init-researcher` 0.9.2's
+  update, now ask to run such a command outside the sandbox, which Codex puts to the user to
+  approve, and never leave it undone.
+- **A home's copy is never the home.** In the same run Codex named APM's copy of the home,
+  `~/.apm/apm_modules/_local/<home>/`, as the home: anything written there is lost to the next
+  install. `SETUP.md`'s step 3 and `init-researcher` now say the copy is never named as the home,
+  opened to work in or written to; the home is the path its researcher's skill names.
+- The frozen files change on the owner's word; the run in `ONBOARDING.md`, on Claude Code with no
+  home made yet, is unchanged, and says so.
+
 ## [1.29.0] - 2026-10-31
 The researcher now names only the five assistants it is tried on — Claude Code, Codex, Copilot,
 Cursor and Antigravity — since Google replaced the Gemini CLI with the Antigravity CLI for most
