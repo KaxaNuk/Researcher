@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
+## [1.29.2] - 2026-10-31
+Your researcher now really appears in the Antigravity app: its skills are copied there, since the
+app does not follow the links 1.29.1 made.
+
+**What to do differently:** say `update` in your home, then quit Antigravity completely, open it
+again and start a new conversation.
+### Fixed
+- **The Antigravity app follows no link.** Tried by the owner on 2026-10-31: with 1.29.1's junctions
+  in `~/.gemini/config/skills/`, the app found no skill, the researcher's and `/next` alike, even
+  after a restart; a real copy of one skill there was found at once. `user_targets.py`'s
+  `link-antigravity` becomes `sync-antigravity` (`init-researcher` 0.9.3): it copies each skill from
+  `~/.gemini/antigravity-cli/skills/` afresh on every run, marked by a `.kaxanuk-copy` file inside,
+  so the run after an install or an update brings the app the new version; it keeps a folder of the
+  user's own with no mark, replaces a link 1.29.1 left, and removes the copy of a skill no longer
+  installed. `SETUP.md`, the interview's install and `update` run it under its new name. Tried here:
+  29 of 29 skills copied, no link left, `check antigravity` passing.
+
 ## [1.29.1] - 2026-10-31
 Your researcher now works in the Antigravity app, not only its CLI, and on Codex setting up no
 longer stops when Codex's sandbox refuses to write in your user folder.

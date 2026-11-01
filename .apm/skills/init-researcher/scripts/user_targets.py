@@ -15,7 +15,7 @@ Usage:
     uv run --no-project python user_targets.py check <assistant> <slug>
     uv run --no-project python user_targets.py clashes <assistant>
     uv run --no-project python user_targets.py keep-mine <assistant>
-    uv run --no-project python user_targets.py link-antigravity
+    uv run --no-project python user_targets.py sync-antigravity
 
 The assistant is claude, codex, copilot, cursor or antigravity, the five the researcher is tried
 on; the slug is the researcher's name as its files take it, `sofia` for Sofía.  In a conversation where the
@@ -44,8 +44,8 @@ and agent, where APM puts them for the assistant:
     antigravity    .gemini/antigravity-cli/skills/   none: it takes no agent
 
 For Antigravity it also looks for `next` and `<slug>` in `.gemini/config/skills/`, where the
-Antigravity app reads skills, as `link-antigravity` links them.  Each missing file is named on a line
-of its own.  The check also fails when `apm.yml` lists assistants
+Antigravity app reads skills, as `sync-antigravity` copies them.  Each missing file is named on a
+line of its own.  The check also fails when `apm.yml` lists assistants
 and not this one, since the next install or update would delete the files it found.
 
 `clashes` reads, and changes nothing.  APM never overwrites a file it did not install: where the
@@ -63,17 +63,19 @@ over a file - a skill's folder, a command's or an agent's file, and the first `n
 `name =` in a TOML agent, that names it; nothing else in them changes, and nothing is deleted.  The
 user's own then works under its new name, and the next install puts the package's where it was.
 
-`link-antigravity` shows the skills APM installed for Antigravity to its app.  APM puts them in
+`sync-antigravity` shows the skills APM installed for Antigravity to its app.  APM puts them in
 `.gemini/antigravity-cli/skills/`, which only the Antigravity CLI reads; the app reads
-`.gemini/config/skills/`.  For each skill folder in the first, it makes a link of the same name in
-the second, pointing at it - a junction on Windows, a symbolic link elsewhere - so the next install
-or update reaches the app too.  A link already pointing there is left as it is; a folder or a link of
-the user's own under that name is kept, never replaced, and named; and a link that points into the
-first folder at a skill no longer there is removed.  Nothing else is touched.
+`.gemini/config/skills/`, and follows no link there, a junction or a symbolic one: tried with the
+Antigravity app on 2026-10-31.  So for each skill folder in the first it puts a copy of the same name
+in the second, marked as the package's by a file `.kaxanuk-copy` inside it, and copies it afresh on
+every run, so the run after an install or an update brings the app the new version.  A folder of
+the user's own under that name, one with no mark, is kept, never replaced, and named; a link left
+by an earlier version is replaced by a copy; and a marked copy, or a link, of a skill no longer
+installed is removed.  Nothing else is touched.
 
 Exit code 0 when the assistant is listed, or needs no list, or the researcher is installed for it,
 or none of the user's own files takes a name of the package's, or each was renamed, or every skill is
-linked for the Antigravity app; 1 when not; 2
+copied for the Antigravity app; 1 when not; 2
 for a command line that cannot be read.  The console is written in UTF-8, so a path
 in any alphabet prints; the script's own words are ASCII.
 """
@@ -83,7 +85,7 @@ import itertools
 import os
 import pathlib
 import re
-import subprocess
+import shutil
 import sys
 
 # The user's APM manifest, from the home folder, and the keys that name its assistants: `targets:`,
@@ -139,9 +141,11 @@ NAME_LINE_PATTERN = re.compile(
 )
 PACKAGE_SKILL = 'next'
 # Where APM puts Antigravity's skills, which the CLI alone reads, and where its app reads them, from
-# the user's home folder: `link-antigravity` links the first into the second.
+# the user's home folder: `sync-antigravity` copies the first into the second, each copy marked by
+# a file of its own.
 ANTIGRAVITY = 'antigravity'
 ANTIGRAVITY_APP_SKILLS = '.gemini/config/skills'
+COPY_MARK = '.kaxanuk-copy'
 SKILL_FOLDERS = {
     'antigravity': '.gemini/antigravity-cli/skills',
     'claude': '.claude/skills',
@@ -364,7 +368,7 @@ def expected_files(
 ) -> list[ExpectedFile]:
     """
     The files that show the package, and the researcher, installed for the assistant: the package's
-    `next` skill, then the researcher's skill, both linked for the app on Antigravity, and its agent
+    `next` skill, then the researcher's skill, both copied for the app on Antigravity, and its agent
     where the assistant takes one.
     """
     skill_folder = home / SKILL_FOLDERS[target]
@@ -386,11 +390,11 @@ def expected_files(
         app_files = [
             ExpectedFile(
                 path=app_folder / PACKAGE_SKILL / SKILL_FILE,
-                role=f"the package's {PACKAGE_SKILL} skill, linked for the Antigravity app",
+                role=f"the package's {PACKAGE_SKILL} skill, copied for the Antigravity app",
             ),
             ExpectedFile(
                 path=app_folder / slug / SKILL_FILE,
-                role="the researcher's skill, linked for the Antigravity app",
+                role="the researcher's skill, copied for the Antigravity app",
             ),
         ]
         files.extend(app_files)
@@ -549,98 +553,6 @@ def keep_mine(
     return 0
 
 
-def link_antigravity(
-    home: pathlib.Path,
-) -> int:
-    """
-    Link each skill APM installed for the Antigravity CLI into the folder the Antigravity app reads,
-    keeping any of the user's own and removing a link left to a skill that is gone.
-    """
-    cli_folder = home / SKILL_FOLDERS[ANTIGRAVITY]
-    app_folder = home / ANTIGRAVITY_APP_SKILLS
-
-    if not cli_folder.is_dir():
-        print(f'{cli_folder} does not exist: install the package for antigravity, then run this.')
-
-        return 1
-
-    app_folder.mkdir(
-        parents=True,
-        exist_ok=True,
-    )
-    skills = [
-        folder
-        for folder
-        in sorted(cli_folder.iterdir())
-        if (folder / SKILL_FILE).is_file()
-    ]
-    kept = []
-    newly_linked = []
-
-    for skill in skills:
-        place = app_folder / skill.name
-
-        if _is_link(place):
-            if _link_target(place) == skill.resolve():
-                continue
-
-            kept.append(place)
-
-            continue
-
-        if place.exists():
-            kept.append(place)
-
-            continue
-
-        try:
-            _make_link(
-                place,
-                skill,
-            )
-        except OSError as exception:
-            print(f'Not linked: {place}: {exception}')
-            kept.append(place)
-
-            continue
-
-        newly_linked.append(place)
-
-    links = [
-        place
-        for place
-        in sorted(app_folder.iterdir())
-        if _is_link(place)
-    ]
-    cli_root = cli_folder.resolve()
-    stale = [
-        place
-        for place
-        in links
-        if _is_stale_link(
-            place,
-            cli_root,
-        )
-    ]
-
-    for place in stale:
-        _remove_link(place)
-        print(f'Removed a link to a skill no longer installed: {place}')
-
-    for place in kept:
-        print(f'Kept yours, not linked: {place}')
-
-    reaching = len(skills) - len(kept)
-    linked_now = len(newly_linked)
-    print(f'{reaching} of {len(skills)} skills reach the Antigravity app; {linked_now} linked now.')
-
-    if kept:
-
-        return 1
-
-    return 0
-
-
 def list_key_indexes(
     lines: list[str],
 ) -> list[int]:
@@ -663,7 +575,7 @@ def main(
 ) -> int:
     """
     Read the command line, then add the assistant to the user's list, check its files, name the
-    user's own that keep the package's out, rename them, or link Antigravity's skills for its app.
+    user's own that keep the package's out, rename them, or copy Antigravity's skills for its app.
     """
     for console_stream in (sys.stdout, sys.stderr):
         try:
@@ -695,10 +607,10 @@ def main(
 
         return reported
 
-    if parsed.command == 'link-antigravity':
-        linked = link_antigravity(home)
+    if parsed.command == 'sync-antigravity':
+        synced = sync_antigravity(home)
 
-        return linked
+        return synced
 
     if parsed.command == 'keep-mine':
         renamed = keep_mine(
@@ -927,6 +839,88 @@ def rename_in_file(
         return
 
 
+def sync_antigravity(
+    home: pathlib.Path,
+) -> int:
+    """
+    Copy each skill APM installed for the Antigravity CLI into the folder the Antigravity app reads,
+    afresh, keeping any of the user's own and removing a copy or a link left to a skill that is gone.
+    """
+    cli_folder = home / SKILL_FOLDERS[ANTIGRAVITY]
+    app_folder = home / ANTIGRAVITY_APP_SKILLS
+
+    if not cli_folder.is_dir():
+        print(f'{cli_folder} does not exist: install the package for antigravity, then run this.')
+
+        return 1
+
+    app_folder.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+    skills = [
+        folder
+        for folder
+        in sorted(cli_folder.iterdir())
+        if (folder / SKILL_FILE).is_file()
+    ]
+    kept = []
+
+    for skill in skills:
+        place = app_folder / skill.name
+        is_ours = _is_link(place) or (place / COPY_MARK).is_file()
+
+        if place.exists() and not is_ours:
+            kept.append(place)
+
+            continue
+
+        try:
+            if is_ours:
+                _remove(place)
+
+            shutil.copytree(
+                skill,
+                place,
+            )
+            (place / COPY_MARK).write_text(
+                f'Copied by user_targets.py sync-antigravity from {skill}\n',
+                encoding='utf-8',
+            )
+        except OSError as exception:
+            print(f'Not copied: {place}: {exception}')
+            kept.append(place)
+
+    installed_names = {
+        skill.name
+        for skill
+        in skills
+    }
+    stale = [
+        place
+        for place
+        in sorted(app_folder.iterdir())
+        if place.name not in installed_names
+        and (_is_link(place) or (place / COPY_MARK).is_file())
+    ]
+
+    for place in stale:
+        _remove(place)
+        print(f'Removed the copy of a skill no longer installed: {place}')
+
+    for place in kept:
+        print(f'Kept yours, not copied: {place}')
+
+    reaching = len(skills) - len(kept)
+    print(f'{reaching} of {len(skills)} skills reach the Antigravity app, copied afresh.')
+
+    if kept:
+
+        return 1
+
+    return 0
+
+
 def unlisted_problem(
     manifest: pathlib.Path,
     target: str,
@@ -1121,8 +1115,8 @@ def _build_parser() -> argparse.ArgumentParser:
         help='the assistant in use',
     )
     commands.add_parser(
-        'link-antigravity',
-        help="link the skills installed for the Antigravity CLI into the folder the Antigravity app reads",
+        'sync-antigravity',
+        help="copy the skills installed for the Antigravity CLI into the folder the Antigravity app reads",
     )
 
     return parser
@@ -1161,79 +1155,23 @@ def _is_link(
     return linked
 
 
-def _is_stale_link(
-    place: pathlib.Path,
-    cli_root: pathlib.Path,
-) -> bool:
-    """
-    Whether a link points into the CLI's skills folder at a skill no longer installed there.
-    """
-    target = _link_target(place)
-    skill_file = target / SKILL_FILE
-    stale = target.parent == cli_root and not skill_file.is_file()
-
-    return stale
-
-
-def _link_target(
-    path: pathlib.Path,
-) -> pathlib.Path:
-    """
-    The folder a link points at, resolved.
-    """
-    target = path.resolve()
-
-    return target
-
-
-def _make_link(
-    place: pathlib.Path,
-    target: pathlib.Path,
-) -> None:
-    """
-    Make a link at the place pointing at the target folder: a junction on Windows, which needs no
-    administrator, a symbolic link elsewhere.
-    """
-    if os.name != 'nt':
-        place.symlink_to(
-            target,
-            target_is_directory=True,
-        )
-
-        return
-
-    completed = subprocess.run(
-        [
-            'cmd',
-            '/c',
-            'mklink',
-            '/J',
-            str(place),
-            str(target),
-        ],
-        capture_output=True,
-        check=False,
-        text=True,
-    )
-
-    if completed.returncode != 0:
-        reason = (completed.stdout + completed.stderr).strip()
-
-        raise OSError(reason)
-
-
-def _remove_link(
+def _remove(
     place: pathlib.Path,
 ) -> None:
     """
-    Remove a link, never what it points at.
+    Remove a link, never what it points at, or a folder the package copied, with all it holds.
     """
     if place.is_junction():
         os.rmdir(place)
 
         return
 
-    place.unlink()
+    if place.is_symlink():
+        place.unlink()
+
+        return
+
+    shutil.rmtree(place)
 
 
 def _slug(

@@ -458,8 +458,8 @@ run these yourself — the owner types nothing, and may not know what any of the
    uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/init-researcher/scripts/user_targets.py" check <the assistant in use> <slug>
    ```
 
-   On Antigravity, the same script's `link-antigravity` runs between the install and `check`: it
-   links the researcher's skill, and the package's, where the Antigravity app reads them.
+   On Antigravity, the same script's `sync-antigravity` runs between the install and `check`: it
+   copies the researcher's skill, and the package's, where the Antigravity app reads them.
 
    APM copies the home into `$HOME/.apm/apm_modules/_local/<folder name>/` and deploys only its
    `.apm/` — the agent and the skill. Never `apm install` inside the home: it deploys a second copy,

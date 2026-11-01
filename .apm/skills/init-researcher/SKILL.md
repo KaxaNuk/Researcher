@@ -9,7 +9,7 @@ description: >
   of the install SETUP.md walks through; never per strategy. It does NOT create a strategy (use
   `init-strategy`), nor ask how the owner works or invests (`philosophy` does, later).
 metadata:
-  version: 0.9.2
+  version: 0.9.3
 ---
 
 # Init researcher — a home for the library, once

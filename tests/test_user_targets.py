@@ -5,7 +5,9 @@ that the package and the researcher are on disk for it, and finds and renames th
 commands and agents that keep the package's of the same name out.
 """
 import functools
+import os
 import pathlib
+import subprocess
 
 import pytest
 
@@ -493,69 +495,6 @@ def test_keep_mine_renames_the_users_own_and_keeps_everything_in_them(
     assert 'install the package again' in printed
     assert after == 0
 
-def test_link_antigravity_links_each_skill_for_the_app_and_keeps_the_users_own(
-    capsys: pytest.CaptureFixture[str],
-    tmp_path: pathlib.Path,
-) -> None:
-    """
-    Each skill installed for the Antigravity CLI gets a link of its name where the app reads skills,
-    pointing at it; a folder of the user's own there is kept and named; a second run changes nothing;
-    and once a skill leaves the CLI's folder, its link is removed and nothing else.
-    """
-    home = tmp_path / 'Pérez, Sofía (2021)'
-    cli_files = _write_files(
-        home / user_targets.SKILL_FOLDERS['antigravity'],
-        [
-            'next/SKILL.md',
-            'read/SKILL.md',
-            'sofia/SKILL.md',
-        ],
-    )
-    app_folder = home / user_targets.ANTIGRAVITY_APP_SKILLS
-    own_files = _write_files(
-        app_folder,
-        ['read/SKILL.md'],
-    )
-    first_run = user_targets.link_antigravity(home)
-    printed_first = capsys.readouterr().out
-    second_run = user_targets.link_antigravity(home)
-    printed_second = capsys.readouterr().out
-    cli_files[0].unlink()
-    cli_files[0].parent.rmdir()
-    third_run = user_targets.link_antigravity(home)
-    printed_third = capsys.readouterr().out
-
-    assert first_run == 1
-    assert (app_folder / 'sofia').resolve() == cli_files[2].parent.resolve()
-    assert (app_folder / 'sofia' / 'SKILL.md').read_bytes() == cli_files[2].read_bytes()
-    assert own_files[0].read_bytes() == b'---\nname: sofia\n---\n'
-    assert f'Kept yours, not linked: {app_folder / "read"}' in printed_first
-    assert '2 of 3 skills reach the Antigravity app; 2 linked now.' in printed_first
-    assert second_run == 1
-    assert '0 linked now.' in printed_second
-    assert third_run == 1
-    assert not (app_folder / 'next').exists()
-    assert not (app_folder / 'next').is_junction()
-    assert not (app_folder / 'next').is_symlink()
-    assert 'Removed a link to a skill no longer installed' in printed_third
-    assert (app_folder / 'sofia' / 'SKILL.md').is_file()
-    assert own_files[0].is_file()
-
-
-def test_link_antigravity_refuses_before_the_install(
-    capsys: pytest.CaptureFixture[str],
-    tmp_path: pathlib.Path,
-) -> None:
-    """
-    With nothing installed for the Antigravity CLI there is nothing to link: it says so and fails.
-    """
-    linked = user_targets.link_antigravity(tmp_path)
-
-    assert linked == 1
-    assert 'install the package for antigravity, then run this.' in capsys.readouterr().out
-
-
-
 def test_main_adds_to_the_list_and_checks_in_the_home_folder(
     capsys: pytest.CaptureFixture[str],
     monkeypatch: pytest.MonkeyPatch,
@@ -673,6 +612,74 @@ def test_main_refuses_a_slug_that_is_not_one(
     assert raised.value.code == 2
     assert 'is not a slug' in capsys.readouterr().err
 
+def test_sync_antigravity_copies_each_skill_for_the_app_and_keeps_the_users_own(
+    capsys: pytest.CaptureFixture[str],
+    tmp_path: pathlib.Path,
+) -> None:
+    """
+    Each skill installed for the Antigravity CLI is copied, marked, where the app reads skills; a
+    folder of the user's own there is kept and named; a link an earlier version left becomes a copy;
+    a second run copies afresh what changed; and once a skill leaves the CLI's folder, its copy is
+    removed and nothing else.
+    """
+    home = tmp_path / 'Pérez, Sofía (2021)'
+    cli_folder = home / user_targets.SKILL_FOLDERS['antigravity']
+    cli_files = _write_files(
+        cli_folder,
+        [
+            'next/SKILL.md',
+            'read/SKILL.md',
+            'sofia/SKILL.md',
+        ],
+    )
+    app_folder = home / user_targets.ANTIGRAVITY_APP_SKILLS
+    own_files = _write_files(
+        app_folder,
+        ['read/SKILL.md'],
+    )
+    _old_link(
+        app_folder / 'next',
+        cli_files[0].parent,
+    )
+    first_run = user_targets.sync_antigravity(home)
+    printed_first = capsys.readouterr().out
+    cli_files[2].write_bytes(b'---\nname: sofia\n---\nnewer\n')
+    second_run = user_targets.sync_antigravity(home)
+    capsys.readouterr()
+    cli_files[0].unlink()
+    cli_files[0].parent.rmdir()
+    third_run = user_targets.sync_antigravity(home)
+    printed_third = capsys.readouterr().out
+    sofia_copy = app_folder / 'sofia'
+
+    assert first_run == 1
+    assert f'Kept yours, not copied: {app_folder / "read"}' in printed_first
+    assert '2 of 3 skills reach the Antigravity app, copied afresh.' in printed_first
+    assert second_run == 1
+    assert not sofia_copy.is_symlink()
+    assert not sofia_copy.is_junction()
+    assert (sofia_copy / 'SKILL.md').read_bytes() == b'---\nname: sofia\n---\nnewer\n'
+    assert (sofia_copy / user_targets.COPY_MARK).is_file()
+    assert own_files[0].read_bytes() == b'---\nname: sofia\n---\n'
+    assert not (own_files[0].parent / user_targets.COPY_MARK).exists()
+    assert third_run == 1
+    assert not (app_folder / 'next').exists()
+    assert 'Removed the copy of a skill no longer installed' in printed_third
+    assert own_files[0].is_file()
+
+
+def test_sync_antigravity_refuses_before_the_install(
+    capsys: pytest.CaptureFixture[str],
+    tmp_path: pathlib.Path,
+) -> None:
+    """
+    With nothing installed for the Antigravity CLI there is nothing to copy: it says so and fails.
+    """
+    synced = user_targets.sync_antigravity(tmp_path)
+
+    assert synced == 1
+    assert 'install the package for antigravity, then run this.' in capsys.readouterr().out
+
 
 def _lock(
     home: pathlib.Path,
@@ -719,6 +726,36 @@ def _manifest(
     manifest.write_bytes(text.encode('utf-8'))
 
     return manifest
+
+def _old_link(
+    place: pathlib.Path,
+    target: pathlib.Path,
+) -> None:
+    """
+    Make the link an earlier version left: a junction on Windows, which needs no administrator, a
+    symbolic link elsewhere.
+    """
+    if os.name != 'nt':
+        place.symlink_to(
+            target,
+            target_is_directory=True,
+        )
+
+        return
+
+    subprocess.run(
+        [
+            'cmd',
+            '/c',
+            'mklink',
+            '/J',
+            str(place),
+            str(target),
+        ],
+        capture_output=True,
+        check=True,
+    )
+
 
 
 def _package(

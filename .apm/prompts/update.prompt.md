@@ -324,7 +324,7 @@ through the question tool — *Go*, described as *update it and save a version*;
    mine*, run the same script's `keep-mine <the assistant>`, then
    `uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/Researcher` and `clashes` once more. The
    question is the one this update asks after the plan's go. With `antigravity` on the list, the
-   same script's `link-antigravity` runs too, so a skill a new version brings reaches its app.
+   same script's `sync-antigravity` runs too, so the new version reaches its app.
 
    Either way, the date `next` keeps for its weekly version line then moves a week on, in the
    home's git config — from a strategy too, at the home the researcher's skill names; it is never
@@ -398,7 +398,7 @@ through the question tool — *Go*, described as *update it and save a version*;
    uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/init-researcher/scripts/user_targets.py" check <assistant> <slug>
    ```
 
-   For `antigravity`, the same script's `link-antigravity` runs before its `check`, so the
+   For `antigravity`, the same script's `sync-antigravity` runs before its `check`, so the
    Antigravity app reads the skills too.
 
    Then the git settings the plan named, in the home only: `git config user.email <it>`, with

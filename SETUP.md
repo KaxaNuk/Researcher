@@ -110,8 +110,8 @@ install keeps the version it had: run `uvx --from apm-cli==0.33.0 apm update -g 
 install above again, then `add`. If `add` exits 1, say why in one line at the opening of step 3's
 question, and go on.
 
-**On Antigravity**, also run the same script's `link-antigravity` after the install, without asking:
-APM puts the skills where the Antigravity CLI reads them, and this links each one where the
+**On Antigravity**, also run the same script's `sync-antigravity` after the install, without asking:
+APM puts the skills where the Antigravity CLI reads them, and this copies each one where the
 Antigravity app reads them, so the researcher is there in both.
 
 **On Codex, its sandbox.** The install writes in the user's own folder — `~/.apm/`, `~/.agents/`,
@@ -216,7 +216,7 @@ home's own files. Always with `-g`: a bare `apm update` outside an APM project u
 
 **Another assistant.** Step 2 with the new target, which adds it to APM's list; then install the
 home, once, the assistant added under `targets:` in the home's `apm.yml` first: `uvx --from
-apm-cli==0.33.0 apm install -g "<the home>"`; on Antigravity, `link-antigravity`; then the done
+apm-cli==0.33.0 apm install -g "<the home>"`; on Antigravity, `sync-antigravity`; then the done
 check's `check`, with that target. `update`, in the home, does this for every assistant its
 `settings.yml` lists.
 
@@ -234,8 +234,9 @@ every file the assistant reads: outside the folder it works in, only the places 
 Copilot receives the same, its commands as `~/.copilot/prompts/*.prompt.md` and its instructions as
 files in `~/.copilot/instructions/`. Cursor gets the skills, the commands, in `~/.cursor/commands/`,
 and the agents, but not the instructions. **Antigravity gets the skills alone**, in
-`~/.gemini/antigravity-cli/skills/`, which only its CLI reads — `user_targets.py link-antigravity`
-links each one into `~/.gemini/config/skills/`, where its app reads them: no command, no agent and
+`~/.gemini/antigravity-cli/skills/`, which only its CLI reads — `user_targets.py sync-antigravity`
+copies each one into `~/.gemini/config/skills/`, where its app reads them, since the app follows
+no link: no command, no agent and
 no instruction, so there the researcher is its skill, and a command is followed from its file, as on
 Codex below. These five — Claude Code, Codex, Copilot, Cursor and Antigravity — are the assistants
 the researcher is tried on; APM installs for others, untried. **Codex gets the skills and the
