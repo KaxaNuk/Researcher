@@ -23,12 +23,13 @@ said; yours to change.>
 ## What you believe
 
 How I see my work, and how I invest, in my own words: in `Philosophy/` — `HOW-I-WORK.md` and
-`HOW-I-INVEST.md` — written by hand, or started and grown with `philosophy`.
+`HOW-I-INVEST.md` — written by hand, or started and grown with `working-philosophy` and
+`investing-philosophy`.
 
 ## Non-negotiables
 
-*None yet.* Say *remember this* to add a rule of your own, and `philosophy` asks for your rules;
-the first one written takes this paragraph's place, on your go.
+*None yet.* Say *remember this* to add a rule of your own, and `working-philosophy` asks for
+your rules; the first one written takes this paragraph's place, on your go.
 
 ## Tag policy
 

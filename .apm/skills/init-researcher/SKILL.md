@@ -7,7 +7,8 @@ description: >
   conversation. With a home already made, it offers that one first, and makes a second — a test,
   or another person — only on the owner's word. Only when the owner runs it by name, or as the step
   of the install SETUP.md walks through; never per strategy. It does NOT create a strategy (use
-  `init-strategy`), nor ask how the owner works or invests (`philosophy` does, later).
+  `init-strategy`), nor ask how the owner works or invests (`working-philosophy` and
+  `investing-philosophy` do, later).
 metadata:
   version: 0.9.3
 ---

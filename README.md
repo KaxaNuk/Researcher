@@ -123,7 +123,7 @@ prices, shown to teach the method, never a promise or a recommendation.
 | stay informed, on the days you choose | `brief setup`, then `brief` | a dated file: your work, your markets, news on your holdings beside your own rules, and once a week your update ready to paste into team chat; never advice |
 | present your work | `deck` | an interactive presentation in a folder of its own, built with HyperFrames from your files: every claim cited, every figure quoted, one HTML file that opens offline and a PDF to send |
 | keep your keys, personal data and confidential files safe | `security`, before you share or push | a check of the folder, values never shown, and what to do if a key leaked |
-| write down how you work or invest, and see it evolve | `philosophy` | a short interview; your typed answers, word for word, in `Philosophy/` |
+| write down how you work, then how you invest, and see it evolve | `working-philosophy`, then `investing-philosophy` | two short interviews; your typed answers, word for word, in `Philosophy/` |
 | know what to do next | `next`, wherever you are | where you stand, and the one thing to do next |
 
 **For investors and builders:**
@@ -141,10 +141,10 @@ reads for your questions, speaks in your voice and keeps your rules, all in its 
 edit. The package offers only hints, as options, never a position to adopt. Its home's `README.md`
 says how to work well with it, and [`USE-CASES.md`](USE-CASES.md) shows twelve uses, step by step.
 
-**From any task to investing.** Start where you work: `read` what you rely on, `query` it, `study`
-a decision, `teach` yourself a topic, and write down how you think with `philosophy`. Investing is
-there when you want it, never pushed: `teach` starts from scratch, and when an idea is ready, the
-Lab takes it through eight steps, with your researcher at each one.
+**From any task to investing.** Start where you work: `read` what you rely on, `query` it, `study` a
+decision, `teach` yourself a topic, and write down how you work with `working-philosophy`. Investing
+is there when you want it, never pushed: `investing-philosophy` and `teach` start from scratch, and
+when an idea is ready, the Lab takes it through eight steps, with your researcher at each one.
 
 ![Your researcher knows the Lab and every step: Bibliotheca, Universe, Data, Portfolio, Backtest, Attribution, Paper trading, and Production outside the Lab](assets/readme/the-lab-process.svg)
 
@@ -215,7 +215,8 @@ such as the daily brief, which is never saved.
 | `query <question>` | answers from the library, every claim cited |
 | `init-researcher`, `init-strategy`, `init-example`, `init-python-library` | make your home, a strategy, the worked example or a Python library, copied by a script, never from memory |
 | `interview` | two short questions about you, then `RESEARCHER.md` and the agent and skill that make it yours; `interview force` starts over |
-| `philosophy` | an optional interview on how you work or how you invest, at your level; your rules go to `RESEARCHER.md` |
+| `working-philosophy` | the first interview, for everyone: five open questions on how you work, and the rules your researcher keeps, which go to `RESEARCHER.md` |
+| `investing-philosophy` | the second, for when you invest: why, for whom, what you measure against, and more at your level |
 | `brief [setup]` | a dated file in `Briefs/`, every figure quoted from a dated source |
 | `next [strategy]` | the one next thing; at home, it offers to save what you changed by hand |
 | `workshop [session]` | your tutor in a session of a KaxaNuk Training Workshop, read from the course each time, never from memory; *practice* sets problems at your level |
@@ -290,7 +291,7 @@ The researcher's part is **the hypothesis**, and it stops where the numbers star
   in a `BIBLIOGRAPHY.md` without one is a lead.
 - **It never advises on a holding.** A brief quotes dated sources and the rules in your
   `Portfolio/RULES.md` that the day's news bears on, as yours, with no verdict. It never says buy,
-  sell, trim, add or hold, and never computes a weight, a P&L or a return. `philosophy` writes into
+  sell, trim, add or hold, and never computes a weight, a P&L or a return. The interviews write into
   `Philosophy/` only what you typed.
 
 ## Contact

@@ -53,7 +53,8 @@ keeps tickers and dates only. `paper_trading_N.py` stays shared and marked.
   2026-10-10, at 1.10.2. `ONBOARDING.md` is that run, step by step. `FROZEN.json` fingerprints it
   and the files that make the run: `SETUP.md`, `init-researcher`, `interview`, and `read` with its
   note convention, reading map and extractor. The home template, `templates/researcher/`, and the
-  `philosophy` skill's `references/questions.md` stay free, by the owner's choice. A frozen file
+  question banks of `working-philosophy` and `investing-philosophy`, each skill's
+  `references/questions.md`, stay free, by the owner's choice. A frozen file
   changes only when the owner asks for that change in words, never as the side effect of another:
   a sweep, a rename, a rewording, a version bump. Show the change against `ONBOARDING.md` first; on
   the owner's go, move its fingerprint in `FROZEN.json` in the same commit, update `ONBOARDING.md`

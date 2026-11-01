@@ -23,8 +23,8 @@ prices, shown to teach the method, never a promise or a recommendation.
 | Folder or file | What it holds | What you do with it |
 | --- | --- | --- |
 | `RESEARCHER.md` | who the researcher is: your name, what you are here for, its voice, your rules, what you are reading for | edit it whenever you like — it is yours |
-| `Philosophy/` | how you work, in `HOW-I-WORK.md`, and how you invest, in `HOW-I-INVEST.md` — your view, in your words; none until you or `philosophy` start one | write freely, or build them with `philosophy`; `refine` tidies them, diff first |
-| `Philosophy/Evolution/` | one file per `philosophy` round: your answers that day, word for word | nothing to do — the record of how your view moved, never edited; it appears with your first round |
+| `Philosophy/` | how you work, in `HOW-I-WORK.md`, and how you invest, in `HOW-I-INVEST.md` — your view, in your words; none until you or an interview start one | write freely, or build them with `working-philosophy` and `investing-philosophy`; `refine` tidies them, diff first |
+| `Philosophy/Evolution/` | one file per round of either interview: your answers that day, word for word | nothing to do — the record of how your view moved, never edited; it appears with your first round |
 | `Sources/Papers/`, `Sources/Books/`, `Sources/Clippings/` | the PDFs and clippings you read | drop a file in, or attach or name one and the researcher copies it in on your go; then `read` |
 | `Knowledge/` | the researcher's notes on what you read, with `INDEX.md` and `LOG.md` | written by `read`, on your go; ask it with `query` |
 | `Studies/` | ideas, plans and decisions worked out from what you read | `study <subject>`; `study` alone lists them |
@@ -70,12 +70,14 @@ your judgement stays yours.
    serves, in plain words, and keeps it as your question 1. For a book it asks which chapters serve
    your questions and reads only those; on your go it writes one note per chapter into
    `Knowledge/`. With nothing to read yet, `read` proposes a few works to start from.
-3. **Write down how you work, or how you invest,** whenever you like, with `philosophy`, an
-   optional second interview. It starts with why you do it, what you already believe and your
-   rules — on investing, at your level, teaching as it asks. On your go, it adds what you typed,
-   word for word, to `Philosophy/HOW-I-WORK.md` or `HOW-I-INVEST.md`, starting the file you lack,
-   and your rules to `RESEARCHER.md`. Take it again after you have read, and see how your view
-   moved.
+3. **Write down how you work, then how you invest,** whenever you like, in two short interviews.
+   First `working-philosophy`, for everyone: five open questions that tell your story at work —
+   how you got here, what changed you, what you believe, how you decide, what would change your
+   mind — and the rules your researcher keeps with you; about ten minutes. Then, if you invest or
+   want to learn, `investing-philosophy`: why you invest and for whom, what you measure against,
+   and more at your level, teaching as it asks. On your go, each adds what you typed, word for
+   word and behind its question, to `Philosophy/HOW-I-WORK.md` or `HOW-I-INVEST.md`, and the rules
+   to `RESEARCHER.md`. Take either again after you have read, and see how your view moved.
 4. **A daily brief,** if you want one: `brief setup` chooses the parts — your work, the markets you
    follow, your portfolio — the days and the time, and schedules it on the Claude desktop app;
    elsewhere, `brief` writes the day's file when you run it.

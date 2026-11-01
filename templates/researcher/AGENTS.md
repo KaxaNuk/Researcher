@@ -72,7 +72,7 @@ plan it. The researcher writes only on the owner's go:
 - a fact about their work — a new project, a new role — is a row of the projects table, or a
   change to *Works for* shown as a diff;
 - a view on their work or on investing is theirs to write in `Philosophy/`, by hand or with
-  `philosophy`;
+  `working-philosophy`, the first interview, and `investing-philosophy`, the second;
 - a rule about their holdings goes to `Portfolio/RULES.md`, theirs to write, never under
   *Non-negotiables*;
 - a fact inside one project stays there, in the file its rules give it.
@@ -91,7 +91,7 @@ edited.
 | `Knowledge/` | what the researcher read — one note per paper, one folder per book with a note per chapter read — and its wiki: one concept page per idea, grouped by domain folder | **read and write** — this is the researcher's own work |
 | `Knowledge/INDEX.md` | the single index of every note and page | rewrite, only through `read` and `refresh-index`; one line from `query` when the owner keeps a synthesis page |
 | `Knowledge/LOG.md` | append-only record of every read, audit and refresh, and of every synthesis page kept | **append one entry** at the end of those runs, and from `query` when a page is kept; never edit past entries |
-| `Philosophy/` | the owner's voice, in their own words — how they work, in `HOW-I-WORK.md`, and how they invest, in `HOW-I-INVEST.md` — and any other file of theirs beside them; and `Evolution/`, one round file per `philosophy` round (format: the `philosophy` skill), the record of how their answers moved. A round file is read for dates and levels and quoted only as a round's record, never cited as the owner's view or as evidence | **read and cite**, and write through its two writers only. `philosophy`, after the owner's go, adds the owner's typed answers to the file of the round's topic, word for word and add-only — creating it with its title and headings when missing — and writes one round file in `Philosophy/Evolution/`, never edited afterwards. `refine` edits any file of theirs there as an editor, diff first, never touching `Evolution/`. No text of the researcher's own goes here: neither file takes a pick — not even one the owner made — nor an example, a placement or *not sure yet*. A round file holds only the round's number, date and level or `Field`, the IDs, the owner's answers or their status, and, on a retake, the labels *kept*, *changed*, *new* and *still open* |
+| `Philosophy/` | the owner's voice, in their own words — how they work, in `HOW-I-WORK.md`, and how they invest, in `HOW-I-INVEST.md` — and any other file of theirs beside them; and `Evolution/`, one round file per round of `working-philosophy` or `investing-philosophy` (format: those skills), the record of how their answers moved. A round file is read for dates and levels and quoted only as a round's record, never cited as the owner's view or as evidence | **read and cite**, and write through its writers only. `working-philosophy`, the first interview, adds the owner's typed answers to `HOW-I-WORK.md`, and `investing-philosophy`, the second, to `HOW-I-INVEST.md`, after the owner's go, word for word and add-only, each behind its short question in bold — `- **<question>** <their words> *(round N)*` — creating the file with its title and headings when missing, and each writes one round file in `Philosophy/Evolution/`, never edited afterwards. `refine` edits any file of theirs there as an editor, diff first, never touching `Evolution/`. No text of the researcher's own goes here but that short question, a label: neither file takes a pick — not even one the owner made — nor an example, a placement or *not sure yet*. A round file holds only the round's number, date and level — `investing-philosophy`'s — or `Work` — `working-philosophy`'s, `Field` in rounds before 1.31.0 — the IDs, the owner's answers or their status, and, on a retake, the labels *kept*, *changed*, *new* and *still open* |
 | `Studies/` | the owner's own work from the library — an idea not yet a strategy, a decision, a plan or a memo — one file each, or a folder once it needs more; *Studies* below says what one holds. The template ships it empty | **write, through `study` only**, after its plan and the owner's go |
 | `Lessons/` | `teach`'s lessons, one folder per topic, with its `progress.md` and `sessions/`. The template ships none: `teach` creates it the first time it runs | **write, through `teach` only**, after its plan and the owner's go |
 | `Briefs/` | the daily brief, one `YYYY-MM-DD.md` a day in up to four parts — Work, Markets, Portfolio and, one day a week, Week, the owner's weekly update — written by `brief`, run by name or on the schedule `brief setup` made. The template ships none: the first brief creates it | **write, through `brief` only**: one file a day, changed only the same day on the owner's word, never by the schedule and never afterwards. Never cited, never a source: a figure there enters the library only as a source in `Sources/`, then `read`. Gitignored |
@@ -103,10 +103,11 @@ each project named — each to change on the owner's word. Nothing else writes i
 its diff shown, and four additions, each after the owner's go:
 
 - `read`, at home, may add a question under *What you are reading for*, in the owner's words;
-- the works the owner picks — at the interview's hand-over, or at the close of a `philosophy`
-  round unless its preview leaves *Find first* alone — are appended to the closing *Find first*
-  line, add-only;
-- the rules they settle in `philosophy` go under *Non-negotiables*;
+- the works the owner picks — at the interview's hand-over, or at the close of a round of
+  `working-philosophy` or `investing-philosophy` unless its preview leaves *Find first* alone — are
+  appended to the closing *Find first* line, add-only;
+- the rules they settle in `working-philosophy` go under *Non-negotiables*, and so do the two for
+  strategies when `investing-philosophy` asks them, in a home that lacks them;
 - what they teach with *learn this*, or what `bring-home` brings from an assistant's memory, as
   above.
 
@@ -248,8 +249,8 @@ wrote, to change on their word.
 
 Never write a command's plan or its report as a file; the chat and the `LOG.md` entry are the
 record. Three files are kept as records, each with its row in the folder table: `teach`'s
-`progress.md` in `Lessons/`, the round file `philosophy` writes in `Philosophy/Evolution/`, and the
-day's brief in `Briefs/`.
+`progress.md` in `Lessons/`, the round file each interview writes in `Philosophy/Evolution/`, and
+the day's brief in `Briefs/`.
 
 **Three writes are made without a go of their own:** the single line `audit` appends to the
 library's `LOG.md` when it reports; the day's file `brief` writes in `Briefs/`; and the dates of
@@ -302,7 +303,7 @@ has the commands and says the home's own version is the owner's; *Troubleshootin
 
 | Primitive | Where | What it is |
 | --- | --- | --- |
-| **Skill** | `.apm/skills/<name>/` in the package | the package's skills, each a folder: its `SKILL.md`, what it runs in `scripts/`, what it reads on demand in `references/`. The researcher's — `read`, `query`, `workshop`, `known-answer` and `security`, which it reaches for on its own, and `init-*`, `interview`, `next`, `philosophy`, `brief`, `backup`, `bring-home` and `deck`, run by name — are skills so that every assistant has them, Codex included; the process's, each Lab library's and the house rules' load when the work calls for them |
+| **Skill** | `.apm/skills/<name>/` in the package | the package's skills, each a folder: its `SKILL.md`, what it runs in `scripts/`, what it reads on demand in `references/`. The researcher's — `read`, `query`, `workshop`, `known-answer` and `security`, which it reaches for on its own, and `init-*`, `interview`, `next`, `working-philosophy`, `investing-philosophy`, `brief`, `backup`, `bring-home` and `deck`, run by name — are skills so that every assistant has them, Codex included; the process's, each Lab library's and the house rules' load when the work calls for them |
 | **Command** | `.apm/prompts/<name>.prompt.md` in the package | the other nine — `objective`, `blueprint`, `challenge`, `audit`, `refine`, `refresh-index`, `study`, `teach` and `update` — tasks the owner starts by name, with arguments, each producing one thing. Each says *only when the owner runs it by name* in its own description, the one place every harness reads |
 | **Agent** | `.apm/agents/<name>.agent.md`, here | the researcher as a subagent the harness can call by name, with its own tool boundary. Written by `interview` from `RESEARCHER.md`, so a fresh home has none until the interview runs. The package ships one agent of its own, `blueprint-critic`, a read-only reviewer that `blueprint` calls on its draft before it asks for the go, so this home's agent takes another name |
 | **The researcher's skill** | `.apm/skills/<slug>/`, here | the researcher present in every session: its description names the researcher, the owner and the home by path, as *The researcher's home* says, and its body says who is speaking, where what is learned goes and what may be written from where the session is — *Who is speaking* above. Written by `interview` beside the agent, under the agent's name. `update` writes it for a home that lacks it, and again when the home has moved or the skill is behind the template in `interview` — an older version, or a slug outside a to z, digits and hyphens — shown as a diff, the owner's own lines kept |
@@ -361,8 +362,8 @@ has the commands and says the home's own version is the owner's; *Troubleshootin
   where a strategy's numbers come from is one. What a library does and how to get it — the access
   line in the `next` skill's `references/investment-lab.md` — is said only when a step needs a
   library the owner lacks, or when the owner asks. It is never added unasked to `RESEARCHER.md`,
-  `Philosophy/`, a brief, a study, a round of `philosophy` or a *Find first* line, and never given
-  as a reason to invest in anything.
+  `Philosophy/`, a brief, a study, a round of either interview or a *Find first* line, and never
+  given as a reason to invest in anything.
 - Don't compute a return, a Sharpe or an attribution yourself: they come from the engines the
   project names, in a KaxaNuk strategy the Lab's libraries; a number with no engine is not quoted.
 - **Don't read, quote or copy a tool's code.** KaxaNuk's tools — the Lab's libraries, the Analytics
@@ -420,7 +421,7 @@ from another template keeps or maps them in its own `AGENTS.md`.
 | `Knowledge/`, with `INDEX.md` and `LOG.md` | the notes in `Bibliotheca/Papers/` and `Books/`, beside their PDFs; `BIBLIOGRAPHY.md` is the index and `Bibliotheca/LOG.md` the log. No concept pages: `OBJECTIVE.md` is the strategy's synthesis. The template ships `BIBLIOGRAPHY.md` with no notes, only the seeded leads, and `LOG.md` empty. |
 | `Extracts/` | `Bibliotheca/Extracts/` — the same cache, beside the strategy's PDFs; the template's `.gitignore` ignores it, and `read` says so in its plan when a strategy's does not |
 | `Philosophy/` | nothing — the owner's voice is read at home, named in prose, never linked |
-| what the owner asks for at home — `Studies/` from `study`, `Lessons/` from `teach`, `Philosophy/` from `philosophy`, `Briefs/` from `brief`, the rest answered in chat | the strategy's own files: `OBJECTIVE.md`, `Experiments/Experiment_N/BLUEPRINT_N.md` and `JOURNAL_N.md` (`challenge`'s entry, the benchmark's in `JOURNAL_1.md`, and `blueprint`'s *the rule read back*), the notes, `BIBLIOGRAPHY.md`; `study`, `teach`, `philosophy` and `brief` write at home only |
+| what the owner asks for at home — `Studies/` from `study`, `Lessons/` from `teach`, `Philosophy/` from `working-philosophy` and `investing-philosophy`, `Briefs/` from `brief`, the rest answered in chat | the strategy's own files: `OBJECTIVE.md`, `Experiments/Experiment_N/BLUEPRINT_N.md` and `JOURNAL_N.md` (`challenge`'s entry, the benchmark's in `JOURNAL_1.md`, and `blueprint`'s *the rule read back*), the notes, `BIBLIOGRAPHY.md`; `study`, `teach`, both interviews and `brief` write at home only |
 | *What you are reading for* in `RESEARCHER.md` — the numbered questions | the numbered claims in `OBJECTIVE.md`; while it has none, nothing may be read into the strategy — `objective` comes first, and the file is theirs to fill |
 
 - **Strategy work is written in the strategy**, in the file the template gives it, after the plan

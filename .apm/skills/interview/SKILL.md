@@ -7,7 +7,8 @@ description: >
   researcher callable by name and present in every session; install both, save a first version
   and hand over. Only when the owner runs it by name, or as the last step of the install SETUP.md
   or init-researcher walk through. "interview force" starts over. It does NOT ask how the owner
-  invests or their rules (use `philosophy`), nor what their reading is for (the first `read` asks).
+  works or invests, or their rules (use `working-philosophy`, then `investing-philosophy`), nor
+  what their reading is for (the first `read` asks).
 metadata:
   version: 2.12.6
 ---
@@ -30,10 +31,11 @@ question 1 itself, and anything else they found waits for the hand-over; never a
 report or a pause of its own.
 
 **The interview is about the person**: who they are, what they do and work on, and how the
-researcher should speak. **Nothing about markets is asked**: how they invest and their rules are
-`philosophy`'s, the questions their reading should answer are the first `read`'s, a strategy is
-`objective`'s and `blueprint`'s, and `next` names each when its turn comes. Its job is to make the
-researcher, fast: what the researcher can do is said once, at the end, in the hand-over.
+researcher should speak. **Nothing about markets is asked**: how they work and their rules are
+`working-philosophy`'s, how they invest `investing-philosophy`'s, the questions their reading should
+answer are the first `read`'s, a strategy is `objective`'s and `blueprint`'s, and `next` names each
+when its turn comes. Its job is to make the researcher, fast: what the researcher can do is said
+once, at the end, in the hand-over.
 
 **At a glance.** Two questions, about three minutes. Say so in one line before question 1 only when
 the owner ran the interview by name, and open question 2 with its number, *2 of 2*: in its call,
@@ -216,7 +218,7 @@ stay in English, as the template has them: *Name*, *Works for*, *Here for* and i
   `Philosophy/`; a *Where it sits* or *Add later* line an earlier template put there is not
   written back — the preview says so, and *Change something* offers to keep them.
 - **Non-negotiables** — the template's *None yet.* paragraph, in their language, with no rule:
-  `philosophy` asks for them. On a re-run, what is there is kept verbatim.
+  `working-philosophy` asks for them. On a re-run, what is there is kept verbatim.
 - **Tag policy** — loose: the researcher proposes tags as it reads, the owner prunes at audit. On a
   re-run, the policy the file states is kept.
 - **The strategies and projects it works on** — a row for each project question 1 named,
@@ -229,9 +231,9 @@ stay in English, as the template has them: *Name*, *Works for*, *Here for* and i
 - **Out of scope for now** — what question 1 said to stay out of, in their words, or *None yet*.
 - **How it cites** — the template's text, in their language, its meaning unchanged.
 
-No angle-bracketed slot is left. **Nothing is written in `Philosophy/`**: its two writers are
-`philosophy` and `refine`. **Nor is a rule written**: the owner's rules go under *Non-negotiables*
-later, through `philosophy` or *remember this*.
+No angle-bracketed slot is left. **Nothing is written in `Philosophy/`**: its writers are
+`working-philosophy`, `investing-philosophy` and `refine`. **Nor is a rule written**: the owner's
+rules go under *Non-negotiables* later, through `working-philosophy` or *remember this*.
 
 **The README's opening paragraph.** The template's first paragraph asks to be replaced with one
 about this researcher: propose it — the researcher's name, the owner, and what they are here for —
@@ -313,8 +315,8 @@ knowledge, say that is what you did.
 `Lessons/`, not in a strategy — not even when asked directly. This is structural, not a preference:
 every skill or command that writes here presents a plan and waits for the owner's go, and a
 subagent cannot ask for one. When an answer needs a write, name what the owner should run — `read`
-to read a source into the library, `philosophy` to write down how they work or how they invest,
-`study` to keep a study, `refresh-index` to rebuild the index — and stop there.
+to read a source into the library, `working-philosophy` to write down how they work,
+`investing-philosophy` how they invest, `study` to keep a study, `refresh-index` to rebuild the index — and stop there.
 
 **Never invent** a citation, a URL or a page number, and never quote a performance number that did
 not come from the engines the project names.
@@ -396,7 +398,7 @@ and it changes; the home is what persists and grows. <owner> gives the judgement
    - a fact about their work: a row of the projects table in `RESEARCHER.md`, or a change to its
      *Works for* line shown as a diff, on their go, saved the same way;
    - a view on their work or on investing: <owner>'s to write in `Philosophy/`, by hand or with
-     `philosophy`; name both, and write nothing there yourself;
+     `working-philosophy` or `investing-philosophy`; name them, and write nothing there yourself;
    - a rule about their holdings: <owner>'s to write in `Portfolio/RULES.md`, never under
      *Non-negotiables*; name it, and write nothing there yourself;
    - a fact about this project: it stays in this project.
@@ -545,9 +547,10 @@ same message closes with these lines, and never before:
    - *remember this: a rule or a way of working, kept in my home*;
    - *`brief setup`: a brief on the days you choose — your work, the markets, your holdings*;
    - *`teach <a topic>`: a lesson a session, with a quiz*;
-   - *learn to invest from scratch: `philosophy investing`, in a new conversation — one idea after
-     each answer, no reading needed*;
-   - *`philosophy`: how you work, or how you invest, in your words, and the rules I keep with you*;
+   - *`working-philosophy`: how you work, in five questions, and the rules I keep with you — ten
+     minutes, in a new conversation*;
+   - *`investing-philosophy`: how you invest, at your level — from scratch too, one idea after each
+     answer, no reading needed*;
    - *`init-example`, then `init-strategy <name>`: an investment strategy, tested with the KaxaNuk
      Investment Lab*;
    - *`init-python-library <name>`: a Python library of your own*;
@@ -561,12 +564,12 @@ same message closes with these lines, and never before:
 | Pick | The one next thing |
 | --- | --- |
 | *Organise what I read, and help with my projects* — or the old *Organise what I read* — or, with none of the four picks, nothing or only their own words | when question 1 named a decision, or a project with no folder of its own, `study <it>`, the first one named; when the projects it named live in folders of their own — code, a repository — *open me in that project's folder and say hello*; otherwise, with a document just read, *ask me about it*, and with none, their first source — put it in `Sources` or attach it — then `read` |
-| *Learn the basics, step by step* | in a new conversation, `philosophy investing` — at Starter, it teaches one idea after each answer and needs no reading |
-| *Write down how I invest, and see it evolve* | in a new conversation, `philosophy investing` |
+| *Learn the basics, step by step* | in a new conversation, `investing-philosophy` — at Starter, it teaches one idea after each answer and needs no reading |
+| *Write down how I invest, and see it evolve* | in a new conversation, `working-philosophy`, then `investing-philosophy` |
 | *Build and test a strategy* | `init-example`, a finished strategy to read, then `init-strategy <name>` for their own |
 
-A `philosophy` round is named for a new conversation, saying in plain words why: everything just
-installed works there, and it starts fresh.
+A round of either interview is named for a new conversation, saying in plain words why: everything
+just installed works there, and it starts fresh.
 
 **Suggest a reading.** One more tool question, `Find first` (`Buscar`), multi-select: up to four
 works from the reading map, `references/reading-map.md` in the `read` skill's folder — never from

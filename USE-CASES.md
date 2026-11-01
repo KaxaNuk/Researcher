@@ -30,7 +30,7 @@ The first `read` asks what you are reading for. Next time, it picks up where you
 
 Ask in plain words, or `query <question>`. It links every claim to its note and names what is
 missing. An answer from three notes or more can become a page in your library. Ask *how has my view
-changed?* and it compares your `philosophy` rounds, on work or investing.
+changed?* and it compares your rounds of `working-philosophy` or `investing-philosophy`.
 
 Attach a contract, a policy or a specification and ask what your library says about it: it goes
 section by section, each point cited to a note or to a rule of yours, and names what your library
@@ -64,8 +64,8 @@ Say *remember this* or *learn this*, anywhere. It sorts what you said: a way of 
 line in `RESEARCHER.md`, in your words; a document goes into `Sources/` for `read` to file; a new
 project becomes a row in its projects table.
 
-*Never:* your view, on work or investing, written for you: it stays yours, through `philosophy` or
-by hand.
+*Never:* your view, on work or investing, written for you: it stays yours, through
+`working-philosophy` or `investing-philosophy` or by hand.
 
 ## A brief every Friday
 

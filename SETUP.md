@@ -51,7 +51,8 @@ a folder at `$HOME/.apm/apm_modules/_local/KaxaNuk-Researcher/`:
 | the copy it makes | `$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/init-strategy/scripts/scaffold.py` |
 | step 5, the interview | `$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/interview/SKILL.md` |
 | step 6, `read`, only if the user brings a document now | `$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/read/SKILL.md` |
-| step 6, `philosophy`, only if the user takes it now | `$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/philosophy/SKILL.md` |
+| step 6, `working-philosophy`, only if the user takes it now | `$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/working-philosophy/SKILL.md` |
+| step 6, `investing-philosophy`, only if the user takes it now | `$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/investing-philosophy/SKILL.md` |
 | step 6, `init-example`, only if the user asks for the worked example now | `$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/init-example/SKILL.md` |
 | step 6, `study`, only if the user starts the study now | `$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/prompts/study.prompt.md` |
 | step 3, a researcher brought back from GitHub | `$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/backup/SKILL.md`, its *Step 10*, then `$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/prompts/update.prompt.md` |
@@ -195,15 +196,17 @@ uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skill
 ```
 
 On Claude Code, `$HOME/.claude/skills/` also holds `init-strategy`, `read`, `query`, `interview`,
-`philosophy`, `brief` and `backup`, and `$HOME/.claude/agents/` holds `blueprint-critic.md`.
+`working-philosophy`, `investing-philosophy`, `brief` and `backup`, and `$HOME/.claude/agents/`
+holds `blueprint-critic.md`.
 
 ---
 
 ## Later
 
-**The user's philosophy, and a daily brief.** In a new session in the home: `philosophy`, a second
-interview on how they work or how they invest — investing at their level — and `brief setup`, which
-schedules the brief on the Claude desktop app and says how to run it elsewhere.
+**The user's philosophy, and a daily brief.** In a new session in the home: `working-philosophy`,
+the first interview after this one, on how they work, then `investing-philosophy` on how they
+invest, at their level — and `brief setup`, which schedules the brief on the Claude desktop app
+and says how to run it elsewhere.
 
 **A strategy.** In a new session in the home: `init-strategy fcf-yield-quality`. It makes the
 strategy's folder beside the home, from the KaxaNuk Strategy Template; open that folder in a new
@@ -243,7 +246,8 @@ the researcher is tried on; APM installs for others, untried. **Codex gets the s
 agents, and no commands.** The skills land in `~/.agents/skills/` and each agent in
 `~/.codex/agents/<name>.toml`, without its tool list: APM warns that it drops it, so on Codex an
 agent has no tool boundary. No instruction lands either. So the steps a newcomer needs —
-`init-researcher`, `interview`, `next`, `read`, `query`, `philosophy`, `brief` — are all skills. A
+`init-researcher`, `interview`, `next`, `read`, `query`, `working-philosophy`,
+`investing-philosophy`, `brief` — are all skills. A
 command, such as `objective` or `blueprint`, is run there by naming its file — *follow
 `$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/prompts/objective.prompt.md`* — and once the
 interview has run, the researcher's own skill does this for the user: they name the command, and it

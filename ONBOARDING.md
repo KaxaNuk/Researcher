@@ -26,7 +26,11 @@
 > commands it refuses, say the copy of a home under `_local/` is never the home, and put
 > Antigravity's skills where its app reads them — linked at 1.29.1, copied at 1.29.2, since the app
 > follows no link — a run on Codex or Antigravity, and a home already made, which this run on
-> Claude Code never reaches: it is unchanged.
+> Claude Code never reaches: it is unchanged. At 1.31.0, on the owner's word, `philosophy` became
+> two interviews, `working-philosophy`, first and for everyone, and `investing-philosophy`, second:
+> the hand-over's list names both, *Write down how I invest* leads to the first, and `read`'s report
+> names the second and the new IDs of its *Bears on* table; every question and step of this run is
+> unchanged.
 
 What varies from run to run: the language — in Spanish every line is in Spanish, with the headers
 the skills give — the names proposed, the paths, the owner's answers and what is proposed from
@@ -150,9 +154,9 @@ Question `Go?`: *Write this plan?* — *Go* (*Write it and save a version*), *Ch
 > Saved.
 
 Then the report: what was written; the gap — the reading map pairs the paper against Fama (1970), a
-lead for `Sources/Papers/`; the investing questions of the owner's philosophy it bears on — here Q4,
-Q6, Q8, S1 and S2, from the *Bears on* table of `philosophy`'s `references/questions.md`, which is
-not frozen — with round 1 of `philosophy investing` offered in a new conversation. `read` puts
+lead for `Sources/Papers/`; the investing questions of the owner's philosophy it bears on — here Q4
+and Q6, from the *Bears on* table of `investing-philosophy`'s `references/questions.md`, which is
+not frozen — with round 1 of `investing-philosophy` offered in a new conversation. `read` puts
 *Saved* after the report; in this run it came first. And the hand-over's end, now that the first
 document is read:
 
@@ -164,9 +168,10 @@ document is read:
 > - remember this: a rule or a way of working, kept in my home
 > - `brief setup`: a brief on the days you choose — your work, the markets, your holdings
 > - `teach <a topic>`: a lesson a session, with a quiz
-> - learn to invest from scratch: `philosophy investing`, in a new conversation — one idea after
->   each answer, no reading needed
-> - `philosophy`: how you work, or how you invest, in your words, and the rules I keep with you
+> - `working-philosophy`: how you work, in five questions, and the rules I keep with you — ten
+>   minutes, in a new conversation
+> - `investing-philosophy`: how you invest, at your level — from scratch too, one idea after each
+>   answer, no reading needed
 > - `init-example`, then `init-strategy <name>`: an investment strategy, tested with the KaxaNuk
 >   Investment Lab
 > - `init-python-library <name>`: a Python library of your own

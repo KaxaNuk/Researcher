@@ -15,11 +15,10 @@ replacement; it evolved by addition.
 
 ## How the researcher uses this file
 
-- **Place the belief.** *Where a belief sits* gives, for each stance `philosophy` offers as a pick,
-  the act, the arc's question, the work that holds it, who tested it where someone is named, and
-  its *other side*. *Beliefs people type* does the same for the beliefs a newcomer states in their
-  own words, and gives `philosophy` six of its seven hunches for an owner with nothing to type; the
-  seventh, *No — prices already know*, comes from *Where a belief sits*. A belief neither lists is
+- **Place the belief.** *Where a belief sits* gives, for each stance an owner may hold, the act, the
+  arc's question, the work that holds it, who tested it where someone is named, and its *other
+  side*. *Beliefs people type* does the same for the beliefs a newcomer states in their own words,
+  as `investing-philosophy` places the edge an owner names in its Q4. A belief neither lists is
   placed by the arc question whose works or core ideas name it, in *The six acts*.
 - **Name the other side** only as this file names it. Where it says none is named here, say that;
   never supply one.
@@ -29,10 +28,10 @@ replacement; it evolved by addition.
   *What you are reading for*: as *Find first* under the question it serves or, when it serves no
   numbered question, on the section's closing *Find first* line, which is added to and never
   rewritten — its *none*, in whatever language it is written, gives way to the first work.
-  `interview` writes a work picked from *Suggest a reading* there, and `philosophy` the works picked
-  at a round's close. Never download it: the owner finds it by its title and authors, puts the PDF
-  in `Sources/Papers/`, or `Sources/Books/` for a book, and runs `read`; a work that cannot be found
-  comes off the line by hand.
+  `interview` writes a work picked from *Suggest a reading* there, and `investing-philosophy` the
+  works picked at a round's close. Never download it: the owner finds it by its title and authors,
+  puts the PDF in `Sources/Papers/`, or `Sources/Books/` for a book, and runs `read`; a work that
+  cannot be found comes off the line by hand.
 - **Match before proposing.** Compare each work here with the file names under `Sources/` and the
   notes in `Knowledge/INDEX.md` by the distinctive words of the title, and by the first author's
   surname wherever the file name or the note carries one, ignoring the year, punctuation and
@@ -44,11 +43,12 @@ replacement; it evolved by addition.
 - **Offer *Where alpha comes from* as hints.** It holds the five sources of edge, where ideas come
   from and how each fools you, seven questions before any backtest, an idea's anatomy and three
   questions for discussion. Each is offered as a question the owner may answer, edit, skip or
-  refuse, never as a position to adopt, and never cited as evidence. `philosophy` takes its *Edge
-  from?* options from the five sources, and puts *Discussion*, some of the seven questions and the
-  kill switch to the owner as questions about how they invest — how they would know, how long they
-  would hold, what would make them stop — never as a strategy's rules. `objective` takes the
-  anatomy of a claim, and `blueprint` the seven questions and the kill switch, for a strategy.
+  refuse, never as a position to adopt, and never cited as evidence. `investing-philosophy` teaches
+  the five sources after its Q4, on where the owner's edge comes from, and puts *Discussion*, some
+  of the seven questions and the kill switch to the owner as questions about how they invest — how
+  they would know, how long they would hold, what would make them stop — never as a strategy's
+  rules. `objective` takes the anatomy of a claim, and `blueprint` the seven questions and the kill
+  switch, for a strategy.
 
 ## Start here — the ten papers of the two timelines
 
@@ -100,9 +100,10 @@ and for how long, is the job, and it never finishes.
 
 ## Where a belief sits
 
-The stances `philosophy` offers as picks; how the owner likes to invest, its fourth pick, is not
-placed here. *Holds it* is the work the stance comes from; *tested* and *other side* come only from
-this file, and where no one is named, the entry says so.
+The stances an owner may hold on whether anyone beats the market, where an edge comes from and
+whether published edges are real; how the owner likes to decide is not placed here. *Holds it* is
+the work the stance comes from; *tested* and *other side* come only from this file, and where no one
+is named, the entry says so.
 
 ### Can anyone beat the market?
 
@@ -248,8 +249,8 @@ names its evidence paper and its other side.
 Each act asks the question the one before could not answer, dated by the works that forced it. The
 arc's 21 questions are given as worded here, each followed by its works. *Edge* is each question's
 "where the edge is" line, shortened. The edge lines are strategy-stage questions, never questions
-for setup: `interview` asks none of them, and `philosophy` may put one to the owner at Researching
-only, as a question about how they invest, never as a strategy's rule.
+for setup: `interview` asks none of them, and `investing-philosophy` may put one to the owner at
+Researching only, as a question about how they invest, never as a strategy's rule.
 
 ### Act I — Prices: can prices be predicted?
 
@@ -551,8 +552,8 @@ door is still open, before testing anything.
    known edge better than others do? Markowitz · Grinold & Kahn · Paleologo — questions 04, 18 and
    19.
 
-`philosophy` offers them as four options of its *Edge from?* pick, the last two together as
-*Something I see or do better*; *Where a belief sits* places each.
+`investing-philosophy` names them after its Q4, on where the owner's edge comes from; *Where a
+belief sits* places each.
 
 ### Where ideas come from, and how each fools you
 
@@ -609,6 +610,7 @@ Three questions left open, to put to any belief:
 - If alpha decays, how long would the strategy they want to build last?
 - What evidence would change their mind before four months go into it?
 
-`philosophy` asks the last two its own way, as questions about the owner rather than a strategy's
-rules: how long an edge would last once everybody knows it, and what would change the owner's mind.
-The first is the other side it names when it places a belief, offered as a work to find.
+`investing-philosophy` asks the last two its own way, as questions about the owner rather than a
+strategy's rules: how long an edge would last once everybody knows it, and what would change the
+owner's mind. The first is the other side it names when it places a belief, offered as a work to
+find.

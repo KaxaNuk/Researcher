@@ -71,7 +71,7 @@ goes home* puts it:
 | a way of working or a rule | a line under *How it speaks*, or a bullet under *Non-negotiables*, in the owner's words as the memory has them, the first one replacing *None yet.* |
 | a fact about their work — a role, a project, where one lives | a row of the projects table, or a change to *Works for*, shown as a diff |
 | a work or a source to read | a copy into `Sources/` on the go, then `read`; a work with no copy here is named, for the owner to find |
-| a view on their work or on investing | theirs to write in `Philosophy/`, by hand or with `philosophy`: named, never written |
+| a view on their work or on investing | theirs to write in `Philosophy/`, by hand or with `working-philosophy` or `investing-philosophy`: named, never written |
 | a rule about their holdings | theirs to write in `Portfolio/RULES.md`: named, never written |
 | a fact inside one project | stays in that project, in the file its rules give it: named, never written at home |
 | about the assistant, this computer or a tool — a path, a setting, how something installs | stays with the assistant: not the researcher's |

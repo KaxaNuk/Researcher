@@ -307,20 +307,20 @@ In chat: what was written, updated and flagged; any gap the source exposed — a
 leans on with no source behind it — as a suggestion for the sources, naming the work the reading map
 gives as this one's other side when it names one, as a lead; whether the source changes a belief in
 the owner's file in `Philosophy/` — `HOW-I-WORK.md` or `HOW-I-INVEST.md` — as a question for the
-owner to answer there in their words, by hand or in a round of `philosophy`; and, at home, the
-strategy a note could serve, with the `read <strategy> <source>` that would carry it there, and a
-study in `Studies/`, still *idea* or *active*, that the note bears on, with the `study <its name>`
-that would revise it.
+owner to answer there in their words, by hand or in a round of `working-philosophy` or
+`investing-philosophy`; and, at home, the strategy a note could serve, with the `read <strategy>
+<source>` that would carry it there, and a study in `Studies/`, still *idea* or *active*, that the
+note bears on, with the `study <its name>` that would revise it.
 
 At home, where *Domains* holds Finance or *Here for* holds *Learn the basics*, *Build and test a
 strategy* or *Write down how I invest*, one more line: **the investing questions of the owner's
 philosophy the new note bears on.** Match the note's work, by its authors' surnames as the reading
 map's *Match before proposing* says, against the *Bears on* table of `references/questions.md` in
-the `philosophy` skill's folder, and name each question it lists by its ID and short name. With a
-round on investing in `Philosophy/Evolution/` — a level, not `Field`, on its first line — the line
-gives the last such round's date and offers the next round with `philosophy`; with none, it offers
-round 1. A work the table does not list, or a table that cannot be read because the skill is not
-installed, gets no line.
+the `investing-philosophy` skill's folder, and name each question it lists by its ID and its
+*Short*. With a round of it in `Philosophy/Evolution/` — a level, not `Work` or `Field`, on its
+first line — the line gives the last such round's date and offers the next round with
+`investing-philosophy`; with none, it offers round 1. A work the table does not list, or a table
+that cannot be read because the skill is not installed, gets no line.
 
 **Then save a version**, on the plan's go, with no second question, in the folder whose library
 this is — every git command, the `backup` skill's send included, as `git -C "<that folder>"` when
@@ -387,6 +387,6 @@ with no `.git/` gets one line, that it keeps no versions yet. In a strategy the 
   where alpha comes from — the ten papers of the two timelines, where each belief sits and its
   other side, the arc's 21 questions and their works, and hints. The one list a work to read may be
   proposed from besides the owner's library; a work in it is a lead, never a citation.
-- `references/questions.md`, in the **`philosophy` skill's** folder, not this one: its *Bears on*
-  table, which works touch which of the owner's philosophy questions, read on demand for the one
-  line in *step 7*. It is that skill's file; this skill reads it and never copies it.
+- `references/questions.md`, in the **`investing-philosophy` skill's** folder, not this one: its
+  *Bears on* table, which works touch which of the owner's philosophy questions, read on demand for
+  the one line in *step 7*. It is that skill's file; this skill reads it and never copies it.

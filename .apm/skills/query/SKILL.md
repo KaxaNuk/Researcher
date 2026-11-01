@@ -79,42 +79,45 @@ note in isolation misses the connections that are the library's value.
 
 ## How has my view changed
 
-When the owner asks how their own view has moved — *how has my view changed?*, *what did I say
-about my benchmark the first time?* — the answer is not in the library but in the rounds
-`philosophy` writes. Each round is one file in `Philosophy/Evolution/`, named by its date,
-`YYYY-MM-DD.md`, and a second round the same day `YYYY-MM-DD-2.md`. This is the one question a
-round file answers, and it is quoted as the record of a round, never as the owner's standing
-view. **Rounds are compared within one topic**: a level on a round's first line is investing,
-`Field` another field, and the two are read apart, never against each other — the topic the owner
-asks about, or each in turn when both have rounds and they name neither.
+When the owner asks how their own view has moved — *how has my view changed?*, *what did I say about
+my benchmark the first time?* — the answer is not in the library but in the rounds
+`working-philosophy` and `investing-philosophy` write. Each round is one file in
+`Philosophy/Evolution/`, named by its date, `YYYY-MM-DD.md`, and a second round the same day
+`YYYY-MM-DD-2.md`. This is the one question a round file answers, and it is quoted as the record of
+a round, never as the owner's standing view. **Rounds are compared within one topic**: a level on a
+round's first line is investing, `Work` — or `Field`, as rounds before 1.31.0 wrote it — how the
+owner works, and the two are read apart, never against each other — the topic the owner asks about,
+or each in turn when both have rounds and they name neither.
 
 1. **The topic's rounds, oldest first** — by the date in the name, and on one date by its suffix.
-   Read each one's first line, `# Round <N> · <date> · <level>`, with `Field` where a level goes for
-   another field, and its lines by question ID: `- <ID> · <answer>`, or on a retake
-   `- <ID> · <label> · <answer>`, the label *kept*, *changed*, *new* or *still open*. A *kept* line
-   carries no answer: the words are the latest earlier round's for that ID, quoted with that round's
-   date. A question answered before and skipped or explained now carries no label, only its status,
-   and its earlier answer stands. An answer is the owner's typed words, or a status — *not sure
-   yet*, *skipped*, *explained*. A round holds nothing else, so nothing else is quoted from it.
+   Read each one's first line, `# Round <N> · <date> · <level>`, with `Work` or `Field` where a
+   level goes for how the owner works, and its lines by question ID: `- <ID> · <answer>`, or on a
+   retake `- <ID> · <label> · <answer>`, the label *kept*, *changed*, *new* or *still open*. A
+   *kept* line carries no answer: the words are the latest earlier round's for that ID, quoted with
+   that round's date. A question answered before and skipped or explained now carries no label, only
+   its status, and its earlier answer stands. An answer is the owner's typed words, or a status —
+   *not sure yet*, *skipped*, *explained*. A round holds nothing else, so nothing else is quoted
+   from it.
 2. **Compare by ID.** For each question asked in more than one round, use the label the later line
    carries, against the latest earlier answer. Where a line carries none, say *kept*, *changed*,
-   *new* or *still open* as `philosophy` defines them, and *not asked again* for a question answered
-   before and only skipped or explained since. Quote each answer word for word, in the owner's
-   language, beside its round's date and level, or *Field* — *2026-10-04, Starter* — naming the
-   round by its date in prose, never by a link: a round file is a record, never cited. The levels
-   then and now, on investing, are said once.
+   *new* or *still open* as the interviews define them, and *not asked again* for a question
+   answered before and only skipped or explained since. Quote each answer word for word, in the
+   owner's language, beside its round's date and level, or *Work* — *2026-10-04, Starter* — naming
+   the round by its date in prose, never by a link: a round file is a record, never cited. The
+   levels then and now, on investing, are said once.
 3. **The reading in between**: the notes, linked, that the `read` entries of `Knowledge/LOG.md`
    list as written, dated on or after the earlier round's date and before the later one's. A
-   read the same day as a round counts after it, as `philosophy` counts it. Name them as what was
+   read the same day as a round counts after it, as the interviews count it. Name them as what was
    read in between, never as the cause: whether a note moved the owner is theirs to say.
-4. **The standing view is the topic's file**, `HOW-I-INVEST.md` or `HOW-I-WORK.md`. Where an
-   earlier answer that later changed still stands there as a line, say so: the owner edits it by
-   hand, or with `refine`, never this skill.
+4. **The standing view is the topic's file**, `HOW-I-INVEST.md` or `HOW-I-WORK.md`. Where an earlier
+   answer that later changed still stands there as a line — a round's line reads `- **<short
+   question>** <their words> *(round N)*`, an older one without the question — say so: the owner
+   edits it by hand, or with `refine`, never this skill.
 
-With no round file on the topic, say so in one line, and that `philosophy` takes round 1; with one,
-quote it with its date and level, or *Field*, and say there is nothing to compare yet. In a strategy
-the rounds are read at home and named in prose. Nothing is written: the comparison lives in chat,
-and is never kept as a synthesis page.
+With no round file on the topic, say so in one line, and that `working-philosophy` or
+`investing-philosophy` takes round 1; with one, quote it with its date and level, or *Work*, and say
+there is nothing to compare yet. In a strategy the rounds are read at home and named in prose.
+Nothing is written: the comparison lives in chat, and is never kept as a synthesis page.
 
 ## A document against the library
 

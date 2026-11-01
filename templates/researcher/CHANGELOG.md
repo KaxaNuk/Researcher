@@ -6,6 +6,20 @@ Every notable change to this repository, newest first: `## X.Y.Z (YYYY-MM-DD)` w
 This is the home template's changelog, which `init-researcher` copies into every home and `update`
 extends with a *Brought to template* entry at the top; the home's own entries go there too.
 
+## 0.34.0 (2026-11-01)
+
+**MINOR** — your philosophy is two short interviews: `working-philosophy`, how you work, first and
+for everyone, and `investing-philosophy`, how you invest, second.
+
+**What to do differently:** say `update` in your home; it brings these lines as a diff.
+
+### Changed
+- `AGENTS.md` names `working-philosophy` and `investing-philosophy` where it named `philosophy`:
+  the writers of `Philosophy/`, each answer behind its short question in bold, the round file's
+  first line — a level, or `Work` — the writers of *Non-negotiables* and *Find first*, and the
+  skills run by name. `README.md`'s path takes the two in order, and `RESEARCHER.md`'s *What you
+  believe* and *Non-negotiables* name them.
+
 ## 0.33.0 (2026-10-31)
 
 **MINOR** — the home is installed for the five assistants the researcher is tried on: Claude Code,

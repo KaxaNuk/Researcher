@@ -4,7 +4,7 @@
 > and naming its engines as where a strategy's numbers come from is one. What a library does and
 > how to get it — the access line below — is said only when a step needs a library the owner
 > lacks, or when the owner asks. It is never added unasked to `RESEARCHER.md`, `Philosophy/`, a
-> brief, a study, a round of `philosophy` or a *Find first* line, and never said as a reason to
+> brief, a study, a round of either interview or a *Find first* line, and never said as a reason to
 > invest in anything. Whether the owner needs any of it is the owner's call. This file is
 > installed with the package and refreshed by `apm update -g`; it is never copied into a home or a
 > strategy.

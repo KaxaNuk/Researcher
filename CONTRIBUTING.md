@@ -34,12 +34,13 @@ instead, all in one conversation. *Removing it*, in the README, undoes either.
 | --- | --- | --- | --- |
 | 1 | anywhere | `init-researcher Arya` | the researcher's home, named after it, then the interview, which writes `RESEARCHER.md`, the agent and the researcher's skill, installs them for your user and saves a first version. The install in [`SETUP.md`](SETUP.md) runs this for you |
 | 2 | the home | `read` | your first note: attach or name a document, copied into `Sources/` on your go; the first `read` asks which question it serves and keeps it as question 1 |
-| 3 | the home | `philosophy`, `brief setup` | when you like: how you work or how you invest, in your words, and a daily brief |
+| 3 | the home | `working-philosophy`, `investing-philosophy`, `brief setup` | when you like: how you work, then how you invest, in your words, and a daily brief |
 | 4 | the home | `init-strategy fcf-yield-quality` | your first strategy, a repository of its own beside the home; its `SETUP.md` finishes the setup |
 | 5 | the strategy | `objective` | the strategy's claims, before any paper; then the order of work, A to H, in the template's README, which the strategy's links to |
 
-The reading map covers investment research; `philosophy` covers how the owner invests or how they
-work, in any field, and a researcher for another field grows by reading.
+The reading map covers investment research; `working-philosophy` covers how the owner works, in any
+field, and `investing-philosophy` how they invest, and a researcher for another field grows by
+reading.
 
 ## What is in here
 
@@ -224,16 +225,17 @@ uv run --no-project python "$S" check claude sofia
 uv run --no-project python "$S" check codex sofia
 ```
 
-Both checks pass. On disk, `~/.claude/` holds the package's 27 skills and `sofia` in `skills/`,
+Both checks pass. On disk, `~/.claude/` holds the package's 28 skills and `sofia` in `skills/`,
 9 commands, 3 rules and 2 agents, `blueprint-critic.md` and `sofia.md`; `~/.agents/skills/` the same
-28 skills; and `~/.codex/agents/` 2 agents, `blueprint-critic.toml` and `sofia.toml`.
+29 skills; and `~/.codex/agents/` 2 agents, `blueprint-critic.toml` and `sofia.toml`.
 
 **If the release changes a skill, a command or a script**, walk the rest of the newcomer's path by
 hand on each run's first assistant, once in Spanish and once on Codex, an assistant with no question
-tool: `next`, `read` on one clipping, a round of `philosophy` at Starter and one on how you work,
-`brief setup` and `brief`, and `init-strategy`; and `init-python-library`, with `next` in the folder
-it makes, `workshop` on one session, *Bootcamp S03*, and `known-answer` on one recipe, beside the
-strategy `init-strategy` made, when the release changes them.
+tool: `next`, `read` on one clipping, a round of `working-philosophy` and one of
+`investing-philosophy` at Starter, `brief setup` and `brief`, and `init-strategy`; and
+`init-python-library`, with `next` in the folder it makes, `workshop` on one session, *Bootcamp
+S03*, and `known-answer` on one recipe, beside the strategy `init-strategy` made, when the release
+changes them.
 
 **When it changes `init-researcher` or `interview`**, last, say `init-researcher` there again: it
 asks `Another?`, and *Make a second one*, named *Sofia*, makes a second home under `$K` whose files

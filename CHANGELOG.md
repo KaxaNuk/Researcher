@@ -6,6 +6,55 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
+## [1.31.0] - 2026-11-01
+Your philosophy is now two short interviews: `working-philosophy`, how you work, first and for
+everyone, and `investing-philosophy`, how you invest, second, each question open and told as a
+story, and each answer saved behind its question.
+
+**What to do differently:** say `update` in your home. `philosophy` is gone: say
+`working-philosophy` for the first interview, about ten minutes, and `investing-philosophy` for the
+second. Your earlier rounds and files stay as they are and are read as before.
+### Added
+- **`working-philosophy`**, the first interview after `interview`, for everyone — a lawyer, a CFO,
+  a portfolio manager: five open questions that tell the owner's story at work — how they got here
+  (W1), what changed them (W3), what they believe that others don't (W2), how they decide (W4),
+  what would change their mind (W5) — then the rules the researcher keeps with them, O4, moved
+  here from the investing round, since rules are about how the owner works. About ten minutes.
+  Its rounds open `# Round <N> · <date> · Work`; a round an earlier version wrote with `Field` is
+  read as one of its own.
+- **`investing-philosophy`**, the second, for an owner who invests or wants to learn: why they
+  invest (O1), whose money and by when (Q18), their best and worst money decision (Q15), then the
+  level, then what they measure against (Q1) and what they do when it falls 20% (Q6); from
+  Building, where their edge is (Q4) and how they split the money (Q17); at Researching, how they'd
+  prove it's skill (Q12) and how they keep the process running (Q16); then what would change how
+  they invest (C1). Six, eight or ten questions, ten to twenty minutes. Starter still teaches one
+  plain idea after each answer and needs no reading. The two rules for strategies are asked here
+  only when *Here for* holds *Build and test a strategy* and the home lacks them.
+### Changed
+- **Each answer is saved behind its question**: `- **<short question>** <their words> *(round
+  N)*`, the question in at most eight words in the owner's language, so a line such as *cetes
+  +10%* still makes sense a year later. The question is a label, never the owner's view; `refine`
+  keeps it as it stands. Lines an earlier round wrote without it stay as they are.
+- **Shorter, open questions.** From the owner's round 1 of 2026-10-31, where answers lost their
+  meaning without their question and the round ran long: the hunches and the stance picks, S1 to
+  S4, are gone, their ground covered by one open question on where the owner's edge comes from,
+  after which the map's five sources of edge are taught; Q1 takes in the benchmark's currency and
+  how long and after which costs; Q12 the count of ideas tried and luck against skill. O2, Q2, Q3,
+  Q5, Q7 to Q11, Q13, Q14, Q19 and S1 to S4 are asked no more: a retake lists an earlier answer
+  under one of them once, as *no longer asked*, and it stands in the owner's file. Every question
+  still says why it is asked, asks one thing at a time and says how much is left.
+- **The order, the same everywhere.** `interview`'s hand-over names both, *Write down how I
+  invest* leading to `working-philosophy` then `investing-philosophy`, and *Learn the basics*
+  straight to the second at Starter; `next`, `teach`'s close and `read`'s report follow the same
+  order. The home's `AGENTS.md`, `README.md` and `RESEARCHER.md` name the two interviews, and
+  `query` compares rounds within each. `read`'s report reads the *Bears on* table in
+  `investing-philosophy`'s folder, remapped to the new IDs.
+- **Frozen files, on the owner's word of 2026-11-01**: `interview`, `init-researcher`, `read` and
+  its reading map, and `SETUP.md` name the two interviews in place of `philosophy`; `ONBOARDING.md`
+  notes it. Every question and step of the onboarding run is unchanged.
+### Removed
+- **`philosophy`**, split into the two interviews above. `apm update -g` removes it.
+
 ## [1.30.0] - 2026-11-01
 A round of `philosophy` now says why it asks each question, asks one thing at a time and how much
 is left, asks how you split money, for whom and in which currency, and `refine` can clean your
