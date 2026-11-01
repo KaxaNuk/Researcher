@@ -25,9 +25,9 @@ Philosophy/HOW-I-INVEST.md` and ask it to clean the grammar, or to put the lines
   and their reasons under *Beat market?*: O3's words are mapped to a level and said back;
   under S1 to S3 the words are the owner's own for that question.
 - **Your rules, O4.** *Nothing is bought or sold from here, and no money moves* read to the owner
-  as misleading: it becomes *I never place an order or move money: every trade
-  is your decision*. When *Here for* holds *Build and test a strategy*, the two rules for
-  strategies are shown with the three from the start, *Keep these five* recommended. A home
+  as misleading, and is no longer offered: the starting rules are two. When *Here for* holds
+  *Build and test a strategy*, the two rules for strategies are shown with them from the start,
+  *Keep these four* recommended. A home
   holding some of them is offered *Keep my rules (current)* first, and *Keep mine, add the rest*
   names what it would add.
 - **Spelling and language.** `philosophy`'s preview says, when typed lines hold typos or another

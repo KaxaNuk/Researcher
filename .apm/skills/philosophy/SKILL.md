@@ -249,9 +249,9 @@ how you find out whether a result is yours, or luck.
 On a retake, the explainer is said again only when the level changed, or when the owner asks.
 
 **Your rules, O4, in round 1**, straight after the explainer, whose process they put to work: one
-tool question, `Your rules` (`Tus reglas`), as section 1 of the bank gives it. It shows three
+tool question, `Your rules` (`Tus reglas`), as section 1 of the bank gives it. It shows two
 rules many people start with, a plain line each, and two for testing a strategy — shown with the
-three from the start when *Here for* holds *Build and test a strategy*, else offered when the owner
+two from the start when *Here for* holds *Build and test a strategy*, else offered when the owner
 asks. A home that already holds some of them keeps its own first, as the bank's O4 says. A rule
 of the owner's own, or a change, is one line in chat after, in their words. What it settles is
 written on the round's go under *Non-negotiables* in `RESEARCHER.md`, never in `Philosophy/` or the

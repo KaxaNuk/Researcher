@@ -247,29 +247,27 @@ On a retake, use the opening in section 7 instead.
 - Say first: *One more thing before the questions. A process keeps a few rules, decided on a calm
   day; these are the ones I'll keep to with you.*
 - Header: `Your rules` (`Tus reglas`).
-- **Ask:** Which rules should I keep to with you? The question shows three, a plain line each, as
-  they will be written, but for *I* and *my*, which the file gives in the third person, by the
-  researcher's name:
+- **Ask:** Which rules should I keep to with you? The question shows two, a plain line each, as
+  they will be written, but for *my*, which the file gives as the researcher's name:
   - *Every result comes from a tested tool, never from my head.*
   - *An idea is written down before it is tested, and every claim names its source — one without
     a source is marked as a guess.*
-  - *I never place an order or move money: every trade is your decision.*
 - **Options:**
 
 | Option | Description shown |
 | --- | --- |
-| *Keep these three* (recommended) | All three, as written above. |
+| *Keep these two* (recommended) | Both, as written above. |
 | *Add one of my own* | A mistake you never want to repeat — one line, in chat, after. |
 | *Change or drop one* | Which one, and how — one line, in chat, after. |
 | *Add the two for strategies* | For when you test a strategy: *An idea gets real money only after a test written down beforehand, never after one good month.* *Every plan is challenged before it is tested, and every idea tried is counted, the failed ones too.* |
 
 - **The two for strategies.** When *Here for* holds *Build and test a strategy*, they are shown
-  with the three from the start, five lines, and *Keep these five* (recommended) takes the place
-  of *Keep these three* and of *Add the two for strategies*. Otherwise *Add the two for
+  with the two from the start, four lines, and *Keep these four* (recommended) takes the place
+  of *Keep these two* and of *Add the two for strategies*. Otherwise *Add the two for
   strategies* is an option only when the owner asks for them, in any words.
-- **What is kept.** Whatever is not changed or dropped is kept, so an add alone keeps the three, or
-  the five. A rule typed under *Other* is a rule of the owner's own. No *in your own words?*
-  follows O4: after *Keep these three* or *Keep these five* alone nothing more is asked, and after
+- **What is kept.** Whatever is not changed or dropped is kept, so an add alone keeps the two, or
+  the four. A rule typed under *Other* is a rule of the owner's own. No *in your own words?*
+  follows O4: after *Keep these two* or *Keep these four* alone nothing more is asked, and after
   *Add one of my own* or *Change or drop one* only its one line in chat.
 - **A rule about holdings** — how much in one place, when to sell, when to look again — is not
   written under *Non-negotiables*, where no brief reads it. Say in one line that it belongs in
@@ -279,7 +277,7 @@ On a retake, use the opening in section 7 instead.
 - **A home with rules already** — from an older interview, or added with *remember this* — shows
   them first, word for word, and they stay unless *Change or drop one* names one. When they hold
   every rule shown in any words — an older template's three count — *Keep my rules (current)*
-  takes the place of *Keep these three* or *Keep these five*. When they hold some but not all,
+  takes the place of *Keep these two* or *Keep these four*. When they hold some but not all,
   *Keep my rules (current)* is offered first, and *Keep mine, add the rest* names each rule it
   would add, word for word; when they hold the two for strategies, *Add the two for strategies*
   is left out. A rule held in any words is never added again.
