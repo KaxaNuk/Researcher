@@ -59,8 +59,15 @@
 - **ID.** It stays the same across levels and rounds, and a retake compares answers by it.
 - **Asked at.** Starter (beginner), Building (intermediate) or Researching (advanced). A level
   with no wording of its own uses the next simpler one.
-- **Ask.** The question, as worded at that level. Q3, Q6, Q8 and Q14 at Starter are worded for
-  someone who does not invest yet as much as for someone who does.
+- **Why.** One plain sentence said before the *Ask*, at every level: why the question is asked,
+  so it makes sense to someone who has none of the asker's context. It is never written.
+- **Ask.** The question, as worded at that level: one thing to answer. Q3, Q6, Q8 and Q14 at
+  Starter are worded for someone who does not invest yet as much as for someone who does.
+- **Then.** A follow-up, at the levels it names, asked in a message of its own once the *Ask* has
+  a typed answer — never after *not sure yet*, *skip* or *explain*'s third step. Its typed words
+  join the *Ask*'s as a further line of the same answer, under the same heading and the same ID;
+  *skip* or *not sure yet* there adds nothing, and the answer stands as typed. *Teaches* follows
+  the *Then*, or the *Ask* when no *Then* is asked.
 - **Plain.** Said on *explain*: one plain line, then the question again in its plainest form — its
   Starter wording, or, for a question Starter does not ask, the question in *Plain*.
 - **Example.** Said on *example*: two or three answers other people give, labelled as examples.
@@ -82,14 +89,22 @@
 ## How every question is asked
 
 - **Open questions are asked in chat**, because only typed words reach the file.
-  - One question per message. At Building and Researching, the owner may ask for a whole block at
-    once.
+  - One question per message, and one thing per question: a second part is the card's *Then*.
+    At Building and Researching, the owner may ask for a whole block at once.
+  - Every open question opens with where the round stands, in one short line — *question 7 of 22
+    · about 15 minutes left* — counting the IDs the level asks after O3, as section 3 gives them,
+    a *Then* not counted, and the minutes left from the level's length; then its *Why*, then the
+    *Ask*.
   - Every open question ends with the same line:
     > *Answer in your words — one line is enough. Or say: example · explain · not sure yet · skip.*
 - **Pick questions are asked with the question tool** (`AskUserQuestion` in Claude Code): at most
   four options, plus *Other*.
   - Without a question tool (Codex), the question is one chat message, with the options
     numbered and *Other — your own words* last.
+  - **A pick answered in words** — typed under *Other*, or in place of choosing — is read, never
+    asked again. O3's words are mapped to the level they describe, said back, and the owner may
+    change it. Under S1–S3 the words are the owner's own words for that question, written as the
+    *in your own words?* line would be, and an option they also tick lands nowhere, as every pick.
 - **After a hunch, O2, or the stance picks, S1–S4**, one optional line: *Want to say that in your
   own words? One line, or skip.* Only that typed line reaches the file. No other pick takes one:
   O3, O4, the calibration, the checkpoints and C2 land nowhere a typed line could go.
@@ -136,6 +151,8 @@ On a retake, use the opening in section 7 instead.
 ### O1 · Why you invest
 - *Asked at:* every level, in chat.
 - *Lands under:* **Why I invest**.
+- **Why:** Your reason sets everything after it: how long you can wait, and what "doing well"
+  means for you.
 - **Ask:** Why do you invest, or why do you want to start? What would it change for you?
 - **Plain:** This is about you, not about markets. Any reason counts.
 - **Example:**
@@ -150,6 +167,7 @@ On a retake, use the opening in section 7 instead.
 ### O2 · What you already believe
 - *Asked at:* every level, in chat.
 - *Lands under:* **What I believe about markets**.
+- **Why:** A belief written down can be checked later; one kept in your head only gets confirmed.
 - **Ask:** What do you already believe about money and markets? Anything at all — a hunch, or
   something you heard and aren't sure of.
 - **Plain:** Everyone has a few, and they don't have to be right. "It's a casino" counts.
@@ -230,11 +248,12 @@ On a retake, use the opening in section 7 instead.
   day; these are the ones I'll keep to with you.*
 - Header: `Your rules` (`Tus reglas`).
 - **Ask:** Which rules should I keep to with you? The question shows three, a plain line each, as
-  they will be written, but for *my*, which the file gives as the researcher's name:
+  they will be written, but for *I* and *my*, which the file gives in the third person, by the
+  researcher's name:
   - *Every result comes from a tested tool, never from my head.*
   - *An idea is written down before it is tested, and every claim names its source — one without
     a source is marked as a guess.*
-  - *Nothing is bought or sold from here, and no money moves.*
+  - *I never place an order or move money: every trade is your decision.*
 - **Options:**
 
 | Option | Description shown |
@@ -244,12 +263,14 @@ On a retake, use the opening in section 7 instead.
 | *Change or drop one* | Which one, and how — one line, in chat, after. |
 | *Add the two for strategies* | For when you test a strategy: *An idea gets real money only after a test written down beforehand, never after one good month.* *Every plan is challenged before it is tested, and every idea tried is counted, the failed ones too.* |
 
-- **The two for strategies** are an option only when *Here for* holds *Build and test a strategy*,
-  or when the owner asks for them, in any words.
-- **What is kept.** Whatever is not changed or dropped is kept, so an add alone keeps the three. A
-  rule typed under *Other* is a rule of the owner's own. No *in your own words?* follows O4: after
-  *Keep these three* alone nothing more is asked, and after *Add one of my own* or *Change or drop
-  one* only its one line in chat.
+- **The two for strategies.** When *Here for* holds *Build and test a strategy*, they are shown
+  with the three from the start, five lines, and *Keep these five* (recommended) takes the place
+  of *Keep these three* and of *Add the two for strategies*. Otherwise *Add the two for
+  strategies* is an option only when the owner asks for them, in any words.
+- **What is kept.** Whatever is not changed or dropped is kept, so an add alone keeps the three, or
+  the five. A rule typed under *Other* is a rule of the owner's own. No *in your own words?*
+  follows O4: after *Keep these three* or *Keep these five* alone nothing more is asked, and after
+  *Add one of my own* or *Change or drop one* only its one line in chat.
 - **A rule about holdings** — how much in one place, when to sell, when to look again — is not
   written under *Non-negotiables*, where no brief reads it. Say in one line that it belongs in
   `Portfolio/RULES.md`, the file `brief` quotes, which `brief setup` starts and the owner writes;
@@ -257,9 +278,11 @@ On a retake, use the opening in section 7 instead.
   `Portfolio/`.
 - **A home with rules already** — from an older interview, or added with *remember this* — shows
   them first, word for word, and they stay unless *Change or drop one* names one. When they hold
-  the three in any words — an older template's three count — *Keep my rules (current)* takes the
-  place of *Keep these three*; when they hold the two for strategies, that option is left out. A
-  rule held in any words is never added again.
+  every rule shown in any words — an older template's three count — *Keep my rules (current)*
+  takes the place of *Keep these three* or *Keep these five*. When they hold some but not all,
+  *Keep my rules (current)* is offered first, and *Keep mine, add the rest* names each rule it
+  would add, word for word; when they hold the two for strategies, *Add the two for strategies*
+  is left out. A rule held in any words is never added again.
 - **Plain:** A rule is a choice made before the moment it is for, so the moment can't make it for
   you.
 - **Plain words only.** Every rule is written as plainly as here, in the owner's language — never a
@@ -386,12 +409,15 @@ changes the wording of a question the level asks; it never adds one the level do
 - *Asked at:* every level; at Starter, only when O1 named no goal or no date. A Starter round that
   does not ask it gives it no line, and no retake counts it as never reached.
 - *Lands under:* **Why I invest**.
+- **Why:** Money needed in two years and money needed in twenty can't be judged the same way.
 - **Ask, by level:**
   - **Starter:** a one-line follow-up to O1, first in the block: *You said "<O1>". And by when?* —
     *What for, and by when?* when O1 named no goal, without the quote when it has no typed words.
-  - **Building:** What is this money for, by when, and what happens if it isn't there in time?
-  - **Researching:** What do you want this money to do for you, and by when? Which yardstick
-    follows from that goal?
+  - **Building and Researching:** What is this money for, and by when? If it is for several
+    things, name each, with its date.
+- **Then:**
+  - **Building:** What happens if it isn't there in time?
+  - **Researching:** Which yardstick follows from that goal?
 - **Plain:** A goal with a date, big or small.
 - **Example:**
   - "A deposit for a flat in five years."
@@ -405,13 +431,17 @@ changes the wording of a question the level asks; it never adds one the level do
 #### Q1 · Your personal benchmark
 - *Asked at:* every level.
 - *Lands under:* **Why I invest**.
+- **Why:** You can only say you did well against something; this is that something, for your own
+  money.
 - **Ask, by level:**
   - **Starter:** Suppose you never chose an investment on purpose. Where would your savings sit — a
     bank account, a pension, cash at home? If you have none yet, where would you put the first?
   - **Building:** What do you compare your results against — a savings rate, a market index, a
     mix? Why that one?
-  - **Researching:** If you did nothing clever with this money, where would it be? Name that
-    benchmark and the risk it carries, and why it's the right comparison.
+  - **Researching:** If you did nothing clever with this money, where would it be? That is your
+    personal benchmark: a place, not a target to beat.
+- **Then:**
+  - **Researching:** What risk does it carry, and why is it the right comparison for your goal?
 - **Plain:** Imagine you never pick an investment on purpose. Where does the money sit: a bank
   account, a pension, lending to the government (bonds), cash, a fund that buys a little of every
   big company?
@@ -441,13 +471,14 @@ changes the wording of a question the level asks; it never adds one the level do
 #### Q3 · How you would know
 - *Asked at:* every level.
 - *Lands under:* **How I decide**.
+- **Why:** A target says where you want to end up; this asks how you would tell you got there.
 - **Ask, by level:**
   - **Starter:** If you start investing, how would you know in a few years whether your choices did
     better than leaving the money where it was?
-  - **Building:** Over how many years, and after which costs (fees, taxes, trading), would you say
-    you beat your personal benchmark?
-  - **Researching:** How would you know you beat it — over how many years, against which risk,
-    after which costs? How would that look different from a lucky run of the same length?
+  - **Building and Researching:** Over how many years, and after which costs (fees, taxes,
+    trading), would you say you beat your personal benchmark?
+- **Then:**
+  - **Researching:** Picture a lucky run of the same length. What would look different in yours?
 - **Plain:** Compare with your answer about where the money would sit anyway.
 - **Example:**
   - "If after five years I have more than my savings account would have paid, after fees and
@@ -526,10 +557,13 @@ leads the placement.
 #### Q4 · The other side
 - *Asked at:* Building and Researching.
 - *Lands under:* **What I believe about markets**.
+- **Why:** Every gain on a trade is someone else's loss on it, so an idea needs a reason the other
+  side keeps losing.
 - **Ask, by level:**
-  - **Building:** When you buy, someone sells to you. Why would you be right and they be wrong?
-  - **Researching:** Why would you know something the price doesn't already show? Who is on the
-    other side of your trade, and what keeps them on the losing end?
+  - **Building and Researching:** When you buy, someone sells to you. Why would you be right and
+    they be wrong?
+- **Then:**
+  - **Researching:** Who is that seller, usually — and what keeps them selling to you?
 - **Plain:** Every trade has a buyer and a seller, and both think they're right.
 - **Example:**
   - "I can wait ten years; many sellers need their money next month."
@@ -550,8 +584,9 @@ leads the placement.
 #### Q5 · What it costs to know
 - *Asked at:* Researching.
 - *Lands under:* **What I believe about markets**.
-- **Ask:** What does it cost you to know what you know — in time, data and tools? Is your edge
-  worth more than that, after costs?
+- **Why:** An edge that costs more to find than it earns is a loss, however real it is.
+- **Ask:** What does it cost you to know what you know — in time, data and tools?
+- **Then:** Is your edge worth more than that, after costs?
 - **Plain:** What do you spend (hours, subscriptions, software) to find your ideas, and do they pay
   you back more than that?
 - **Example:** "Two evenings a week and a data subscription; I don't know yet whether it pays."
@@ -570,11 +605,14 @@ leads the placement.
 #### Q6 · When it loses
 - *Asked at:* every level.
 - *Lands under:* **How I decide**.
+- **Why:** What you do after a loss is decided either on a calm day or in the moment; this asks
+  which.
 - **Ask, by level:**
   - **Starter:** Imagine you put 1,000 into something and a month later it's worth 800. What would
     you do? Would you decide that now, or only when it happens?
-  - **Building and Researching:** When an idea loses money, what do you do? And did you decide
-    that before it happened?
+  - **Building and Researching:** When an idea loses money, what do you do?
+- **Then:**
+  - **Building and Researching:** Did you decide that before it happened, or when it happened?
 - **Plain:** Most people have never decided this in advance. That's the point of asking.
 - **Example:**
   - "Sell, so it stops hurting."
@@ -590,10 +628,14 @@ leads the placement.
 #### Q7 · How long you can hold
 - *Asked at:* Building and Researching.
 - *Lands under:* **How I decide**.
+- **Why:** Being right too late costs as much as being wrong; this asks how long you can wait.
 - **Ask, by level:**
-  - **Building:** How long could you hold an idea you still believe in while it loses, and what
-    would make you stop?
-  - **Researching:** The same, and then: which runs out first — money, patience, or time?
+  - **Building and Researching:** How long could you hold an idea you still believe in while it
+    loses — weeks, months, years?
+- **Then:**
+  - **Building:** What would make you stop?
+  - **Researching:** What would make you stop — and which runs out first: money, patience, or
+    time?
 - **Plain** (the plainest form): If you still believed in an investment but it kept losing, how
   long could you wait? What would make you give up?
 - **Example:**
@@ -611,12 +653,15 @@ leads the placement.
 #### Q8 · Fear and excitement
 - *Asked at:* every level.
 - *Lands under:* **What I have learned**.
+- **Why:** Knowing your own reflex is what lets a plan, rather than the moment, decide.
 - **Ask, by level:**
   - **Starter:** When you hear about a market crash on the news, or a friend brags about a big
     win, what do you feel like doing? If it has never happened to you, what do you think you'd
     do?
-  - **Building:** When you feel fear or excitement about a market, what do you do with it?
-  - **Researching:** The same, and then: in which market did that reflex serve you?
+  - **Building and Researching:** When you feel fear or excitement about a market, what do you do
+    with it?
+- **Then:**
+  - **Researching:** In which market did that reflex serve you, and in which did it cost you?
 - **Plain:** Think of a time a headline made you want to act right away.
 - **Example:**
   - "I check prices all day and sometimes sell."
@@ -637,8 +682,10 @@ leads the placement.
 #### Q9 · A very different market
 - *Asked at:* Researching.
 - *Lands under:* **What I believe about markets**.
-- **Ask:** Would your idea have worked in a very different market — a crash, a boom, rates rising?
-  In which state does it break?
+- **Why:** An idea that worked in one kind of market may only be a story about that market.
+- **Ask:** Take the idea you rely on most. Would it have worked in a crash? In a boom? With rates
+  rising fast? A guess for each is enough.
+- **Then:** In which of them does it break, and how would you see that coming?
 - **Plain:** Picture the worst year you can remember in markets. Would your idea have survived it?
 - **Example:** "Probably not in a crash; it needs rising prices."
 - **Teaches:** The map sums up Lo (2004) like this: edges get crowded and decay, the environment
@@ -653,9 +700,12 @@ leads the placement.
 #### Q10 · Once everybody knows
 - *Asked at:* Building and Researching.
 - *Lands under:* **What I believe about markets**.
+- **Why:** Ideas that get published or crowded can stop paying; this asks whether yours could.
 - **Ask, by level:**
-  - **Building:** What happens to an idea once everybody knows it, or everybody holds it?
-  - **Researching:** The same, and then: how much of it is left, and how long would it last?
+  - **Building and Researching:** What happens to an idea once everybody knows it, or everybody
+    holds it? Think of one of yours.
+- **Then:**
+  - **Researching:** How much of it would be left, and how long would it last?
 - **Plain:** If a trick for beating the market were in every newspaper, would it still work?
 - **Example:**
   - "It stops working, because everybody's already in."
@@ -677,8 +727,9 @@ leads the placement.
 #### Q11 · The turn, or the conditions
 - *Asked at:* Researching.
 - *Lands under:* **How I decide**.
-- **Ask:** When the trend changes, do you act on the turn itself, or on the conditions that make a
-  turn costly?
+- **Why:** Some losses come before the turn, not after it; this asks what you watch.
+- **Ask:** When a trend changes, do you act on the turn itself — or earlier, on the signs that a
+  turn would hurt, such as a big fall or a jump in volatility?
 - **Plain:** Do you move when a trend turns, or do you watch for the signs that a turn would hurt?
 - **Example:**
   - "I move when it turns."
@@ -696,10 +747,12 @@ leads the placement.
 #### Q12 · How many you tried
 - *Asked at:* Building and Researching.
 - *Lands under:* **What would change my mind**.
+- **Why:** Try enough ideas and one looks good by luck alone; the count is how you know the bar.
 - **Ask, by level:**
-  - **Building:** How many ideas did you try before the one you keep?
-  - **Researching:** The same, and then: had you tried twice as many, would you trust the one you
-    kept any less?
+  - **Building and Researching:** How many ideas did you try before the one you keep — or, if you
+    haven't started, how will you count them?
+- **Then:**
+  - **Researching:** Had you tried twice as many, would you trust the one you kept any less?
 - **Plain:** Toss enough coins and one will land heads ten times in a row.
 - **Example:**
   - "Just one."
@@ -715,7 +768,10 @@ leads the placement.
 #### Q13 · Luck or skill
 - *Asked at:* Researching.
 - *Lands under:* **What would change my mind**.
-- **Ask:** What would convince you that a good result of yours was luck?
+- **Why:** A result you could never call luck can't be tested, and what can't be tested can't be
+  improved.
+- **Ask:** Suppose a strategy of yours did well last year. What would you need to see to conclude
+  it was luck, not skill?
 - **Plain:** If a friend made money last year, how would you tell whether it was skill?
 - **Example:**
   - "If it stopped working the year after I started using it."
@@ -728,6 +784,7 @@ leads the placement.
 #### Q14 · Written down
 - *Asked at:* every level.
 - *Lands under:* **How I decide**.
+- **Why:** A rule only you can run isn't a rule yet; writing it down is the cheapest test.
 - **Ask, by level:**
   - **Starter:** If you invest, or when you start, would you write down your rules — when to buy,
     how much, when to sell — clearly enough that a friend could follow them and do exactly the
@@ -753,11 +810,14 @@ leads the placement.
 #### Q15 · A decision you'd make differently
 - *Asked at:* every level.
 - *Lands under:* **What I have learned**.
+- **Why:** A mistake you can name is the best case for the process you want.
 - **Ask, by level:**
   - **Starter:** Think of a money decision you'd make differently today. What happened, and what
     would you do now?
-  - **Building and Researching:** Which decision did you get wrong because you had no process?
-    What would one have changed?
+  - **Building and Researching:** Which one decision did you get wrong because you had no
+    process?
+- **Then:**
+  - **Building and Researching:** What would a process have changed?
 - **Plain:** Any money decision counts: a purchase, a loan, an investment, or one you didn't make.
 - **Example:** "I bought what a friend recommended and sold in a panic. Now I'd decide when to sell
   before buying."
@@ -768,6 +828,7 @@ leads the placement.
 #### Q16 · What you'd need to keep it
 - *Asked at:* Researching.
 - *Lands under:* **How I decide**.
+- **Why:** A process you can't keep is a plan; this asks what keeping it takes.
 - **Ask:** What would you need (knowledge, tools, time, people) to follow a process every week?
 - **Plain:** What would make it easy to stick to a plan every week?
 - **Example:** "An hour on Sundays, and one place where all my data lives."
@@ -783,13 +844,17 @@ leads the placement.
 ### C1 · What would change your mind
 - *Asked at:* every level.
 - *Lands under:* **What would change my mind**.
+- **Why:** A belief you would drop on evidence is one you can test; this asks for that evidence.
 - **Ask, by level:**
   - **Starter:** You said you believe "<the line they typed for O2, quoted>". What would you need
     to see to stop believing it?
-  - **Building:** What evidence would make you drop that belief, before you put months or money
-    into it?
-  - **Researching:** Put your firmest belief as one sentence a test could answer, and the result
-    that would end it, rather than send it back for tuning.
+  - **Building:** You said "<the O2 line, quoted>". What evidence would make you drop it, before
+    you put months or money into it?
+  - **Researching:** You said "<the O2 line, quoted>". Which result — what, over how long — would
+    make you drop it?
+- **Then:**
+  - **Researching:** Would you really drop it then, or adjust it and try again? Say which result
+    ends it for good.
 - **If no O2 line was typed** — a hunch picked with no words of their own counts as none — ask
   about any belief they'd like to test, or skip.
 - **Plain:** A belief you could drop on evidence is one you can test.
@@ -1033,6 +1098,7 @@ says.
 
 ### W1 · Why you do it
 - *Lands under:* **Why I do this work**.
+- **Why:** Your reason decides what doing it well means to you.
 - **Ask:** Why do you do this work, or why do you want to? Who is it for, and what would doing it
   well change?
 - **Plain:** This is about you, not about your field. Any reason counts.
@@ -1043,6 +1109,7 @@ says.
 
 ### W2 · What you believe about your field
 - *Lands under:* **What I believe about my field**.
+- **Why:** A belief written down can be checked; one kept in your head only gets confirmed.
 - **Ask:** What do you believe about your field that not everyone in it would agree with?
 - **Plain:** A hunch counts, and it doesn't have to be right.
 - **Example:** "Most disputes are settled before anyone reaches a courtroom." · "Experience
@@ -1057,6 +1124,7 @@ only when the owner asks for them.
 
 ### W3 · What you have learned
 - *Lands under:* **What I have learned**.
+- **Why:** A lesson written down can't be quietly rewritten by memory.
 - **Ask:** What has experience taught you that you would tell yourself ten years ago?
 - **Plain:** One lesson is enough; a mistake you won't repeat counts.
 - **Example:** "Read the whole file before forming a view." · "Ask what people need, not only what
@@ -1065,6 +1133,7 @@ only when the owner asks for them.
 
 ### W4 · How you decide
 - *Lands under:* **How I decide**.
+- **Why:** A way of deciding you can name is one you can improve.
 - **Ask:** When the evidence is mixed, how do you decide — what do you need to see, whom do you
   ask, and when do you stop looking?
 - **Plain:** Think of the last hard call you made at work.
@@ -1075,6 +1144,7 @@ only when the owner asks for them.
 
 ### W5 · What would change your mind
 - *Lands under:* **What would change my mind**.
+- **Why:** A belief you would drop on evidence is one you can test.
 - **Ask:** You said you believe "<the line typed for W2, quoted>". What would you need to see to
   stop believing it? With no W2 line, ask about any belief on their work they'd like to test, or
   skip.

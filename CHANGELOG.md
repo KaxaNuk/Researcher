@@ -6,6 +6,37 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
+## [1.30.0] - 2026-10-31
+A round of `philosophy` now says why it asks each question, asks one thing at a time and how much
+is left, and `refine` can clean your answers' grammar or put them in your home's language.
+
+**What to do differently:** say `update` in your home. After a round, say `refine
+Philosophy/HOW-I-INVEST.md` and ask it to clean the grammar, or to put the lines in your language.
+### Changed
+- **Questions that make sense without the asker's context**, from the owner's round 1 of
+  2026-10-31, at Researching. Every open question in the bank opens with where the round stands —
+  *question 7 of 22 · about 15 minutes left* — and a *Why*, one plain sentence of context. Q2, Q1,
+  Q3, Q4, Q5, Q6, Q7, Q8, Q9, Q10, Q12, Q15 and C1 asked two or three things in one message, and
+  the owner answered the first; each now asks one, and its second part is a *Then*, asked in a
+  message of its own once the first has an answer, joining it as one answer under the same ID. Q4,
+  Q9, Q11, Q13 and C1 at Researching are worded plainly: Q4 had drawn a request to explain. Q1
+  says the personal benchmark is a place, not a target to beat. W1 to W5 take a *Why* too.
+- **A pick answered in words is read.** The owner typed their experience in place of a level,
+  and their reasons under *Beat market?*: O3's words are mapped to a level and said back;
+  under S1 to S3 the words are the owner's own for that question.
+- **Your rules, O4.** *Nothing is bought or sold from here, and no money moves* read to the owner
+  as misleading: it becomes *I never place an order or move money: every trade
+  is your decision*. When *Here for* holds *Build and test a strategy*, the two rules for
+  strategies are shown with the three from the start, *Keep these five* recommended. A home
+  holding some of them is offered *Keep my rules (current)* first, and *Keep mine, add the rest*
+  names what it would add.
+- **Spelling and language.** `philosophy`'s preview says, when typed lines hold typos or another
+  language than *How it speaks*, that they go in as typed and `refine` can clean or translate them
+  after; the hand-over names it. `refine`, on the owner's explicit word, now also fixes grammar and
+  accents, or puts lines in the home's language, line by line, meaning and *(round N)* tags kept,
+  diff first. The round file keeps the words as typed.
+- The frozen files are untouched: `interview` and the run in `ONBOARDING.md` are unchanged.
+
 ## [1.29.2] - 2026-10-31
 Your researcher now really appears in the Antigravity app: its skills are copied there, since the
 app does not follow the links 1.29.1 made.

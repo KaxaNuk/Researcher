@@ -1,5 +1,5 @@
 ---
-description: A voice-preserving editor pass over a file in Philosophy/ — the owner's own writing — typos and slips fixed, ambiguities flagged, diff shown before anything is written; never a round file in Philosophy/Evolution/. Only when the owner runs it by name, on a path they give.
+description: A voice-preserving editor pass over a file in Philosophy/ — the owner's own writing — typos and slips fixed, and on the owner's word grammar cleaned or lines put in the home's language, ambiguities flagged, diff shown before anything is written; never a round file in Philosophy/Evolution/. Only when the owner runs it by name, on a path they give.
 input:
   - path: "The file under Philosophy/ to edit"
 ---
@@ -24,6 +24,12 @@ in the same way and takes the same pass. `${input:path}` is one file under `Phil
    voice, the headings, the order, the analogies, the emphasis and the bullet structure, and every
    *(round N)* tag `philosophy` put on a line, exactly as it stands: a retake finds the owner's
    earlier answers by it.
+   **On the owner's explicit word** — *clean the grammar*, *put it in English*, in any words —
+   the pass also fixes grammar and accents, or puts lines into the language *How it speaks*
+   names, line by line: the meaning, the order, the bullet structure and every *(round N)* tag
+   kept, a name, a number and a term of art left as written, nothing added or dropped. A line
+   whose meaning is unclear is flagged, as below, never guessed. The round file keeps the words
+   as typed.
 3. Where a passage is unclear or ambiguous, do not rewrite it: name it in chat, with the question a
    careful reader would ask; the owner answers it by hand, or types a line that goes in as typed.
 4. **A line a later round changed** — the owner names it, or a round of `philosophy` sent them here

@@ -66,6 +66,10 @@ four, with *Other*, which the tool always offers, as the free-text escape; call 
 type a pick and its options as chat. **Without one** — Codex — a pick is asked in chat, as
 the home's `AGENTS.md` says, *Other — your own words* last. Every header is the one the bank gives
 for that language, the English one for any other, twelve characters at most. Wait for each answer.
+Every open question opens with where the round stands — *question 7 of 22 · about 15 minutes
+left* — and its *Why*, one plain sentence of context, so it makes sense to someone without the
+researcher's; a second part is its *Then*, asked in a message of its own once the first has an
+answer, as *How every question is asked* in the bank says.
 
 **A round at a glance.** About 10 to 15, 20 to 25 or 30 to 40 minutes by level, and it can stop
 after any block.
@@ -225,8 +229,10 @@ option is marked *(suggested)* — never picked for the owner — by the first r
 
 *Not sure — help me place myself* opens the calibration, `Which fits?` (`¿Cuál va?`): short labels,
 the question in each description, nothing checked. Say the level that results, and let the owner
-change it. Then say the round's length, from section 3 of the bank — at Starter, *about 10 to 15
-minutes, in three blocks* — and that it can stop after any block.
+change it. **An answer typed in place of a pick** — *ten years of trading my own account,
+and I read papers* — is mapped to the level it describes, said back, and the owner may change
+it; it is never asked again as a pick. Then say the round's length, from section 3 of the bank — at
+Starter, *about 10 to 15 minutes, in three blocks* — and that it can stop after any block.
 
 ## 5. The idea the rest builds on, and your rules
 
@@ -244,10 +250,12 @@ On a retake, the explainer is said again only when the level changed, or when th
 
 **Your rules, O4, in round 1**, straight after the explainer, whose process they put to work: one
 tool question, `Your rules` (`Tus reglas`), as section 1 of the bank gives it. It shows three
-rules many people start with, a plain line each, and two for testing a strategy, offered when
-*Here for* holds *Build and test a strategy* or the owner asks. A rule of the owner's own, or a
-change, is one line in chat after, in their words. What it settles is written on the round's go
-under *Non-negotiables* in `RESEARCHER.md`, never in `Philosophy/` or the round file. A rule already
+rules many people start with, a plain line each, and two for testing a strategy — shown with the
+three from the start when *Here for* holds *Build and test a strategy*, else offered when the owner
+asks. A home that already holds some of them keeps its own first, as the bank's O4 says. A rule
+of the owner's own, or a change, is one line in chat after, in their words. What it settles is
+written on the round's go under *Non-negotiables* in `RESEARCHER.md`, never in `Philosophy/` or the
+round file. A rule already
 there stays unless the owner changes or drops it here, and *skip* or *stop* leaves the section as
 it is. A rule of theirs about holdings — how much in one place, when to sell, when to look again —
 is not written there, where no brief reads it: say in one line that it belongs in
@@ -265,8 +273,10 @@ Section 3 of the bank says which questions each level asks, block by block — *
 each asks what the one below asks, in harder words, and more. Open each block with its name and
 where it stands — *block 2 of 3 · You · 2 questions* — so the owner knows how much is left.
 
-- **An open question** is its *Ask* at the level, ending with the bank's closing line, one per
-  message. At Starter after *None yet* in the calibration, its *Example* comes under it unasked.
+- **An open question** is the round's place and its *Why*, then its *Ask* at the level, ending
+  with the bank's closing line, one per message; its *Then*, where the level has one, follows in
+  a message of its own once the *Ask* has a typed answer, and joins it as one answer. At Starter
+  after *None yet* in the calibration, its *Example* comes under it unasked.
   At Starter, Q2 is only O1's one-line follow-up, and only when O1 named no goal or no date.
 - **After every answer** — *not sure yet* and *skip* included — the question's *Teaches* line, as
   written: one idea, never a verdict on the answer. Starter names no work; Building at most one,
@@ -334,6 +344,10 @@ Show in chat, before anything is written:
   holdings, *step 5*, is shown apart, marked *yours to write in `Portfolio/RULES.md`*.
 - **Privacy**, one line: these lines are saved in your researcher's versions; leave out any you
   would rather not keep.
+- **Spelling and language**, one line, when the typed lines hold typos or another language than
+  *How it speaks*: they go in exactly as typed, and `refine` can clean their spelling and grammar,
+  or put them in that language, right after, each line shown as a diff before it changes; the
+  round file keeps them as typed.
 
 Then ask `Go?` (`¿Escribo?`) — *Go*, described as *write it and save a version* (*escribirlo y
 guardar una versión*), *Change something*, *Stop*; in chat, any of the go words in the home's
@@ -395,7 +409,8 @@ not kept, and the next run starts as this one did, as round *N* again.
    - **The first line** is the round, the date and the level the round ended at — *Starter*,
      *Building* or *Researching* — or, in a field round, `Field`.
    - **One line per question asked**, in the order asked: `- <ID> · <answer>`, the answer the
-     owner's typed words or a status — *not sure yet*, *skipped* or *explained*. A pick is never
+     owner's typed words or a status — *not sure yet*, *skipped* or *explained*; an answer of
+     several lines, a *Then*'s included, keeps them, indented under its bullet. A pick is never
      recorded: an S question takes the words typed for it, or *skipped* when none were. O3 is the
      level on the first line; O4 and C2 take no line.
    - **On a retake**, a label follows the ID — `- <ID> · <label> · <answer>`: *kept* — and no
@@ -454,7 +469,8 @@ Short, in the owner's language and voice, in this order:
    what was left *not sure yet*, skipped or never reached waits for them there. In a field round,
    or without the reading map, no work is named: *once you have read a source or two*.
 4. **`refine Philosophy/HOW-I-INVEST.md`**, when *Leave my old line* was picked, with the old lines
-   to bring to it, each by its *(round N)*.
+   to bring to it, each by its *(round N)*; and when the preview's *Spelling and language* line
+   was shown, to clean this round's lines or put them in the home's language, diff first.
 5. **`update`**, when O4 was left out, *step 1*: after it, *my rules* in the next round.
 6. **`brief setup`**, when a rule about holdings was pointed to `Portfolio/RULES.md`: with its
    Portfolio part, it starts that file when it is missing, and the owner writes the rule there, in
