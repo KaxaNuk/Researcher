@@ -362,16 +362,16 @@ The levels are nested: each asks everything the level before it asks, in harder 
 | Block | Starter | Building | Researching |
 | --- | --- | --- | --- |
 | Opening | O1, O2, O3; O4 as its card says | O1, O2, O3; O4 as its card says | O1, O2, O3; O4 as its card says |
-| Your scoreboard | Q2 (O1's follow-up, when needed), Q1, Q3 | Q2, Q1, Q3 | Q2, Q1, Q3 |
+| Your scoreboard | Q2 (O1's follow-up, when needed), Q1, Q3 | Q2, Q18, Q1, Q19, Q3 | Q2, Q18, Q1, Q19, Q3 |
 | Your edge | — | S1, S4 (one call), Q4 | S1–S4 (one call), Q4, Q5 |
 | You | Q6, Q8 | Q6, Q7, Q8 | Q6, Q7, Q8 |
 | The world moves | — | Q10 | Q9, Q10, Q11 |
-| Your proof | Q14 | Q12, Q14 | Q12, Q13, Q14 |
-| Your process | Q15 (one block with Q14) | Q15 | Q15, Q16 |
+| Your proof | Q14 | Q12, Q14 | Q12, Q14 |
+| Your process | Q15 (one block with Q14) | Q15, Q17 | Q15, Q17, Q16 |
 | Closing | C1, C2 | C1, C2 | C1, C2 |
-| **After the opening** | **7 or 8 typed, 1 pick** | **12 typed, 3 picks** | **17 typed, 5 picks** |
+| **After the opening** | **7 or 8 typed, 1 pick** | **15 typed, 3 picks** | **19 typed, 5 picks** |
 | **Blocks** | **3** | **6** | **6** |
-| **About** | **10 to 15 minutes** | **20 to 25 minutes** | **30 to 40 minutes** |
+| **About** | **10 to 15 minutes** | **25 to 30 minutes** | **35 to 45 minutes** |
 
 **Checkpoints.** After each block except the last, ask one tool question, `Continue?`
 (`¿Seguimos?`):
@@ -426,6 +426,28 @@ changes the wording of a question the level asks; it never adds one the level do
 - **Behind it:** *a gap*. The map holds no work on goals or goal-based benchmarks. Say so, and
   propose nothing.
 
+#### Q18 · Whose money
+- *Asked at:* Building and Researching, after Q2.
+- *Lands under:* **Why I invest**.
+- **Why:** Money that is someone else's, or needed sooner, often can't be run the same way as your
+  own long-term savings.
+- **Ask:** Is all of this money yours, or do you also invest for others — family, friends,
+  clients, a fund?
+- **Then:** Does your process change when the money is someone else's, or needed sooner? How?
+- **Plain:** Your own savings, your family's, a fund's: the same rules for all, or not?
+- **Example:**
+  - "Only mine."
+  - "Mine and my parents'; theirs I keep much safer."
+  - "Mine and a small fund; the fund has written rules, mine doesn't."
+- **Teaches:** Whose money it is changes how long it can wait and how big a fall it can take.
+  Rules written down once, per pool, keep one pool's urgency from deciding for another.
+  - **Researching adds:** The map's other side to *someone is paid to know*, Berk & Green (2004):
+    "alpha exists" is not "the client gets it". A lead to read.
+- **Behind it:** Berk & Green, 2004, *Mutual Fund Flows and Performance in Rational Markets* (Act
+  III, question 06).
+- **Never:** a holding, an account, a broker or a person's name is asked for; a typed one is
+  marked in the preview, as the skill's *Privacy* line says.
+
 #### Q1 · Your personal benchmark
 - *Asked at:* every level.
 - *Lands under:* **Why I invest**.
@@ -466,6 +488,24 @@ changes the wording of a question the level asks; it never adds one the level do
     "alpha exists" is not "the client gets it".
 - **Never:** a product, a ticker, an allocation or a computed return.
 
+#### Q19 · The currency you count in
+- *Asked at:* Building and Researching, after Q1.
+- *Lands under:* **Why I invest**.
+- **Why:** A gain in one currency can be a loss in another, so the yardstick needs a currency too.
+- **Ask:** In which currency do you count your results — the one you'll spend the money in?
+- **Then:** When that currency moves a lot against the others, what happens to your benchmark and
+  to what you hold?
+- **Plain:** If you'll spend the money in pesos, a gain in dollars is only a gain once it's back in
+  pesos.
+- **Example:**
+  - "Pesos; most of what I'll pay is in pesos."
+  - "Dollars, because I'll retire abroad."
+  - "I haven't thought about it."
+- **Teaches:** A currency move can make or erase a year's result on its own. Naming the currency
+  you count in is part of naming your benchmark.
+- **Behind it:** *a gap*. The map holds no work on currency or on a benchmark's currency. Say so,
+  and propose nothing.
+
 #### Q3 · How you would know
 - *Asked at:* every level.
 - *Lands under:* **How I decide**.
@@ -497,7 +537,8 @@ changes the wording of a question the level asks; it never adds one the level do
 - *Asked at:* Building asks S1 and S4. Researching asks S1–S4.
 - *Lands under:* a pick lands nowhere, the round file included. The owner's own words for one
   go under **What I believe about markets** for S1–S3, and under **How I decide** for S4.
-- **Say first:** No answer is right, and picking several is expected. In the map's *Nothing is
+- **Say first:** No answer is right, and picking several is expected where a question allows it. In
+  the map's *Nothing is
   discarded*, every view keeps its job.
 - **How each option is shown:**
   - Each option's description is a plain gloss.
@@ -513,8 +554,10 @@ changes the wording of a question the level asks; it never adds one the level do
 | *For a while — edges crowd and move* | an edge works until too many people use it, then moves | Lo, 2004 | Act V, question 14 |
 | *Not sure yet* | — | — | — |
 
-**S2 · `Edge from?` (`¿De dónde?`)** — Researching only, multi-select. *Ask:* If there is an edge,
-where does it come from? *Not sure yet* is typed under *Other*.
+**S2 · `Edge from?` (`¿De dónde?`)** — Researching only, single-select. *Ask:* If there is an
+edge, which is its main source for you — the one you'd name first? *Not sure yet* is typed under
+*Other*. One pick, because an idea with no single named source is only a pattern; a second source
+the owner names goes in their own words after.
 
 | Option | Plain gloss | Work |
 | --- | --- | --- |
@@ -764,7 +807,9 @@ leads the placement.
   - *Seven questions before any backtest*, question 7: "How many ideas came before this one?"
 
 #### Q13 · Luck or skill
-- *Asked at:* Researching.
+- *Folded into C1's* Then *since 1.30.0, and asked at no level.* The card stays for its ID: a retake
+  quotes an earlier round's Q13 answer when it asks C1, and its *Behind it* is C1's too.
+- *Asked at:* Researching, before 1.30.0.
 - *Lands under:* **What would change my mind**.
 - **Why:** A result you could never call luck can't be tested, and what can't be tested can't be
   improved.
@@ -823,6 +868,33 @@ leads the placement.
   process exists. Writing a lesson down as *I have learned that…* keeps it.
 - **Behind it:** *a gap*; no paper.
 
+#### Q17 · How much goes to each
+- *Asked at:* Building and Researching.
+- *Lands under:* **How I decide**.
+- **Why:** Which ideas you hold is half the story; how much goes to each, and when it changes, is
+  the other half.
+- **Ask:** When you have several ideas, strategies or asset classes, how do you decide how much
+  goes to each?
+- **Then:** What tells you to change that split — a date, a result, a change in the market?
+- **Plain:** If you had three good ideas and one pot of money, how would you split it?
+- **Example:**
+  - "Equal parts, and I rebalance once a year."
+  - "More to what has worked lately."
+  - "More to what tends to fail at different times from the rest."
+- **Teaches:** How you combine bets can matter as much as which bets you pick: two ideas that fail
+  at different times can be steadier together than either alone.
+  - **Building adds:** Markowitz (1952) made that the starting point of portfolio choice. A lead to
+    read.
+  - **Researching adds:** And Asness, Moskowitz & Pedersen (2013), as the map sums them up: combine
+    premia that fail at different times; robustness across markets beats a perfect fit in one. A
+    lead to read too.
+- **Behind it:**
+  - Markowitz, 1952, *Portfolio Selection* (Act II, question 04).
+  - Asness, Moskowitz & Pedersen, 2013, *Value and Momentum Everywhere* (Act V, question 16).
+  - Grinold & Kahn, 1995, *Active Portfolio Management* (Act VI, question 18): edge scales with
+    breadth.
+- **Never:** an allocation is proposed; the question asks how the owner decides, not what to hold.
+
 #### Q16 · What you'd need to keep it
 - *Asked at:* Researching.
 - *Lands under:* **How I decide**.
@@ -851,8 +923,8 @@ leads the placement.
   - **Researching:** You said "<the O2 line, quoted>". Which result — what, over how long — would
     make you drop it?
 - **Then:**
-  - **Researching:** Would you really drop it then, or adjust it and try again? Say which result
-    ends it for good.
+  - **Researching:** And if it does well for a year, what would tell you that was luck, not your
+    process — and would you drop it then, or adjust it and try again?
 - **If no O2 line was typed** — a hunch picked with no words of their own counts as none — ask
   about any belief they'd like to test, or skip.
 - **Plain:** A belief you could drop on evidence is one you can test.
@@ -873,6 +945,8 @@ leads the placement.
   - *An idea's anatomy*, the claim and the kill switch. `objective` takes the shape further, in a
     strategy.
   - *Who argues with whom*.
+  - **Researching, for the *Then*:** Harvey, Liu & Zhu, 2016, against Jensen, Kelly & Pedersen,
+    2023, *Is There a Replication Crisis in Finance?* Still contested.
 
 ### C2 · What to read or learn next
 - *Asked at:* every level.
@@ -915,11 +989,11 @@ leads the placement.
 
 | Heading in `HOW-I-INVEST.md` | IDs |
 | --- | --- |
-| **Why I invest** — the first heading | O1, Q2, Q1 |
+| **Why I invest** — the first heading | O1, Q2, Q18, Q1, Q19 |
 | **What I believe about markets** | O2, Q4, Q5, Q9, Q10, and S1–S3 in the owner's own words |
 | **What I have learned** | Q8, Q15 |
-| **How I decide** | Q3, Q6, Q7, Q11, Q14, Q16, and S4 in the owner's own words |
-| **What would change my mind** | Q12, Q13, C1 |
+| **How I decide** | Q3, Q6, Q7, Q11, Q14, Q17, Q16, and S4 in the owner's own words |
+| **What would change my mind** | Q12, Q13 (before 1.30.0), C1 |
 | *never written to `HOW-I-INVEST.md`* | O3 (the level), O4 (its rules go under *Non-negotiables* in `RESEARCHER.md`, but one about holdings, which the owner writes in `Portfolio/RULES.md`), every pick, C2, placements, *not sure yet*, *skipped*, *explained* |
 
 - Each typed answer is one bullet, word for word, tagged *(round N)*. Headings are matched by name
@@ -1022,15 +1096,15 @@ holds, tests or answers a belief in the map's *Where a belief sits* and *Beliefs
 | Khandani & Lo, 2011 — the map also dates it 2007 | Q10, S1, O2, C1 |
 | Daniel & Moskowitz, 2016 | Q9, Q11, S1, O2, C1 |
 | McLean & Pontiff, 2016 | Q10, S1, S3, O2, C1 |
-| Harvey, Liu & Zhu, 2016 | Q12, Q13, S3 |
-| Jensen, Kelly & Pedersen, 2023 | Q3, Q13, S3 |
+| Harvey, Liu & Zhu, 2016 | Q12, Q13, S3, C1 |
+| Jensen, Kelly & Pedersen, 2023 | Q3, Q13, S3, C1 |
 | Cowles, 1933 | Q1, S1, O2, C1 |
 | Jensen, 1968 | Q1, S1 |
 | Sharpe, 1964 | Q3 |
-| Berk & Green, 2004 | Q1, Q5, S1 |
+| Berk & Green, 2004 | Q1, Q5, Q18, S1 |
 | Pedersen, 2015 | Q5, S1 |
 | Ross, 1976 | S2 |
-| Grinold & Kahn, 1995 | Q11, S2, O2, C1 |
+| Grinold & Kahn, 1995 | Q11, Q17, S2, O2, C1 |
 | Arnott, Harvey & Markowitz, 2019 | Q14, O2, C1 |
 | Guo, Wang, Ni & Shum, 2022 | Q16 |
 | Fama & French, 1992 and 1993 | S2, O2, C1 |
@@ -1038,7 +1112,9 @@ holds, tests or answers a belief in the map's *Where a belief sits* and *Beliefs
 | Lakonishok, Shleifer & Vishny, 1994 | S2, O2, C1 |
 | Shiller, 1981 · De Bondt & Thaler, 1985 | S2, O2, C1 |
 | Farmer, 2002 | S1, O2, C1 |
-| Jegadeesh & Titman, 1993 · Asness, Moskowitz & Pedersen, 2013 | O2, C1 |
+| Jegadeesh & Titman, 1993 | O2, C1 |
+| Asness, Moskowitz & Pedersen, 2013 | Q17, O2, C1 |
+| Markowitz, 1952 | Q17 |
 | Graham & Dodd, 1934 | O2, C1 |
 | Dow, 1889 · Nelson, 1903 · Kendall, 1953 · Samuelson, 1965 · Lo & MacKinlay, 1988 | O2, C1 |
 | Gu, Kelly & Xiu, 2020 | O2, C1 |

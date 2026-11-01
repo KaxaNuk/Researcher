@@ -71,7 +71,7 @@ left* — and its *Why*, one plain sentence of context, so it makes sense to som
 researcher's; a second part is its *Then*, asked in a message of its own once the first has an
 answer, as *How every question is asked* in the bank says.
 
-**A round at a glance.** About 10 to 15, 20 to 25 or 30 to 40 minutes by level, and it can stop
+**A round at a glance.** About 10 to 15, 25 to 30 or 35 to 45 minutes by level, and it can stop
 after any block.
 
 | # | Step | How |

@@ -8,7 +8,8 @@ tagged `vX.Y.Z`.
 
 ## [1.30.0] - 2026-10-31
 A round of `philosophy` now says why it asks each question, asks one thing at a time and how much
-is left, and `refine` can clean your answers' grammar or put them in your home's language.
+is left, asks how you split money, for whom and in which currency, and `refine` can clean your
+answers' grammar or put them in your home's language.
 
 **What to do differently:** say `update` in your home. After a round, say `refine
 Philosophy/HOW-I-INVEST.md` and ask it to clean the grammar, or to put the lines in your language.
@@ -30,6 +31,18 @@ Philosophy/HOW-I-INVEST.md` and ask it to clean the grammar, or to put the lines
   *Keep these four* recommended. A home
   holding some of them is offered *Keep my rules (current)* first, and *Keep mine, add the rest*
   names what it would add.
+- **Three new questions, from the owner's round**, at Building and Researching, for an owner who
+  allocates across strategies and runs more than one pool of money: **Q18**, whose money it is and
+  whether the process changes when it is someone else's (Berk & Green, 2004); **Q19**, the
+  currency results are counted in (a gap on the map, said out loud); **Q17**, how much goes to
+  each idea, strategy or asset class, and what changes the split (Markowitz, 1952; Asness,
+  Moskowitz & Pedersen, 2013; Grinold & Kahn, 1995). Q18 and Q19 join *Your scoreboard*, Q17
+  *Your process*.
+- **S2 is one pick**: the main source of edge, since an owner who ticked all four said nothing an
+  idea could use; a second source goes in their own words. **Q13 folds into C1**, whose *Then* now
+  asks what would show a good year was luck: both drew the same answer. Q13 keeps its card and ID,
+  so a retake quotes an earlier answer under C1. A Building round is now about 25 to 30 minutes,
+  a Researching one 35 to 45.
 - **Spelling and language.** `philosophy`'s preview says, when typed lines hold typos or another
   language than *How it speaks*, that they go in as typed and `refine` can clean or translate them
   after; the hand-over names it. `refine`, on the owner's explicit word, now also fixes grammar and
