@@ -447,7 +447,7 @@ run these yourself — the owner types nothing, and may not know what any of the
 1. **Install the home for the owner's user**, beside the package — the same user scope, so the agent
    and the skill reach every folder, for every assistant listed under `targets:` both in
    `$HOME/.apm/apm.yml` and in the home's `apm.yml`. First `add` the assistant in use to the first
-   list — `claude`, `codex`, `cursor` or `antigravity` — since while
+   list — `claude`, `codex`, `copilot`, `cursor` or `antigravity` — since while
    that list leaves it out, every install and update deletes its files; then install, without
    `--target`, so the home reaches every assistant both lists name; then `check` its files are
    there:

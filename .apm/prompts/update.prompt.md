@@ -224,8 +224,9 @@ this folder, nothing else.
   - **Each assistant `assistants:` lists** whose files are missing here — the same script's
     `check <assistant> <slug>` exits 1 — is to have the package and the home installed for it, as
     *Step 4* item 6 does. One the owner does not use on this computer is theirs to leave out, by
-    *Change something*; it stays in the file. One outside the four the researcher is tried on —
-    `claude`, `codex`, `cursor`, `antigravity` — such as `gemini` or `copilot`, is not set up: the
+    *Change something*; it stays in the file. One outside the five the researcher is tried on —
+    `claude`, `codex`, `copilot`, `cursor`, `antigravity` — such as `gemini` or `windsurf`, is not
+    set up: the
     plan and the report say so in one line, and it stays in the file.
   - **`versions:`**, where this home's own git config — `git config --local`, since the global
     `user.email` a new computer's setup writes signs every folder — has no `user.email` or no

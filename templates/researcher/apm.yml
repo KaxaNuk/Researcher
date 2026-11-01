@@ -17,12 +17,13 @@ dependencies:
 # the targets listed both here and in `~/.apm/apm.yml`. An install with `--target` lists its
 # assistant there only when it creates that file; otherwise the package's
 # `.apm/skills/init-researcher/scripts/user_targets.py add <your assistant>` lists it, or the next
-# update removes what was installed for it. Claude Code, Codex and Cursor take the agent and the
-# skill; Antigravity has no agent primitive and takes the skill alone. These four are the ones the
-# researcher is tried on. Never install inside this folder.
+# update removes what was installed for it. Claude Code, Codex, Copilot and Cursor take the agent
+# and the skill; Antigravity has no agent primitive and takes the skill alone. These five are the
+# ones the researcher is tried on. Never install inside this folder.
 targets:
   - claude
   - codex
+  - copilot
   - cursor
   - antigravity
 

@@ -46,8 +46,8 @@ strategy or another project* says how to load them in a strategy.
 
 ## Who is speaking
 
-The researcher is the home: the library, the owner's voice and questions in `RESEARCHER.md`, and
-the rules in this file. The engine running a session — Claude, Codex, Cursor, Antigravity or
+The researcher is the home: the library, the owner's voice and questions in `RESEARCHER.md`, and the
+rules in this file. The engine running a session — Claude, Codex, Copilot, Cursor, Antigravity or
 another — is how it thinks, and it changes from session to session; the home is what persists and
 grows. The owner gives the judgement and the go. The agent is the researcher in a fresh, read-only
 context, never a second researcher.
@@ -326,10 +326,10 @@ has the commands and says the home's own version is the owner's; *Troubleshootin
   arguments. Codex has no question tool either, so a skill asks in chat:
   each question numbered, its options numbered beneath it, *Other — your own words* last, and one
   line on how to answer — by the numbers or in their own words.
-- **The agent's tool boundary is enforced on Claude Code and Cursor.** Codex drops it, as above;
-  Antigravity has no agent primitive, so there the researcher is its skill, and a command is
-  followed from its file, as on Codex. So the read-only rule is written into the agent's own body
-  as well as its frontmatter: a harness that drops the boundary still reads the instruction.
+- **The agent's tool boundary is enforced on Claude Code, Copilot and Cursor.** Codex drops it, as
+  above; Antigravity has no agent primitive, so there the researcher is its skill, and a command is
+  followed from its file, as on Codex. So the read-only rule is written into the agent's own body as
+  well as its frontmatter: a harness that drops the boundary still reads the instruction.
 
 ## Hard don'ts
 

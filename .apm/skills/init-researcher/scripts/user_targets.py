@@ -16,8 +16,8 @@ Usage:
     uv run --no-project python user_targets.py clashes <assistant>
     uv run --no-project python user_targets.py keep-mine <assistant>
 
-The assistant is claude, codex, cursor or antigravity, the four the researcher is tried on; the
-slug is the researcher's name as its files take it, `sofia` for Sofía.  In a conversation where the
+The assistant is claude, codex, copilot, cursor or antigravity, the five the researcher is tried
+on; the slug is the researcher's name as its files take it, `sofia` for Sofía.  In a conversation where the
 init-researcher skill is not loaded yet, run it from the installed package, `<package>` standing
 for `$HOME/.apm/apm_modules/KaxaNuk/Researcher` — `$HOME`, never `~`, which a program
 handed it does not expand:
@@ -38,6 +38,7 @@ and agent, where APM puts them for the assistant:
     assistant      the skills, next and <slug>       the researcher's agent
     claude         .claude/skills/                   .claude/agents/<slug>.md
     codex          .agents/skills/                   .codex/agents/<slug>.toml
+    copilot        .agents/skills/                   .copilot/agents/<slug>.agent.md
     cursor         .agents/skills/                   .cursor/agents/<slug>.md
     antigravity    .gemini/antigravity-cli/skills/   none: it takes no agent
 
@@ -49,8 +50,8 @@ user already has a skill, command or agent of their own under one of the package
 install keeps theirs, leaves the package's out, warns in one line and still exits 0, and the
 researcher runs without that part.  For each of the package's skills, commands and agents, read
 from the installed package under `~/.apm/apm_modules`, it looks where APM puts it for the assistant
-- the skills as `check` lists them, the commands in `.claude/commands/` and `.cursor/commands/`,
-the agent where `check` looks for the researcher's - and names each one there that APM's lock file,
+- the skills as `check` lists them, the commands in `.claude/commands/`, `.copilot/prompts/` and
+`.cursor/commands/`, the agent where `check` looks for the researcher's - and names each one there that APM's lock file,
 `~/.apm/apm.lock.yaml`, does not record as installed: the user's own.  Codex and Antigravity take
 no commands, and Antigravity no agent.
 
@@ -80,12 +81,13 @@ MANIFEST_FILE = pathlib.Path('.apm') / 'apm.yml'
 # A file's lines, each with its own line ending, so a file written with CRLF keeps them.
 LINE_PATTERN = re.compile(r'[^\n]*\n|[^\n]+')
 # Where APM puts each assistant's files, from the user's home folder: the researcher's agent, from
-# its slug, for the three assistants that take one; and the folder of skills, Claude Code's and
-# Antigravity's their own, Codex's and Cursor's shared.  The package's `next` skill stands for the
+# its slug, for the four assistants that take one; and the folder of skills, Claude Code's and
+# Antigravity's their own, Codex's, Copilot's and Cursor's shared.  The package's `next` skill stands for the
 # package.  Each was checked by an install with APM 0.33.0.
 AGENT_FILES = {
     'claude': '.claude/agents/{slug}.md',
     'codex': '.codex/agents/{slug}.toml',
+    'copilot': '.copilot/agents/{slug}.agent.md',
     'cursor': '.cursor/agents/{slug}.md',
 }
 # The kinds of file the package installs, as the package keeps them: a skill a folder holding
@@ -97,6 +99,7 @@ SKILL_FILE = 'SKILL.md'
 # and Antigravity take none.
 COMMAND_FILES = {
     'claude': '.claude/commands/{name}.md',
+    'copilot': '.copilot/prompts/{name}.prompt.md',
     'cursor': '.cursor/commands/{name}.md',
 }
 # Where the package is installed for the user, under `~/.apm/apm_modules/`, newest name first: as
@@ -125,6 +128,7 @@ SKILL_FOLDERS = {
     'antigravity': '.gemini/antigravity-cli/skills',
     'claude': '.claude/skills',
     'codex': '.agents/skills',
+    'copilot': '.agents/skills',
     'cursor': '.agents/skills',
 }
 # The package's own folder seen from this file, scripts/ -> init-researcher/ -> skills/ -> .apm/,

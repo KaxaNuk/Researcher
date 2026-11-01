@@ -8,17 +8,18 @@ extends with a *Brought to template* entry at the top; the home's own entries go
 
 ## 0.33.0 (2026-10-31)
 
-**MINOR** — the home is installed for the four assistants the researcher is tried on: Claude Code,
-Codex, Cursor and Antigravity, which replaced the Gemini CLI for most of its users.
+**MINOR** — the home is installed for the five assistants the researcher is tried on: Claude Code,
+Codex, Copilot, Cursor and Antigravity, which replaced the Gemini CLI for most of its users.
 
 **What to do differently:** say `update` in your home. If you use your researcher on the Gemini
-CLI, Copilot, OpenCode or Windsurf, `update` no longer sets it up there: open it in one of the four.
+CLI, OpenCode or Windsurf, `update` no longer sets it up there: open it in one of the five.
 
 ### Changed
-- `apm.yml`'s `targets:` are `claude`, `codex`, `cursor` and `antigravity`, in place of `claude`,
-  `copilot`, `cursor`, `codex`, `gemini` and `windsurf`, and `settings.yml`'s note names the same
-  four. `AGENTS.md` and `README.md` name them where they named the others: Antigravity takes the
-  skills alone, so there the researcher is its skill and a command is followed from its file.
+- `apm.yml`'s `targets:` are `claude`, `codex`, `copilot`, `cursor` and `antigravity`, in place of
+  `claude`, `copilot`, `cursor`, `codex`, `gemini` and `windsurf`, and `settings.yml`'s note names
+  the same five. `AGENTS.md` and `README.md` name them where they named the others: Antigravity
+  takes the skills alone, so there the researcher is its skill and a command is followed from its
+  file.
 
 ## 0.32.1 (2026-10-27)
 

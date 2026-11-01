@@ -43,9 +43,9 @@ for somebody who was not in the room:
 
 ## 0.18.1 (2026-10-31)
 
-**PATCH** — the README's sentence on where what the assistant reads goes names the four assistants
-the researcher is tried on: Claude, Codex, Cursor and Antigravity, in place of Gemini. No result
-changes.
+**PATCH** — the README's sentence on where what the assistant reads goes names the five assistants
+the researcher is tried on: Claude, Codex, Copilot, Cursor and Antigravity, in place of Gemini. No
+result changes.
 
 **What to do differently:** nothing.
 

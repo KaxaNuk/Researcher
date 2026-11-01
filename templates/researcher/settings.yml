@@ -6,7 +6,7 @@
 # copy on GitHub. Edit it by hand whenever you like; each skill writes only its own part, on your
 # go, and saves a version of it.
 
-# The assistants you use your researcher on, as APM names them: claude, codex, cursor,
+# The assistants you use your researcher on, as APM names them: claude, codex, copilot, cursor,
 # antigravity. `update` installs the package and this home for each one; `backup` and
 # `update` add the ones this computer uses.
 assistants: []

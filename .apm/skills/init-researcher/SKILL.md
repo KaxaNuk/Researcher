@@ -119,7 +119,7 @@ past four options, *Stop* is left out and the other homes are named in the line 
 5. **Bring the package up to date**, on the same go, before anything is copied.
    **Skip this step when the package was installed in this same conversation**: it is
    already the newest, and `SETUP.md`'s step 2 listed the assistant. Otherwise, first put the
-   assistant in use — `claude`, `codex`, `cursor` or `antigravity` —
+   assistant in use — `claude`, `codex`, `copilot`, `cursor` or `antigravity` —
    on APM's list in `$HOME/.apm/apm.yml`, so the update keeps its files. The script is in this
    skill's folder; where the skill is not loaded, run it from the package. Run one of these, never
    both:

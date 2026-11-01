@@ -30,6 +30,11 @@ EXPECTED_FILES = {
         '.agents/skills/sofia/SKILL.md',
         '.codex/agents/sofia.toml',
     ],
+    'copilot': [
+        '.agents/skills/next/SKILL.md',
+        '.agents/skills/sofia/SKILL.md',
+        '.copilot/agents/sofia.agent.md',
+    ],
     'cursor': [
         '.agents/skills/next/SKILL.md',
         '.agents/skills/sofia/SKILL.md',

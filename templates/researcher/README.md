@@ -11,9 +11,9 @@ researcher, it writes a paragraph about it in place of this one, yours to change
 projects, and for learning to invest when you want. It is never investment advice: it never tells
 you to buy, sell or hold, never trades or moves money, and every decision, and its risk, is yours.
 It runs on your computer through your AI assistant; what it reads goes to the company behind that
-assistant (Anthropic for Claude, OpenAI for Codex, Google for Antigravity, and for Cursor, Cursor
-and the maker of the model you pick there), never to KaxaNuk, and a copy goes to your own private
-GitHub only when you ask. It is free under the MIT licence, as is and
+assistant (Anthropic for Claude, OpenAI for Codex, Google for Antigravity, and for Copilot and
+Cursor, GitHub or Cursor and the maker of the model you pick there), never to KaxaNuk, and a copy
+goes to your own private GitHub only when you ask. It is free under the MIT licence, as is and
 without warranty; your data provider, your assistant and the Investment Lab's libraries, which
 KaxaNuk sells, each have their own terms. The worked example's figures come from a backtest on past
 prices, shown to teach the method, never a promise or a recommendation.
