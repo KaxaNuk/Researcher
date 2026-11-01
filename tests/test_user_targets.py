@@ -19,6 +19,8 @@ EXPECTED_FILES = {
     'antigravity': [
         '.gemini/antigravity-cli/skills/next/SKILL.md',
         '.gemini/antigravity-cli/skills/sofia/SKILL.md',
+        '.gemini/config/skills/next/SKILL.md',
+        '.gemini/config/skills/sofia/SKILL.md',
     ],
     'claude': [
         '.claude/skills/next/SKILL.md',
@@ -490,6 +492,68 @@ def test_keep_mine_renames_the_users_own_and_keeps_everything_in_them(
     assert 'Renamed your skill read to read-mine-2' in printed
     assert 'install the package again' in printed
     assert after == 0
+
+def test_link_antigravity_links_each_skill_for_the_app_and_keeps_the_users_own(
+    capsys: pytest.CaptureFixture[str],
+    tmp_path: pathlib.Path,
+) -> None:
+    """
+    Each skill installed for the Antigravity CLI gets a link of its name where the app reads skills,
+    pointing at it; a folder of the user's own there is kept and named; a second run changes nothing;
+    and once a skill leaves the CLI's folder, its link is removed and nothing else.
+    """
+    home = tmp_path / 'Pérez, Sofía (2021)'
+    cli_files = _write_files(
+        home / user_targets.SKILL_FOLDERS['antigravity'],
+        [
+            'next/SKILL.md',
+            'read/SKILL.md',
+            'sofia/SKILL.md',
+        ],
+    )
+    app_folder = home / user_targets.ANTIGRAVITY_APP_SKILLS
+    own_files = _write_files(
+        app_folder,
+        ['read/SKILL.md'],
+    )
+    first_run = user_targets.link_antigravity(home)
+    printed_first = capsys.readouterr().out
+    second_run = user_targets.link_antigravity(home)
+    printed_second = capsys.readouterr().out
+    cli_files[0].unlink()
+    cli_files[0].parent.rmdir()
+    third_run = user_targets.link_antigravity(home)
+    printed_third = capsys.readouterr().out
+
+    assert first_run == 1
+    assert (app_folder / 'sofia').resolve() == cli_files[2].parent.resolve()
+    assert (app_folder / 'sofia' / 'SKILL.md').read_bytes() == cli_files[2].read_bytes()
+    assert own_files[0].read_bytes() == b'---\nname: sofia\n---\n'
+    assert f'Kept yours, not linked: {app_folder / "read"}' in printed_first
+    assert '2 of 3 skills reach the Antigravity app; 2 linked now.' in printed_first
+    assert second_run == 1
+    assert '0 linked now.' in printed_second
+    assert third_run == 1
+    assert not (app_folder / 'next').exists()
+    assert not (app_folder / 'next').is_junction()
+    assert not (app_folder / 'next').is_symlink()
+    assert 'Removed a link to a skill no longer installed' in printed_third
+    assert (app_folder / 'sofia' / 'SKILL.md').is_file()
+    assert own_files[0].is_file()
+
+
+def test_link_antigravity_refuses_before_the_install(
+    capsys: pytest.CaptureFixture[str],
+    tmp_path: pathlib.Path,
+) -> None:
+    """
+    With nothing installed for the Antigravity CLI there is nothing to link: it says so and fails.
+    """
+    linked = user_targets.link_antigravity(tmp_path)
+
+    assert linked == 1
+    assert 'install the package for antigravity, then run this.' in capsys.readouterr().out
+
 
 
 def test_main_adds_to_the_list_and_checks_in_the_home_folder(

@@ -7,12 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 tagged `vX.Y.Z`.
 
 ## [1.29.1] - 2026-10-31
-On Codex, setting up the researcher no longer stops when Codex's sandbox refuses to write in your
-user folder: it asks you to approve the command instead.
+Your researcher now works in the Antigravity app, not only its CLI, and on Codex setting up no
+longer stops when Codex's sandbox refuses to write in your user folder.
 
-**What to do differently:** nothing; on Codex, approve the commands it asks to run outside its
-sandbox while it installs.
+**What to do differently:** say `update` in your home; on Antigravity, then open a new conversation.
+On Codex, approve the commands it asks to run outside its sandbox while it installs.
 ### Fixed
+- **The Antigravity app had none of the skills**, found by the owner's run of 2026-10-31: greeted by
+  name, it answered as Antigravity. APM, 0.35.0 too, installs Antigravity's skills in
+  `~/.gemini/antigravity-cli/skills/`, which only the CLI reads; the app reads
+  `~/.gemini/config/skills/`, as Antigravity's documentation says. `user_targets.py`'s new
+  `link-antigravity` links each skill there — a junction on Windows, a symbolic link elsewhere — so
+  every install and update reaches the app too, keeps any skill of the user's own under the same
+  name, and removes a link left to a skill no longer installed; `check antigravity` now looks for
+  the links. `SETUP.md`'s step 2, *Another assistant* and *Troubleshooting*, the interview's install
+  and `update` run it. Tried here: 28 of 28 skills linked, a researcher's included, and its tests
+  make the links under a path with accents, commas and parentheses.
 - **Codex's sandbox**, found by the owner's run of 2026-10-31: Codex keeps itself to the folder it
   was opened in, so it was refused writing `~/.apm/apm.yml` and `~/.codex/agents/`, and stopped
   until told to go on. `SETUP.md`'s step 2 and *Troubleshooting*, and `init-researcher` 0.9.2's

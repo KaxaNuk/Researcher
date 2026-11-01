@@ -110,6 +110,10 @@ install keeps the version it had: run `uvx --from apm-cli==0.33.0 apm update -g 
 install above again, then `add`. If `add` exits 1, say why in one line at the opening of step 3's
 question, and go on.
 
+**On Antigravity**, also run the same script's `link-antigravity` after the install, without asking:
+APM puts the skills where the Antigravity CLI reads them, and this links each one where the
+Antigravity app reads them, so the researcher is there in both.
+
 **On Codex, its sandbox.** The install writes in the user's own folder — `~/.apm/`, `~/.agents/`,
 `~/.codex/` — outside the folder Codex was opened in, which its sandbox keeps it to. When the
 sandbox refuses a command, ask to run it outside the sandbox, which Codex puts to the user to
@@ -211,9 +215,10 @@ finished strategy to read first.
 home's own files. Always with `-g`: a bare `apm update` outside an APM project updates APM itself.
 
 **Another assistant.** Step 2 with the new target, which adds it to APM's list; then install the
-home, once, the assistant added under `targets:` in the home's `apm.yml` first:
-`uvx --from apm-cli==0.33.0 apm install -g "<the home>"`; then the done check's `check`, with that
-target. `update`, in the home, does this for every assistant its `settings.yml` lists.
+home, once, the assistant added under `targets:` in the home's `apm.yml` first: `uvx --from
+apm-cli==0.33.0 apm install -g "<the home>"`; on Antigravity, `link-antigravity`; then the done
+check's `check`, with that target. `update`, in the home, does this for every assistant its
+`settings.yml` lists.
 
 **A new machine.** Steps 1 and 2, then the researcher brought back, as step 3's first paragraph
 says: nothing is made again.
@@ -229,15 +234,16 @@ every file the assistant reads: outside the folder it works in, only the places 
 Copilot receives the same, its commands as `~/.copilot/prompts/*.prompt.md` and its instructions as
 files in `~/.copilot/instructions/`. Cursor gets the skills, the commands, in `~/.cursor/commands/`,
 and the agents, but not the instructions. **Antigravity gets the skills alone**, in
-`~/.gemini/antigravity-cli/skills/`: no command, no agent and no instruction, so there the
-researcher is its skill, and a command is followed from its file, as on Codex below. These five —
-Claude Code, Codex, Copilot, Cursor and Antigravity — are the assistants the researcher is tried on;
-APM installs for others, untried. **Codex gets the skills and the agents, and no commands.** The
-skills land in `~/.agents/skills/` and each agent in `~/.codex/agents/<name>.toml`, without its tool
-list: APM warns that it drops it, so on Codex an agent has no tool boundary. No instruction lands
-either. So the steps a newcomer needs — `init-researcher`, `interview`, `next`, `read`, `query`,
-`philosophy`, `brief` — are all skills. A command, such as `objective` or `blueprint`, is run there
-by naming its file — *follow
+`~/.gemini/antigravity-cli/skills/`, which only its CLI reads — `user_targets.py link-antigravity`
+links each one into `~/.gemini/config/skills/`, where its app reads them: no command, no agent and
+no instruction, so there the researcher is its skill, and a command is followed from its file, as on
+Codex below. These five — Claude Code, Codex, Copilot, Cursor and Antigravity — are the assistants
+the researcher is tried on; APM installs for others, untried. **Codex gets the skills and the
+agents, and no commands.** The skills land in `~/.agents/skills/` and each agent in
+`~/.codex/agents/<name>.toml`, without its tool list: APM warns that it drops it, so on Codex an
+agent has no tool boundary. No instruction lands either. So the steps a newcomer needs —
+`init-researcher`, `interview`, `next`, `read`, `query`, `philosophy`, `brief` — are all skills. A
+command, such as `objective` or `blueprint`, is run there by naming its file — *follow
 `$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/prompts/objective.prompt.md`* — and once the
 interview has run, the researcher's own skill does this for the user: they name the command, and it
 follows the file. Codex's sandbox keeps it to the folder it was opened in, so each command that
