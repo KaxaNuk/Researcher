@@ -68,7 +68,7 @@ read only, no figure about the book, no advice.
 
 **How to ask.** In Claude Code, the questions below are asked by calling `AskUserQuestion` — the
 options as its choices, at most four, and *Other*, which the tool always offers, as the free-text
-escape. Without such a tool — Codex, Gemini and every other assistant — they are one chat message,
+escape. Without such a tool — Codex and every other assistant — they are one chat message,
 as the home's `AGENTS.md` says, *Other — your own words* last. Every question, option and line is
 in the owner's language, and every header is the one given below for that language — the English
 one for any other — twelve characters at most.

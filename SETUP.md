@@ -1,7 +1,7 @@
 # Setup
 
 From nothing to a researcher you can talk to, in one conversation. This file is written for the
-assistant — Claude, Codex, Gemini, Cursor, Copilot — that was told *please install this repo for
+assistant — Claude, Codex, Cursor, Antigravity — that was told *please install this repo for
 me and set up my researcher, start to finish in this conversation — install everything it needs
 without asking first:* `https://github.com/KaxaNuk/Researcher`, or its former address,
 `https://github.com/KaxaNuk/KaxaNuk-Researcher`, or, from an older README, *please install this
@@ -25,7 +25,7 @@ install and a researcher brought back, not made: step 3 says how.
 >   install this repo* asks for the same. Once the language is chosen, install what is missing and
 >   the package, and go straight on.
 > - **The user may never have used a terminal.** Plain words, one question at a time, and you run
->   every command yourself; never ask them to type one. Without a question tool — Codex, Gemini —
+>   every command yourself; never ask them to type one. Without a question tool — Codex —
 >   each pick is one chat message, its options a numbered list, *Other — your own words* last; the
 >   user answers with the number. Say in one sentence what each step does, and that their
 >   assistant may ask them to allow a command — allowing it is all they do.
@@ -101,14 +101,14 @@ uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skill
 uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skills/init-researcher/scripts/user_targets.py" clashes <the assistant you are>
 ```
 
-The target is the assistant you are: `claude`, `codex`, `gemini`, `cursor`, `copilot`, `opencode` or
-`windsurf`. Run all four without asking. `-g` installs for the user, whatever folder you are in,
-and `add` keeps your assistant in APM's list, `~/.apm/apm.yml`, so that a later install or update
-does not remove what it put there. uv may warn that its tool folder is not on the PATH; leave it.
-**If `add` cannot find the script**, an older package was already installed, and an install keeps
-the version it had: run `uvx --from apm-cli==0.33.0 apm update -g --yes`, then the install above
-again, then `add`. If `add` exits 1, say why in one line at the opening of step 3's question, and go
-on.
+The target is the assistant you are: `claude`, `codex`, `cursor` or `antigravity`, the four the
+researcher is tried on. Run all four without asking. `-g` installs for the user, whatever folder you
+are in, and `add` keeps your assistant in APM's list, `~/.apm/apm.yml`, so that a later install or
+update does not remove what it put there. uv may warn that its tool folder is not on the PATH; leave
+it. **If `add` cannot find the script**, an older package was already installed, and an install
+keeps the version it had: run `uvx --from apm-cli==0.33.0 apm update -g --yes`, then the install
+above again, then `add`. If `add` exits 1, say why in one line at the opening of step 3's question,
+and go on.
 
 **If `clashes` exits 1**, the user already has a skill, command or agent of their own under one of
 the package's names: the install kept theirs, left the package's out, and the researcher would run
@@ -204,7 +204,7 @@ finished strategy to read first.
 home's own files. Always with `-g`: a bare `apm update` outside an APM project updates APM itself.
 
 **Another assistant.** Step 2 with the new target, which adds it to APM's list; then install the
-home, once, the assistant added under `targets:` in the home's `apm.yml` first, OpenCode aside:
+home, once, the assistant added under `targets:` in the home's `apm.yml` first:
 `uvx --from apm-cli==0.33.0 apm install -g "<the home>"`; then the done check's `check`, with that
 target. `update`, in the home, does this for every assistant its `settings.yml` lists.
 
@@ -219,11 +219,11 @@ says: nothing is made again.
 agents and the three instructions, which land in `~/.claude/rules/` — Bloom Code and PEP 8 for
 Python in a KaxaNuk repository, and nowhere else, and filesystem boundaries, in any project, for
 every file the assistant reads: outside the folder it works in, only the places the task needs.
-Copilot receives the same, its instructions as files in `~/.copilot/instructions/`. Cursor, Gemini,
-OpenCode and Windsurf get the skills and the commands but not the instructions, and Gemini and
-Windsurf take no agent: there the researcher is its skill. OpenCode takes the package but not the
-researcher's own agent and skill: it rejects the agent APM writes for it, so the home's `apm.yml`
-leaves it out of `targets:`; APM's hint to run `apm compile` is printed for OpenCode alone.
+Cursor gets the skills, the commands, in `~/.cursor/commands/`, and the agents, but not the
+instructions. **Antigravity gets the skills alone**, in `~/.gemini/antigravity-cli/skills/`: no
+command, no agent and no instruction, so there the researcher is its skill, and a command is
+followed from its file, as on Codex below. These four — Claude Code, Codex, Cursor and
+Antigravity — are the assistants the researcher is tried on; APM installs for others, untried.
 **Codex gets the skills and the agents, and no commands.** The skills land in `~/.agents/skills/`
 and each agent in `~/.codex/agents/<name>.toml`, without its tool list: APM warns that it drops
 it, so on Codex an agent has no tool boundary. No instruction lands either. So the steps a newcomer

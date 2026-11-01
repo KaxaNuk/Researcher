@@ -6,6 +6,20 @@ Every notable change to this repository, newest first: `## X.Y.Z (YYYY-MM-DD)` w
 This is the home template's changelog, which `init-researcher` copies into every home and `update`
 extends with a *Brought to template* entry at the top; the home's own entries go there too.
 
+## 0.33.0 (2026-10-31)
+
+**MINOR** — the home is installed for the four assistants the researcher is tried on: Claude Code,
+Codex, Cursor and Antigravity, which replaced the Gemini CLI for most of its users.
+
+**What to do differently:** say `update` in your home. If you use your researcher on the Gemini
+CLI, Copilot, OpenCode or Windsurf, `update` no longer sets it up there: open it in one of the four.
+
+### Changed
+- `apm.yml`'s `targets:` are `claude`, `codex`, `cursor` and `antigravity`, in place of `claude`,
+  `copilot`, `cursor`, `codex`, `gemini` and `windsurf`, and `settings.yml`'s note names the same
+  four. `AGENTS.md` and `README.md` name them where they named the others: Antigravity takes the
+  skills alone, so there the researcher is its skill and a command is followed from its file.
+
 ## 0.32.1 (2026-10-27)
 
 **PATCH** — the package's address on GitHub is now `KaxaNuk/Researcher`.

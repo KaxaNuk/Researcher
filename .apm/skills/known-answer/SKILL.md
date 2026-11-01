@@ -52,7 +52,7 @@ dear anywhere else.
 
 **Every question this skill asks** goes through the question tool where the harness has one,
 Claude Code's `AskUserQuestion`, and a question with more than four options as a numbered list in
-chat instead. Without one — Codex, Gemini — it is one chat message: each question numbered, its
+chat instead. Without one — Codex — it is one chat message: each question numbered, its
 options numbered beneath it, *Other — your own words* last, and one line on how to answer, by the
 numbers or in their own words.
 

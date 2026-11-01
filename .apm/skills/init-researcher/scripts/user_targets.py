@@ -16,8 +16,8 @@ Usage:
     uv run --no-project python user_targets.py clashes <assistant>
     uv run --no-project python user_targets.py keep-mine <assistant>
 
-The assistant is claude, codex, copilot, cursor, gemini, opencode or windsurf; the slug is the
-researcher's name as its files take it, `sofia` for Sofía.  In a conversation where the
+The assistant is claude, codex, cursor or antigravity, the four the researcher is tried on; the
+slug is the researcher's name as its files take it, `sofia` for Sofía.  In a conversation where the
 init-researcher skill is not loaded yet, run it from the installed package, `<package>` standing
 for `$HOME/.apm/apm_modules/KaxaNuk/Researcher` — `$HOME`, never `~`, which a program
 handed it does not expand:
@@ -35,16 +35,13 @@ exits 1.
 `check` looks in the user's home folder for the package's `next` skill and the researcher's skill
 and agent, where APM puts them for the assistant:
 
-    assistant           the skills, next and <slug>   the researcher's agent
-    claude              .claude/skills/               .claude/agents/<slug>.md
-    codex               .agents/skills/               .codex/agents/<slug>.toml
-    copilot             .agents/skills/               .copilot/agents/<slug>.agent.md
-    cursor              .agents/skills/               .cursor/agents/<slug>.md
-    gemini, windsurf    .agents/skills/               none: neither takes an agent
-    opencode            .config/opencode/skills/      none: next alone
+    assistant      the skills, next and <slug>       the researcher's agent
+    claude         .claude/skills/                   .claude/agents/<slug>.md
+    codex          .agents/skills/                   .codex/agents/<slug>.toml
+    cursor         .agents/skills/                   .cursor/agents/<slug>.md
+    antigravity    .gemini/antigravity-cli/skills/   none: it takes no agent
 
-OpenCode receives the package but never the researcher, which the home leaves out by design.  Each
-missing file is named on a line of its own.  The check also fails when `apm.yml` lists assistants
+Each missing file is named on a line of its own.  The check also fails when `apm.yml` lists assistants
 and not this one, since the next install or update would delete the files it found.
 
 `clashes` reads, and changes nothing.  APM never overwrites a file it did not install: where the
@@ -52,10 +49,10 @@ user already has a skill, command or agent of their own under one of the package
 install keeps theirs, leaves the package's out, warns in one line and still exits 0, and the
 researcher runs without that part.  For each of the package's skills, commands and agents, read
 from the installed package under `~/.apm/apm_modules`, it looks where APM puts it for the assistant
-- the skills as `check` lists them, Claude Code's commands in `.claude/commands/`, the agent where
-`check` looks for the researcher's - and names each one there that APM's lock file,
-`~/.apm/apm.lock.yaml`, does not record as installed: the user's own.  Codex takes no commands;
-for Copilot, Cursor, Gemini, OpenCode and Windsurf only the skills and the agent are looked for.
+- the skills as `check` lists them, the commands in `.claude/commands/` and `.cursor/commands/`,
+the agent where `check` looks for the researcher's - and names each one there that APM's lock file,
+`~/.apm/apm.lock.yaml`, does not record as installed: the user's own.  Codex and Antigravity take
+no commands, and Antigravity no agent.
 
 `keep-mine` renames each of those to `<name>-mine` - `-mine-2` and on when that is taken, never
 over a file - a skill's folder, a command's or an agent's file, and the first `name:` line, or
@@ -83,13 +80,12 @@ MANIFEST_FILE = pathlib.Path('.apm') / 'apm.yml'
 # A file's lines, each with its own line ending, so a file written with CRLF keeps them.
 LINE_PATTERN = re.compile(r'[^\n]*\n|[^\n]+')
 # Where APM puts each assistant's files, from the user's home folder: the researcher's agent, from
-# its slug, for the four assistants that take one; and the folder of skills, Claude Code's and
-# OpenCode's their own, the others' shared.  OpenCode is left out of the home, since it rejects the
-# agent APM writes for it, and the package's `next` skill stands for the package.
+# its slug, for the three assistants that take one; and the folder of skills, Claude Code's and
+# Antigravity's their own, Codex's and Cursor's shared.  The package's `next` skill stands for the
+# package.  Each was checked by an install with APM 0.33.0.
 AGENT_FILES = {
     'claude': '.claude/agents/{slug}.md',
     'codex': '.codex/agents/{slug}.toml',
-    'copilot': '.copilot/agents/{slug}.agent.md',
     'cursor': '.cursor/agents/{slug}.md',
 }
 # The kinds of file the package installs, as the package keeps them: a skill a folder holding
@@ -97,10 +93,11 @@ AGENT_FILES = {
 AGENT_ENDING = '.agent.md'
 COMMAND_ENDING = '.prompt.md'
 SKILL_FILE = 'SKILL.md'
-# Where APM puts the package's commands, from the user's home folder: Claude Code's alone, checked
-# by an install; Codex takes none.
+# Where APM puts the package's commands, from the user's home folder, checked by an install; Codex
+# and Antigravity take none.
 COMMAND_FILES = {
     'claude': '.claude/commands/{name}.md',
+    'cursor': '.cursor/commands/{name}.md',
 }
 # Where the package is installed for the user, under `~/.apm/apm_modules/`, newest name first: as
 # KaxaNuk/Researcher, under its name before 1.25.0, or from an archive or a folder.
@@ -123,16 +120,12 @@ MINE_SUFFIX = '-mine'
 NAME_LINE_PATTERN = re.compile(
     r'(?P<key>name\s*[:=]\s*)(?P<quote>[\'"]?)(?P<name>[^\'"\s#]+)(?P=quote)(?P<rest>\s*(?:#.*)?)',
 )
-OPENCODE = 'opencode'
 PACKAGE_SKILL = 'next'
 SKILL_FOLDERS = {
+    'antigravity': '.gemini/antigravity-cli/skills',
     'claude': '.claude/skills',
     'codex': '.agents/skills',
-    'copilot': '.agents/skills',
     'cursor': '.agents/skills',
-    'gemini': '.agents/skills',
-    'opencode': '.config/opencode/skills',
-    'windsurf': '.agents/skills',
 }
 # The package's own folder seen from this file, scripts/ -> init-researcher/ -> skills/ -> .apm/,
 # used when no installed package is found: this repository, in its tests.
@@ -284,9 +277,6 @@ def check_target(
         target,
     )
 
-    if target == OPENCODE:
-        print('The researcher is not deployed to OpenCode, by design; only the package is looked for.')
-
     for missing_file in missing:
         print(f'Missing: {missing_file.path} - {missing_file.role}')
 
@@ -298,8 +288,7 @@ def check_target(
 
         return 1
 
-    installed = 'The package is' if target == OPENCODE else f'The researcher, {slug}, is'
-    print(f'{installed} installed for {target}.')
+    print(f'The researcher, {slug}, is installed for {target}.')
 
     return 0
 
@@ -360,10 +349,6 @@ def expected_files(
         path=skill_folder / PACKAGE_SKILL / 'SKILL.md',
         role=f"the package's {PACKAGE_SKILL} skill",
     )
-
-    if target == OPENCODE:
-
-        return [package_skill]
 
     researcher_skill = ExpectedFile(
         path=skill_folder / slug / 'SKILL.md',

@@ -63,7 +63,7 @@ finding is said as the map sums it up, as a lead to read.
 the file; at Building and Researching the owner may ask for a whole block in one message. A pick
 is asked by **calling the question tool** — `AskUserQuestion` in Claude Code — its options at most
 four, with *Other*, which the tool always offers, as the free-text escape; call the tool, never
-type a pick and its options as chat. **Without one** — Codex, Gemini — a pick is asked in chat, as
+type a pick and its options as chat. **Without one** — Codex — a pick is asked in chat, as
 the home's `AGENTS.md` says, *Other — your own words* last. Every header is the one the bank gives
 for that language, the English one for any other, twelve characters at most. Wait for each answer.
 

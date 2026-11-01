@@ -24,7 +24,7 @@ it: *a saved version*, *your copy on GitHub*, *send*. You run every command; sho
 
 **How to ask.** In Claude Code, the questions below are asked by calling `AskUserQuestion` — the
 options as its choices, at most four, and *Other*, which the tool always offers, as the free-text
-escape. Without such a tool — Codex, Gemini and every other assistant — they are one chat message:
+escape. Without such a tool — Codex and every other assistant — they are one chat message:
 each question numbered, its options numbered beneath it, *Other — your own words* last, and one
 line on how to answer. Every question, option and line is in the owner's language, and every
 header is the one given below for that language — the English one for any other — twelve

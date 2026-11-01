@@ -18,7 +18,10 @@
 > `SETUP.md`'s step 2, `init-researcher` after its update, and `user_targets.py`'s `clashes` and
 > `keep-mine` look for a skill, command or agent of the user's own under one of the package's
 > names, which the install keeps while leaving the package's out, and ask `Same name` to rename it
-> `<name>-mine` — a branch a clean machine never reaches: this run is unchanged.
+> `<name>-mine` — a branch a clean machine never reaches: this run is unchanged. At 1.29.0, on the
+> owner's word, `SETUP.md`, `init-researcher`, `interview` and `user_targets.py` name the four
+> assistants the researcher is tried on — Claude Code, Codex, Cursor and Antigravity, which
+> replaced the Gemini CLI — in place of seven: this run, on Claude Code, is unchanged.
 
 What varies from run to run: the language — in Spanish every line is in Spanish, with the headers
 the skills give — the names proposed, the paths, the owner's answers and what is proposed from

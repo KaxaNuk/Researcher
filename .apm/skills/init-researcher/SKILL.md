@@ -9,7 +9,7 @@ description: >
   of the install SETUP.md walks through; never per strategy. It does NOT create a strategy (use
   `init-strategy`), nor ask how the owner works or invests (`philosophy` does, later).
 metadata:
-  version: 0.9.0
+  version: 0.9.1
 ---
 
 # Init researcher — a home for the library, once
@@ -27,7 +27,7 @@ on a question. **Done is the interview's first question, never the copy.** After
 question 1 — one open chat message, with no options — never a message that only reports the home
 is made, never an offer to start the interview. The only questions between are step 6's own —
 `Where?` again for a folder the script refuses, git, or a name to sign with — and question 1
-follows straight after the answer. Without a question tool — Codex, Gemini —
+follows straight after the answer. Without a question tool — Codex —
 each question marked *through the question tool* is one chat message, its options numbered beneath
 and *Other — your own words* last.
 
@@ -60,7 +60,7 @@ gives, `.apm/skills/<slug>/SKILL.md` in that copy, asked of the owner only when 
   owner writes in, through the question tool, `Another?` (`¿Otro?`):
   - *Use <Existing> (recommended)* — install it for this assistant as `SETUP.md`'s *One researcher
     per person* says — the package with `--target`, `user_targets.py add`, this assistant added
-    under `targets:` in the home's `apm.yml` when it is missing there (OpenCode aside) and saved in
+    under `targets:` in the home's `apm.yml` when it is missing there and saved in
     the home, the home, `check` — and hand over in the interview's *Step 6* words: who and where,
     and *say `next`*;
   - *Make a second one* — a test, or another person on this computer: a second library, and a
@@ -119,7 +119,7 @@ past four options, *Stop* is left out and the other homes are named in the line 
 5. **Bring the package up to date**, on the same go, before anything is copied.
    **Skip this step when the package was installed in this same conversation**: it is
    already the newest, and `SETUP.md`'s step 2 listed the assistant. Otherwise, first put the
-   assistant in use — `claude`, `codex`, `copilot`, `cursor`, `gemini`, `opencode` or `windsurf` —
+   assistant in use — `claude`, `codex`, `cursor` or `antigravity` —
    on APM's list in `$HOME/.apm/apm.yml`, so the update keeps its files. The script is in this
    skill's folder; where the skill is not loaded, run it from the package. Run one of these, never
    both:

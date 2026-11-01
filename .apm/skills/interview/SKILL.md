@@ -48,7 +48,7 @@ its question's first words. Question 1 carries no number.
 item says. In Claude Code, every question marked *tool* is asked by **calling
 `AskUserQuestion`** — the options as its choices, at most four, and *Other*, which the tool always
 offers, as the free-text escape. Call the tool; do not type those questions and their options as
-chat text. **Without such a tool — Codex, Gemini and every other assistant — a tool call is one
+chat text. **Without such a tool — Codex and every other assistant — a tool call is one
 chat message**: its options beneath as a numbered list with *Other — your own words* last, and
 one line saying how to answer: a number, several, *1, 3*, where the question says several, or their
 own words; a message with two questions numbers them, *1: 2 · 2: 1, 3*. Never ask questions 1 and
@@ -447,7 +447,7 @@ run these yourself — the owner types nothing, and may not know what any of the
 1. **Install the home for the owner's user**, beside the package — the same user scope, so the agent
    and the skill reach every folder, for every assistant listed under `targets:` both in
    `$HOME/.apm/apm.yml` and in the home's `apm.yml`. First `add` the assistant in use to the first
-   list — `claude`, `codex`, `copilot`, `cursor`, `gemini`, `opencode` or `windsurf` — since while
+   list — `claude`, `codex`, `cursor` or `antigravity` — since while
    that list leaves it out, every install and update deletes its files; then install, without
    `--target`, so the home reaches every assistant both lists name; then `check` its files are
    there:

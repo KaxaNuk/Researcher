@@ -47,7 +47,7 @@ sessions, each `id` and `title`, and ask which.
 **Every question this skill asks** — which session, where they are, a clone's path — goes through
 the question tool where the harness has one, Claude Code's `AskUserQuestion`, and a question with
 more than four options as a numbered list in chat instead, as `init-example` does. Without one —
-Codex, Gemini — it is one chat message: each question numbered, its options numbered beneath it,
+Codex — it is one chat message: each question numbered, its options numbered beneath it,
 *Other — your own words* last, and one line on how to answer, by the numbers or in their own words.
 
 ## Step 1: Read the session

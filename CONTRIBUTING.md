@@ -14,7 +14,7 @@ uv tool install apm-cli==0.33.0
 uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/Researcher --target claude
 ```
 
-For another assistant, put `codex`, `gemini`, `cursor` or another in place of `claude`. Claude Code
+For another assistant, put `codex`, `cursor` or `antigravity` in place of `claude`. Claude Code
 receives everything. *Troubleshooting* in [`SETUP.md`](SETUP.md) says what the others miss, and why
 APM stays at 0.33.0, named in every command, and `apm self-update` is never run. A second assistant
 installed this way keeps its files through the next update only once it is on APM's list in

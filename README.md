@@ -2,7 +2,7 @@
 
 | |
 |---|
-| [![Works with](https://img.shields.io/badge/works%20with-Claude%20Code%20%7C%20Codex%20%7C%20Gemini%20CLI%20%7C%20Cursor%20%7C%20Copilot-blue)](#install--three-steps-no-coding) [![License](https://img.shields.io/github/license/KaxaNuk/Researcher?color=blue)](LICENSE) |
+| [![Works with](https://img.shields.io/badge/works%20with-Claude%20Code%20%7C%20Codex%20%7C%20Cursor%20%7C%20Antigravity-blue)](#install--three-steps-no-coding) [![License](https://img.shields.io/github/license/KaxaNuk/Researcher?color=blue)](LICENSE) |
 | [![Version](https://img.shields.io/github/v/tag/KaxaNuk/Researcher?sort=semver&label=version&logo=github)](CHANGELOG.md) [![APM](https://img.shields.io/badge/installs%20with-APM%200.33.0-blue)](https://github.com/microsoft/apm) |
 | [![Languages](https://img.shields.io/badge/speaks-any%20language%20you%20choose-blue)](#install--three-steps-no-coding) [![Powered by KaxaNuk](https://img.shields.io/badge/powered%20by-KaxaNuk-orange?colorB=orange)](https://kaxanuk.mx) |
 
@@ -20,9 +20,9 @@ researcher per person, in any language.
 Where what it reads goes, and what it never does, is under *What it is, and what it is not*, below.
 
 1. Open one of these, signed in: the **Code** tab of the **Claude** desktop app, **Claude Code**,
-   the **Codex** app or CLI, the **Gemini CLI**, **Cursor** or the **Copilot CLI**. A chat on the
-   web, such as claude.ai, ChatGPT or Gemini, cannot install it: it cannot run commands on your
-   computer.
+   the **Codex** app or CLI, **Cursor**, or the **Antigravity CLI**, which replaced the Gemini CLI.
+   A chat on the web, such as claude.ai, ChatGPT or Gemini, cannot install it: it cannot run
+   commands on your computer.
 2. Paste this line and send it:
 
    ```text
@@ -49,9 +49,10 @@ Please install this repo for me and bring back my researcher from my private cop
 
 Then quit and reopen your assistant, open your researcher's folder in a **new** conversation, and
 say hello, by its name. In the Claude desktop app, that is a new conversation in the **Code** tab on
-that folder; in the Codex app, that folder; in a terminal, `claude`, `codex` or `gemini` run in it.
+that folder; in the Codex app or Cursor, that folder; in a terminal, `claude`, `codex`,
+`cursor-agent` or `agy` run in it.
 
-With Claude or Copilot, installing also adds three house instructions, described under *The
+With Claude, installing also adds three house instructions, described under *The
 skills and commands*; *Removing it* undoes them.
 
 ## What your researcher does
@@ -91,7 +92,7 @@ otherwise keep — the assistants you use, how versions are sent, your brief —
 | --- | --- |
 | **another Claude account**, same computer | nothing for your researcher: the package and your researcher are installed for your computer's user, in `~/.claude/`, not for an account. The connectors your brief reads are the account's: say hello and your researcher names the ones to connect in the new account (on a company account, an administrator may have to allow them); then `brief setup` checks that each can read, asking only for your go |
 | **another computer** | paste the second line under *Install*: it installs the package, brings your home back from your copy, and `update` sets the computer up from `settings.yml` — every assistant you use, how versions are sent, and your brief, asking only for your go. The PDFs and other files `Sources/` keeps out of git, for copyright, and `Portfolio/`, your holdings, are never in the copy: bring them from wherever you keep them. `Extracts/` is made again from the PDFs, and `Briefs/` stays on the old computer. A strategy has its own copy, and its clone follows its own `SETUP.md` |
-| **another assistant** — Codex, Gemini, Cursor, Copilot | add it under `assistants:` in your home's `settings.yml` and say `update`, or open it and paste the line under *Install*: either installs the package and your home for that assistant. On Codex the skills and your researcher's agent arrive, not the commands: name one, `update` or `study`, and it follows the command's file; with no question tool there, as on Gemini, questions come numbered in chat. Gemini takes no agent, so there your researcher is its skill |
+| **another assistant** — Codex, Cursor, Antigravity | add it under `assistants:` in your home's `settings.yml` and say `update`, or open it and paste the line under *Install*: either installs the package and your home for that assistant. On Codex the skills and your researcher's agent arrive, not the commands: name one, `update` or `study`, and it follows the command's file; with no question tool there, questions come numbered in chat. Antigravity takes neither the commands nor an agent, so there your researcher is its skill and a command is followed from its file, as on Codex |
 
 **What stays behind:** your conversations and what you shared from them stay with the account they
 were made in, and so do its connectors and the skills you turned on there. What an assistant
@@ -102,8 +103,9 @@ into its home, on your go, as it does with *remember this*.
 projects, and for learning to invest when you want. It is never investment advice: it never tells
 you to buy, sell or hold, never trades or moves money, and every decision, and its risk, is yours.
 It runs on your computer through your AI assistant; what it reads goes to the company behind that
-assistant (Anthropic for Claude, OpenAI for Codex, Google for Gemini), never to KaxaNuk, and a copy
-goes to your own private GitHub only when you ask. It is open source under the MIT licence, as is
+assistant (Anthropic for Claude, OpenAI for Codex, Google for Antigravity, and for Cursor, Cursor
+and the maker of the model you pick there), never to KaxaNuk, and a copy goes to your own private
+GitHub only when you ask. It is open source under the MIT licence, as is
 and without warranty; your data provider, your assistant and the Investment Lab's libraries, which
 KaxaNuk sells, each have their own terms. The worked example's figures come from a backtest on past
 prices, shown to teach the method, never a promise or a recommendation.

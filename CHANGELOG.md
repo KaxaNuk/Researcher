@@ -6,6 +6,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
+## [1.29.0] - 2026-10-31
+The researcher now names only the four assistants it is tried on — Claude Code, Codex, Cursor and
+Antigravity — since Google replaced the Gemini CLI with the Antigravity CLI for most of its users.
+
+**What to do differently:** say `update` in your home. If you use your researcher on the Gemini
+CLI, Copilot, OpenCode or Windsurf, open it in one of the four: `update` no longer sets it up there.
+On Antigravity, say `update` once after installing it, so your home is installed there too.
+### Changed
+- **Four assistants, each tried on this computer.** Since 2026-06-18 the Gemini CLI no longer
+  serves free accounts or Google AI Pro and Ultra; the Antigravity CLI, `agy`, replaces it. APM
+  0.33.0 installs for it as `antigravity`: the skills alone, in `~/.gemini/antigravity-cli/skills/`,
+  with no command, agent or instruction, so there the researcher is its skill and a command is
+  followed from its file, as on Codex. Cursor keeps the skills, its commands in
+  `~/.cursor/commands/` and the agents. Copilot, the Gemini CLI, OpenCode and Windsurf, which were
+  never tried, leave the README, `SETUP.md`, `CONTRIBUTING.md`, the skills and the home template
+  (0.33.0); the worked example's README follows (Golden Flow 0.18.1).
+- **The frozen files, on the owner's word**: `SETUP.md`'s step 2 and *Troubleshooting*,
+  `init-researcher` and `interview` name the four, and `user_targets.py` (`init-researcher` 0.9.1)
+  takes `claude`, `codex`, `cursor` and `antigravity` only, with Antigravity's skills folder and
+  Cursor's commands for `clashes`. The run in `ONBOARDING.md`, on Claude Code, is unchanged, and
+  says so.
+- `update` sets up no assistant outside the four that a home's `settings.yml` still lists, and
+  says so; `bring-home` gives Antigravity's memory as not yet checked, and drops the Gemini CLI's
+  and Copilot's.
+- Tried by installing the package and a researcher's home for all four under a throwaway HOME, with
+  `user_targets.py check` and `clashes` passing for each.
+
 ## [1.28.1] - 2026-10-31
 The README's picture of the interview shows someone who works in finance again.
 

@@ -16,6 +16,10 @@ __all__ = []
 # The files the check looks for, from the user's home folder, for a researcher named Sofía, as the
 # script's docstring lists them for each assistant.
 EXPECTED_FILES = {
+    'antigravity': [
+        '.gemini/antigravity-cli/skills/next/SKILL.md',
+        '.gemini/antigravity-cli/skills/sofia/SKILL.md',
+    ],
     'claude': [
         '.claude/skills/next/SKILL.md',
         '.claude/skills/sofia/SKILL.md',
@@ -26,26 +30,10 @@ EXPECTED_FILES = {
         '.agents/skills/sofia/SKILL.md',
         '.codex/agents/sofia.toml',
     ],
-    'copilot': [
-        '.agents/skills/next/SKILL.md',
-        '.agents/skills/sofia/SKILL.md',
-        '.copilot/agents/sofia.agent.md',
-    ],
     'cursor': [
         '.agents/skills/next/SKILL.md',
         '.agents/skills/sofia/SKILL.md',
         '.cursor/agents/sofia.md',
-    ],
-    'gemini': [
-        '.agents/skills/next/SKILL.md',
-        '.agents/skills/sofia/SKILL.md',
-    ],
-    'opencode': [
-        '.config/opencode/skills/next/SKILL.md',
-    ],
-    'windsurf': [
-        '.agents/skills/next/SKILL.md',
-        '.agents/skills/sofia/SKILL.md',
     ],
 }
 # A manifest as APM writes it at user scope, naming the one assistant of its first install, and the
@@ -432,7 +420,7 @@ def test_expected_files_are_where_apm_puts_them(
 ) -> None:
     """
     The check looks for the package's `next` skill, then the researcher's skill and agent, where APM
-    puts them for each assistant; OpenCode takes the package alone, and Gemini and Windsurf no agent.
+    puts them for each assistant; Antigravity takes no agent.
     """
     expected = user_targets.expected_files(
         tmp_path,

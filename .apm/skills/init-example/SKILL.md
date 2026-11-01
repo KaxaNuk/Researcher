@@ -58,7 +58,7 @@ or describe an example from memory.
    several are left, ask which through the question tool, one option per example: its name, and its
    line from the list, which gives its kind and its subject. The tool takes four options, so with
    more, ask the kind first, and with more than four of one kind, ask as a numbered list in chat
-   instead. Without a question tool — Codex, Gemini — ask in one chat message, the examples numbered
+   instead. Without a question tool — Codex — ask in one chat message, the examples numbered
    beneath it, each with its line, *Other — your own words* last. Any other word —
    `Data/analyzer_marimo.py`, `Experiments/Experiment_1`, `Universe` — is a path of the example, one
    piece of the example chosen the same way.

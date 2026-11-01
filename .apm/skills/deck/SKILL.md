@@ -27,7 +27,7 @@ and HyperFrames' `slideshow` skill, kept fresh from its own source, builds it. O
 in plain words.
 
 **Every question this skill asks** goes through the question tool where the harness has one,
-Claude Code's `AskUserQuestion`; without one — Codex, Gemini — it is one chat message, each
+Claude Code's `AskUserQuestion`; without one — Codex — it is one chat message, each
 question numbered with its options beneath it, *Other — your own words* last.
 
 ## Step 1: The brief

@@ -88,7 +88,7 @@
     > *Answer in your words — one line is enough. Or say: example · explain · not sure yet · skip.*
 - **Pick questions are asked with the question tool** (`AskUserQuestion` in Claude Code): at most
   four options, plus *Other*.
-  - Without a question tool (Codex, Gemini), the question is one chat message, with the options
+  - Without a question tool (Codex), the question is one chat message, with the options
     numbered and *Other — your own words* last.
 - **After a hunch, O2, or the stance picks, S1–S4**, one optional line: *Want to say that in your
   own words? One line, or skip.* Only that typed line reaches the file. No other pick takes one:
