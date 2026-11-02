@@ -88,8 +88,8 @@ def test_a_file_the_server_lacks_is_absent_and_an_internet_one_is_missing() -> N
 def test_a_self_driven_deck_gets_no_runtime() -> None:
     """
     A deck that drives its own slides, setting `window.__hfSetTime` as the slideshow skill's
-    standalone harness does, gets no runtime: the player never adds one to it, and one added beside
-    it would take the slides over.
+    standalone harness does, gets no runtime, which would take its slides over, and the note that
+    keeps the player from fetching one into its `srcdoc` from the internet.
     """
     harness = '<script>window.__hfSetTime = function (time) {};</script>'
     files = {
@@ -111,6 +111,7 @@ def test_a_self_driven_deck_gets_no_runtime() -> None:
     deck = _deck_of(page)
 
     assert 'window.__player' not in deck
+    assert '<head><!-- hyperframe.runtime.iife.js not needed -->' in deck
     assert 'window.__hfSetTime' in deck
     assert 'window.gsap' in deck
 

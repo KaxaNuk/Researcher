@@ -84,9 +84,16 @@ SCRIPT_ADDRESS = re.compile(''.join([
     r'(["\'])((?:https?://|/)[^"\'\s<>]+?\.',
     r'(?:js|mjs|css|mp3|wav|ogg|m4a|mp4|webm|png|jpe?g|gif|svg|webp|woff2?|ttf|otf))\1',
 ]))
-# A deck that drives its own slides, as the slideshow skill's standalone harness does: the player
-# finds its timeline and never adds the runtime, and a runtime added beside it takes the slides over.
+# A deck that drives its own slides, as the slideshow skill's standalone harness does: a runtime
+# added beside it takes the slides over, and they stay blank or stuck.
 SELF_DRIVEN = re.compile(r'\bwindow\.__hfSetTime\s*=')
+# The player puts its runtime, fetched from the internet, into any deck in a `srcdoc` whose markup
+# does not name it; this note, the one HyperFrames writes into a deck that needs none, names it.
+NO_RUNTIME_NOTE = '<!-- hyperframe.runtime.iife.js not needed -->'
+HEAD_TAG = re.compile(
+    r'<head\b[^>]*>',
+    re.IGNORECASE,
+)
 SCENE_DATA = re.compile(rf'\s{SCENE_ATTRIBUTE}="data:text/html[^,"]*;base64,([^"]*)"')
 SRCDOC = re.compile(r'\ssrcdoc="([^"]*)"')
 STILL_OUTSIDE = re.compile(
@@ -477,7 +484,8 @@ def _deck_in_player(
         address,
         reader,
     )
-    deck = inlined if SELF_DRIVEN.search(inlined) else _put_first_in_head(
+    self_driven = SELF_DRIVEN.search(inlined) is not None
+    deck = _noted_in_head(inlined) if self_driven else _put_first_in_head(
         inlined,
         runtime_scripts,
         reader,
@@ -787,6 +795,23 @@ def _media_type(
     guessed, _ = mimetypes.guess_type(urllib.parse.urlsplit(address).path)
 
     return guessed or header_type or 'application/octet-stream'
+
+
+def _noted_in_head(
+    page: str,
+) -> str:
+    """
+    A deck with the note that it needs no runtime at the top of its `<head>`, or before its markup
+    when it has none, so the player adds none.
+    """
+    head = HEAD_TAG.search(page)
+
+    if head is None:
+        return NO_RUNTIME_NOTE + page
+
+    noted = page[:head.end()] + NO_RUNTIME_NOTE + page[head.end():]
+
+    return noted
 
 
 def _put_first_in_head(

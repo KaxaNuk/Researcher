@@ -15,9 +15,11 @@ HTML file, that opens blank or stuck on a slide: save it again.
 ### Fixed
 - **`deck`'s one HTML file** (`one_file.py`) no longer puts HyperFrames' runtime into a deck that
   drives its own slides — one that sets `window.__hfSetTime`, as the slideshow skill's standalone
-  harness does. The player never adds the runtime to such a deck, and one added beside it took its
-  slides over: the file opened, and stayed blank or stuck as you moved on. Tested in
-  `tests/test_one_file.py`; checked on HyperFrames 0.8.183 by running it offline.
+  harness does, and writes into it the note HyperFrames writes into a deck that needs none, so the
+  player does not fetch one from the internet either. A runtime beside such a deck took its slides
+  over: the file opened, and stayed blank or stuck as you moved on, online most of all. Tested in
+  `tests/test_one_file.py`; checked on HyperFrames 0.8.183 by running it, online and offline, in
+  Chrome and Edge.
 ### Added
 - **`deck`'s PDF**, `scripts/pdf_pages.py`: one page a slide, each at its last step, printed by
   Chrome or Edge with no window while `present` serves the deck, after the entrance effects that

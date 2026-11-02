@@ -115,8 +115,9 @@ file, and `check` passes again after it.
   file it names as *not in the deck, as under `present`* — a sound effect the deck never had — is
   missing under `present` too. A deck that drives its own slides — it sets `window.__hfSetTime`,
   as the slideshow skill's standalone harness does — gets no HyperFrames runtime beside it, which
-  would take its slides over and leave them blank. Open the file once from the folder and step
-  through it before it is shared.
+  would take its slides over and leave them blank, and the note HyperFrames writes into a deck that
+  needs none, so the player does not fetch one from the internet either. Open the file once from
+  the folder, with internet on, and step through it before it is shared.
 - **A PDF beside it**, one page a slide, each at its last step, printed by Chrome or Edge with no
   window while `present` serves the deck — checked on HyperFrames 0.8.183 by running it:
 
