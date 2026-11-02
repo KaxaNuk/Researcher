@@ -26,7 +26,7 @@ uv run --no-project python "$HOME/.apm/apm_modules/KaxaNuk/Researcher/.apm/skill
 
 `uvx --from apm-cli==0.33.0 apm update -g` brings every new version. Then open a new session,
 anywhere, and follow the path below. An assistant asked to install follows [`SETUP.md`](SETUP.md)
-instead, all in one conversation. *Removing it*, in the README, undoes either.
+instead, all in one conversation. *Removing it*, in [`SKILLS.md`](SKILLS.md), undoes either.
 
 ## The path after the install
 

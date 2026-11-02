@@ -1,51 +1,84 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 580" width="1200" height="580" role="img" aria-labelledby="title desc">
-  <title id="title">Your researcher knows the Lab and every step of the process</title>
-  <desc id="desc">The eight steps of a KaxaNuk strategy: 1 Bibliotheca, 2 Universe, 3 Data, 4 Portfolio, 5 Backtest, 6 Attribution, 7 Paper trading, 8 Production, outside the Lab. You ask which step you are at; your researcher answers step 5, the backtest, and proposes one run of the Backtest Engine with its skill, for your approval. init-example copies the worked example to study; init-strategy makes yours, with the same folders.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img" aria-labelledby="title desc">
+  <title id="title">Your researcher and the Lab: one skill per step</title>
+  <desc id="desc">Your researcher unites the Investment Lab pipeline, with one skill per step of its eight: 1 Bibliotheca, read, objective and blueprint; 2 Universe, universe; 3 Data, curator and analyzer; 4 Portfolio, portfolio; 5 Backtest, backtest; 6 Attribution, attribution and alpha; 7 Paper trading, the graduation gate; 8 Production, outside the Lab. You ask which step you are on; your researcher answers: step 5, the backtest, with a plan to run the Backtest Engine with its skill, for your approval. init-example copies the full Golden-Flow to study; init-strategy starts yours, with the same folders. It knows which step you are on, what comes next and which library to use; it plans and asks before writing; the numbers come only from the Lab.</desc>
   <style>
-    .sans { font-family: "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif; }
-    .heavy { font-family: "Archivo Black", "Arial Black", "Helvetica Neue", Arial, sans-serif; font-weight: 900; }
-    .mono { font-family: "JetBrains Mono", Consolas, "Courier New", monospace; }
+    .label { font: 700 14px Archivo, Inter, 'Segoe UI', Helvetica, Arial, sans-serif; letter-spacing: 3.5px; fill: #686661; }
+    .head { font: 400 38px 'Archivo Black', 'Arial Black', Impact, sans-serif; fill: #121110; letter-spacing: -0.5px; }
+    .dot { fill: #e84328; }
+    .num { font: 400 22px 'Archivo Black', 'Arial Black', Impact, sans-serif; fill: #e84328; }
+    .num-on { font: 400 22px 'Archivo Black', 'Arial Black', Impact, sans-serif; fill: #121110; }
+    .step { font: 400 20px 'Archivo Black', 'Arial Black', Impact, sans-serif; fill: #121110; }
+    .step-on { font: 400 20px 'Archivo Black', 'Arial Black', Impact, sans-serif; fill: #fff4f1; }
+    .step-out { font: 400 20px 'Archivo Black', 'Arial Black', Impact, sans-serif; fill: #56534e; }
+    .skill { font: 700 14px 'JetBrains Mono', Consolas, 'Courier New', monospace; fill: #b8321a; }
+    .skill-on { font: 700 14px 'JetBrains Mono', Consolas, 'Courier New', monospace; fill: #121110; }
+    .who { font: 700 17px Archivo, Inter, 'Segoe UI', Helvetica, Arial, sans-serif; fill: #f0664e; }
+    .say { font: 400 18px Archivo, Inter, 'Segoe UI', Helvetica, Arial, sans-serif; fill: #f2f0eb; }
+    .cmd { font: 700 15px 'JetBrains Mono', Consolas, 'Courier New', monospace; fill: #f0664e; }
+    .cmd-text { font: 400 15px 'JetBrains Mono', Consolas, 'Courier New', monospace; fill: #f2f0eb; }
+    .foot { font: 400 14px Archivo, Inter, 'Segoe UI', Helvetica, Arial, sans-serif; fill: #56534e; letter-spacing: 0.5px; }
   </style>
-  <rect width="1200" height="580" fill="#F1EFEA"/>
-  <text x="40" y="52" class="sans" font-size="15" letter-spacing="4" fill="#3A3A3A">THE RESEARCHER AND THE LAB</text>
-  <text x="40" y="112" class="heavy" font-size="46" fill="#111">YOUR RESEARCHER KNOWS THE LAB</text>
-  <text x="40" y="164" class="heavy" font-size="46" fill="#111">AND EVERY STEP<tspan fill="#E23B2A">.</tspan></text>
+  <rect width="1200" height="675" fill="#f2f0eb"/>
 
-  <g class="sans" font-size="21" font-weight="700">
-    <rect x="40" y="200" width="260" height="72" fill="#E4E1DB"/>
-    <text x="60" y="244" fill="#E23B2A">1</text><text x="90" y="244" fill="#111">Bibliotheca</text>
-    <rect x="40" y="282" width="260" height="72" fill="#E4E1DB"/>
-    <text x="60" y="326" fill="#E23B2A">2</text><text x="90" y="326" fill="#111">Universe</text>
-    <rect x="40" y="364" width="260" height="72" fill="#E4E1DB"/>
-    <text x="60" y="408" fill="#E23B2A">3</text><text x="90" y="408" fill="#111">Data</text>
-    <rect x="40" y="446" width="260" height="72" fill="#E4E1DB"/>
-    <text x="60" y="490" fill="#E23B2A">4</text><text x="90" y="490" fill="#111">Portfolio</text>
+  <text x="49" y="56" class="label">YOUR RESEARCHER AND THE LAB</text>
+  <text x="49" y="108" class="head">YOUR RESEARCHER UNITES THE LAB PIPELINE:</text>
+  <text x="49" y="152" class="head">ONE SKILL PER STEP<tspan class="dot">.</tspan></text>
 
-    <rect x="310" y="200" width="260" height="72" fill="#E23B2A"/>
-    <text x="330" y="244" fill="#fff">5</text><text x="360" y="244" fill="#fff">Backtest</text>
-    <rect x="310" y="282" width="260" height="72" fill="#E4E1DB"/>
-    <text x="330" y="326" fill="#E23B2A">6</text><text x="360" y="326" fill="#111">Attribution</text>
-    <rect x="310" y="364" width="260" height="72" fill="#E4E1DB"/>
-    <text x="330" y="408" fill="#E23B2A">7</text><text x="360" y="408" fill="#111">Paper trading</text>
-    <rect x="311" y="447" width="258" height="70" fill="none" stroke="#B8B4AC" stroke-width="2" stroke-dasharray="5 4"/>
-    <text x="330" y="478" fill="#E23B2A">8</text><text x="360" y="478" fill="#555">Production,</text>
-    <text x="360" y="502" fill="#555">outside the Lab</text>
-  </g>
+  <rect x="49" y="185" width="302" height="78" fill="#e4e1da"/>
+  <text x="66" y="217" class="num">1</text>
+  <text x="102" y="217" class="step">Bibliotheca</text>
+  <text x="102" y="243" class="skill">read · objective · blueprint</text>
 
-  <rect x="600" y="200" width="560" height="318" fill="#111"/>
-  <g class="sans">
-    <text x="628" y="236" font-size="19" font-weight="700" fill="#F2543F">You</text>
-    <text x="628" y="266" font-size="19" fill="#F1EFEA">Which step am I at?</text>
-    <line x1="628" y1="290" x2="1132" y2="290" stroke="#3A3A3A"/>
-    <text x="628" y="322" font-size="19" font-weight="700" fill="#F2543F">Your researcher</text>
-    <text x="628" y="352" font-size="19" fill="#F1EFEA">Step 5, the backtest. Plan: one run of the</text>
-    <text x="628" y="378" font-size="19" fill="#F1EFEA">Backtest Engine with its skill. Do you approve?</text>
-    <line x1="628" y1="402" x2="1132" y2="402" stroke="#3A3A3A"/>
-  </g>
-  <g class="mono" font-size="17">
-    <text x="628" y="440"><tspan fill="#F2543F">init-example</tspan><tspan fill="#F1EFEA"> · the worked example, to study</tspan></text>
-    <text x="628" y="478"><tspan fill="#F2543F">init-strategy</tspan><tspan fill="#F1EFEA"> · yours, with the same folders</tspan></text>
-  </g>
+  <rect x="49" y="272" width="302" height="78" fill="#e4e1da"/>
+  <text x="66" y="304" class="num">2</text>
+  <text x="102" y="304" class="step">Universe</text>
+  <text x="102" y="330" class="skill">universe</text>
 
-  <text x="40" y="556" class="sans" font-size="16" fill="#3A3A3A">One skill per library · a plan and your go before it writes · the numbers come only from the Lab</text>
+  <rect x="49" y="359" width="302" height="78" fill="#e4e1da"/>
+  <text x="66" y="391" class="num">3</text>
+  <text x="102" y="391" class="step">Data</text>
+  <text x="102" y="417" class="skill">curator · analyzer</text>
+
+  <rect x="49" y="446" width="302" height="78" fill="#e4e1da"/>
+  <text x="66" y="478" class="num">4</text>
+  <text x="102" y="478" class="step">Portfolio</text>
+  <text x="102" y="504" class="skill">portfolio</text>
+
+  <rect x="360" y="185" width="302" height="78" fill="#e84328"/>
+  <text x="377" y="217" class="num-on">5</text>
+  <text x="413" y="217" class="step-on">Backtest</text>
+  <text x="413" y="243" class="skill-on">backtest</text>
+
+  <rect x="360" y="272" width="302" height="78" fill="#e4e1da"/>
+  <text x="377" y="304" class="num">6</text>
+  <text x="413" y="304" class="step">Attribution</text>
+  <text x="413" y="330" class="skill">attribution · alpha</text>
+
+  <rect x="360" y="359" width="302" height="78" fill="#e4e1da"/>
+  <text x="377" y="391" class="num">7</text>
+  <text x="413" y="391" class="step">Paper trading</text>
+  <text x="413" y="417" class="skill">the graduation gate</text>
+
+  <rect x="361" y="447" width="300" height="76" fill="none" stroke="#c9c6be" stroke-width="2" stroke-dasharray="6 5"/>
+  <text x="377" y="478" class="num">8</text>
+  <text x="413" y="478" class="step-out">Production</text>
+  <text x="413" y="504" class="skill">outside the Lab</text>
+
+  <rect x="686" y="185" width="465" height="339" fill="#121110"/>
+  <text x="710" y="222" class="who">You</text>
+  <text x="710" y="250" class="say">Which step am I on?</text>
+  <rect x="710" y="272" width="417" height="1.5" fill="#3a3833"/>
+  <text x="710" y="304" class="who">Your researcher</text>
+  <text x="710" y="332" class="say">Step 5, the backtest. Plan: one Backtest</text>
+  <text x="710" y="356" class="say">Engine run with its skill. Approve?</text>
+  <rect x="710" y="380" width="417" height="1.5" fill="#3a3833"/>
+  <text x="710" y="414" class="cmd">init-example<tspan class="cmd-text"> · the full Golden-Flow,</tspan></text>
+  <text x="710" y="436" class="cmd-text">to study</text>
+  <text x="710" y="472" class="cmd">init-strategy<tspan class="cmd-text"> · your own, with the same</tspan></text>
+  <text x="710" y="494" class="cmd-text">folders</text>
+
+  <text x="49" y="584" class="foot">Knows your step, what's next and which library to use · plan and approval before writing · the numbers come only from the Lab</text>
+
+  <text x="49" y="644" class="foot">KaxaNuk Researcher · github.com/KaxaNuk/Researcher</text>
+  <text x="1151" y="644" class="foot" text-anchor="end">kaxanuk.mx</text>
 </svg>

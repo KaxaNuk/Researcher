@@ -1,51 +1,64 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 836" width="1200" height="836" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img" aria-labelledby="title desc">
   <title id="title">Why not just Claude or Codex?</title>
-  <desc id="desc">Why not just Claude or Codex? Your researcher runs on them and adds what they do not keep. A plain assistant beside your researcher. Your library: a plain assistant forgets what it read; with your researcher, what you read becomes notes on your computer, and its answers cite them and name what is missing. You: a plain assistant starts from zero in each chat; your researcher keeps your questions, your voice and your rules in your own files, the same in every folder. Portability: change assistant or computer and a plain assistant starts again; your researcher moves to Claude, Codex or Antigravity, another account or another computer, and keeps everything, with a private copy on your GitHub. KaxaNuk's knowledge: a plain assistant knows what anyone knows; your researcher has skills for the eight-step process and for each Lab library, with their traps. A method: a plain assistant writes when asked; your researcher shows a plan and waits for your go, saves a version of each change, and for investing writes your claims before any test. For research and learning, never advice; what it reads goes to your assistant's company, never to KaxaNuk.</desc>
+  <desc id="desc">Your researcher runs on Claude, Codex and the others, and adds what a plain assistant does not keep. Your library: a plain assistant forgets what it read; your researcher turns what you read into notes on your computer, and its answers cite them and say what is missing. You: a plain assistant starts over in every chat; your researcher keeps your questions, your voice and your rules in your own files. Portability: switch assistant or computer and you start over; your researcher installs on Claude Code, Codex, Copilot, Cursor or Antigravity, another account or computer, and keeps everything, with a private copy on GitHub. KaxaNuk's knowledge: a plain assistant knows what anyone knows; your researcher carries skills for the eight-step process and every Lab library, with their traps. Your own skills: a plain assistant only brings its own; your researcher creates the skills you need with the same architecture, in its folder, and they travel with it. For research and learning, never advice; what it reads goes to your assistant's company, never to KaxaNuk.</desc>
   <style>
-    .sans { font-family: "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif; }
-    .heavy { font-family: "Archivo Black", "Arial Black", "Helvetica Neue", Arial, sans-serif; font-weight: 900; }
-    .mono { font-family: "JetBrains Mono", Consolas, "Courier New", monospace; }
+    .label { font: 700 14px Archivo, Inter, 'Segoe UI', Helvetica, Arial, sans-serif; letter-spacing: 3.5px; fill: #686661; }
+    .head { font: 400 36px 'Archivo Black', 'Arial Black', Impact, sans-serif; fill: #121110; letter-spacing: -0.5px; }
+    .dot { fill: #e84328; }
+    .th { font: 700 12px Archivo, Inter, 'Segoe UI', Helvetica, Arial, sans-serif; letter-spacing: 2.5px; fill: #56534e; }
+    .th-me { font: 700 12px Archivo, Inter, 'Segoe UI', Helvetica, Arial, sans-serif; letter-spacing: 2.5px; fill: #b8321a; }
+    .row { font: 700 17px Archivo, Inter, 'Segoe UI', Helvetica, Arial, sans-serif; fill: #121110; }
+    .alone { font: 400 16.5px Archivo, Inter, 'Segoe UI', Helvetica, Arial, sans-serif; fill: #56534e; }
+    .me { font: 400 16.5px Archivo, Inter, 'Segoe UI', Helvetica, Arial, sans-serif; fill: #f2f0eb; }
+    .foot { font: 400 14px Archivo, Inter, 'Segoe UI', Helvetica, Arial, sans-serif; fill: #56534e; letter-spacing: 0.5px; }
   </style>
-  <rect width="1200" height="836" fill="#F1EFEA"/>
-  <text x="40" y="52" class="sans" font-size="15" letter-spacing="4" fill="#3A3A3A">YOUR RESEARCHER OR A PLAIN ASSISTANT</text>
-  <text x="40" y="110" class="heavy" font-size="44" fill="#111">WHY NOT JUST CLAUDE OR CODEX?</text>
-  <text x="40" y="162" class="heavy" font-size="44" fill="#111">YOUR RESEARCHER RUNS ON THEM AND</text>
-  <text x="40" y="214" class="heavy" font-size="44" fill="#111">KEEPS WHAT THEY DON'T<tspan fill="#E23B2A">.</tspan></text>
-  <text x="300" y="270" class="sans" font-size="15" letter-spacing="3" font-weight="700" fill="#3A3A3A">A PLAIN ASSISTANT</text>
-  <text x="646" y="270" class="sans" font-size="15" letter-spacing="3" font-weight="700" fill="#E23B2A">YOUR RESEARCHER</text>
-  <line x1="40" y1="290" x2="1160" y2="290" stroke="#D0CCC4" stroke-width="1.5"/>
-  <rect x="630" y="291" width="530" height="88" fill="#111"/>
-  <text x="56" y="330" class="sans" font-size="19" font-weight="700" fill="#111">Your library</text>
-  <text x="300" y="330" class="sans" font-size="18" fill="#3A3A3A">Forgets what it read.</text>
-  <text x="646" y="330" class="sans" font-size="18" fill="#F1EFEA">What you read becomes notes on your computer;</text>
-  <text x="646" y="356" class="sans" font-size="18" fill="#F1EFEA">its answers cite them and name what is missing.</text>
-  <line x1="40" y1="380" x2="1160" y2="380" stroke="#D0CCC4" stroke-width="1.5"/>
-  <rect x="630" y="381" width="530" height="88" fill="#111"/>
-  <text x="56" y="420" class="sans" font-size="19" font-weight="700" fill="#111">You</text>
-  <text x="300" y="420" class="sans" font-size="18" fill="#3A3A3A">Starts from zero in each chat.</text>
-  <text x="646" y="420" class="sans" font-size="18" fill="#F1EFEA">Your questions, your voice and your rules,</text>
-  <text x="646" y="446" class="sans" font-size="18" fill="#F1EFEA">in your own files, the same in every folder.</text>
-  <line x1="40" y1="470" x2="1160" y2="470" stroke="#D0CCC4" stroke-width="1.5"/>
-  <rect x="630" y="471" width="530" height="114" fill="#111"/>
-  <text x="56" y="510" class="sans" font-size="19" font-weight="700" fill="#111">Portability</text>
-  <text x="300" y="510" class="sans" font-size="18" fill="#3A3A3A">Change assistant or computer,</text>
-  <text x="300" y="536" class="sans" font-size="18" fill="#3A3A3A">and you start again.</text>
-  <text x="646" y="510" class="sans" font-size="18" fill="#F1EFEA">Claude, Codex or Antigravity, another account or</text>
-  <text x="646" y="536" class="sans" font-size="18" fill="#F1EFEA">another computer: install it and it keeps</text>
-  <text x="646" y="562" class="sans" font-size="18" fill="#F1EFEA">everything, with a private copy on your GitHub.</text>
-  <line x1="40" y1="586" x2="1160" y2="586" stroke="#D0CCC4" stroke-width="1.5"/>
-  <rect x="630" y="587" width="530" height="88" fill="#111"/>
-  <text x="56" y="626" class="sans" font-size="19" font-weight="700" fill="#111">KaxaNuk's</text>
-  <text x="56" y="652" class="sans" font-size="19" font-weight="700" fill="#111">knowledge</text>
-  <text x="300" y="626" class="sans" font-size="18" fill="#3A3A3A">Knows what anyone knows.</text>
-  <text x="646" y="626" class="sans" font-size="18" fill="#F1EFEA">Skills for the eight-step process and for each</text>
-  <text x="646" y="652" class="sans" font-size="18" fill="#F1EFEA">Lab library, with their traps.</text>
-  <line x1="40" y1="676" x2="1160" y2="676" stroke="#D0CCC4" stroke-width="1.5"/>
-  <rect x="630" y="677" width="530" height="88" fill="#111"/>
-  <text x="56" y="716" class="sans" font-size="19" font-weight="700" fill="#111">A method</text>
-  <text x="300" y="716" class="sans" font-size="18" fill="#3A3A3A">Writes when asked.</text>
-  <text x="646" y="716" class="sans" font-size="18" fill="#F1EFEA">A plan and your go first; a saved version of each</text>
-  <text x="646" y="742" class="sans" font-size="18" fill="#F1EFEA">change; for investing, your claims before any test.</text>
-  <line x1="40" y1="766" x2="1160" y2="766" stroke="#D0CCC4" stroke-width="1.5"/>
-  <text x="40" y="808" class="sans" font-size="15" fill="#3A3A3A">For research and learning, never advice · what it reads goes to your assistant's company, never to KaxaNuk</text>
+  <rect width="1200" height="675" fill="#f2f0eb"/>
+
+  <text x="49" y="56" class="label">YOUR RESEARCHER OR AN ASSISTANT ALONE</text>
+  <text x="49" y="104" class="head">WHY NOT JUST CLAUDE OR CODEX? YOUR</text>
+  <text x="49" y="144" class="head">RESEARCHER RUNS ON THEM AND ADDS</text>
+  <text x="49" y="184" class="head">WHAT THEY DON'T KEEP<tspan class="dot">.</tspan></text>
+
+  <text x="240" y="226" class="th">AN ASSISTANT ALONE</text>
+  <text x="530" y="226" class="th-me">YOUR RESEARCHER</text>
+
+  <rect x="518" y="238" width="633" height="330" fill="#121110"/>
+  <rect x="49" y="237" width="1102" height="1.5" fill="#d6d3cc"/>
+
+  <text x="60" y="266" class="row">Your library</text>
+  <text x="240" y="266" class="alone">Forgets what it read.</text>
+  <text x="530" y="266" class="me">What you read becomes notes on your computer;</text>
+  <text x="530" y="289" class="me">its answers cite them and say what is missing.</text>
+  <rect x="49" y="307" width="469" height="1.5" fill="#d6d3cc"/>
+  <rect x="518" y="307" width="633" height="1.5" fill="#3a3833"/>
+
+  <text x="60" y="336" class="row">You</text>
+  <text x="240" y="336" class="alone">Starts over in every chat.</text>
+  <text x="530" y="336" class="me">Your questions, your voice and your rules, in your own files.</text>
+  <rect x="49" y="355" width="469" height="1.5" fill="#d6d3cc"/>
+  <rect x="518" y="355" width="633" height="1.5" fill="#3a3833"/>
+
+  <text x="60" y="384" class="row">Portability</text>
+  <text x="240" y="384" class="alone">Switch assistant or computer</text>
+  <text x="240" y="407" class="alone">and you start over.</text>
+  <text x="530" y="384" class="me">Claude Code, Codex, Copilot, Cursor or Antigravity, another account or</text>
+  <text x="530" y="407" class="me">computer: it keeps everything, with a private copy on GitHub.</text>
+  <rect x="49" y="425" width="469" height="1.5" fill="#d6d3cc"/>
+  <rect x="518" y="425" width="633" height="1.5" fill="#3a3833"/>
+
+  <text x="60" y="454" class="row">KaxaNuk's</text>
+  <text x="60" y="476" class="row">knowledge</text>
+  <text x="240" y="454" class="alone">Knows what anyone knows.</text>
+  <text x="530" y="454" class="me">Skills for the eight-step process and each Lab library,</text>
+  <text x="530" y="477" class="me">with their traps.</text>
+  <rect x="49" y="495" width="469" height="1.5" fill="#d6d3cc"/>
+  <rect x="518" y="495" width="633" height="1.5" fill="#3a3833"/>
+
+  <text x="60" y="524" class="row">Your own skills</text>
+  <text x="240" y="524" class="alone">Only brings its own.</text>
+  <text x="530" y="524" class="me">Create the skills you need with the same architecture,</text>
+  <text x="530" y="547" class="me">in its folder; they travel with it.</text>
+
+  <text x="49" y="634" class="foot">For research and learning, never advice · what it reads goes to your assistant's company, never to KaxaNuk</text>
+  <text x="1151" y="634" class="foot" text-anchor="end">kaxanuk.mx</text>
 </svg>

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img" aria-labelledby="title desc">
+  <title id="title">Three steps to create your researcher</title>
+  <desc id="desc">Three steps, about ten minutes from start to finish. One: open an assistant, in an empty folder, signed in. Two: paste one line, the README's, and send it. Three: about you: who you are, what you do, and its name.</desc>
+  <style>
+    .label { font: 700 14px Archivo, Inter, 'Segoe UI', Helvetica, Arial, sans-serif; letter-spacing: 3.5px; fill: #686661; }
+    .head { font: 400 46px 'Archivo Black', 'Arial Black', Impact, sans-serif; fill: #121110; letter-spacing: -0.5px; }
+    .dot { fill: #e84328; }
+    .num { font: 400 64px 'Archivo Black', 'Arial Black', Impact, sans-serif; fill: #f0664e; }
+    .card-title { font: 400 25px 'Archivo Black', 'Arial Black', Impact, sans-serif; fill: #f0664e; }
+    .card-text { font: 400 21px Archivo, Inter, 'Segoe UI', Helvetica, Arial, sans-serif; fill: #f2f0eb; }
+    .code { font: 700 17px 'JetBrains Mono', Consolas, 'Courier New', monospace; fill: #f0664e; }
+    .lede { font: 400 21px Archivo, Inter, 'Segoe UI', Helvetica, Arial, sans-serif; fill: #3a3833; }
+    .foot { font: 400 14px Archivo, Inter, 'Segoe UI', Helvetica, Arial, sans-serif; fill: #56534e; letter-spacing: 0.5px; }
+  </style>
+  <rect width="1200" height="675" fill="#f2f0eb"/>
+
+  <text x="49" y="56" class="label">DO IT WITH ME · ON YOUR COMPUTER</text>
+  <text x="49" y="122" class="head">THREE STEPS TO CREATE</text>
+  <text x="49" y="170" class="head">YOUR RESEARCHER<tspan class="dot">.</tspan></text>
+
+  <rect x="49" y="210" width="358" height="300" fill="#121110"/>
+  <text x="77" y="284" class="num">1</text>
+  <text x="77" y="334" class="card-title">OPEN AN ASSISTANT</text>
+  <text x="77" y="374" class="card-text">In an empty folder, signed in:</text>
+  <text x="77" y="402" class="card-text">Claude Code, Codex, Copilot,</text>
+  <text x="77" y="430" class="card-text">Cursor or Antigravity.</text>
+
+  <rect x="421" y="210" width="358" height="300" fill="#121110"/>
+  <text x="449" y="284" class="num">2</text>
+  <text x="449" y="334" class="card-title">PASTE ONE LINE</text>
+  <text x="449" y="374" class="card-text">The README's, and send it.</text>
+  <text x="449" y="414" class="code">Please install this repo</text>
+  <text x="449" y="438" class="code">for me and set up my</text>
+  <text x="449" y="462" class="code">researcher… KaxaNuk/Researcher</text>
+
+  <rect x="793" y="210" width="358" height="300" fill="#121110"/>
+  <text x="821" y="284" class="num">3</text>
+  <text x="821" y="334" class="card-title">ABOUT YOU</text>
+  <text x="821" y="374" class="card-text">Who you are, what you do,</text>
+  <text x="821" y="402" class="card-text">its name. Two short questions,</text>
+  <text x="821" y="430" class="card-text">about three minutes.</text>
+
+  <text x="49" y="560" class="lede">About ten minutes from start to finish. It asks your language first, and speaks it from then on.</text>
+
+  <text x="49" y="634" class="foot">KaxaNuk Researcher · github.com/KaxaNuk/Researcher</text>
+  <text x="1151" y="634" class="foot" text-anchor="end">kaxanuk.mx</text>
+</svg>

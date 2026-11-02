@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img" aria-labelledby="title desc">
+  <title id="title">Where it lives: one place for everything</title>
+  <desc id="desc">Your researcher's folder, every part with a purpose, and who writes it. Read first in every conversation: RESEARCHER.md, who you are, its voice and your rules, written by both of you; and Philosophy/, how you work and how you invest, in your own words. You write Sources/, what you give it: papers, books, clippings. Your researcher writes Knowledge/, its notes, each citing its source; Studies/, decisions weighed for and against; and Lessons/, lessons and their quizzes. The flow: Sources/, read, Knowledge/, then query, study and teach, into Studies/ and Lessons/, and you decide. It is all Markdown, plain text any assistant or editor reads, and git keeps every change.</desc>
+  <style>
+    .label { font: 700 14px Archivo, Inter, 'Segoe UI', Helvetica, Arial, sans-serif; letter-spacing: 3.5px; fill: #686661; }
+    .head { font: 400 40px 'Archivo Black', 'Arial Black', Impact, sans-serif; fill: #121110; letter-spacing: -0.5px; }
+    .dot { fill: #e84328; }
+    .key { font: 700 12px Archivo, Inter, 'Segoe UI', Helvetica, Arial, sans-serif; letter-spacing: 2px; fill: #56534e; }
+    .name { font: 700 21px 'JetBrains Mono', Consolas, 'Courier New', monospace; fill: #121110; }
+    .text { font: 400 17px Archivo, Inter, 'Segoe UI', Helvetica, Arial, sans-serif; fill: #3a3833; }
+    .first { font: 700 10.5px Archivo, Inter, 'Segoe UI', Helvetica, Arial, sans-serif; letter-spacing: 1.5px; fill: #b8321a; }
+    .flow { font: 700 19px 'JetBrains Mono', Consolas, 'Courier New', monospace; fill: #f2f0eb; }
+    .flow-red { font: 700 19px 'JetBrains Mono', Consolas, 'Courier New', monospace; fill: #f0664e; }
+    .flow-grey { font: 400 19px Archivo, Inter, 'Segoe UI', Helvetica, Arial, sans-serif; fill: #c9c6be; }
+    .decide { font: 700 15px Archivo, Inter, 'Segoe UI', Helvetica, Arial, sans-serif; letter-spacing: 1.5px; fill: #f0664e; }
+    .md { font: 400 17px 'Archivo Black', 'Arial Black', Impact, sans-serif; fill: #e84328; }
+    .md-text { font: 400 17px Archivo, Inter, 'Segoe UI', Helvetica, Arial, sans-serif; fill: #3a3833; }
+    .foot { font: 400 14px Archivo, Inter, 'Segoe UI', Helvetica, Arial, sans-serif; fill: #56534e; letter-spacing: 0.5px; }
+  </style>
+  <rect width="1200" height="675" fill="#f2f0eb"/>
+
+  <text x="49" y="56" class="label">ITS HOME · C:\RESEARCH\ARYA</text>
+  <text x="49" y="112" class="head">A PLACE FOR EVERYTHING, AND</text>
+  <text x="49" y="156" class="head">EVERY FOLDER WITH A PURPOSE<tspan class="dot">.</tspan></text>
+
+  <rect x="49" y="185" width="20" height="7" fill="#121110"/>
+  <text x="77" y="192" class="key">YOU WRITE IT</text>
+  <rect x="207" y="185" width="20" height="7" fill="#e84328"/>
+  <text x="235" y="192" class="key">YOUR RESEARCHER WRITES IT</text>
+  <rect x="482" y="185" width="10" height="7" fill="#121110"/>
+  <rect x="492" y="185" width="10" height="7" fill="#e84328"/>
+  <text x="510" y="192" class="key">BOTH</text>
+
+  <rect x="49" y="210" width="358" height="112" fill="#e4e1da"/>
+  <rect x="49" y="210" width="179" height="6" fill="#121110"/>
+  <rect x="228" y="210" width="179" height="6" fill="#e84328"/>
+  <text x="67" y="250" class="name">RESEARCHER.md</text>
+  <text x="391" y="244" class="first" text-anchor="end">READ FIRST</text>
+  <text x="67" y="280" class="text">Who you are, its voice and your rules.</text>
+
+  <rect x="421" y="210" width="358" height="112" fill="#e4e1da"/>
+  <rect x="421" y="210" width="358" height="6" fill="#121110"/>
+  <text x="439" y="250" class="name">Philosophy/</text>
+  <text x="763" y="244" class="first" text-anchor="end">READ FIRST</text>
+  <text x="439" y="280" class="text">How you work and how you invest,</text>
+  <text x="439" y="303" class="text">in your own words.</text>
+
+  <rect x="793" y="210" width="358" height="112" fill="#e4e1da"/>
+  <rect x="793" y="210" width="358" height="6" fill="#121110"/>
+  <text x="811" y="250" class="name">Sources/</text>
+  <text x="811" y="280" class="text">What you give it: papers, books,</text>
+  <text x="811" y="303" class="text">clippings.</text>
+
+  <rect x="49" y="334" width="358" height="112" fill="#e4e1da"/>
+  <rect x="49" y="334" width="358" height="6" fill="#e84328"/>
+  <text x="67" y="374" class="name">Knowledge/</text>
+  <text x="67" y="404" class="text">Its notes, each citing its source.</text>
+
+  <rect x="421" y="334" width="358" height="112" fill="#e4e1da"/>
+  <rect x="421" y="334" width="358" height="6" fill="#e84328"/>
+  <text x="439" y="374" class="name">Studies/</text>
+  <text x="439" y="404" class="text">Decisions weighed, for and against.</text>
+
+  <rect x="793" y="334" width="358" height="112" fill="#e4e1da"/>
+  <rect x="793" y="334" width="358" height="6" fill="#e84328"/>
+  <text x="811" y="374" class="name">Lessons/</text>
+  <text x="811" y="404" class="text">Lessons and their quizzes.</text>
+
+  <rect x="49" y="460" width="1102" height="58" fill="#121110"/>
+  <text x="71" y="496"><tspan class="flow">Sources/</tspan><tspan class="flow-grey"> → </tspan><tspan class="flow-red">read</tspan><tspan class="flow-grey"> → </tspan><tspan class="flow">Knowledge/</tspan><tspan class="flow-grey"> → </tspan><tspan class="flow-red">query · study · teach</tspan><tspan class="flow-grey"> → </tspan><tspan class="flow">Studies/ · Lessons/</tspan><tspan class="flow-grey"> → </tspan><tspan class="decide">YOU DECIDE</tspan></text>
+
+  <rect x="49" y="538" width="1102" height="3" fill="#e84328"/>
+  <text x="49" y="572" class="md">IT'S ALL MARKDOWN</text>
+  <text x="300" y="572" class="md-text">Plain text any assistant and any editor can read: no app lock-in;</text>
+  <text x="300" y="596" class="md-text">git keeps every change, line by line. All in files of yours, on your computer.</text>
+
+  <text x="49" y="644" class="foot">KaxaNuk Researcher · github.com/KaxaNuk/Researcher</text>
+  <text x="1151" y="644" class="foot" text-anchor="end">kaxanuk.mx</text>
+</svg>

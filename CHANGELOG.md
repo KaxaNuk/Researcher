@@ -7,8 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 tagged `vX.Y.Z`.
 
 ## [1.32.0] - 2026-11-01
-Your brief can now tell you, once a week, what slipped in your home and the word that fixes it; and
-the philosophy interviews no longer ask a question you can answer with a plain "yes".
+A shorter README, with the install on top and four pictures from the KaxaNuk deck; your brief can
+now tell you, once a week, what slipped in your home and the word that fixes it; and the philosophy
+interviews no longer ask a question you can answer with a plain "yes".
 
 **What to do differently:** say `update` in your home, then `brief setup` to add *Health*. Nothing
 else changes; your rounds and files stay as they are.
@@ -20,7 +21,17 @@ else changes; your rounds and files stay as they are.
   the package's own checks by a new script, `brief/scripts/health.py`, read only, tested in
   `tests/test_health.py` on a small home with commas, parentheses and accents in its names. The
   home template, 0.35.0, lists `health` among the brief's parts.
+- **`SKILLS.md`**: every skill and command, the Investment Lab skills, the house rules and the
+  agent, how to take your researcher to another account, computer or assistant, and *Removing it*,
+  moved from the README as they stood.
 ### Changed
+- **The README** is a quarter of its length: the three install steps on top, word for word as
+  before, then what you do with it, why not just Claude or Codex, investing and the Lab, what it is
+  and is not, and the contacts. Its four pictures are redrawn by hand as SVG from the KaxaNuk
+  presentation's own slides, in its colours and type: the three steps, where it lives, why not
+  just an assistant — which now says you can create skills of your own — and the Lab's pipeline.
+  `first-you.svg` and `one-researcher.svg` are gone. `CONTRIBUTING.md` points to `SKILLS.md` for
+  *Removing it*.
 - **Open questions only.** Four prompts a first real round showed could be answered "yes" are now
   open: `working-philosophy`'s W3 (*Tell me about a moment that changed how you work*) and W4's
   follow-up (*How does that compare with the way you usually decide?*), and
