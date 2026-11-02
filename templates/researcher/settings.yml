@@ -21,11 +21,11 @@ versions:
 # Your daily brief, as `brief setup` last confirmed it; `parts` empty means no brief. `brief setup`
 # schedules it from here on another computer or account, asking only for your go, and `brief`
 # follows it where nothing is scheduled.
-#   parts: work, markets, portfolio, week.
+#   parts: work, markets, portfolio, week, health.
 #   when: the days and the time, the computer's own, e.g. weekdays 06:00.
 #   measures: in the order picked, by the names a dated source gives them.
 #   questions: each tied question and its measures, e.g. "2: the 10-year yield; the dollar index".
-#   week_day: the day Week is written, e.g. Monday.
+#   week_day: the day Week and Health are written, e.g. Monday.
 #   week_folders: folders beyond the projects table that Week reads, by absolute path.
 #   connectors: the calendar, mail and chat connectors Work reads, by the names your assistant
 #   gives them.

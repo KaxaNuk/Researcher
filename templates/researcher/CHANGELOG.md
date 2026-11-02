@@ -6,6 +6,21 @@ Every notable change to this repository, newest first: `## X.Y.Z (YYYY-MM-DD)` w
 This is the home template's changelog, which `init-researcher` copies into every home and `update`
 extends with a *Brought to template* entry at the top; the home's own entries go there too.
 
+## 0.35.0 (2026-11-01)
+
+**MINOR** — the brief can add *Health* once a week: what slipped in your home, each line with the
+word that fixes it.
+
+**What to do differently:** say `update` in your home; it brings these lines as a diff. Then
+`brief setup` offers *Health*.
+
+### Changed
+- `settings.yml` lists `health` among the brief's parts, written on *Week*'s day.
+- `AGENTS.md`'s row for `Briefs/` names the fifth part, *Health*; its paragraph on `settings.yml`
+  says any of its three writers brings the file from the template when an older home lacks it.
+- `README.md` says which assistant reads `CLAUDE.md` and `GEMINI.md`, and names
+  `init-python-library` beside `init-strategy`.
+
 ## 0.34.0 (2026-11-01)
 
 **MINOR** — your philosophy is two short interviews: `working-philosophy`, how you work, first and

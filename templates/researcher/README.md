@@ -32,7 +32,7 @@ prices, shown to teach the method, never a promise or a recommendation.
 | `Briefs/` | your daily brief, one file a day, every figure quoted from a dated source, never advice | `brief setup` once; `brief` writes today's now |
 | `Portfolio/` | your holdings and the rules you hold them by, `holdings.csv` and `RULES.md` | `brief setup` starts both, empty, when you choose its portfolio part; you fill them |
 | `settings.yml` | the choices that travel with this home: the assistants you use, how versions are signed and sent, your brief and the connectors it reads | nothing to do — the skills keep it, each on your go; edit it by hand whenever you like |
-| `AGENTS.md`, `CLAUDE.md`, `GEMINI.md` | the rules the researcher works by | nothing to do |
+| `AGENTS.md`, `CLAUDE.md`, `GEMINI.md` | the rules the researcher works by: `CLAUDE.md` for Claude, `GEMINI.md` for Antigravity, each pointing to `AGENTS.md`, which the others read | nothing to do |
 | `.apm/`, `apm.yml` | the researcher's agent and skill, installed for your user | nothing to do |
 | `Extracts/` | text pulled out of the PDFs for `read`, remade when needed | nothing to do |
 
@@ -88,7 +88,8 @@ your judgement stays yours.
    this folder — open `OBJECTIVE.md`, then `RESULTS.md`, then `Experiments/Experiment_1/`. Reading
    it needs nothing; running it needs a data provider's key, the Analytics Factory's files and the
    Lab's licences, as its `SETUP.md` says. Then `init-strategy <name>` makes your own beside this
-   folder, from the KaxaNuk Strategy Template.
+   folder, from the KaxaNuk Strategy Template; `init-python-library <name>` starts a Python library
+   the same way.
 
 **Lost?** `next`, here or in a strategy, names the one next thing and its command — at home, for
 what you came for. **Stay current:** when a new version is out, your researcher says so in one

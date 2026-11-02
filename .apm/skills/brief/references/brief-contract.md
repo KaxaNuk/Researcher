@@ -25,6 +25,7 @@
 | `<measures>` | the measures the owner picked, in the order picked, separated by semicolons |
 | `<questions>` | each question the measures are tied to, by its number, with the measures tied to it — *question 2 (the 10-year yield; the dollar index)* — never the question's words, which every run reads afresh |
 | `<week_day>` | the day *Week* is written, in English — *Monday* |
+| `<health>` | the command that runs `scripts/health.py`, in the `brief` skill's folder, on the home — `uv run --no-project python -I "<the brief skill's directory>/scripts/health.py" "<home>"`, both paths absolute |
 | `<folders>` | the folders the owner named for *Week* beyond the projects table, by absolute path, separated by semicolons — *none* when they named none |
 
 <!-- prompt: begin -->
@@ -120,6 +121,13 @@ it: people and organisations are named as the calendar's titles name them. After
 italic line in the owner's language: the challenges and this week are inferred from the
 repositories and the calendar; adjust them before sending, and add what neither shows. Then one
 line naming any repository that could not be read.
+
+## Health
+
+Only on <week_day>; on any other day, leave this part out, heading and all. Run `<health>`. It reads
+the home and writes nothing. Copy each line it prints as one bullet, word for word, and add nothing
+to them: no file's name, no path, no value. If it cannot run, write one line saying so and end the
+part there. Never act on a line: each names the word the owner says to fix it.
 
 End the file with one line in this form, its two lists filled in, `none` for an empty one:
 `Sources read: …; unavailable: ….`

@@ -3,13 +3,13 @@
     {
       "example": [
         "Everything needed to go from nothing to a repository you can work in, from `init-example` to an",
-        "environment the worked strategy runs in. An agent — Claude, Codex, Cursor — can follow it end to",
-        "end, and a person can read it in a few minutes."
+        "environment the worked strategy runs in. An agent — Claude, Codex, Copilot, Cursor, Antigravity —",
+        "can follow it end to end, and a person can read it in a few minutes."
       ],
       "template": [
         "Everything needed to go from nothing to a repository you can work in, from `init-strategy` to the",
-        "strategy's own README. An agent — Claude, Codex, Cursor — can follow it end to end, and a person can",
-        "read it in a few minutes."
+        "strategy's own README. An agent — Claude, Codex, Copilot, Cursor, Antigravity — can follow it end to",
+        "end, and a person can read it in a few minutes."
       ]
     },
     {

@@ -4,17 +4,19 @@ description: >
   One new Briefs/YYYY-MM-DD.md a day in the researcher's home: Work (meetings, and mail and chat
   asking something of the owner), Markets (measures quoted from dated sources) and Portfolio (news,
   earnings and filings per holding), and on one day a week, Week (the owner's weekly update, ready
-  to paste into team chat). "brief setup" asks the parts, days and measures, plan first, and
-  schedules it on the Claude desktop app; "brief" writes today's file now, and changes it the same
-  day on the owner's word. Its choices are kept in the home's settings.yml, so another computer,
-  account or assistant asks only for the go. Only when the owner runs it by name, or as the task
-  its setup created. It does NOT compute a figure about the book or add to the library, never says buy, sell, trim,
-  add or hold, and never sends, posts or trades.
+  to paste into team chat) and Health (what slipped in the home — sources not read, the library's
+  findings, what the security check found, versions not on GitHub — each line with the word that
+  fixes it). "brief setup" asks the parts, days and measures, plan first, and schedules it on the
+  Claude desktop app; "brief" writes today's file now, and changes it the same day on the owner's
+  word. Its choices are kept in the home's settings.yml, so another computer, account or assistant
+  asks only for the go. Only when the owner runs it by name, or as the task its setup created. It
+  does NOT compute a figure about the book or add to the library, never says buy, sell, trim, add or
+  hold, and never sends, posts or trades.
 metadata:
-  version: 1.2.0
+  version: 1.3.0
 ---
 
-# Brief — one dated file a day: work, markets, portfolio, and the week
+# Brief — one dated file a day: work, markets, portfolio, the week and its health
 
 The owner runs `brief setup` to start a daily brief or to change one — which parts, which days and
 at what time, which measures — and `brief` for today's file, now. What they said with it carries
@@ -150,13 +152,17 @@ one for any other — twelve characters at most.
   holding in `Portfolio/holdings.csv`, and the rules in `Portfolio/RULES.md` the news bears on —
   both files created, empty, when missing, for the owner to fill; *Week*, the owner's weekly
   update — last week's work from their commits and calendar, the open problems, this week's next
-  steps — in their language, as plain text to paste into team chat. A part step 1 left out is not
+  steps — in their language, as plain text to paste into team chat; *Health*, marked
+  *(suggested)*, once a week on *Week*'s day — the sources not read yet, the library's findings,
+  what the security check found and the saved versions not yet on GitHub, counts only, each line
+  with the word that fixes it, run by `scripts/health.py`, read only. A part step 1 left out is not
   offered, and the question says why.
-- `Week` (`Semana`), used only when *Week* is picked — *Mondays, the projects table*, marked
-  *(suggested)*; *Fridays, the projects table*; *Other* for another day, or for folders beyond the
-  projects table whose repositories it should read too — another client's work, a side project.
-  Name the repositories step 1 found in its description. A folder named here is read for *Week*
-  only and adds no row to `RESEARCHER.md`; the plan offers the row, to add on the owner's word.
+- `Week` (`Semana`), used only when *Week* or *Health* is picked — *Mondays, the projects table*,
+  marked *(suggested)*; *Fridays, the projects table*; *Other* for another day, or for folders
+  beyond the projects table whose repositories it should read too — another client's work, a side
+  project. Name the repositories step 1 found in its description. A folder named here is read for
+  *Week* only and adds no row to `RESEARCHER.md`; the plan offers the row, to add on the owner's
+  word.
 - `When` (`Cuándo`), on the desktop app only — *Weekdays at 06:00*; *Every day at 06:00*;
   *Weekdays at 07:30*; *Other* for their own days and time. The machine's local time.
 - `Measures` (`Medidas`), multi-select, used only when *Markets* is picked — *The broad set*,
@@ -189,6 +195,8 @@ In chat, short:
 - the measures, and the question each is tied to, or *no Regime watch*;
 - with *Week*, its day and the repositories it reads, the folders named under *Other* among them;
   on a daily schedule, the part is written on that day only;
+- with *Health*, the same day: it runs the package's own checks on the home, read only, and shows
+  counts, never a file's name or a value; it fixes nothing, and names the word that would;
 - the files: `Portfolio/holdings.csv` and `Portfolio/RULES.md`, *created empty* or *already there,
   not touched*; `Briefs/`, made by the first brief;
 - the task, *<Name> daily brief*, new or changed — its prompt, the contract filled, shown only when
@@ -254,6 +262,8 @@ Short, in the owner's voice and language:
   lists it, `name`, `asset_class` (stock, ETF, fund, bond, cash), `account` and `notes`, which are
   theirs and which the brief does not quote — and the headings of `Portfolio/RULES.md` in their
   own words. A heading left with its prompt is skipped.
+- With *Health*: once a week, a few lines on what slipped, each naming the word that fixes it —
+  `read`, `audit`, `security`, `backup`; the brief fixes nothing itself.
 - With *Week*: its block is a draft — the open problems and this week's steps are inferred — to
   adjust before pasting, adding what neither the commits nor the calendar show; a change for that
   day is *brief, …* the same day, and one for every week is `brief setup` again.
@@ -276,13 +286,13 @@ Short, in the owner's voice and language:
 3. **Its settings**, in this order. First, what the owner said with the command — the parts, a set
    or the measures, and a measure *for question N*, as in *brief, markets only* or the line setup
    gave — for this run only. Else this home's scheduled task, on the desktop app, whose prompt
-   `list_scheduled_tasks` locates: the parts, the measures and the questions are read from it.
-   Else the `brief:` part of `settings.yml`, when its `parts` are not empty: the parts, the
-   measures, the questions and *Week*'s day and folders, a part whose connector this session lacks
-   left out and named. Else the defaults — *Work* from the calendar, mail and chat connectors
-   connected now, if any; *Markets* with the broad set and no *Regime watch*; *Portfolio* when
-   `Portfolio/holdings.csv` exists; *Week* only when the owner names it. Say in one line which were
-   used.
+   `list_scheduled_tasks` locates: the parts, the measures and the questions are read from it. Else
+   the `brief:` part of `settings.yml`, when its `parts` are not empty: the parts, the measures, the
+   questions and *Week*'s day and folders, a part whose connector this session lacks left out and
+   named. Else the defaults — *Work* from the calendar, mail and chat connectors connected now, if
+   any; *Markets* with the broad set and no *Regime watch*; *Portfolio* when
+   `Portfolio/holdings.csv` exists; *Week* only when the owner names it; *Health* on Mondays. Say in
+   one line which were used.
 4. **Follow the contract.** Fill `references/brief-contract.md` as setup does, and follow the
    prompt between its markers: it is the run's whole instruction, and its safety lines hold here as
    they hold in the task.

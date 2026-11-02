@@ -6,11 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
-## [1.31.1] - 2026-11-01
-The philosophy interviews no longer ask a question you can answer with a plain "yes".
+## [1.32.0] - 2026-11-01
+Your brief can now tell you, once a week, what slipped in your home and the word that fixes it; and
+the philosophy interviews no longer ask a question you can answer with a plain "yes".
 
-**What to do differently:** say `update` in your home. Nothing else changes; your rounds and files
-stay as they are.
+**What to do differently:** say `update` in your home, then `brief setup` to add *Health*. Nothing
+else changes; your rounds and files stay as they are.
+### Added
+- **The brief's *Health* part** (`brief` 1.3.0), once a week on *Week*'s day, offered by
+  `brief setup` and marked *(suggested)*: the sources no note has read (say `read`), the library's
+  findings (`audit`), what the security check found (`security`) and the saved versions not yet in
+  the home's copy on GitHub (`backup`). Counts only: never a file's name, a path or a value. It runs
+  the package's own checks by a new script, `brief/scripts/health.py`, read only, tested in
+  `tests/test_health.py` on a small home with commas, parentheses and accents in its names. The
+  home template, 0.35.0, lists `health` among the brief's parts.
 ### Changed
 - **Open questions only.** Four prompts a first real round showed could be answered "yes" are now
   open: `working-philosophy`'s W3 (*Tell me about a moment that changed how you work*) and W4's
@@ -19,6 +28,12 @@ stay as they are.
   will be needed*) and Q6's follow-up (*When would you decide that?*). Both skills now say every
   question is asked as the bank writes it: never turned into a yes-or-no, and never into a guess
   from earlier answers for the owner to confirm. Both skills move to 2.0.1.
+- **The five assistants everywhere.** The strategy template's `SETUP.md`, 0.20.1, and the worked
+  example's, 0.18.2, name Claude Code, Codex, Copilot, Cursor and Antigravity where they named two
+  or three. `next` no longer speaks of OpenCode, which 1.29.0 stopped setting up.
+- **The home template, 0.35.0**: its `README.md` says `GEMINI.md` is Antigravity's and names
+  `init-python-library` beside `init-strategy`; its `AGENTS.md` says any of the three writers of
+  `settings.yml` brings the file from the template when an older home lacks it.
 
 ## [1.31.0] - 2026-11-01
 Your philosophy is now two short interviews: `working-philosophy`, how you work, first and for

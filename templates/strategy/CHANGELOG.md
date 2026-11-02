@@ -41,6 +41,13 @@ for somebody who was not in the room:
 
 ---
 
+## 0.20.1 (2026-11-01)
+
+**PATCH** — `SETUP.md` names the five assistants the researcher is tried on: Claude Code, Codex,
+Copilot, Cursor and Antigravity, where it named two or three. No result changes.
+
+**What to do differently:** nothing.
+
 ## 0.20.0 (2026-10-27)
 
 **MINOR** — the template takes what Golden Flow 0.16.0 to 0.21.0 learned, the proposals of issue

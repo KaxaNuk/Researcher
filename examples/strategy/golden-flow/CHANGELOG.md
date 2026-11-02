@@ -41,6 +41,14 @@ for somebody who was not in the room:
 
 ---
 
+## 0.18.2 (2026-11-01)
+
+**PATCH** — `SETUP.md` names the five assistants the researcher is tried on: Claude Code, Codex,
+Copilot, Cursor and Antigravity, where it named two or three, as the template's 0.20.1 does. No
+result changes.
+
+**What to do differently:** nothing.
+
 ## 0.18.1 (2026-10-31)
 
 **PATCH** — the README's sentence on where what the assistant reads goes names the five assistants

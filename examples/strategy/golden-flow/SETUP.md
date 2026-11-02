@@ -1,8 +1,8 @@
 # Setup
 
 Everything needed to go from nothing to a repository you can work in, from `init-example` to an
-environment the worked strategy runs in. An agent — Claude, Codex, Cursor — can follow it end to
-end, and a person can read it in a few minutes.
+environment the worked strategy runs in. An agent — Claude, Codex, Copilot, Cursor, Antigravity —
+can follow it end to end, and a person can read it in a few minutes.
 
 <!-- example: begin -->
 
@@ -41,9 +41,9 @@ index's holdings and that catalogue. A newer catalogue can move a live listing's
 
 ## What you need first
 
-The two tools below, and an assistant — Claude or Codex — with the KaxaNuk Researcher installed
-once for your user, as step 4 says. You do **not** need Python: `uv` fetches the right version in
-step 2.
+The two tools below, and an assistant — Claude Code, Codex, Copilot, Cursor or Antigravity — with
+the KaxaNuk Researcher installed once for your user, as step 4 says. You do **not** need Python:
+`uv` fetches the right version in step 2.
 
 | Tool | Windows | macOS and Linux |
 | --- | --- | --- |
@@ -194,9 +194,9 @@ your user, not per repository, by the same command that gave you step 1:
 uvx --from apm-cli==0.33.0 apm install -g KaxaNuk/Researcher --target claude
 ```
 
-For another assistant, put `codex`, `cursor` or its name in place of `claude`; the researcher
-package's [`SETUP.md`](https://github.com/KaxaNuk/Researcher/blob/main/SETUP.md) says what
-each receives.
+For another assistant, put `codex`, `copilot`, `cursor` or `antigravity` in place of `claude`;
+the researcher package's [`SETUP.md`](https://github.com/KaxaNuk/Researcher/blob/main/SETUP.md)
+says what each receives.
 
 The skills then work in every folder, this one included, and
 `uvx --from apm-cli==0.33.0 apm update -g` keeps every strategy current at once. Nothing in the
@@ -295,7 +295,7 @@ last date.
 <!-- example: end -->
 
 Then open **this folder**, not a parent of it, in your editor (PyCharm or VS Code) and in your
-assistant (Claude or Codex).
+assistant.
 
 **In a new strategy nothing runs yet, on purpose:** every `.py` file and notebook says what belongs
 in it. Your assistant writes each one with you, in the order of parts A to H of the template's
