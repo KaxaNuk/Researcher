@@ -97,7 +97,7 @@ how to start later. On a retake, the opening of *Taking it again* instead.
 - *Lands under:* **What I have learned**.
 - **Short:** *What changed how I work* (*Qué cambió mi forma de trabajar*).
 - **Why:** A lesson tied to a moment is one memory can't quietly rewrite.
-- **Ask:** Was there a moment — a win, a mistake, a person — that changed how you work? What
+- **Ask:** Tell me about a moment — a win, a mistake, a person — that changed how you work. What
   happened?
 - **Then:** What do you do differently since?
 - **Plain:** One moment is enough; a mistake you won't repeat counts.
@@ -123,7 +123,7 @@ how to start later. On a retake, the opening of *Taking it again* instead.
 - **Short:** *How I decide something important* (*Cómo decido algo importante*).
 - **Why:** A way of deciding you can name is one you can improve.
 - **Ask:** Think of the last hard call you made at work. How did you decide?
-- **Then:** Is that how you usually decide, or was that one different?
+- **Then:** How does that compare with the way you usually decide?
 - **Plain:** What did you need to see, whom did you ask, when did you stop looking?
 - **Example:**
   - "I write the best argument against my position first."

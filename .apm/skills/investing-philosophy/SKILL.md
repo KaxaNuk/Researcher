@@ -12,7 +12,7 @@ description: >
   the file holds (`refine` does), or write RESEARCHER.md beyond Find first and the two rules for
   strategies, and never says buy, sell, trim, add or hold.
 metadata:
-  version: 2.0.0
+  version: 2.0.1
 ---
 
 # Investing philosophy — how the owner invests, in their own words, round by round
@@ -56,11 +56,13 @@ gender, and never improvised. IDs are stable; a retake compares by ID.
 folder, or from the owner's own `Sources/` and `Knowledge/`, with its year, authors and title as the
 map gives them — never from memory. A work is a lead, never a source.
 
-**How to ask.** Open questions are asked in chat, one per message, each opening with where the
-round stands and its *Why*; a *Then* is asked in a message of its own once the *Ask* has a typed
-answer. A pick is asked by **calling the question tool** — `AskUserQuestion` in Claude Code — at
-most four options, with *Other* as the free-text escape. **Without one** — Codex — a pick is asked
-in chat, its options numbered, *Other — your own words* last. Wait for each answer.
+**How to ask.** Open questions are asked in chat, one per message, each opening with where the round
+stands and its *Why*; a *Then* is asked in a message of its own once the *Ask* has a typed answer.
+An *Ask* and a *Then* are said as the bank writes them, open: never turned into a yes-or-no, and
+never into a guess from earlier answers for the owner to confirm. A pick is asked by **calling the
+question tool** — `AskUserQuestion` in Claude Code — at most four options, with *Other* as the
+free-text escape. **Without one** — Codex — a pick is asked in chat, its options numbered, *Other —
+your own words* last. Wait for each answer.
 
 **A round at a glance.** About 10, 15 or 20 minutes by level — 6, 8 or 10 typed questions — and it
 can stop at any point.

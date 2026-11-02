@@ -12,7 +12,7 @@ description: >
   (`investing-philosophy` does, second), edit what the file holds (`refine` does), or write
   RESEARCHER.md beyond Find first and those rules, and never says buy, sell, trim, add or hold.
 metadata:
-  version: 2.0.0
+  version: 2.0.1
 ---
 
 # Working philosophy — how the owner works, in their own words, round by round
@@ -48,12 +48,13 @@ language — the one *How it speaks* names — as written, in words that never m
 and never improvised. IDs are stable; a retake compares by ID. No work from the reading map is
 named: it is about markets, and this round is about the owner's work.
 
-**How to ask.** Open questions are asked in chat, one per message, each opening with where the
-round stands and its *Why*, and inviting a story; a *Then* is asked in a message of its own once
-the *Ask* has a typed answer. A pick is asked by **calling the question tool** — `AskUserQuestion`
-in Claude Code — at most four options, with *Other* as the free-text escape. **Without one** —
-Codex — a pick is asked in chat, its options numbered, *Other — your own words* last. Wait for
-each answer.
+**How to ask.** Open questions are asked in chat, one per message, each opening with where the round
+stands and its *Why*, and inviting a story; a *Then* is asked in a message of its own once the *Ask*
+has a typed answer. An *Ask* and a *Then* are said as the bank writes them, open: never turned into
+a yes-or-no, and never into a guess from earlier answers for the owner to confirm. A pick is asked
+by **calling the question tool** — `AskUserQuestion` in Claude Code — at most four options, with
+*Other* as the free-text escape. **Without one** — Codex — a pick is asked in chat, its options
+numbered, *Other — your own words* last. Wait for each answer.
 
 **A round at a glance.** About ten minutes, in one go, and it can stop at any point.
 

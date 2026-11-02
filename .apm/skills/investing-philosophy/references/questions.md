@@ -140,9 +140,10 @@ again* instead.
 - **Short:** *Whose money, and by when* (*De quién es el dinero y para cuándo*).
 - **Why:** Money needed in two years, or someone else's, can't be run like your own savings for
   twenty.
-- **Ask:** Whose money is it — yours, your family's, other people's — and when will it be needed?
-- **Then** (Building and Researching): Do you run it differently when it's someone else's, or
-  needed sooner? How?
+- **Ask:** Tell me whose money it is — yours, your family's, other people's — and when each part
+  will be needed.
+- **Then** (Building and Researching): How do you run it when it's someone else's, or needed
+  sooner?
 - **Plain:** Your savings, your children's school, a fund: each has its own date.
 - **Example:**
   - "Mine, for retirement in twenty-five years."
@@ -259,7 +260,7 @@ the evidence of 2011 to 2023; say* show me the paper *on any of them.*
 - **Why:** What you do after a fall is decided either on a calm day or in the moment; this asks
   which.
 - **Ask:** Imagine what you hold falls 20% in a month. What do you do?
-- **Then:** Did you decide that before it happened — or would you decide it then?
+- **Then:** When would you decide that — on a calm day before it happens, or in the moment?
 - **Plain:** 1,000 becomes 800 in a month. Sell, wait, buy more, or look away?
 - **Example:**
   - "Sell, so it stops hurting."

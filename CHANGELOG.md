@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
+## [1.31.1] - 2026-11-01
+The philosophy interviews no longer ask a question you can answer with a plain "yes".
+
+**What to do differently:** say `update` in your home. Nothing else changes; your rounds and files
+stay as they are.
+### Changed
+- **Open questions only.** Four prompts a first real round showed could be answered "yes" are now
+  open: `working-philosophy`'s W3 (*Tell me about a moment that changed how you work*) and W4's
+  follow-up (*How does that compare with the way you usually decide?*), and
+  `investing-philosophy`'s Q18 with its follow-up (*Tell me whose money it is, and when each part
+  will be needed*) and Q6's follow-up (*When would you decide that?*). Both skills now say every
+  question is asked as the bank writes it: never turned into a yes-or-no, and never into a guess
+  from earlier answers for the owner to confirm. Both skills move to 2.0.1.
+
 ## [1.31.0] - 2026-11-01
 Your philosophy is now two short interviews: `working-philosophy`, how you work, first and for
 everyone, and `investing-philosophy`, how you invest, second, each question open and told as a
