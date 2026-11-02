@@ -84,7 +84,12 @@ apply, so they hold in every later session on the deck.
 3. **The project.** In the folder's parent, `npx hyperframes init <name> --non-interactive --skill
    slideshow`, then `BRIEF.md` into it. From there `slideshow` builds the deck as its own skill
    says — its scenes, the slides' list, reveals, branches and notes — searching HyperFrames'
-   catalog before drawing a visual by hand. Its commands run in the project folder.
+   catalog before drawing a visual by hand. Its commands run in the project folder. The deck is
+   handed over as one file, so `slideshow` builds it with its standalone harness, as its
+   `references/standalone-harness.md` says: the deck drives its own slides, sets
+   `window.__hfSetTime`, and registers its timeline under its first scene's id, so `check` passes
+   — checked on HyperFrames 0.8.183 by building one. A deck without it shows stacked or blank
+   slides once saved as one file, and `pdf_pages.py` cannot print it.
 4. **The look.** The owner's brand files are copied into the project's assets on their go; with
    none, a plain style. A logo or a font that is not the owner's to use is never fetched.
 5. **The check.** `npx hyperframes check` passes before the owner sees it.
@@ -97,12 +102,17 @@ file, and `check` passes again after it.
 
 ## Step 5: Share it
 
+- **Into `export/`.** Both files go into the deck's `export/` folder, `<folder>/export/`, never
+  beside `index.html`: HyperFrames' `check` reads an HTML file there as a second deck and fails.
+- **The address `present` printed.** `present` moves to another port when its own is taken — a
+  deck served earlier and never stopped holds it — so the address is the one it printed for this
+  folder, not 3004 from memory. Both scripts stop, naming it, when the address serves another
+  deck than the one in `<folder>/index.html`. Stop `present` when the files are written.
 - **One HTML file, the default to share.** While `present` serves the deck, this skill's script
-  writes it whole into its folder as `<deck-name>.html` — the folder's name unless the owner gives
-  another — from the address `present` printed:
+  writes it whole as `<deck-name>.html` — the folder's name unless the owner gives another:
 
   ```bash
-  uv run --no-project python -I <this skill's folder>/scripts/one_file.py http://localhost:3004 "<folder>/<deck-name>.html"
+  uv run --no-project python -I <this skill's folder>/scripts/one_file.py <the address present printed> "<folder>/export/<deck-name>.html"
   ```
 
   It saves the page `present` serves, with every script, stylesheet, font, image, sound and scene
@@ -122,14 +132,16 @@ file, and `check` passes again after it.
   window while `present` serves the deck — checked on HyperFrames 0.8.183 by running it:
 
   ```bash
-  uv run --no-project --with playwright --with pypdf python -I <this skill's folder>/scripts/pdf_pages.py http://localhost:3004 "<folder>/<deck-name>.pdf"
+  uv run --no-project --with playwright --with pypdf python -I <this skill's folder>/scripts/pdf_pages.py <the address present printed> "<folder>/export/<deck-name>.pdf"
   ```
 
   It prints a deck that drives its own slides; for any other it says so, and the PDF is printed
   from the browser, landscape with backgrounds on. It waits for the entrance effects that run in
   real time, a typed line among them, before each page. Open the PDF once before it is shared.
 - **Before it leaves this computer** — sent, shared or uploaded, the HTML file or the PDF — the
-  `security` skill's check runs on the folder, and a finding stops it.
+  `security` skill's check runs on `export/`, and a finding stops it. An address in a library's
+  licence header, inlined with the library — GSAP's author's, say — is a *look at*, said in one
+  line, and stops nothing.
 - **`publish` only when asked.** `npx hyperframes publish <folder>` uploads the deck to HeyGen, the
   company behind HyperFrames, and gives a link, private by default. Run it only when the owner
   asks to publish, after the check, saying in one line that the deck then leaves the computer and

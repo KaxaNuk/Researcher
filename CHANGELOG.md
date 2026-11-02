@@ -20,10 +20,21 @@ HTML file, that opens blank or stuck on a slide: save it again.
   over: the file opened, and stayed blank or stuck as you moved on, online most of all. Tested in
   `tests/test_one_file.py`; checked on HyperFrames 0.8.183 by running it, online and offline, in
   Chrome and Edge.
+- **`deck`'s exports go into the deck's `export/` folder**: written beside `index.html`, the HTML
+  file made HyperFrames' `check` read it as a second deck and fail.
+- **Both of `deck`'s scripts stop when the address serves another deck** than the one in the
+  folder: `present` moves to another port when its own is taken, by a deck served earlier and
+  never stopped, and an address from memory saved that other deck without a word. Tested in
+  `tests/test_one_file.py` and `tests/test_pdf_pages.py`.
+- **`deck` builds a deck to share as one file with the slideshow skill's standalone harness**, its
+  timeline under its first scene's id, as a test deck built end to end on HyperFrames 0.8.183
+  showed: one without it shows stacked or blank slides once saved, and cannot be printed.
 ### Added
 - **`deck`'s PDF**, `scripts/pdf_pages.py`: one page a slide, each at its last step, printed by
   Chrome or Edge with no window while `present` serves the deck, after the entrance effects that
-  run in real time. `deck` 0.3.0. Tested in `tests/test_pdf_pages.py`.
+  run in real time. `deck` 0.3.0. Tested in `tests/test_pdf_pages.py`. A test deck built end to
+  end by `deck` — four slides, reveals, a branch — saved as one HTML file and a PDF, opened online
+  and offline in Chrome and Edge, its branch followed.
 ### Changed
 - **The README's four pictures** are pages of the KaxaNuk presentation's English PDF, printed by
   `pdf_pages.py` and saved as SVG text, so they are the slides exactly. `AGENTS.md` says how one

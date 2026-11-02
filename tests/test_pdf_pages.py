@@ -43,6 +43,40 @@ def test_an_address_off_this_computer_exits_one(
     assert exit_code == 1
 
 
+def test_another_deck_is_told_apart_from_the_folders_own(
+    tmp_path: pathlib.Path,
+) -> None:
+    """
+    A PDF written to `<deck>/export/` belongs to the deck in `<deck>/index.html`: a server that
+    serves another deck, as when `present` moved to another port, is told apart by its scenes; a
+    folder with no deck in or above it is not compared.
+    """
+    deck_folder = tmp_path / 'Mi deck, (prueba)'
+    export_folder = deck_folder / 'export'
+    export_folder.mkdir(parents=True)
+    (deck_folder / 'index.html').write_text(
+        DECK,
+        encoding='utf-8',
+    )
+    other = DECK.replace(
+        'data-composition-id="cover"',
+        'data-composition-id="portada"',
+    )
+
+    assert not pdf_pages.another_deck(
+        DECK,
+        export_folder,
+    )
+    assert pdf_pages.another_deck(
+        other,
+        export_folder,
+    )
+    assert not pdf_pages.another_deck(
+        other,
+        tmp_path,
+    )
+
+
 def test_slides_end_at_their_last_step_and_branches_are_left_out() -> None:
     """
     Each main-line slide is printed a moment before its scene ends, whatever the order of its

@@ -94,6 +94,7 @@ HEAD_TAG = re.compile(
     r'<head\b[^>]*>',
     re.IGNORECASE,
 )
+SCENE_ID = re.compile(r'\bdata-composition-id=["\']([^"\']+)["\']')
 SCENE_DATA = re.compile(rf'\s{SCENE_ATTRIBUTE}="data:text/html[^,"]*;base64,([^"]*)"')
 SRCDOC = re.compile(r'\ssrcdoc="([^"]*)"')
 STILL_OUTSIDE = re.compile(
@@ -155,6 +156,52 @@ class CommandLineParser(argparse.ArgumentParser):
         print(problem, file=sys.stderr)
 
         raise SystemExit(1)
+
+
+def another_deck(
+    page: str,
+    base_address: str,
+    reader: Reader,
+    folder: pathlib.Path,
+) -> str:
+    """
+    Why the deck the address serves is not the one in the folder the file is written to, or an
+    empty string: `present` moves to another port when its own is taken, and an address from an
+    earlier deck would then save that one. The deck is the `index.html` of the folder, or of the
+    folder above it, as for `<deck>/export/`; a file written elsewhere is not compared.
+    """
+    folder_deck = _folder_deck(folder)
+    player = re.search(
+        r'<hyperframes-player\b[^>]*\ssrc=["\']([^"\']+)["\']',
+        page,
+        re.IGNORECASE,
+    )
+
+    if folder_deck is None or player is None:
+        return ''
+
+    deck_address = urllib.parse.urljoin(
+        base_address,
+        html.unescape(player.group(1)),
+    )
+    served = reader.fetch(deck_address)
+    folder_text = folder_deck.read_text(
+        encoding='utf-8',
+        errors='replace',
+    )
+    folder_scenes = set(SCENE_ID.findall(folder_text))
+    served_text = _text(served) if served else ''
+    served_scenes = set(SCENE_ID.findall(served_text))
+
+    if not folder_scenes or folder_scenes == served_scenes:
+        return ''
+
+    mismatch = ''.join([
+        f'{base_address} serves another deck, not the one in {folder}: ',
+        'give the address `npx hyperframes present` printed for this folder',
+    ])
+
+    return mismatch
 
 
 def data_address(
@@ -279,6 +326,21 @@ def main(
     if page is None:
         print(
             f'no answer at {address} — start the deck with `npx hyperframes present <folder>`',
+            file=sys.stderr,
+        )
+
+        return 1
+
+    mismatch = another_deck(
+        _text(page),
+        address,
+        reader,
+        output.parent,
+    )
+
+    if mismatch:
+        print(
+            mismatch,
             file=sys.stderr,
         )
 
@@ -524,6 +586,23 @@ def _fetch_reported(
         unanswered.append(address)
 
     return loaded
+
+
+def _folder_deck(
+    folder: pathlib.Path,
+) -> pathlib.Path | None:
+    """
+    The deck a file written to this folder belongs to: the folder's `index.html`, or the one in
+    the folder above it, as for `<deck>/export/`; None when neither is there.
+    """
+    for candidate in (
+        folder / 'index.html',
+        folder.parent / 'index.html',
+    ):
+        if candidate.is_file():
+            return candidate
+
+    return None
 
 
 def _imported_css(

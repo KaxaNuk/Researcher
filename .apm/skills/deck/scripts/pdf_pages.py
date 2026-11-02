@@ -36,6 +36,7 @@ import pypdf
 
 __all__ = [
     'Slide',
+    'another_deck',
     'main',
     'slides_of',
 ]
@@ -54,6 +55,7 @@ LOCAL_HOSTS = frozenset({
     'localhost',
 })
 PLAYER_SOURCE = re.compile(r'<hyperframes-player\b[^>]*\ssrc=["\']([^"\']+)["\']', re.IGNORECASE)
+SCENE_ID = re.compile(r'\bdata-composition-id=["\']([^"\']+)["\']')
 SCENE_TAG = re.compile(r'<[a-zA-Z][\w-]*\s[^<>]*\bdata-composition-id=["\']([^"\']+)["\'][^<>]*>')
 SELF_DRIVEN = 'typeof window.__hfSetTime === "function"'
 # How far before a slide's end its last step is printed, in seconds, and how long each move waits
@@ -70,6 +72,41 @@ class Slide:
     """
     scene_id: str
     last_moment: float
+
+
+def another_deck(
+    deck: str,
+    folder: pathlib.Path,
+) -> bool:
+    """
+    Whether the deck served is not the one in the folder the PDF is written to, by the ids of its
+    scenes: `present` moves to another port when its own is taken. The deck is the `index.html` of
+    the folder, or of the folder above it, as for `<deck>/export/`; elsewhere nothing is compared.
+    """
+    folder_deck = next(
+        (
+            candidate
+            for candidate in (
+                folder / 'index.html',
+                folder.parent / 'index.html',
+            )
+            if candidate.is_file()
+        ),
+        None,
+    )
+
+    if folder_deck is None:
+        return False
+
+    folder_text = folder_deck.read_text(
+        encoding='utf-8',
+        errors='replace',
+    )
+    folder_scenes = set(SCENE_ID.findall(folder_text))
+    served_scenes = set(SCENE_ID.findall(deck))
+    another = bool(folder_scenes) and folder_scenes != served_scenes
+
+    return another
 
 
 def main(
@@ -119,6 +156,18 @@ def main(
         no_slides = f'no slides in the deck at {deck_address}'
         print(
             no_slides,
+            file=sys.stderr,
+        )
+
+        return 1
+
+    if another_deck(deck, output.parent):
+        another = ''.join([
+            f'{address} serves another deck, not the one in {output.parent}: ',
+            'give the address `npx hyperframes present` printed for this folder',
+        ])
+        print(
+            another,
             file=sys.stderr,
         )
 

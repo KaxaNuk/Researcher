@@ -6,6 +6,7 @@ the network.
 """
 import base64
 import html
+import pathlib
 import re
 
 import pytest
@@ -55,6 +56,53 @@ FILES = {
     ]),
     f'{SERVER}composition/assets/logo.svg': '<svg xmlns="http://www.w3.org/2000/svg"></svg>',
 }
+
+
+def test_a_deck_the_folder_does_not_hold_is_named_as_another(
+    tmp_path: pathlib.Path,
+) -> None:
+    """
+    A file written to `<deck>/export/` is checked against the deck in `<deck>/index.html`: the
+    server's deck, with other scenes, is named as another; the same deck, or a folder with no deck
+    in or above it, passes.
+    """
+    deck_folder = tmp_path / 'Mi deck, (prueba)'
+    export_folder = deck_folder / 'export'
+    export_folder.mkdir(parents=True)
+    (deck_folder / 'index.html').write_text(
+        '<div data-composition-id="portada"></div>',
+        encoding='utf-8',
+    )
+    reader = one_file.Reader(
+        _fake_fetch,
+        one_file.Report(),
+    )
+    another = one_file.another_deck(
+        FILES[SERVER],
+        SERVER,
+        reader,
+        export_folder,
+    )
+    elsewhere = one_file.another_deck(
+        FILES[SERVER],
+        SERVER,
+        reader,
+        tmp_path,
+    )
+    (deck_folder / 'index.html').write_text(
+        FILES[f'{SERVER}composition/index.html'],
+        encoding='utf-8',
+    )
+    same = one_file.another_deck(
+        FILES[SERVER],
+        SERVER,
+        reader,
+        export_folder,
+    )
+
+    assert 'serves another deck' in another
+    assert elsewhere == ''
+    assert same == ''
 
 
 def test_a_file_the_server_lacks_is_absent_and_an_internet_one_is_missing() -> None:
