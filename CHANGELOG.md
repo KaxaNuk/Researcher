@@ -6,6 +6,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
+## [1.32.1] - 2026-11-01
+A deck saved as one HTML file by `deck` now works when it drives its own slides, and `deck` prints
+its PDF itself; the README's pictures are the KaxaNuk presentation's own slides.
+
+**What to do differently:** say `update` in your home. A deck you saved with `deck` before, as one
+HTML file, that opens blank or stuck on a slide: save it again.
+### Fixed
+- **`deck`'s one HTML file** (`one_file.py`) no longer puts HyperFrames' runtime into a deck that
+  drives its own slides — one that sets `window.__hfSetTime`, as the slideshow skill's standalone
+  harness does. The player never adds the runtime to such a deck, and one added beside it took its
+  slides over: the file opened, and stayed blank or stuck as you moved on. Tested in
+  `tests/test_one_file.py`; checked on HyperFrames 0.8.183 by running it offline.
+### Added
+- **`deck`'s PDF**, `scripts/pdf_pages.py`: one page a slide, each at its last step, printed by
+  Chrome or Edge with no window while `present` serves the deck, after the entrance effects that
+  run in real time. `deck` 0.3.0. Tested in `tests/test_pdf_pages.py`.
+### Changed
+- **The README's four pictures** are pages of the KaxaNuk presentation's English PDF, printed by
+  `pdf_pages.py` and saved as SVG text, so they are the slides exactly. `AGENTS.md` says how one
+  changes. The README's first lines name a CIO, a portfolio manager and a trader first.
+
 ## [1.32.0] - 2026-11-01
 A shorter README, with the install on top and four pictures from the KaxaNuk deck; your brief can
 now tell you, once a week, what slipped in your home and the word that fixes it; and the philosophy

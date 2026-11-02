@@ -12,7 +12,7 @@ description: >
   figure, give advice, upload a deck the owner did not ask to publish, or write in the home or a
   strategy.
 metadata:
-  version: 0.2.0
+  version: 0.3.0
 ---
 
 # Deck — an interactive presentation from your own work
@@ -113,10 +113,20 @@ file, and `check` passes again after it.
   nothing is left outside it. On exit 2 it names what the file would still fetch, or an address
   that gave no answer: say so in one line, and fix it in the deck or share the folder instead. A
   file it names as *not in the deck, as under `present`* — a sound effect the deck never had — is
-  missing under `present` too. Open the file once from the folder and step through it before it
-  is shared.
-- **A PDF beside it**, printed from the browser, landscape with backgrounds on, or made as
-  HyperFrames' own docs say, for whoever wants pages.
+  missing under `present` too. A deck that drives its own slides — it sets `window.__hfSetTime`,
+  as the slideshow skill's standalone harness does — gets no HyperFrames runtime beside it, which
+  would take its slides over and leave them blank. Open the file once from the folder and step
+  through it before it is shared.
+- **A PDF beside it**, one page a slide, each at its last step, printed by Chrome or Edge with no
+  window while `present` serves the deck — checked on HyperFrames 0.8.183 by running it:
+
+  ```bash
+  uv run --no-project --with playwright --with pypdf python -I <this skill's folder>/scripts/pdf_pages.py http://localhost:3004 "<folder>/<deck-name>.pdf"
+  ```
+
+  It prints a deck that drives its own slides; for any other it says so, and the PDF is printed
+  from the browser, landscape with backgrounds on. It waits for the entrance effects that run in
+  real time, a typed line among them, before each page. Open the PDF once before it is shared.
 - **Before it leaves this computer** — sent, shared or uploaded, the HTML file or the PDF — the
   `security` skill's check runs on the folder, and a finding stops it.
 - **`publish` only when asked.** `npx hyperframes publish <folder>` uploads the deck to HeyGen, the

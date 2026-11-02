@@ -12,7 +12,9 @@ What it does
                   player's `srcdoc` in place of its `src`
     the runtime   a script the page's own code names by its address, as the player names the
                   runtime it adds to a deck that lacks one, goes into the deck ahead of the deck's
-                  scripts, so nothing is fetched when the file opens
+                  scripts, so nothing is fetched when the file opens; never into a deck that drives
+                  its own slides, setting `window.__hfSetTime` as the slideshow skill's standalone
+                  harness does, which the runtime would take over
     the check     lists every address on the internet the file would still fetch or that gave no
                   answer, and every file the deck names that its own server does not have, which
                   it lacks under `present` too, such as a sound effect it never added
@@ -82,6 +84,9 @@ SCRIPT_ADDRESS = re.compile(''.join([
     r'(["\'])((?:https?://|/)[^"\'\s<>]+?\.',
     r'(?:js|mjs|css|mp3|wav|ogg|m4a|mp4|webm|png|jpe?g|gif|svg|webp|woff2?|ttf|otf))\1',
 ]))
+# A deck that drives its own slides, as the slideshow skill's standalone harness does: the player
+# finds its timeline and never adds the runtime, and a runtime added beside it takes the slides over.
+SELF_DRIVEN = re.compile(r'\bwindow\.__hfSetTime\s*=')
 SCENE_DATA = re.compile(rf'\s{SCENE_ATTRIBUTE}="data:text/html[^,"]*;base64,([^"]*)"')
 SRCDOC = re.compile(r'\ssrcdoc="([^"]*)"')
 STILL_OUTSIDE = re.compile(
@@ -467,11 +472,15 @@ def _deck_in_player(
     if loaded is None:
         return match.group(0)
 
-    deck = inline_page(
+    inlined = inline_page(
         _text(loaded),
         address,
         reader,
+    )
+    deck = inlined if SELF_DRIVEN.search(inlined) else _put_first_in_head(
+        inlined,
         runtime_scripts,
+        reader,
     )
 
     return _with_attributes(

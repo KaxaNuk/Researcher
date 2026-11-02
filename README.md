@@ -6,12 +6,13 @@
 | [![Version](https://img.shields.io/github/v/tag/KaxaNuk/Researcher?sort=semver&label=version&logo=github)](CHANGELOG.md) [![APM](https://img.shields.io/badge/installs%20with-APM%200.33.0-blue)](https://github.com/microsoft/apm) |
 | [![Languages](https://img.shields.io/badge/speaks-any%20language%20you%20choose-blue)](#install--three-steps-no-coding) [![Powered by KaxaNuk](https://img.shields.io/badge/powered%20by-KaxaNuk-orange?colorB=orange)](https://kaxanuk.mx) |
 
-**Train your own research companion, for whatever you do.** A lawyer, a CFO, an engineer, someone
-in HR, a student or an investor: you name it and teach it who you are, how you work and the rules
-you never break. It keeps a library of what you read and answers from it, every claim pointing to
-its source; it helps you think through ideas and decisions, keeps your keys safe and can brief you
-each morning. When you want, it teaches you to invest and walks you through building and testing a
-strategy with the KaxaNuk Investment Lab. One researcher per person, in any language.
+**Train your own research companion, for whatever you do.** A CIO, a portfolio manager, a trader,
+or a lawyer, a CFO, an engineer, someone in HR, a student: you name it and teach it who you are,
+how you work and the rules you never break. It keeps a library of what you read and answers from
+it, every claim pointing to its source; it helps you think through ideas and decisions, keeps your
+keys safe and can brief you each morning. When you want, it teaches you to invest and walks you
+through building and testing a strategy with the KaxaNuk Investment Lab. One researcher per
+person, in any language.
 
 ## Install — three steps, no coding
 

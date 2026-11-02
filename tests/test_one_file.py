@@ -85,6 +85,36 @@ def test_a_file_the_server_lacks_is_absent_and_an_internet_one_is_missing() -> N
     assert one_file.still_outside(page) == ['https://cdn.example.org/gsap.min.js']
 
 
+def test_a_self_driven_deck_gets_no_runtime() -> None:
+    """
+    A deck that drives its own slides, setting `window.__hfSetTime` as the slideshow skill's
+    standalone harness does, gets no runtime: the player never adds one to it, and one added beside
+    it would take the slides over.
+    """
+    harness = '<script>window.__hfSetTime = function (time) {};</script>'
+    files = {
+        **FILES,
+        f'{SERVER}composition/index.html': FILES[f'{SERVER}composition/index.html'].replace(
+            '</head>',
+            f'{harness}</head>',
+        ),
+    }
+    reader = one_file.Reader(
+        lambda address: _fake_fetch(address, files),
+        one_file.Report(),
+    )
+    page = one_file.inline_page(
+        files[SERVER],
+        SERVER,
+        reader,
+    )
+    deck = _deck_of(page)
+
+    assert 'window.__player' not in deck
+    assert 'window.__hfSetTime' in deck
+    assert 'window.gsap' in deck
+
+
 def test_inline_page_puts_everything_the_deck_loads_inside_one_file() -> None:
     """
     The player's script is inlined, the deck goes into its `srcdoc` with the runtime first, its
