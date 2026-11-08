@@ -41,6 +41,16 @@ for somebody who was not in the room:
 
 ---
 
+## 0.20.2 (2026-11-07)
+
+**PATCH** — `Data/Refinery/custom_calculations.py` says that a column the provider leaves empty,
+but publishes the makings of, is rebuilt in the Refinery: under Sharadar, the unadjusted and the
+dividend-and-split adjusted open, high, low and volume, from the split-adjusted family by the ratio
+of the day's closes. No result changes.
+
+**What to do differently:** a rule that reads the unadjusted volume, or any of those columns, on
+Sharadar reads an `r_*` column built in the Refinery, never the empty `m_*` one.
+
 ## 0.20.1 (2026-11-01)
 
 **PATCH** — `SETUP.md` names the five assistants the researcher is tried on: Claude Code, Codex,

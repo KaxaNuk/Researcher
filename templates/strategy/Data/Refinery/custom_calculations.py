@@ -14,6 +14,15 @@ Two kinds of column live here, and only here:
 the `c_*` columns the Curator wrote -- the daily total-return log returns, the traded value --
 never a widening of the Curator's columns and a second download.
 
+**A column the provider leaves empty, but publishes the makings of, is rebuilt here too.**  Under
+Sharadar the unadjusted and the dividend-and-split adjusted open, high, low and volume arrive
+empty, because Sharadar publishes them only split-adjusted, with its close in all three
+adjustments.  Each is the split-adjusted value moved by the ratio of the day's closes -- `r_open`
+is `m_open_split_adjusted` times `m_close` over `m_close_split_adjusted`, `r_volume` the inverse,
+and the total-return volume the split-adjusted one -- so a rule that reads the unadjusted volume
+reads `r_volume`, never the empty `m_volume`, and a fix to it costs no download
+(KaxaNuk/Data-Curator#44).
+
 What is expected here is one function per column, named exactly as the column, resolved by
 parameter name the same way the Curator resolves its own.  Every parameter is a column of the
 panel -- the date, `main_identifier`, any `c_*` or `r_*` column, any `current_*` column -- and a

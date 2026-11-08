@@ -13,7 +13,7 @@ description: >
   `backtest-engine-runs`, `attribution-analysis-runs`, `alpha-decomposition`,
   `paper-trading-gate`, or branches and changelogs (`how-we-work`).
 metadata:
-  version: 0.15.0
+  version: 0.16.0
 ---
 
 # The research process — how a strategy repository is worked in
@@ -196,6 +196,20 @@ every identifier, so nothing tunable lives there: **a fitted column lives in the
 it is per-security, because a sweep must never cost a download.** Its inputs — arithmetic with
 nothing to tune — stay in the Curator. **A new experiment's signal on the data already downloaded is
 an `r_*` calculation of the Refinery**, never a wider Curator schema and a second download.
+
+**A column the provider leaves empty, but publishes the makings of, is rebuilt in the Refinery
+too.** The Curator writes what the provider sends, and an `m_*` column it leaves empty stays empty:
+a custom calculation can only add a `c_*` column, and a fix there costs a download. Under Sharadar
+on Data Curator 0.51.0 the unadjusted and the dividend-and-split adjusted open, high, low and volume
+are such columns: Sharadar publishes the open, high, low and volume only split-adjusted, and the
+close in all three adjustments, so each is the split-adjusted value moved by the ratio of the day's
+closes — `r_open` is `m_open_split_adjusted` × `m_close` / `m_close_split_adjusted`, `r_volume` is
+`m_volume_split_adjusted` × `m_close_split_adjusted` / `m_close`, the price's inverse, and the
+total-return volume is the split-adjusted one, since a dividend changes no share count. A rule that
+reads the unadjusted volume — a count of the days a security traded — reads the `r_*` column, never
+the empty `m_*` one, which would read every security as untraded without an error. Asked of the
+Curator as built-in calculations, <https://github.com/KaxaNuk/Data-Curator/issues/44>; once they
+ship, read them from it and retire the `r_*` ones.
 
 ## 6. Scaffolding
 

@@ -6,6 +6,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
+## [1.33.0] - 2026-11-07
+On Sharadar, the unadjusted and the total-return open, high, low and volume arrive empty, and your
+researcher now says to rebuild them in the Refinery, so the fix never costs a download.
+
+**What to do differently:** say `update` in your home. In a strategy on Sharadar, a rule that reads
+the unadjusted volume reads a column the Refinery rebuilds, never the empty one.
+### Changed
+- **`experiment-lifecycle`** (0.16.0), *Where each kind of logic goes*: a column the provider
+  leaves empty, but publishes the makings of, is rebuilt in the Refinery. Under Sharadar on Data
+  Curator 0.51.0 that is the unadjusted and the dividend-and-split adjusted open, high, low and
+  volume, each the split-adjusted value moved by the ratio of the day's closes, the volume by the
+  inverse.
+  A custom calculation cannot fill an `m_*` column, and a fix in the Curator costs a download.
+- **`data-curator-custom-calculations`** (0.8.0): the Sharadar notes name the eight empty columns
+  and point to that rebuild. Asked of the Curator as built-in calculations,
+  <https://github.com/KaxaNuk/Data-Curator/issues/44>.
+- **The strategy template, 0.20.2, and the worked example, 0.18.3**: the description of
+  `Data/Refinery/custom_calculations.py` says the same. Golden Flow reads none of those columns, so
+  no figure moves.
+
 ## [1.32.1] - 2026-11-01
 A deck saved as one HTML file by `deck` now works when it drives its own slides, and `deck` prints
 its PDF itself; the README's pictures are the KaxaNuk presentation's own slides.

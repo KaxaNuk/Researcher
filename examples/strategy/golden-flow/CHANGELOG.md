@@ -41,6 +41,14 @@ for somebody who was not in the room:
 
 ---
 
+## 0.18.3 (2026-11-07)
+
+**PATCH** — `Data/Refinery/custom_calculations.py` says that a column the provider leaves empty,
+but publishes the makings of, is rebuilt in the Refinery, as the template's 0.20.2 does. Golden Flow
+reads none of those columns: no result changes.
+
+**What to do differently:** nothing.
+
 ## 0.18.2 (2026-11-01)
 
 **PATCH** — `SETUP.md` names the five assistants the researcher is tried on: Claude Code, Codex,

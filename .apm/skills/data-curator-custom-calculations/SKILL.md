@@ -13,7 +13,7 @@ description: >
   composition, wiring the column into the output, for configuration files and runs of `main()`,
   and whether a wrong value is the provider's or the library's.
 metadata:
-  version: 0.7.0
+  version: 0.8.0
   library_version: 0.51.0
 ---
 
@@ -49,6 +49,14 @@ column with no dividends or splits block mapped stops the run before anything is
   Reported, <https://github.com/KaxaNuk/Data-Curator/issues/40>. Build the traded value in a `c_*`
   of your own, under a name of its own: the example's `c_traded_value`, the split-adjusted close
   times `m_volume_split_adjusted`, with the volume adjusted twice at a split corrected.
+- **The unadjusted and the dividend-and-split adjusted open, high, low and volume are empty on
+  every row**, as the Sharadar page's list of tags implies: Sharadar publishes them only
+  split-adjusted. `m_open`, `m_high`, `m_low` and `m_volume`, and their four
+  `_dividend_and_split_adjusted` columns, stay empty; a custom calculation cannot fill an `m_*`
+  column. Rebuild them in the Refinery from the split-adjusted family by the ratio of the day's
+  closes, as `experiment-lifecycle`'s *Where each kind of logic goes* says, so a fix never costs a
+  download; never read the empty `m_volume` as a security that did not trade. Asked of the Curator
+  as built-in calculations, <https://github.com/KaxaNuk/Data-Curator/issues/44>.
 - **A spin-off is not in the dividend column** — GE's GE HealthCare and GE Vernova among them. The
   example adds it after the download from Sharadar's `actions` table, whose `spinoffdividend` rows
   carry its cash value a share in today's split-adjusted shares; asked of the Curator,
