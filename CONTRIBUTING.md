@@ -190,7 +190,7 @@ uv run --no-project python -I tools/install_check.py
 ```
 
 It checks a project-scope install for Claude: every skill, command, rule and agent the package
-holds, today 27, 9, 3 and 1, deployed with no warning. Then a user-scope install in a new home:
+holds, today 29, 9, 3 and 1, deployed with no warning. Then a user-scope install in a new home:
 Claude, then Codex put on APM's list by `user_targets.py add`, then Codex, then `apm update -g`,
 with each assistant holding what the package holds. Last, the deployed `scaffold.py` makes a
 strategy, a researcher's home and the worked example from that install. It works in a folder of
@@ -225,9 +225,9 @@ uv run --no-project python "$S" check claude sofia
 uv run --no-project python "$S" check codex sofia
 ```
 
-Both checks pass. On disk, `~/.claude/` holds the package's 28 skills and `sofia` in `skills/`,
+Both checks pass. On disk, `~/.claude/` holds the package's 29 skills and `sofia` in `skills/`,
 9 commands, 3 rules and 2 agents, `blueprint-critic.md` and `sofia.md`; `~/.agents/skills/` the same
-29 skills; and `~/.codex/agents/` 2 agents, `blueprint-critic.toml` and `sofia.toml`.
+30 skills; and `~/.codex/agents/` 2 agents, `blueprint-critic.toml` and `sofia.toml`.
 
 **If the release changes a skill, a command or a script**, walk the rest of the newcomer's path by
 hand on each run's first assistant, once in Spanish and once on Codex, an assistant with no question

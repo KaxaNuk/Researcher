@@ -6,6 +6,18 @@ Every notable change to this repository, newest first: `## X.Y.Z (YYYY-MM-DD)` w
 This is the home template's changelog, which `init-researcher` copies into every home and `update`
 extends with a *Brought to template* entry at the top; the home's own entries go there too.
 
+## 0.36.0 (2026-11-09)
+
+**MINOR** — your researcher can watch a video: its transcript goes to `Sources/Videos/`, and the
+chapters you pick become a note.
+
+**What to do differently:** say `update` in your home; it brings these lines as a diff. Then
+`watch <link>`.
+
+### Changed
+- `AGENTS.md`'s row for `Sources/` names `Sources/Videos/`, where `watch` copies a video's
+  transcript in on the go, and its list of the researcher's skills names `watch`.
+
 ## 0.35.0 (2026-11-01)
 
 **MINOR** — the brief can add *Health* once a week: what slipped in your home, each line with the

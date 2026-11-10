@@ -6,6 +6,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
+## [1.34.0] - 2026-11-09
+Your researcher can now watch a talk, a lecture or an interview: say `watch` with its link, and the
+chapters you pick become a note in your library, every claim at its minute.
+
+**What to do differently:** say `update` in your home; it brings the home template's two lines as a
+diff. Then say `watch <link>`.
+### Added
+- **`watch`** (0.2.0), the `read` skill for a video. Its `scripts/transcript.py` asks yt-dlp for the
+  video's details and captions — human-made first, else YouTube's auto-generated ones in the
+  video's own language, never a machine translation — and never the video. It reads a YouTube link
+  in any of its forms, and a Google search link that carries a video's `vid:` id. It writes the
+  transcript outside the library, under the video's chapters or ten-minute parts, a marker about
+  every thirty seconds, and prints the chapters for the owner to pick from. On the go the
+  transcript is copied into `Sources/Videos/` and read into one note, timestamps in place of pages,
+  with the concept pages, the index and the log as `read` writes them. When YouTube refuses — a
+  sign-in or bot check, a 403, a 429 — nothing is retried: the owner copies YouTube's transcript
+  and `--paste` builds the same file from it. Names the auto-generated captions garble are quoted
+  *(as captioned)*. Tried on two talks, one with auto-generated captions and 20 chapters, one with
+  human-made captions reached from a Google search link. `tests/test_transcript.py` tests it.
+- **The home template, 0.36.0**: `AGENTS.md`'s row for `Sources/` names `Sources/Videos/`, and its
+  list of the researcher's skills names `watch`.
+### Changed
+- `CONTRIBUTING.md`'s counts: the project-scope install deploys 29 skills, the stale 27 corrected,
+  and a user-scope install 29 and the researcher's own.
+
 ## [1.33.0] - 2026-11-07
 On Sharadar, the unadjusted and the total-return open, high, low and volume arrive empty, and your
 researcher now says to rebuild them in the Refinery, so the fix never costs a download.

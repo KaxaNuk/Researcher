@@ -13,6 +13,7 @@ anywhere else, say it.
 | You want to | Say or type | You get |
 | --- | --- | --- |
 | keep what you read, and ask it later | `read`, then `query <question>` | a note per paper or chapter you chose; answers that cite them and name what is missing |
+| keep what you watched | `watch <link>` | a talk or lecture's transcript in `Sources/Videos/` and a note on the chapters you chose, each claim at its minute |
 | check a contract, a policy or a draft against what you know | `query`, with the document attached or named | the document section by section, against your notes and your rules, each cited, and what your library does not cover |
 | work out an idea, a plan, a goal or a decision | `study <subject>` | a study in `Studies/`: your words, what your library says for and against, where it stands; on your word, a memo or report drafted from it |
 | teach it how you work | *remember this* or *learn this*, anywhere | a rule added to `RESEARCHER.md`, or a source to your library, on your go |
@@ -41,6 +42,7 @@ anywhere else, say it.
 | Skill | What it does |
 | --- | --- |
 | `read` | files a source into the library, a note per chapter you pick — a scan made searchable first, on your go; in a strategy, into its `Bibliotheca/` |
+| `watch <link>` | a video into the library: its captions fetched, never the video, the chapters you pick read into a note with timestamps in place of pages; when YouTube refuses, it asks you for the transcript |
 | `query <question>` | answers from the library, every claim cited |
 | `init-researcher`, `init-strategy`, `init-example`, `init-python-library` | make your home, a strategy, the worked example or a Python library, copied by a script, never from memory |
 | `interview` | two short questions about you, then `RESEARCHER.md` and the agent and skill that make it yours; `interview force` starts over |
