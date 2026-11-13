@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
+## [1.35.0] - 2026-11-13
+A deck saved as one HTML file by `deck` now moves with a presentation clicker.
+
+**What to do differently:** say `update` in your home, then save the deck again with `deck`; a
+file saved before stays as it was.
+### Added
+- **`deck`'s one HTML file** (`one_file.py`, `deck` 0.4.0) ends with a short script that turns
+  PageDown and the down arrow into the next step and PageUp and the up arrow into the previous one.
+  A clicker sends PageDown and PageUp, which the slideshow does not read, so it moved nothing. The
+  script listens in the page and in every frame it holds, shadow roots included, where the focus
+  sits once the deck is clicked; a slider or a text field keeps its keys. Checked on HyperFrames
+  0.9.6 by running it on a deck's export with real key presses. `tests/test_one_file.py` tests it.
+
 ## [1.34.0] - 2026-11-09
 Your researcher can now watch a talk, a lecture or an interview: say `watch` with its link, and the
 chapters you pick become a note in your library, every claim at its minute.

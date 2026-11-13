@@ -12,7 +12,7 @@ description: >
   figure, give advice, upload a deck the owner did not ask to publish, or write in the home or a
   strategy.
 metadata:
-  version: 0.3.0
+  version: 0.4.0
 ---
 
 # Deck — an interactive presentation from your own work
@@ -126,8 +126,10 @@ file, and `check` passes again after it.
   missing under `present` too. A deck that drives its own slides — it sets `window.__hfSetTime`,
   as the slideshow skill's standalone harness does — gets no HyperFrames runtime beside it, which
   would take its slides over and leave them blank, and the note HyperFrames writes into a deck that
-  needs none, so the player does not fetch one from the internet either. Open the file once from
-  the folder, with internet on, and step through it before it is shared.
+  needs none, so the player does not fetch one from the internet either. A presentation clicker
+  moves its slides: PageDown and the down arrow go forward, PageUp and the up arrow back, as the
+  arrows to the right and left do. Open the file once from the folder, with internet on, and step
+  through it before it is shared.
 - **A PDF beside it**, one page a slide, each at its last step, printed by Chrome or Edge with no
   window while `present` serves the deck — checked on HyperFrames 0.8.183 by running it:
 

@@ -222,6 +222,22 @@ def test_main_refuses_an_address_not_on_this_computer(
     assert 'not an address on this computer' in error
 
 
+
+def test_with_clicker_keys_puts_its_script_once_before_the_page_ends() -> None:
+    """
+    The clicker script goes before the page's last `</body>`, once however often the page passes
+    through, and at the end of a page with no `</body>`.
+    """
+    page = '<html><body><p>Uno</p></body></html>'
+    keyed = one_file.with_clicker_keys(page)
+
+    assert keyed.count('id="clicker-keys"') == 1
+    assert keyed.index('id="clicker-keys"') < keyed.rindex('</body>')
+    assert 'PageDown' in keyed
+    assert 'PageUp' in keyed
+    assert one_file.with_clicker_keys(keyed) == keyed
+    assert one_file.with_clicker_keys('<p>Uno</p>').endswith('</script>\n')
+
 def _deck_of(
     page: str,
 ) -> str:

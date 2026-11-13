@@ -15,6 +15,9 @@ What it does
                   scripts, so nothing is fetched when the file opens; never into a deck that drives
                   its own slides, setting `window.__hfSetTime` as the slideshow skill's standalone
                   harness does, which the runtime would take over
+    the clicker   a short script at the end of the page lets a presentation clicker move the
+                  slides: PageDown and the down arrow go forward, PageUp and the up arrow back,
+                  wherever the focus is, the deck's own frame included
     the check     lists every address on the internet the file would still fetch or that gave no
                   answer, and every file the deck names that its own server does not have, which
                   it lacks under `present` too, such as a sound effect it never added
@@ -99,6 +102,50 @@ SCENE_DATA = re.compile(rf'\s{SCENE_ATTRIBUTE}="data:text/html[^,"]*;base64,([^"
 SRCDOC = re.compile(r'\ssrcdoc="([^"]*)"')
 STILL_OUTSIDE = re.compile(
     r'(?:\b(?:src|href|poster)\s*=\s*["\']?|url\(\s*["\']?)(https?://[^"\'\s)>]+)',
+    re.IGNORECASE,
+)
+# A presentation clicker sends PageDown and PageUp, keys the slideshow does not read: this script
+# turns them, and the up and down arrows, into its next and previous step, in the page and in every
+# frame the page holds, shadow roots included, where the focus sits once the deck is clicked.
+CLICKER_SCRIPT = '''<script id="clicker-keys">
+(function () {
+  var NEXT = {PageDown: 1, ArrowDown: 1};
+  var PREVIOUS = {PageUp: 1, ArrowUp: 1};
+  var hooked = [];
+  function onKey(event) {
+    if (!NEXT[event.key] && !PREVIOUS[event.key]) return;
+    var target = event.target;
+    if (target && target.closest && target.closest('input, textarea, select, [role=slider]')) return;
+    var deck = document.querySelector('hyperframes-slideshow');
+    if (!deck || !deck.controller) return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (NEXT[event.key]) deck.controller.next(); else deck.controller.prev();
+  }
+  function frames(root, found) {
+    root.querySelectorAll('*').forEach(function (element) {
+      if (element.tagName === 'IFRAME') found.push(element);
+      if (element.shadowRoot) frames(element.shadowRoot, found);
+    });
+    return found;
+  }
+  window.addEventListener('keydown', onKey, true);
+  setInterval(function () {
+    frames(document, []).forEach(function (frame) {
+      try {
+        var inner = frame.contentWindow;
+        if (inner && hooked.indexOf(inner) < 0) {
+          inner.addEventListener('keydown', onKey, true);
+          hooked.push(inner);
+        }
+      } catch (error) {}
+    });
+  }, 1000);
+})();
+</script>
+'''
+BODY_END = re.compile(
+    r'</body\s*>',
     re.IGNORECASE,
 )
 # Addresses that name a format, never a file the page fetches.
@@ -346,10 +393,12 @@ def main(
 
         return 1
 
-    one_file = inline_page(
-        _text(page),
-        address,
-        reader,
+    one_file = with_clicker_keys(
+        inline_page(
+            _text(page),
+            address,
+            reader,
+        ),
     )
     output.write_text(
         one_file,
@@ -438,6 +487,26 @@ def still_outside(
     }
 
     return sorted(found)
+
+
+def with_clicker_keys(
+    page: str,
+) -> str:
+    """
+    The page with the clicker script before its last `</body>`, or at its end when it has none;
+    a page that has it already is given back as it is.
+    """
+    if 'id="clicker-keys"' in page:
+        return page
+
+    ends = list(BODY_END.finditer(page))
+
+    if not ends:
+        return page + CLICKER_SCRIPT
+
+    last = ends[-1].start()
+
+    return page[:last] + CLICKER_SCRIPT + page[last:]
 
 
 def _attribute_value(
