@@ -41,6 +41,14 @@ for somebody who was not in the room:
 
 ---
 
+## 0.20.1 (2026-11-16)
+
+**PATCH** — the spin-off step computes `c_trend_50_200` again from the close it rewrites, through
+`trend_of_closes`, which the column shares. No figure of the example changes: its rule reads the
+Refinery's `r_trend_50_200`, built on the adjusted close.
+
+**What to do differently:** nothing.
+
 ## 0.20.0 (2026-11-16)
 
 **MINOR** — curated files are CSV, as the template's 0.22.0 has them, and the seed builder also

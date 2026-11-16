@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
+## [1.37.1] - 2026-11-16
+A signal the Curator computes is now computed again once a spin-off is added to a file, so a
+spin-off no longer reads as a crash in the trend.
+
+**What to do differently:** say `update` in your home. In a strategy made from template 0.22.0 whose
+Curator computes a trend, download again, or recompute the trend from each file's close, as the
+template's 0.22.1 entry says.
+### Fixed
+- **The worked example 0.20.1.** `Data/curator.py` adds Sharadar's spin-offs to a file's total
+  return after the Curator has computed its columns, and wrote the total-return columns again but
+  not `c_trend_50_200`, which is built on them: in a strategy made from 1.37.0, 251 of the KN US
+  Equity Core's 2,204 files kept a trend computed before the spin-off, off by up to 1.30 near its
+  date. The trend's arithmetic is now one function, `trend_of_closes`, which the column and the
+  spin-off step both call. Found and checked in US-Golden-Flow on 2026-11-16: after the fix, every
+  file's trend matches its own close.
+
 ## [1.37.0] - 2026-11-16
 A strategy now keeps its curated data in the format the KaxaNuk app reads, and says in one place
 what the app reads from it, so the app shows a strategy's universe, data, books and backtests.

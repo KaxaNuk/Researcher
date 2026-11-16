@@ -41,6 +41,14 @@ for somebody who was not in the room:
 
 ---
 
+## 0.22.1 (2026-11-16)
+
+**PATCH** — the worked example's spin-off step computes again every signal built on the total
+return. No result changes in a template that computes none.
+
+**What to do differently:** where the Curator computes a signal on the total-return close, the step
+that adds spin-offs after the download computes it again, from one shared function.
+
 ## 0.22.0 (2026-11-16)
 
 **MINOR** — curated files are CSV, the format the KaxaNuk app reads, and `AGENTS.md` says what the

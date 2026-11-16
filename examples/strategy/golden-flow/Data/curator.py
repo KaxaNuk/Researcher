@@ -379,6 +379,11 @@ def apply_spin_offs(
     frame["c_volume_dividend_and_split_adjusted"] = (
         frame["c_traded_value"].astype(float) / total_return_close
     )
+
+    if "c_trend_50_200" in frame.columns:
+        calculations = load_custom_calculations()
+        frame["c_trend_50_200"] = calculations.trend_of_closes(total_return_close)
+
     time_series.write_frame(
         frame,
         path,

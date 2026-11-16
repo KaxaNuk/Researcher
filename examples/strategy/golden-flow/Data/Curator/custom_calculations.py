@@ -105,6 +105,7 @@ __all__ = [
     "c_traded_value_sma_63d",
     "c_trend_50_200",
     "c_volume_dividend_and_split_adjusted",
+    "trend_of_closes",
 ]
 
 # Where Sharadar's three decimals are fine enough to read its split basis from: a split-adjusted
@@ -322,9 +323,7 @@ def c_trend_50_200(
     the first 199 rows, as the Refinery's `r_trend_50_200` is.
     """
     prices = _floats(c_close_dividend_and_split_adjusted)
-    short_average = prices.rolling(TREND_SHORT_WINDOW_DAYS).mean()
-    long_average = prices.rolling(TREND_LONG_WINDOW_DAYS).mean()
-    trend = short_average / long_average - 1
+    trend = trend_of_closes(prices)
 
     return _column(trend)
 
@@ -343,6 +342,21 @@ def c_volume_dividend_and_split_adjusted(
     volume = _floats(c_traded_value) / _floats(c_close_dividend_and_split_adjusted)
 
     return _column(volume)
+
+
+def trend_of_closes(
+    prices: "pandas.Series",
+) -> "pandas.Series":
+    """
+    The trend `c_trend_50_200` holds, from a total-return close as plain floats.
+
+    Not a column of its own: `Data/curator.py` calls it again once it has added a file's spin-offs
+    to the total-return close, so the trend reads the close the file ends with.
+    """
+    short_average = prices.rolling(TREND_SHORT_WINDOW_DAYS).mean()
+    long_average = prices.rolling(TREND_LONG_WINDOW_DAYS).mean()
+
+    return short_average / long_average - 1
 
 
 def _column(
@@ -375,5 +389,4 @@ def _floats(
         numbers,
         errors="coerce",
     ).astype(float)
-
 # --- example: end ---
