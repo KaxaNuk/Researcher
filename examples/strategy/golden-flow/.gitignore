@@ -63,6 +63,8 @@ Data/Curator/Benchmarks/*.parquet
 Data/Curator/Benchmarks/*.xlsx
 Data/Curator/Factors/*.csv
 Data/Curator/Factors/*.parquet
+# The factor model can arrive as a folder of its own, one per delivery.
+Data/Curator/Factors/*/
 Data/Refinery/Time_Series/*.csv
 Data/Refinery/Time_Series/*.parquet
 
@@ -77,9 +79,21 @@ Data/Analyzer/*.csv
 Experiments/*/Portfolio/*
 Experiments/*/Backtest/*
 Experiments/*/Attribution/*
+# The KaxaNuk app writes each job it runs, and each one a notebook exports for it, as a folder of
+# its own inside these three, named in lower case: one folder where the file system ignores case,
+# two where it does not, ignored alike either way, before the negations so they still win.
+Experiments/*/portfolio/*
+Experiments/*/backtest/*
+Experiments/*/attribution/*
 !Experiments/*/Portfolio/.gitkeep
 !Experiments/*/Backtest/.gitkeep
 !Experiments/*/Attribution/.gitkeep
+
+# --- The KaxaNuk app ---------------------------------------------------------------------------
+# A project the app made keeps its registration in `.kaxanuk/` folders, at the root and in each
+# experiment's folder: ids issued to one account, the provenance of each file it fetched, its locks
+# and its scratch. Never committed: a clone is registered again by the app that opens it.
+.kaxanuk/
 
 # --- Step 7: Paper trading --------------------------------------------------------------------
 # A frozen book's code and FREEZE.json are committed: they are the book. What each day's run writes

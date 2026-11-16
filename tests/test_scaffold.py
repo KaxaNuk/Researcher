@@ -472,6 +472,30 @@ def test_main_refuses_a_destination_that_holds_files(
     assert f'{file_in_place} exists and is not a folder' in printed_file
 
 
+def test_main_refuses_a_kaxanuk_project_holding_other_files(
+    capsys: pytest.CaptureFixture[str],
+    tmp_path: pathlib.Path,
+) -> None:
+    """
+    A project the KaxaNuk app made that holds a file outside its registration is not empty: nothing
+    is copied, exit code 1.
+    """
+    destination = tmp_path / 'Sofía, estrategia (2021)'
+    _write(destination / '.kaxanuk' / 'project.json', '{"layout":1}')
+    _write(destination / 'Universe' / 'Pérez, Ana (2021).csv', 'symbol\n')
+    exit_code = scaffold.main([
+        'strategy',
+        str(destination),
+        '--package',
+        str(REPOSITORY),
+    ])
+    printed = capsys.readouterr().out
+
+    assert exit_code == 1
+    assert 'is not empty' in printed
+    assert not (destination / 'README.md').exists()
+
+
 def test_main_says_how_to_install_the_package_when_none_is_found(
     capsys: pytest.CaptureFixture[str],
     tmp_path: pathlib.Path,
@@ -528,6 +552,46 @@ def test_main_takes_a_folder_holding_only_what_a_file_manager_leaves(
     assert still_there == file_manager_files
     assert _tracked_files(destination) == tracked
 
+
+def test_main_takes_a_project_the_kaxanuk_app_made(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: pathlib.Path,
+) -> None:
+    """
+    A project the KaxaNuk app made, holding only its `.kaxanuk/` registration and folders with no
+    file, takes a strategy's copy: the registration stays as it was, and out of the first commit.
+    """
+    tracked = _tracked_files(REPOSITORY / 'templates' / 'strategy')
+    destination = tmp_path / 'Sofía, estrategia (2021)'
+    registration = {
+        '.kaxanuk/project.json': '{"layout":1,"project_id":35}',
+        '.kaxanuk/provenance.json.lock': '',
+        'Experiments/Experiment_1/.kaxanuk/experiment.json': '{"layout":1,"experiment_id":83}',
+    }
+
+    for relative_path, text in registration.items():
+        _write(destination / relative_path, text)
+
+    (destination / '.kaxanuk' / 'tmp').mkdir()
+    (destination / 'Data' / 'Curator' / 'Time_Series').mkdir(parents=True)
+    _isolate_git(
+        monkeypatch,
+        tmp_path / 'home',
+    )
+    exit_code = scaffold.main([
+        'strategy',
+        str(destination),
+        '--package',
+        str(REPOSITORY),
+    ])
+    kept = {
+        relative_path: (destination / relative_path).read_text(encoding='utf-8')
+        for relative_path in registration
+    }
+
+    assert exit_code == 0
+    assert kept == registration
+    assert _tracked_files(destination) == tracked
 
 def test_plan_copy_leaves_behind_caches_agents_and_keys(
     tmp_path: pathlib.Path,

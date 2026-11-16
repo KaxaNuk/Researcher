@@ -13,7 +13,7 @@ description: >
   does NOT cover what the numbers mean for a strategy (use `alpha-decomposition`) or running the
   backtest that produced the book (use `backtest-engine-runs`).
 metadata:
-  version: 0.7.0
+  version: 0.8.0
   library_version: 0.2.0
 ---
 
@@ -102,6 +102,11 @@ repository's `.venv` rather than wherever the first `pip` on the path points:
 ```bash
 uv pip install kaxanuk-attribution_analysis --extra-index-url https://license:{YOUR_LICENSE_KEY}@{SERVER}/simple/
 ```
+
+**In a KaxaNuk Strategy Template repository from template 0.21.0, `Config/install_libraries.py` runs
+that command for you**, reading `KNAA_API_KEY_KAXANUK` and `KNAA_INDEX_HOST` — the `{SERVER}` above
+— from `Config/.env` by name: `uv run python Config/install_libraries.py`. Checked by running it on
+2026-11-16, for build 0.7.0.
 
 Inside a KaxaNuk Strategy Template repository that is all: in the worked example
 `Experiments/attribution_analysis.py` shapes the inputs and builds the attribution objects in code

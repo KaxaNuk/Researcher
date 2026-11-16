@@ -41,6 +41,29 @@ for somebody who was not in the room:
 
 ---
 
+## 0.21.0 (2026-11-16)
+
+**MINOR** — one command installs every library a strategy runs on, and a strategy can live inside a
+project the KaxaNuk app made, which then shows its books. No result changes.
+
+**What to do differently:** put each licence's index host in `Config/.env` beside its key —
+`KNBE_INDEX_HOST`, `KNAA_INDEX_HOST`, `KNPC_INDEX_HOST` — and run
+`uv run python Config/install_libraries.py` in place of the hand-typed install commands.
+
+### Added
+
+- `Config/install_libraries.py`: the public libraries by `uv sync --inexact`, then each licensed one
+  from its index, its key and host read from `Config/.env` by name and never printed; Portfolio
+  Construction with the extras every sizing method needs.
+
+### Changed
+
+- `.gitignore` keeps the KaxaNuk app's `.kaxanuk/` registration, the job folders the app writes, and
+  a factor model delivered as a folder of its own out of git.
+- `SETUP.md`: step 2 installs with the script, step 3 names the index hosts, and step 1 says how to
+  make a strategy the app shows — its weight files in `Portfolio/`, the engine's workbook imported
+  from `Backtest/`.
+
 ## 0.20.2 (2026-11-07)
 
 **PATCH** — `Data/Refinery/custom_calculations.py` says that a column the provider leaves empty,

@@ -33,7 +33,10 @@ and lists them.  A whole copy's first commit names it:
 
 Without `--only`, the destination must not exist or must be an empty folder — one holding only
 what Finder or Explorer leaves, `FILE_MANAGER_FILES`, counts as empty, and those files stay on disk
-and out of the commit; the copy is then made a git repository on branch `main` with one first
+and out of the commit.  So does a project the KaxaNuk app made, its `.kaxanuk/` folder at the root:
+its only files sit inside a `.kaxanuk/` folder, there or in an experiment's folder, beside folders
+holding no file; the copy goes in beside them, never over them, and the template's `.gitignore`
+keeps them out of git.  The copy is then made a git repository on branch `main` with one first
 commit, unless `--no-git`.  With `--only`, one path of the starting point is copied into an
 existing folder: a file already there with the same content is skipped, and one with other content
 stops the run before anything is written, so nothing is overwritten.  The path is relative and
@@ -104,6 +107,10 @@ FILE_MANAGER_FILES = frozenset({
     'Thumbs.db',
     'desktop.ini',
 })
+# The folder the KaxaNuk app keeps a project's and an experiment's registration in.  A destination
+# with one at its root is a project the app made, and still takes a copy while its only files sit
+# inside such a folder, at any depth.
+APP_FOLDER = '.kaxanuk'
 # Key files, never copied at any depth, as a file or a folder: a key never leaves the folder it was
 # typed into.  These are the names the starting points' .gitignore files keep out of git: `.env`
 # and any `*.env`, wherever it sits, and the licence the Lab's libraries can read.
@@ -751,7 +758,8 @@ def _destination_problem(
     Why the destination cannot take a new copy, or None when it can.
 
     A folder holding only `FILE_MANAGER_FILES` counts as empty: one the owner made in Finder or
-    Explorer still takes the copy.
+    Explorer still takes the copy.  So does a project the KaxaNuk app made, with an `APP_FOLDER` at
+    its root, while its only files sit inside such a folder, beside folders holding no file.
     """
     if not destination.exists():
 
@@ -762,12 +770,22 @@ def _destination_problem(
 
         return not_a_folder
 
-    contents = [
-        entry
-        for entry
-        in destination.iterdir()
-        if entry.name not in FILE_MANAGER_FILES
-    ]
+    if (destination / APP_FOLDER).is_dir():
+        contents = [
+            entry
+            for entry
+            in destination.rglob('*')
+            if entry.is_file()
+            and entry.name not in FILE_MANAGER_FILES
+            and APP_FOLDER not in entry.relative_to(destination).parts
+        ]
+    else:
+        contents = [
+            entry
+            for entry
+            in destination.iterdir()
+            if entry.name not in FILE_MANAGER_FILES
+        ]
 
     if contents:
         not_empty = f'{destination} is not empty; choose a new folder'

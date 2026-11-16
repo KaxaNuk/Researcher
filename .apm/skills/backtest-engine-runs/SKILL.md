@@ -14,7 +14,7 @@ description: >
   `attribution-analysis-runs`), reading attribution output (use `alpha-decomposition`), or authoring
   Data Curator `c_*` columns (use `data-curator-custom-calculations`).
 metadata:
-  version: 0.5.0
+  version: 0.6.0
   library_version: 0.67.0
 ---
 
@@ -69,6 +69,12 @@ so it lands in the repository's `.venv` rather than wherever the first `pip` on 
 ```bash
 uv pip install kaxanuk-backtest-engine --extra-index-url https://license:{YOUR_LICENSE_KEY}@{SERVER}/simple/
 ```
+
+**In a KaxaNuk Strategy Template repository from template 0.21.0, `Config/install_libraries.py` runs
+that command for you:** `uv run python Config/install_libraries.py` reads `KNBE_API_KEY_KAXANUK` and
+`KNBE_INDEX_HOST` — the `{SERVER}` above — from `Config/.env` by name, installs into the
+repository's `.venv`, hides every key in what `uv` answers, and names the build of each KaxaNuk
+library installed. Checked by running it on 2026-11-16, for build 0.68.0.
 
 Inside a KaxaNuk Strategy Template repository that is all: the configuration is built in code, in
 `Experiments/backtest_engine.py` (section 7; the worked example's `build_configuration` shows how),

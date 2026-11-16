@@ -13,7 +13,7 @@ description: >
   reading what sizing earned (use `alpha-decomposition`), or the documents around the experiment
   (use `experiment-lifecycle`).
 metadata:
-  version: 0.6.0
+  version: 0.7.0
   library_version: 1.28.0
 ---
 
@@ -82,6 +82,12 @@ welcome email, which serves its new dependency, `kaxanuk-license-client`:
 ```bash
 uv pip install -e "<path to the Portfolio-Construction clone>[solver,clustering]" --extra-index-url https://license:{YOUR_LICENSE_KEY}@{SERVER}/simple/
 ```
+
+**The licensed index serves the library itself, so no clone is needed.** In a KaxaNuk Strategy
+Template repository from template 0.21.0, `uv run python Config/install_libraries.py` installs
+`kaxanuk-portfolio-construction[solver,clustering]` from it, reading `KNPC_API_KEY_KAXANUK` and
+`KNPC_INDEX_HOST` — the `{SERVER}` above — from `Config/.env` by name. Checked by running it on
+2026-11-16: build 2.1.0, with cvxpy, clarabel and scipy importable.
 
 - **Never print, echo or commit the key or the index URL**: the command carries a credential — run
   it, do not paste it back. An exposed key is rotated, not edited out.

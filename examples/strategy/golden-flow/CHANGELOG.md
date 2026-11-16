@@ -41,6 +41,14 @@ for somebody who was not in the room:
 
 ---
 
+## 0.19.0 (2026-11-16)
+
+**MINOR** — one command installs every library Golden Flow runs on, as the template's 0.21.0 does,
+and the KaxaNuk app's folders stay out of git. No result changes.
+
+**What to do differently:** put each licence's index host in `Config/.env` beside its key and run
+`uv run python Config/install_libraries.py`.
+
 ## 0.18.3 (2026-11-07)
 
 **PATCH** — `Data/Refinery/custom_calculations.py` says that a column the provider leaves empty,

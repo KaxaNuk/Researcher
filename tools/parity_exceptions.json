@@ -58,6 +58,13 @@
         "build on the example."
       ],
       "template": [
+        "**To see the strategy in the KaxaNuk app**, make the project and its first experiment in the app",
+        "first, with the strategy's name, then run `init-strategy` into the folder the app made: a folder",
+        "holding only the app's `.kaxanuk/` registration counts as empty, the copy goes in beside it, and",
+        "the template's `.gitignore` keeps the registration out of git. From then on the app lists every",
+        "weight file the experiment's notebook writes in `Experiments/Experiment_N/Portfolio/`, and imports",
+        "the Backtest Engine's results workbook from `Backtest/` as a backtest of its own. A strategy made",
+        "without the app runs the same; the app can be added to a new one later.",
         "The worked example, `golden-flow`, is not copied: every file it works through is already here,",
         "describing what belongs in it. To read or run it, `init-example` copies it into a folder of its",
         "own. Never build on it."

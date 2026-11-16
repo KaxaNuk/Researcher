@@ -6,6 +6,39 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
+## [1.36.0] - 2026-11-16
+A new strategy can live inside a project the KaxaNuk app made, so the app shows the books its code
+builds, and one command now installs every library a strategy runs on, licences included.
+
+**What to do differently:** say `update` in your home. In a new strategy, put each licence's index
+host in `Config/.env` beside its key and run `uv run python Config/install_libraries.py`. To see a
+strategy in the KaxaNuk app, make the project there first and run `init-strategy` into its folder.
+### Added
+- **`Config/install_libraries.py`** in the strategy template 0.21.0 and the worked example 0.19.0:
+  `uv sync --group notebook --inexact`, then the Backtest Engine, Attribution Analysis and Portfolio
+  Construction from KaxaNuk's licensed indexes, each with its key and its index's host read from
+  `Config/.env` by name, never printed, every key hidden in what `uv` answers; Portfolio
+  Construction with its `solver` and `clustering` extras, so every sizing method can be built. It
+  ends with each KaxaNuk library's installed build. `Config/.env.template` gains `KNBE_INDEX_HOST`,
+  `KNAA_INDEX_HOST` and `KNPC_INDEX_HOST`. Checked by running it on 2026-11-16: Backtest Engine
+  0.68.0, Attribution Analysis 0.7.0 and Portfolio Construction 2.1.0, the last from the licensed
+  index itself, with no clone.
+### Changed
+- **`init-strategy`** (0.5.0) and its `scaffold.py` take a project the KaxaNuk app made: a folder
+  holding only `.kaxanuk/` registration folders and empty folders counts as empty, the copy goes in
+  beside them and never touches them. Two tests in `tests/test_scaffold.py` cover it. Checked on a
+  real app project: the registration's hashes are the same before and after the copy.
+- **The template's and the example's `.gitignore`** keep the app's `.kaxanuk/` folders, the job
+  folders it writes in lower case inside `Portfolio/`, `Backtest/` and `Attribution/`, and a factor
+  model delivered as a folder of its own out of git.
+- **`SETUP.md`** in both: step 2 installs with the script, step 3 explains the index hosts, and the
+  template's step 1 says how to make a strategy the app shows. The app lists each weight file in an
+  experiment's `Portfolio/` — checked on 2026-11-16 — and imports the engine's results workbook
+  from `Backtest/`, by its connector's documented contract.
+- **`backtest-engine-runs`** (0.6.0), **`attribution-analysis-runs`** (0.8.0) and
+  **`portfolio-construction-runs`** (0.7.0) name the installer in their install sections; the last
+  says the licensed index serves the library, so no clone is needed.
+
 ## [1.35.0] - 2026-11-13
 A deck saved as one HTML file by `deck` now moves with a presentation clicker.
 

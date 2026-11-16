@@ -9,7 +9,7 @@ description: >
   `init-example`), does NOT create a researcher (use `init-researcher`), and does NOT create a
   Python library (use `init-python-library`).
 metadata:
-  version: 0.4.4
+  version: 0.5.0
 ---
 
 # Init strategy — a new strategy, one folder, one repository
@@ -61,9 +61,12 @@ every strategy made from the same package version starts identical.
    others, `D:\Research\fcf-yield-quality`, unless they say another. A folder of that name already
    there and not empty is said in one line, and another name or place asked for — theirs, typed or
    picked from names offered as above, their idea asked first if not yet said; never a suffix such
-   as `-2`. On Windows, keep it short: a deep synced path such as `C:\Users\<you>\OneDrive\...`
-   breaks tools later with misleading errors such as `WinError 3`. Say the full path you will
-   create.
+   as `-2`. A project the KaxaNuk app made, holding nothing but its `.kaxanuk/` registration and
+   empty folders, counts as empty: the strategy goes in beside the registration, which the copy
+   never touches and the template's `.gitignore` keeps out of git, so the app shows what the
+   strategy's code exports. On Windows, keep it short: a deep synced path such as
+   `C:\Users\<you>\OneDrive\...` breaks tools later with misleading errors such as `WinError 3`.
+   Say the full path you will create.
 
 2. **The plan.** In chat: the path, that it will hold the KaxaNuk Strategy Template at this
    package's version, and that it keeps dated versions from the start, the first saved now. Say too

@@ -117,16 +117,29 @@ machine, `uv` downloads 3.13**; there is nothing to install by hand.
 **Why 3.13 and not the newest.** Every performance figure comes from the Backtest Engine, which is
 documented for Python 3.12 or 3.13. The Data Curator allows 3.12 to 3.14, so 3.13 satisfies both.
 
-**Once the Backtest Engine, Attribution Analysis or Portfolio Construction is installed by hand,
-never run a bare `uv sync` here again.** It is exact: it removes every package `uv.lock` does not
-name, and those three are deliberately not named. Use the command above, `--inexact` included, and
-`uv run` for everything else; both keep them. The `backtest-engine-runs`,
-`attribution-analysis-runs` and `portfolio-construction-runs` skills say how to install each.
+**The licensed libraries install with one command, once step 3 has put your keys in place:**
+
+```bash
+uv run python Config/install_libraries.py
+```
+
+It runs the `uv sync` above, then installs the Backtest Engine, Attribution Analysis and Portfolio
+Construction from KaxaNuk's licensed indexes, each with its key and its index's host read from
+`Config/.env` by name: no key is typed, printed or written anywhere, and whatever `uv` answers is
+shown with every key hidden. A library whose two lines are empty is skipped and named. It ends with
+the build of every KaxaNuk library in the environment.
+
+**Once a licensed library is in, never run a bare `uv sync` here again.** It is exact: it removes
+every package `uv.lock` does not name, and those three are deliberately not named. Use the
+installer, or the command above with `--inexact`, and `uv run` for everything else; all three keep
+them. The `backtest-engine-runs`, `attribution-analysis-runs` and `portfolio-construction-runs`
+skills say what each library needs beyond its install.
 
 **Upgrade a Lab library between experiments**, never during one; your researcher says when a new
 one is out. For the Data Curator, run `uv lock --upgrade-package kaxanuk-data-curator`, then the
-command above; for a licensed library, follow its skill. A book on paper stops on any Data Curator
-but the one it was frozen with.
+command above; for a licensed library, `uv run python Config/install_libraries.py --upgrade`, then
+its skill's notes on the new build. A book on paper stops on any Data Curator but the one it was
+frozen with.
 
 ---
 
@@ -148,6 +161,11 @@ file, as `portfolio-construction-runs` says. An equal-weight book needs neither 
 library. The three come together, with their licences, in the KaxaNuk Investment Lab, which
 KaxaNuk sells: write to `lab@kaxanuk.mx`, saying which library and what it is for, with
 *via KaxaNuk Researcher* in the subject — <https://www.kaxanuk.mx/lab> shows the Lab.
+
+`KNBE_INDEX_HOST`, `KNAA_INDEX_HOST` and `KNPC_INDEX_HOST` are not keys: each is the index its
+licence installs from, as the licence's welcome e-mail gives it — the part of the install address
+after the `@` and before `/simple/`. `Config/install_libraries.py` reads each with its key; then
+return to step 2 and run it.
 
 `KN_ANALYTICS_PATH` is not a key. It is the folder where KaxaNuk's Analytics Factory ships its
 benchmark portfolios and factor models, which a strategy may read as its universe, its benchmark
