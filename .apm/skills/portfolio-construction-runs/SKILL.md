@@ -13,7 +13,7 @@ description: >
   reading what sizing earned (use `alpha-decomposition`), or the documents around the experiment
   (use `experiment-lifecycle`).
 metadata:
-  version: 0.7.0
+  version: 0.8.0
   library_version: 1.28.0
 ---
 
@@ -321,6 +321,26 @@ The notebook's section 8, Verify, raises on every one of them.
 
 Run them over **every** book an experiment builds, not only the benchmark's. A variant that holds a
 name the benchmark could not is a bug wearing a Sharpe.
+
+**Every one of the fourteen methods passes them on 2.1.0, with three settings to know**, checked
+by running each on four dates of the KN US Equity Core, the year of returns before each date
+(US-Golden-Flow's `Experiments/Experiment_1/validate_sizing_methods.py`, 2026-11-16; reported as
+KaxaNuk/Portfolio-Construction#6):
+
+- **`cvar`, `cdar` and `constrained_mean_variance` short without a mandate.** Give them a long-only
+  `Mandate`, `default_bounds=Bounds(minimum=0.0, maximum=1.0)`; a cap such as 20% goes in the same
+  bounds and holds exactly, inside the solve. With no mandate CVaR also refused one date as
+  `optimal_inaccurate`, which the long-only mandate solves.
+- **`kn_index` refuses `min_weight=0`**: the minimum must be positive. Its rename to
+  `metric_cap_weight` is proposed in the same issue.
+- **`mean_variance` under `MAX_SHARPE` refuses a date whose expected returns are all negative**,
+  as a degenerate optimisation: right after a crash, on trailing means. It is the inputs, not the
+  solver.
+
+`feature_weighting`, proportional, followed by `Weights.cap(maximum=...)` builds the worked
+example's capped book exactly — the same names and weights as its `bounded_by_score` on 120 random
+cases, to 1e-17 — so a strategy can size that way with the library; the floor that sets how many
+names are held stays the strategy's, because no method has one.
 
 ## What this skill will not let you do
 

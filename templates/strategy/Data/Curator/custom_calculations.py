@@ -42,6 +42,11 @@ wrong home for anything you intend to tune.  Put a model's frozen arithmetic inp
 model itself in the Refinery: a sweep must never cost a download, and a new experiment's signal on
 the data already downloaded is an `r_*` column, never a new `c_*` one.
 
+**Decided before the first download, two kinds of column belong here too**, so the KaxaNuk app
+shows them beside the prices: the rule's own per-security signals, at the windows the blueprint
+names -- their sweep neighbours stay `r_*` columns -- and a market capitalisation, `c_market_cap`,
+where the provider serves the shares outstanding, so the app can size the universe.
+
 It produces the `c_*` columns in every file under `Data/Curator/Time_Series/`.
 
 It prevents a feature computed on a price basis it should not use -- a plausible number and no

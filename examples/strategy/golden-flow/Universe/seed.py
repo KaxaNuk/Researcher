@@ -63,18 +63,49 @@ import kaxanuk.data_curator
 __all__ = [
     "fetch_catalogue",
     "main",
+    "write_app_universe",
 ]
 
 CACHE_DIRECTORY = pathlib.Path(__file__).parent / "Provider_Cache"
 HAND_SUPPLIED_PATH = pathlib.Path(__file__).parent.parent / "Data" / "hand_supplied.py"
 SEED_PATH = pathlib.Path(__file__).parent / "Investable_Universe.csv"
+# The seed as the KaxaNuk app reads a saved universe from `Universe/`: a `symbol` column first, then
+# the name, as the app's own Creator saves one, and each listing's span, so the app can read it
+# point in time once it does.  Named after the index, so the app lists it by what it is.
+APP_UNIVERSE_PATH = pathlib.Path(__file__).parent / "KN_US_Equity_Core.csv"
+APP_UNIVERSE_COLUMNS = {
+    "main_identifier": "symbol",
+    "index_identifier": "index_identifier",
+    "valid_from": "valid_from",
+    "valid_to": "valid_to",
+}
+# What the catalogue says each listing is, under the names the app's own universes use, so its
+# Universe Analyzer can group by them.  The seed keeps tickers and dates only; the name is the
+# catalogue's, in this view alone.
+APP_CLASSIFICATION_COLUMNS = {
+    "name": "company_name",
+    "exchange": "exchange",
+    "category": "instrument_type",
+    "sector": "sector",
+    "industry": "industry",
+    "scalemarketcap": "size",
+    "currency": "currency",
+}
+LINE_END = "\n"
 
 # The catalogue's columns this seed reads, and nothing else: a lean request is a fast one.
 CATALOGUE_COLUMNS = (
     "ticker",
+    "name",
     "isdelisted",
     "firstpricedate",
     "lastpricedate",
+    "exchange",
+    "category",
+    "sector",
+    "industry",
+    "scalemarketcap",
+    "currency",
 )
 # Sharadar's own API, which the startup subscription is served from, never Nasdaq Data Link's.
 CATALOGUE_URL = "https://api.sharadar.com/v1.0/data/tickers?years=full"
@@ -195,6 +226,10 @@ def main() -> int:
         index=False,
         lineterminator="\n",
     )
+    write_app_universe(
+        seed,
+        catalogue,
+    )
     not_catalogued = [
         listing
         for listing in members
@@ -204,6 +239,47 @@ def main() -> int:
     print(f"not in the catalogue: {len(not_catalogued)} {not_catalogued}")
 
     return 0
+
+
+def write_app_universe(
+    seed: "pandas.DataFrame",
+    catalogue: "pandas.DataFrame",
+) -> pathlib.Path:
+    """
+    Write the seed as the KaxaNuk app reads a saved universe, and return where.
+
+    Every listing the index held is a row, departed ones included, with the span Sharadar prices it
+    over: the app's saved universes are lists of names today, and the span is what a point-in-time
+    read of the same file needs.  Beside each name, what Sharadar's catalogue says it is -- its
+    exchange, category, sector, industry and size bucket -- so the app's Universe Analyzer can group
+    by any of them.  They are what the listing is classified as today, not on each date.  The seed
+    stays the authority; this is a view of it, written again each time the seed is.
+    """
+    by_ticker = catalogue.drop_duplicates("ticker").set_index("ticker")
+    view = seed[list(APP_UNIVERSE_COLUMNS)].rename(columns=APP_UNIVERSE_COLUMNS)
+    described = view.join(
+        by_ticker[list(APP_CLASSIFICATION_COLUMNS)].rename(columns=APP_CLASSIFICATION_COLUMNS),
+        on="symbol",
+    )
+    described.insert(
+        2,
+        "asset_class",
+        "equity",
+    )
+    described.insert(
+        3,
+        "country",
+        "US",
+    )
+    described.to_csv(
+        APP_UNIVERSE_PATH,
+        index=False,
+        lineterminator=LINE_END,
+    )
+    listing_count = len(described)
+    print(f"wrote {APP_UNIVERSE_PATH.name}: {listing_count} listings, as the KaxaNuk app reads it")
+
+    return APP_UNIVERSE_PATH
 
 
 def _download_catalogue(

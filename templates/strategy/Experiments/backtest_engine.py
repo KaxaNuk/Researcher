@@ -27,6 +27,9 @@ What is expected here:
   weights as it held them -- the input step 6 needs -- and its summary statistics.  Import it
   inside a guard -- it installs from a licensed index, not PyPI -- and report and skip when it is
   absent, so a clone without a licence still produces everything except the numbers.
+- Leave the KaxaNuk app what it imports.  A single run writes the engine's results workbook into
+  `Backtest/`, which the app imports as a backtest of its own; the batch mode writes none.  So the
+  books a reader will open in the app -- the rule, its control -- are priced in a single run too.
 - Price an experiment's books together, in the engine's batch mode, which loads the market data
   once for a batch of books that share every setting but their weights, and cache each book's
   answer under the hash of its weight file and its settings, so a re-run prices only what changed.

@@ -13,7 +13,7 @@ description: >
   composition, wiring the column into the output, for configuration files and runs of `main()`,
   and whether a wrong value is the provider's or the library's.
 metadata:
-  version: 0.8.0
+  version: 0.9.0
   library_version: 0.51.0
 ---
 
@@ -139,17 +139,22 @@ as descriptions — a docstring each — to be filled in. In a strategy made fro
 0.10.0 they are missing: they come back from the template, never from the example, through
 `init-strategy`'s script run from the strategy's root —
 `scaffold.py strategy . --only Data/curator.py` and `--only Data/Curator/custom_calculations.py`,
-which never overwrite. Since template 0.20.0 every per-security file is Parquet, written and read
-through `Data/time_series.py`; a strategy made earlier gets that description the same way,
-`--only Data/time_series.py`. Two kinds of column are not `c_*` columns, even when asked for as a
-"signal". One compares securities on a date (a rank, a breadth reading); the other has a setting
-an experiment will sweep (a fitted model, or a window such as the 50- and 200-day averages the
-example builds as `r_trend_50_200`). Both are `r_*` columns in
+which never overwrite. Every per-security file is written and read through `Data/time_series.py`:
+since template 0.22.0 a curated file is a CSV, the format the KaxaNuk app and the engine read, and
+a refined one Parquet (from 0.20.0 to 0.21.0 both were Parquet); a strategy made earlier gets that
+description the same way, `--only Data/time_series.py`. Two kinds of column are not `c_*`
+columns, even when asked for as a "signal". One compares securities on a date (a rank, a breadth
+reading); the other has a setting an experiment will sweep (a fitted model, or a window such as
+the 50- and 200-day averages the example builds as `r_trend_50_200`). Both are `r_*` columns in
 `Data/Refinery/custom_calculations.py`, which the worked example's `Data/refinery.py` computes
 and this skill does not cover. Only their frozen arithmetic inputs are `c_*` columns. **When a new
 experiment can use the data already downloaded, its signals are `r_*` columns too**, computed from
 the `c_*` columns the Curator wrote — the daily total-return log returns, the traded value —
-never by widening the Curator's columns and downloading again.
+never by widening the Curator's columns and downloading again. **One exception, decided before the
+first download:** the rule's own per-security signals, at the windows its blueprint names, and
+`c_market_cap` where the provider serves the shares outstanding, are `c_*` columns too, so the
+KaxaNuk app shows them beside the prices — US-Golden-Flow's `c_trend_50_200` and
+`c_traded_value_sma_63d`, the owner's decision of 2026-11-16. Their sweep neighbours stay `r_*`.
 
 Anywhere else, if a project has no surface yet, default to (a): create
 `Config/custom_calculations.py` and confirm the entry script imports it.

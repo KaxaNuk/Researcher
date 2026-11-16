@@ -9,7 +9,7 @@ Runs after `Universe/universe_marimo.py`, because it joins the security master t
 writes, and before `Data/analyzer_marimo.py`, which reads what this writes.  Run too early it should
 say which columns it is skipping and carry on -- the right behaviour and the wrong outcome.
 
-    Data/Curator/Time_Series/<id>.parquet  m_* + c_*                       per security
+    Data/Curator/Time_Series/<id>.csv      m_* + c_*                       per security
             |
             v   stack, compute per date across the cross-section, join the master
     Data/Refinery/Time_Series/<id>.parquet m_* + c_* + r_* + current_*     rows in span, more cols
@@ -196,7 +196,10 @@ def load_panel(
     spans = read_valid_spans()
     frames = []
 
-    for path in sorted(CURATOR_DIRECTORY.glob(f"*{time_series.SUFFIX}")):
+    curated_suffix = time_series.suffix_for(CURATOR_DIRECTORY)
+    curated_paths = sorted(CURATOR_DIRECTORY.glob(f"*{curated_suffix}"))
+
+    for path in curated_paths:
         if path.stem not in investable:
             continue
 
@@ -351,9 +354,11 @@ def remove_stale_files(
     the folder would average two incompatible cross-sections without raising.
     """
     current = set(refined[IDENTIFIER_COLUMN].unique())
+    refined_suffix = time_series.suffix_for(REFINERY_DIRECTORY)
+    refined_paths = sorted(REFINERY_DIRECTORY.glob(f"*{refined_suffix}"))
     stale_paths = [
         path
-        for path in sorted(REFINERY_DIRECTORY.glob(f"*{time_series.SUFFIX}"))
+        for path in refined_paths
         if path.stem not in current
     ]
 

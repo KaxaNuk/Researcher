@@ -9,7 +9,7 @@ Runs after `Universe/universe_marimo.py`, because it joins the security master t
 writes, and before `Data/analyzer_marimo.py`, which reads what this writes.  Run too early it should
 say which columns it is skipping and carry on -- the right behaviour and the wrong outcome.
 
-    Data/Curator/Time_Series/<id>.parquet  m_* + c_*                       per security
+    Data/Curator/Time_Series/<id>.csv      m_* + c_*                       per security
             |
             v   stack, compute per date across the cross-section, join the master
     Data/Refinery/Time_Series/<id>.parquet m_* + c_* + r_* + current_*     rows in span, more cols

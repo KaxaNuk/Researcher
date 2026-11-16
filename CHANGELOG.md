@@ -6,6 +6,35 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
+## [1.37.0] - 2026-11-16
+A strategy now keeps its curated data in the format the KaxaNuk app reads, and says in one place
+what the app reads from it, so the app shows a strategy's universe, data, books and backtests.
+
+**What to do differently:** say `update` in your home. In a new strategy nothing more; in one made
+before, the Curator's files change format at its next download, as the template's 0.22.0 entry
+says.
+### Changed
+- **The strategy template 0.22.0 and the worked example 0.20.0.** A curated file is a CSV, the
+  format the KaxaNuk app, the Backtest Engine and a spreadsheet read; a refined one stays Parquet.
+  `Data/time_series.py` decides the format by stage, so no other file names it. `AGENTS.md` gains
+  *The KaxaNuk app*: what the app reads, from where — a universe with a `symbol` column in
+  `Universe/`, curated CSV, weight files in `Portfolio/`, the engine's results workbook from a
+  single run in `Backtest/` — and that it never reads a job folder it did not write.
+  `Data/Curator/custom_calculations.py` allows two kinds of `c_*` column decided before the first
+  download, so the app shows them: the rule's own per-security signals and `c_market_cap`.
+  `Experiments/backtest_engine.py` says the books a reader opens in the app are priced in a single
+  run, whose workbook the app imports. The example's seed builder also writes the app's copy of the
+  universe, `Universe/KN_US_Equity_Core.csv`, with the catalogue's name, exchange, sector, industry
+  and size; its seed keeps tickers and dates only. Checked by running it in a strategy made from
+  the template, US-Golden-Flow, on 2026-11-16: the app lists the weight files, its Universe Analyzer
+  reads the universe file and the curated CSVs. The example was not run again: no figure of it
+  depends on a file's format.
+- **`data-curator-custom-calculations`** (0.9.0): curated CSV, and the two kinds of `c_*` column
+  the app needs. **`portfolio-construction-runs`** (0.8.0): what checking all fourteen methods of
+  2.1.0 found — a mandate for `cvar`, `cdar` and constrained mean-variance, a positive minimum for
+  `kn_index`, the maximum-Sharpe refusal after a crash — and that `feature_weighting` with
+  `Weights.cap` builds a capped book exactly.
+
 ## [1.36.0] - 2026-11-16
 A new strategy can live inside a project the KaxaNuk app made, so the app shows the books its code
 builds, and one command now installs every library a strategy runs on, licences included.

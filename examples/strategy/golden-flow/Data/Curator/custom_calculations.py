@@ -42,6 +42,11 @@ wrong home for anything you intend to tune.  Put a model's frozen arithmetic inp
 model itself in the Refinery: a sweep must never cost a download, and a new experiment's signal on
 the data already downloaded is an `r_*` column, never a new `c_*` one.
 
+**Decided before the first download, two kinds of column belong here too**, so the KaxaNuk app
+shows them beside the prices: the rule's own per-security signals, at the windows the blueprint
+names -- their sweep neighbours stay `r_*` columns -- and a market capitalisation, `c_market_cap`,
+where the provider serves the shares outstanding, so the app can size the universe.
+
 It produces the `c_*` columns in every file under `Data/Curator/Time_Series/`.
 
 It prevents a feature computed on a price basis it should not use -- a plausible number and no
@@ -97,6 +102,8 @@ __all__ = [
     "c_open_dividend_and_split_adjusted",
     "c_split_ratio",
     "c_traded_value",
+    "c_traded_value_sma_63d",
+    "c_trend_50_200",
     "c_volume_dividend_and_split_adjusted",
 ]
 
@@ -112,6 +119,12 @@ SPLIT_SHARES_TOLERANCE = 0.15
 SPLIT_SIGNATURE_TOLERANCE = 0.10
 SPLIT_SMALLEST_LOG_FACTOR = 0.2
 SPLIT_WINDOW_DAYS = 30
+# The rule's own windows, the owner's choice of 2026-11-16: the signals the KaxaNuk app shows beside
+# the prices are computed here, per security.  Their sweep neighbours stay `r_*` columns of the
+# Refinery, where a window is a setting.
+TRADED_VALUE_WINDOW_DAYS = 63
+TREND_LONG_WINDOW_DAYS = 200
+TREND_SHORT_WINDOW_DAYS = 50
 
 
 def c_close_dividend_and_split_adjusted(
@@ -282,6 +295,38 @@ def c_traded_value(
             fix[:row] = fix[:row] * split_factor
 
     return _column(pandas.Series(traded_value * fix))
+
+
+def c_traded_value_sma_63d(
+    c_traded_value: "kaxanuk.data_curator.DataColumn",
+) -> "kaxanuk.data_curator.DataColumn":
+    """
+    The 63-day simple average of the day's traded value: the rule's rank and weight.
+
+    Strictly backward and null until 63 days have traded, as the Refinery's
+    `r_traded_value_sma_63d` is, so the two agree wherever both are computed.
+    """
+    traded_value = _floats(c_traded_value)
+    average = traded_value.rolling(TRADED_VALUE_WINDOW_DAYS).mean()
+
+    return _column(average)
+
+
+def c_trend_50_200(
+    c_close_dividend_and_split_adjusted: "kaxanuk.data_curator.DataColumn",
+) -> "kaxanuk.data_curator.DataColumn":
+    """
+    The 50-day average of the total-return close over its 200-day average, minus one.
+
+    Above zero the security is in an uptrend, the rule's state.  Strictly backward and null through
+    the first 199 rows, as the Refinery's `r_trend_50_200` is.
+    """
+    prices = _floats(c_close_dividend_and_split_adjusted)
+    short_average = prices.rolling(TREND_SHORT_WINDOW_DAYS).mean()
+    long_average = prices.rolling(TREND_LONG_WINDOW_DAYS).mean()
+    trend = short_average / long_average - 1
+
+    return _column(trend)
 
 
 def c_volume_dividend_and_split_adjusted(

@@ -31,9 +31,9 @@ What is expected here is a short driver, not a framework:
   mapped to the provider, so each name gets its own answer and its own file.
 - Record the provider's answer for each name.  A name it does not carry is then told from one it
   refused today -- a rate limit, a timeout -- and only the second is asked again, after a pause.
-- Point its output at `Data/Curator/Time_Series/`, one Parquet file per identifier, written and
-  read through `Data/time_series.py`.  The library's default folder is `Output/`; here every stage
-  has one home, and this is the Curator's.
+- Point its output at `Data/Curator/Time_Series/`, one CSV file per identifier -- the format the
+  KaxaNuk app and the engine read -- written and read through `Data/time_series.py`.  The library's
+  default folder is `Output/`; here every stage has one home, and this is the Curator's.
 - A provider's history can stop where its coverage does: a name that left the market years ago may
   be missing from it altogether.  Fetch such names from a second provider that carries them, into
   the same files and columns, and say in the strategy's documents which names came from where and
@@ -81,9 +81,9 @@ the index was not staged; the notebooks stop where they first read it.
 Credentials come from `Config/.env` and are never printed -- not into a log line, a notebook
 output or a commit.  An exposed key is rotated, not edited out.
 
-It produces `Data/Curator/Time_Series/<identifier>.parquet`, `m_*` plus `c_*`, read by the universe
-notebook, `Data/refinery.py` and the engine; and in `Data/Curator/` the provider's last answer for
-each name and the date each file was fetched through.
+It produces `Data/Curator/Time_Series/<identifier>.csv`, `m_*` plus `c_*`, read by the universe
+notebook, `Data/refinery.py`, the engine and the KaxaNuk app; and in `Data/Curator/` the provider's
+last answer for each name and the date each file was fetched through.
 
 It prevents beautiful results that came from broken inputs -- and a dataset nobody else can
 rebuild.
@@ -223,11 +223,11 @@ CUSTOM_CALCULATIONS_PATH = pathlib.Path(__file__).parent / "Curator" / "custom_c
 # limit disables the account for minutes, so the pause is long.
 DOWNLOAD_ATTEMPTS = 4
 # Fixed, not `today`, so two people running a week apart get the same files.  It is the last date
-# of the KN US Equity Core and of the factor model the strategy reads.
+# of the KN US Equity Core and of the factor model the strategy reads: 2026-11-06 in US-Golden-Flow.
 END_DATE = datetime.date(
     2026,
-    8,
-    14,
+    11,
+    6,
 )
 # The date each file was last fetched through, so a refresh knows what it has already done.
 FETCHED_THROUGH_PATH = pathlib.Path(__file__).parent / "Curator" / "fetched_through.json"
@@ -289,6 +289,9 @@ OUTPUT_COLUMNS = (
     "c_log_returns_total",
     "c_traded_value",
     "c_volume_dividend_and_split_adjusted",
+    # The rule's two signals, per security, so the KaxaNuk app shows them beside the prices.
+    "c_trend_50_200",
+    "c_traded_value_sma_63d",
 )
 
 
@@ -893,7 +896,7 @@ def _fetch_once(
     provider = kaxanuk.data_curator.data_providers.Sharadar(
         api_key=read_provider_key(),
     )
-    output_handler = kaxanuk.data_curator.output_handlers.ParquetOutput(
+    output_handler = kaxanuk.data_curator.output_handlers.CsvOutput(
         output_base_dir=str(OUTPUT_DIRECTORY),
     )
     collector = _MessageCollector()

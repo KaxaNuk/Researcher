@@ -41,6 +41,15 @@ for somebody who was not in the room:
 
 ---
 
+## 0.20.0 (2026-11-16)
+
+**MINOR** — curated files are CSV, as the template's 0.22.0 has them, and the seed builder also
+writes the KaxaNuk app's copy of the universe. No result changes: the same numbers, stored as text;
+not re-run.
+
+**What to do differently:** after the next download, delete the Parquet files left in
+`Data/Curator/Time_Series/`.
+
 ## 0.19.0 (2026-11-16)
 
 **MINOR** — one command installs every library Golden Flow runs on, as the template's 0.21.0 does,

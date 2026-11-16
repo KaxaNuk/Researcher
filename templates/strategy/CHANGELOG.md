@@ -41,6 +41,28 @@ for somebody who was not in the room:
 
 ---
 
+## 0.22.0 (2026-11-16)
+
+**MINOR** — curated files are CSV, the format the KaxaNuk app reads, and `AGENTS.md` says what the
+app reads from a strategy. No result changes: the same numbers, stored as text.
+
+**What to do differently:** nothing in a new strategy. In one made before, the next download writes
+CSV; delete the Curator's Parquet files after it, so the app does not list each name twice. Decide
+before that download which per-security signals, and `c_market_cap`, the app should show.
+
+### Changed
+
+- `Data/time_series.py`: one format per stage — CSV under the Curator, Parquet under the Refinery.
+- `Data/curator.py` and `Data/refinery.py`: the curated files' suffix.
+- `Data/Curator/custom_calculations.py`: the rule's own per-security signals and `c_market_cap` may
+  be `c_*` columns, decided before the first download.
+- `Experiments/backtest_engine.py`: the books a reader opens in the app are priced in a single run,
+  whose results workbook the app imports.
+
+### Added
+
+- `AGENTS.md`, *The KaxaNuk app*: what the app reads, and from where.
+
 ## 0.21.0 (2026-11-16)
 
 **MINOR** — one command installs every library a strategy runs on, and a strategy can live inside a

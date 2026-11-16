@@ -159,9 +159,11 @@ def load_matrices(
     """
     investable = read_investable_identifiers()
     position_keys = read_position_keys()
+    refined_suffix = time_series.suffix_for(REFINERY_DIRECTORY)
+    refined_paths = sorted(REFINERY_DIRECTORY.glob(f"*{refined_suffix}"))
     paths = [
         path
-        for path in sorted(REFINERY_DIRECTORY.glob(f"*{time_series.SUFFIX}"))
+        for path in refined_paths
         if path.stem in investable
     ]
 

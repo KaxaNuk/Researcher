@@ -1,8 +1,10 @@
 """
 Time series -- step 3 of 8: how every per-security file is stored, and the one way it is read.
 
-In plain words: every price file, curated or refined, is a Parquet file read and written with
-PyArrow, so a step reads only the columns it asks for and never parses text.
+In plain words: every price file is read and written with PyArrow, in one schema.  A curated file
+is a CSV -- the format the KaxaNuk app, the Backtest Engine and a spreadsheet all read -- so the
+Curator's folder is the one copy of the data every reader shares.  A refined file is Parquet, so
+the cross-sectional stages read only the columns they ask for.
 
 Runs inside every stage that touches a per-security file: `Data/curator.py`, `Data/refinery.py`,
 the universe and analyzer notebooks, and the experiments' seams.  Each imports it from `Data/`, a
@@ -16,38 +18,41 @@ What is expected here:
   as integers; read as they come, two files would not stack, and the engine and pandas would each
   read them their own way.  So every file the Curator writes is rewritten in the shared schema
   before anything reads it.  A decimal cast to `float64` is the same number a CSV of it parsed to.
-- One place that names a file: the identifier and the suffix, `<identifier>.parquet`, in the
-  folder of the stage that wrote it.
-- Read only the columns asked for, from the file's footer first.  A file of eighteen columns read
-  for two is the difference between a step that loads a quarter of a century in seconds and one
-  that loads it in minutes.  A caller stacking many files stacks them as Arrow tables and converts
-  to pandas once.
+- One place that names a file and its format: the identifier and its stage's suffix --
+  `<identifier>.csv` under the Curator, `<identifier>.parquet` under the Refinery -- so no caller
+  says which format it reads.
+- Read only the columns asked for, from a Parquet file's footer or a CSV's header first.  A file
+  of eighteen columns read for two is the difference between a step that loads a quarter of a
+  century in seconds and one that loads it in minutes.  A caller stacking many files stacks them as
+  Arrow tables and converts to pandas once.
 - Name a missing column in the error, before anything is read.
 
 It produces nothing of its own: it is how `Data/Curator/Time_Series/` and
 `Data/Refinery/Time_Series/` are written and read.
 
-It prevents two stages reading the same file two ways, and a run that spends its hours parsing
-text instead of computing.
+It prevents two stages reading the same file two ways, two copies of the same prices in two
+formats, and a refined panel that spends its hours parsing text instead of computing.
 """
 
 # --- example: begin ---
-
 import pathlib
 
 import pandas
 import pyarrow
 import pyarrow.compute
+import pyarrow.csv
 import pyarrow.parquet
 
 __all__ = [
+    "CSV_SUFFIX",
     "DATE_COLUMN",
-    "SUFFIX",
+    "PARQUET_SUFFIX",
     "normalize_file",
     "path_for",
     "read_column_names",
     "read_frame",
     "read_table",
+    "suffix_for",
     "write_frame",
 ]
 
@@ -62,7 +67,11 @@ NUMERIC_TYPES = (
     pyarrow.types.is_integer,
     pyarrow.types.is_null,
 )
-SUFFIX = ".parquet"
+# The curated files' format: the one the KaxaNuk app and the Backtest Engine read.
+CSV_SUFFIX = ".csv"
+# The refined files' format, and the name of the folder that marks a refined stage.
+PARQUET_SUFFIX = ".parquet"
+REFINED_STAGE = "Refinery"
 
 
 def normalize_file(
@@ -74,12 +83,10 @@ def normalize_file(
     The Data Curator writes Sharadar's prices as decimals of the precision each file needs and its
     volume as integers, so this is the step that makes two of its files stack.
     """
-    table = pyarrow.parquet.read_table(path)
-    normalized = _normalized(table)
-    pyarrow.parquet.write_table(
-        normalized,
+    table = read_table(path)
+    _write_table(
+        table,
         path,
-        compression=COMPRESSION,
     )
 
 
@@ -88,17 +95,26 @@ def path_for(
     identifier: str,
 ) -> "pathlib.Path":
     """
-    The file that holds one identifier's series in a directory.
+    The file that holds one identifier's series in a directory, in that stage's format.
     """
-    return directory / f"{identifier}{SUFFIX}"
+    suffix = suffix_for(directory)
+
+    return directory / f"{identifier}{suffix}"
 
 
 def read_column_names(
     path: "pathlib.Path",
 ) -> tuple[str, ...]:
     """
-    A file's columns, read from its footer without reading a row.
+    A file's columns, from a Parquet file's footer or a CSV's header, without reading a row.
     """
+    if path.suffix == CSV_SUFFIX:
+        reader = pyarrow.csv.open_csv(path)
+        names = tuple(reader.schema.names)
+        reader.close()
+
+        return names
+
     schema = pyarrow.parquet.read_schema(path)
 
     return tuple(schema.names)
@@ -145,10 +161,12 @@ def read_table(
 
             raise KeyError(message)
 
-    table = pyarrow.parquet.read_table(
+    wanted = None if columns is None else list(columns)
+    stored = _read_stored(
         path,
-        columns=None if columns is None else list(columns),
+        wanted,
     )
+    table = _normalized(stored)
 
     if DATE_COLUMN not in table.column_names:
 
@@ -167,6 +185,17 @@ def read_table(
     )
 
 
+def suffix_for(
+    directory: "pathlib.Path",
+) -> str:
+    """
+    The format a stage's folder keeps its files in: Parquet under a Refinery folder, else CSV.
+    """
+    refined = REFINED_STAGE in directory.parts
+
+    return PARQUET_SUFFIX if refined else CSV_SUFFIX
+
+
 def write_frame(
     frame: "pandas.DataFrame",
     path: "pathlib.Path",
@@ -178,11 +207,9 @@ def write_frame(
         frame,
         preserve_index=False,
     )
-    normalized = _normalized(table)
-    pyarrow.parquet.write_table(
-        normalized,
+    _write_table(
+        table,
         path,
-        compression=COMPRESSION,
     )
 
 
@@ -222,4 +249,48 @@ def _normalized(
         names=table.column_names,
     )
 
+
+def _read_stored(
+    path: "pathlib.Path",
+    columns: list[str] | None,
+) -> "pyarrow.Table":
+    """
+    A file as stored, only the columns asked for: a CSV parsed for those alone, Parquet read whole.
+    """
+    if path.suffix == CSV_SUFFIX:
+        options = pyarrow.csv.ConvertOptions(include_columns=columns)
+
+        return pyarrow.csv.read_csv(
+            path,
+            convert_options=options,
+        )
+
+    return pyarrow.parquet.read_table(
+        path,
+        columns=columns,
+    )
+
+
+def _write_table(
+    table: "pyarrow.Table",
+    path: "pathlib.Path",
+) -> None:
+    """
+    Write a table in the shared schema, in the format its path names.
+    """
+    normalized = _normalized(table)
+
+    if path.suffix == CSV_SUFFIX:
+        pyarrow.csv.write_csv(
+            normalized,
+            path,
+        )
+
+        return
+
+    pyarrow.parquet.write_table(
+        normalized,
+        path,
+        compression=COMPRESSION,
+    )
 # --- example: end ---

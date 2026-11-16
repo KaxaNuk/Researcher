@@ -27,6 +27,9 @@ What is expected here:
   weights as it held them -- the input step 6 needs -- and its summary statistics.  Import it
   inside a guard -- it installs from a licensed index, not PyPI -- and report and skip when it is
   absent, so a clone without a licence still produces everything except the numbers.
+- Leave the KaxaNuk app what it imports.  A single run writes the engine's results workbook into
+  `Backtest/`, which the app imports as a backtest of its own; the batch mode writes none.  So the
+  books a reader will open in the app -- the rule, its control -- are priced in a single run too.
 - Price an experiment's books together, in the engine's batch mode, which loads the market data
   once for a batch of books that share every setting but their weights, and cache each book's
   answer under the hash of its weight file and its settings, so a re-run prices only what changed.
@@ -67,6 +70,7 @@ import sys
 import tempfile
 
 import pandas
+import pyarrow.compute
 import pyarrow.csv
 import pyarrow.parquet
 
@@ -132,9 +136,9 @@ INDEX_IDENTIFIER = BENCHMARK_IDENTIFIERS[0]
 # book in about ten seconds, so a batch is sized to keep a load worth its books while several run
 # side by side.
 BOOKS_PER_BATCH = 12
-# The curated files, Parquet, and the engine's copy of them: the columns it reads, as CSV, because
-# its Parquet reader refuses these files on 0.66.0 (reported to the engine).  The copy is written
-# again whenever a curated file is newer than it.
+# The curated files, CSV, and the engine's copy of them: only the columns it reads, so a batch
+# loads a fraction of what each curated file carries.  The copy is written again whenever a curated
+# file is newer than it.
 CURATED_DIRECTORY = DATA_DIRECTORY / "Curator" / "Time_Series"
 MARKET_DATA_DIRECTORY = DATA_DIRECTORY / "Curator" / "Engine"
 # The columns the engine reads, in its roles below, and the cash rate's own.
@@ -671,7 +675,9 @@ def stage_market_data() -> int:
     )
     written = []
 
-    for source in sorted(CURATED_DIRECTORY.glob(f"*{time_series.SUFFIX}")):
+    curated_suffix = time_series.suffix_for(CURATED_DIRECTORY)
+
+    for source in sorted(CURATED_DIRECTORY.glob(f"*{curated_suffix}")):
         target = MARKET_DATA_DIRECTORY / f"{source.stem}.csv"
         source_time = source.stat().st_mtime
         current = target.is_file() and target.stat().st_mtime >= source_time
@@ -685,12 +691,20 @@ def stage_market_data() -> int:
             for column in MARKET_DATA_COLUMNS
             if column in carried
         ]
-        table = pyarrow.parquet.read_table(
+        table = time_series.read_table(
             source,
-            columns=columns,
+            tuple(columns),
+        )
+        dated = table.set_column(
+            0,
+            "m_date",
+            pyarrow.compute.cast(
+                table.column("m_date"),
+                pyarrow.date32(),
+            ),
         )
         pyarrow.csv.write_csv(
-            table,
+            dated,
             target,
         )
         written.append(source.stem)
