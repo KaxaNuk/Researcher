@@ -53,13 +53,13 @@ signal built on it carries anything. It builds no book, runs no engine and sizes
 ## The notebook, section by section
 
 The template ships `Data/analyzer_marimo.py` as its markdown cells — each section says what is
-expected in it — and the worked example, `examples/strategy/golden-flow/` in the KaxaNuk Researcher
-package, fills every one. Read the example's copy before writing a cell; `init-example` puts it in a
-folder of its own. Sections 0 to 4 are what any strategy needs; 5 depends on the signal; 7, Verify,
-ends every one. A strategy made from a template before 0.20.0 has a Jupyter notebook,
-`Data/analyzer.ipynb`: the marimo one comes back through `init-strategy`'s script, run from the
-strategy's root, `scaffold.py strategy . --only Data/analyzer_marimo.py`, and the old cells are
-moved into it by hand, then the old file deleted.
+expected in it — and the worked example, `examples/strategy/us-golden-flow/` in the KaxaNuk
+Researcher package, fills every one. Read the example's copy before writing a cell; `init-example`
+puts it in a folder of its own. Sections 0 to 4 are what any strategy needs; 5 depends on the
+signal; 7, Verify, ends every one. A strategy made from a template before 0.20.0 has a Jupyter
+notebook, `Data/analyzer.ipynb`: the marimo one comes back through `init-strategy`'s script, run
+from the strategy's root, `scaffold.py strategy . --only Data/analyzer_marimo.py`, and the old cells
+are moved into it by hand, then the old file deleted.
 
 | Section | Measures | The trap it catches |
 | --- | --- | --- |
@@ -133,8 +133,8 @@ the one that passed: count them, and publish the count beside the winner.
 
 ## References
 
-- `Data/analyzer_marimo.py` in the worked example, `examples/strategy/golden-flow/` in the KaxaNuk
-  Researcher package — every section filled, with the strategy's own cells between
+- `Data/analyzer_marimo.py` in the worked example, `examples/strategy/us-golden-flow/` in the
+  KaxaNuk Researcher package — every section filled, with the strategy's own cells between
   `# --- example: begin ---` and `# --- example: end ---`. The template's copy is the same notebook
   without them.
 - `RESULTS.md` in the same example, *Before any experiment* — what a filled table looks like.

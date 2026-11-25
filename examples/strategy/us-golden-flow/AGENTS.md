@@ -52,7 +52,7 @@ change-set with its `CHANGELOG.md` entry. A branch and a pull request are for a 
 reviewed, or for two lines of work that must not mix; they are never a gate. Delete the branch once
 it is merged or abandoned: `main` is the only branch that stays.
 
-**The template and the worked example, `golden-flow`, live in the
+**The template and the worked example, `us-golden-flow`, live in the
 [KaxaNuk Researcher](https://github.com/KaxaNuk/Researcher)** package. The example is for
 reading, never for building on: nothing in a strategy is brought across from it. Issues and pull
 requests about the process go there. So does a trap found in a Lab library while running a
@@ -64,9 +64,9 @@ README.
 
 <!-- example: begin -->
 
-**In this example.** `golden-flow` is the folder `examples/strategy/golden-flow/` of the KaxaNuk
-Researcher package. A copy made by `init-example` is a repository of its own, with one first commit.
-A strategy of your own starts with `init-strategy`.
+**In this example.** `us-golden-flow` is the folder `examples/strategy/us-golden-flow/` of the
+KaxaNuk Researcher package. A copy made by `init-example` is a repository of its own, with one first
+commit. A strategy of your own starts with `init-strategy`.
 
 <!-- example: end -->
 

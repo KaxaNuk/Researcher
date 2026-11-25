@@ -88,6 +88,31 @@ def test_a_long_line_where_agents_md_allows_one_is_no_problem() -> None:
     assert record_problems == []
 
 
+def test_a_renamed_markdown_file_is_compared_with_its_former_path() -> None:
+    """
+    A rename maps the new path to the old one, so only its changed lines are checked; any other
+    change maps to None.
+    """
+    name_status = '\0'.join([
+        'M',
+        'README.md',
+        'R097',
+        'examples/strategy/old/AGENTS.md',
+        'examples/strategy/new/AGENTS.md',
+        'A',
+        'notes.md',
+        '',
+    ])
+
+    paths = check.changed_markdown_paths(name_status)
+
+    assert paths == {
+        'README.md': None,
+        'examples/strategy/new/AGENTS.md': 'examples/strategy/old/AGENTS.md',
+        'notes.md': None,
+    }
+
+
 def test_apm_notices_are_no_warning_but_any_other_flagged_line_is() -> None:
     """
     APM's notice of a newer version is expected; a warning about the package is not.

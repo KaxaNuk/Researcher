@@ -6,6 +6,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
+## [1.38.0] - 2026-11-25
+A new strategy now starts with no licence, since a strategy is its owner's, and its README is half
+as long; the worked example is renamed `us-golden-flow`.
+
+**What to do differently:** say `update` in your home. A strategy made before keeps its `LICENSE`
+until you remove it; `init-example` now offers `us-golden-flow`.
+### Changed
+- **The strategy template 0.23.0.** `LICENSE` and `license = "MIT"` are gone, and `SETUP.md` step 5
+  says a strategy ships with no licence, every right in it its owner's. The README is cut from 293
+  lines to 139: one table of the steps and the folder each owns replaces *Eight steps*, *What is in
+  here* and *The names*; the order of work, the libraries and the conventions are each said once.
+  *What is in here* and *Starting your own strategy* keep their names, which the skills cite.
+- **The worked example 0.21.0, renamed `us-golden-flow`** from `golden-flow`, on the owner's word
+  of 2026-11-25: it is built on the US equity universe, and US-Golden-Flow's Experiment 1 is to be
+  curated into it next. Its content is unchanged and it keeps MIT; every path and current mention in
+  the skills, the templates, the README, `SKILLS.md`, `scaffold.py` and the tests follows. Dated
+  records keep the old name, such as *checked by Golden Flow's run of 2026-10-24*. The example
+  before this release is `golden-flow`, at the tag `v1.37.1`.
+- **The home template 0.36.1.** Its README names the example by its new name.
+### Fixed
+- `tools/check.py`'s Markdown rule compares a renamed file with its former path, so a folder moved
+  whole no longer reads every line it held as added. `changed_markdown_paths` is tested.
+
 ## [1.37.1] - 2026-11-16
 A signal the Curator computes is now computed again once a spin-off is added to a file, so a
 spin-off no longer reads as a crash in the trend.

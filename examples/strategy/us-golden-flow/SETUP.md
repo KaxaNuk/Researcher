@@ -57,7 +57,7 @@ Open a **new** terminal after installing either, so it is on the path. If `git -
 >
 > - it holds `Bibliotheca/`, `Universe/` and `Experiments/` → the repository exists, go to step 2;
 > - otherwise the repository does not exist yet → step 1. It needs **where to put it**, which
->   defaults to `golden-flow` beside the folder you are in; ask if the user has not said.
+>   defaults to `us-golden-flow` beside the folder you are in; ask if the user has not said.
 >
 > Every command from step 2 on runs **in the root**, the folder step 1 made. Never a level above it.
 
@@ -78,9 +78,9 @@ committed.
 **`init-example` makes it.** It is a skill of the
 [KaxaNuk Researcher](https://github.com/KaxaNuk/Researcher), installed for your user as
 step 4 says. A script copies the worked example inside the researcher package, byte for byte, into
-a new folder, `golden-flow` unless you choose another place. It then makes that folder a git
+a new folder, `us-golden-flow` unless you choose another place. It then makes that folder a git
 repository and commits it once. That folder is the root. You can read the example
-[on GitHub](https://github.com/KaxaNuk/Researcher/tree/main/examples/strategy/golden-flow)
+[on GitHub](https://github.com/KaxaNuk/Researcher/tree/main/examples/strategy/us-golden-flow)
 without making anything.
 
 **On Windows, keep the path short.** `D:\Research\...` is fine; a deep synced path such as
@@ -96,7 +96,7 @@ build on the example.
 > message, with no options, *What's your name, or what would you like me to call you?*; never invent
 > it, and ask no e-mail. Set it for this folder only: `git config user.name "<name>"` then
 > `git config user.email "<>"`, an empty address.
-> Then commit again: `git commit -m "Start from the KaxaNuk example strategy, golden-flow"`.
+> Then commit again: `git commit -m "Start from the KaxaNuk example strategy, us-golden-flow"`.
 
 ---
 
@@ -264,10 +264,11 @@ Research, never investment advice: *What it is, and what it is not*, in the
 ```
 
 Put the same status line in place of the banner at the top of `AGENTS.md`. In `pyproject.toml`,
-rename `name` to the strategy's and set `version` to `0.1.0`. `LICENSE` names KaxaNuk as the
-holder: put yourself there, or choose another licence. In `CHANGELOG.md`, keep everything above the
-first `---` line and replace the template's entries below it with the strategy's first, naming the
-template version `pyproject.toml` declared before you reset it:
+rename `name` to the strategy's and set `version` to `0.1.0`. A strategy ships with no licence:
+every right in it stays with its owner, and an owner who publishes it chooses a licence then. In
+`CHANGELOG.md`, keep everything above the first `---` line and replace the template's entries below
+it with the strategy's first, naming the template version `pyproject.toml` declared before you
+reset it:
 
 ```markdown
 ## 0.1.0 (YYYY-MM-DD)
@@ -278,13 +279,13 @@ template version `pyproject.toml` declared before you reset it:
 Then run `uv lock`, so `uv.lock` records the new name and version, and commit it with the rest:
 
 ```bash
-git add README.md AGENTS.md pyproject.toml LICENSE CHANGELOG.md uv.lock
+git add README.md AGENTS.md pyproject.toml CHANGELOG.md uv.lock
 git commit -m "README: <strategy-name>"
 ```
 
 > **For the agent.** Use the name you asked for at the start, and the user's sentence on the idea
-> if they gave one; **never invent a thesis**, use the placeholder. The holder in `LICENSE` is the
-> user's name: ask if you do not have it, never invent it. Everything else in the block is fixed.
+> if they gave one; **never invent a thesis**, use the placeholder. Everything else in the block
+> is fixed.
 > Do not keep the template's README under another name: the process lives upstream, and a copy
 > here drifts.
 

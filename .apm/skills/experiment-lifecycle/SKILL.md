@@ -23,11 +23,11 @@ Strategy Template**, which ships in `KaxaNuk/Researcher` as `templates/strategy/
 template is the shape and every file the process expects in it: six folders, the documents at the
 root, and inside the folders each driver, module, notebook and document. Each is a description of
 what belongs there — a `.py` file as its docstring, a notebook as its markdown cells — to be filled
-in with the strategy's own. The worked example beside it, `examples/strategy/golden-flow/`, works
-one strategy, `golden-flow`, through the same files, with the strategy's own lines between example
-markers. The fixed shape buys comparability and legibility: any experiment looks like any other,
-every experiment is measured against the same named benchmark, and a reader takes in the whole state
-of a project from two files, `OBJECTIVE.md` and `RESULTS.md`.
+in with the strategy's own. The worked example beside it, `examples/strategy/us-golden-flow/`,
+works one strategy, `us-golden-flow`, through the same files, with the strategy's own lines between
+example markers. The fixed shape buys comparability and legibility: any experiment looks like any
+other, every experiment is measured against the same named benchmark, and a reader takes in the
+whole state of a project from two files, `OBJECTIVE.md` and `RESULTS.md`.
 
 Code in English — function names, docstrings and comments — and so are file names and the
 headings the skills read; the notebook narrative and the documents in the owner's language, unless
@@ -38,7 +38,7 @@ the strategy's `AGENTS.md` names one language for its team.
 makes it a repository; the new folder's own `SETUP.md` owns the rest of the procedure. To work
 inside a strategy repository, follow this skill. **Do not name Obsidian or a deck in a repository
 document, nor any KaxaNuk in-house strategy other than the package's worked example,
-`golden-flow`.**
+`us-golden-flow`.**
 
 ## 1. The eight steps
 
@@ -293,5 +293,5 @@ is two rules, and the copies drift. Read them where they are.
   stripped, the blank for `experiment_N_marimo.py`.
 
 The three documents and the notebook are copies of Experiment 1's files in the worked example,
-`examples/strategy/golden-flow/` in the package, with the example's own lines stripped. They
+`examples/strategy/us-golden-flow/` in the package, with the example's own lines stripped. They
 change by hand with the example's, in the same commit, and so does `references/structure.md`.

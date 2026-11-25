@@ -41,6 +41,29 @@ for somebody who was not in the room:
 
 ---
 
+## 0.23.0 (2026-11-25)
+
+**MINOR** — a strategy ships with no licence, and the README says each thing once. No result
+changes.
+
+**What to do differently:** nothing in a new strategy. One made before keeps its `LICENSE` and
+`license = "MIT"` until its owner removes them: without them, every right in it is the owner's.
+
+### Changed
+
+- `SETUP.md` step 5: a strategy ships with no licence; `LICENSE` leaves the first commit's
+  `git add`, and the agent no longer asks for a holder.
+- `README.md`, 293 lines to 139: *What is in here* is now one table of the steps, the folder each
+  owns, what belongs in it and what it prevents, in place of *Eight steps*, the folder table and
+  *The names*; *Starting your own strategy* is one line a letter; *The libraries* and *Conventions*
+  each say their part once. The documents come first.
+- The worked example is `us-golden-flow`.
+
+### Removed
+
+- `LICENSE`, and `license = "MIT"` in `pyproject.toml`: a strategy is its owner's, and an owner who
+  publishes one chooses its licence then.
+
 ## 0.22.1 (2026-11-16)
 
 **PATCH** — the worked example's spin-off step computes again every signal built on the total

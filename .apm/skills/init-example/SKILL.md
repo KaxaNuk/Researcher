@@ -1,7 +1,7 @@
 ---
 name: init-example
 description: >
-  Copy a KaxaNuk worked example — today one, the strategy golden-flow — into a new folder to study
+  Copy a KaxaNuk worked example — today one, the strategy us-golden-flow — into a new folder to study
   or run it, or one of its worked files, such as Data/analyzer_marimo.py, into a folder of its own to
   read beside a strategy's own, from the copy inside the researcher package, by a script; with
   several examples, it asks which. Only when the owner runs it by name. It does NOT start a
@@ -15,7 +15,7 @@ metadata:
 
 The examples sit in the package by kind, as the templates do: `examples/<kind>/<name>/`, the kind
 being what the example is an example of — `strategy`, worked through the KaxaNuk Strategy Template.
-Today there is one, `examples/strategy/golden-flow/`: one strategy worked through every folder of
+Today there is one, `examples/strategy/us-golden-flow/`: one strategy worked through every folder of
 the template — the objective and its claims, the notes, the universe, the data, the experiment and
 its documents, the findings, the results and the paper-trading gate. An example's own lines sit
 between example markers — `<!-- example: begin -->` and `<!-- example: end -->` in Markdown,
@@ -29,7 +29,7 @@ or describe an example from memory.
 
 ## When to Use
 
-- **A whole example, in a new folder** — *init-example*, *init-example golden-flow*, *give me the
+- **A whole example, in a new folder** — *init-example*, *init-example us-golden-flow*, *give me the
   example to look at*. To read it, run its notebooks, or see what a finished experiment looks like.
 - **The examples of one kind** — *init-example strategy*: the same, chosen among that kind only.
 - **One worked file, to read beside your own** — *init-example Data/analyzer_marimo.py*, *show me
@@ -54,7 +54,7 @@ or describe an example from memory.
 
    A word the owner gave that the list holds as a name, or as `<kind>/<name>`, is that example,
    taken without asking; one it holds as a kind leaves that kind's examples only. When one example
-   is left — today `golden-flow`, with no word at all — it is the one, and nothing is asked. When
+   is left — today `us-golden-flow`, with no word at all — it is the one, and nothing is asked. When
    several are left, ask which through the question tool, one option per example: its name, and its
    line from the list, which gives its kind and its subject. The tool takes four options, so with
    more, ask the kind first, and with more than four of one kind, ask as a numbered list in chat
@@ -65,7 +65,7 @@ or describe an example from memory.
 
 2. **Whole or one piece, and where.** A path means that one piece; no path means the whole
    example. Either lands in a folder outside any strategy: ask where through the question tool.
-   The default is a folder named after the example — `golden-flow` — in the folder a caller hands
+   The default is a folder named after the example — `us-golden-flow` — in the folder a caller hands
    it, else beside the researcher's home — the folder holding `RESEARCHER.md` here, or the one the
    researcher's skill names — else beside the folder the session is open in. Never into a
    strategy: its file of the same name is the template's description, for the owner to fill. When
@@ -105,14 +105,14 @@ or describe an example from memory.
    `git config user.email "<>"`, an empty address, then run the printed commands there.
 
 5. **For one piece, say what it shows.** Everything between the markers in what was copied is the
-   example's own work, and so, whole, is every file only the example has — for `golden-flow`, its
+   example's own work, and so, whole, is every file only the example has — for `us-golden-flow`, its
    seed, its notes and `Universe/seed.py`; an example with a book on paper adds that book's
    `FREEZE.json` and the files it hashes.
    Around the markers is the template's description, which the strategy's copy already holds. Name
    the path it landed at, to read beside the strategy's file; never copy its lines into the
    strategy.
 
-6. **Hand over**, for the whole example, in three short lines — for `golden-flow`:
+6. **Hand over**, for the whole example, in three short lines — for `us-golden-flow`:
    - *Read*, with nothing installed: `OBJECTIVE.md`, `RESULTS.md`, then `BLUEPRINT_1.md` and
      `FINDINGS_1.md` in `Experiments/Experiment_1/`, then `Paper_Trading/BITACORA.md`.
    - *Run*: its README's *Run it*, in a **new** session opened in the folder — a Sharadar key of

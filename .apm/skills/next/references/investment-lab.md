@@ -53,7 +53,7 @@ ask `analytics@kaxanuk.mx` for them. A strategy reads them in place from the fol
   suggest: `lab@kaxanuk.mx`, with the versions the researcher names when asked *which version are
   you?*, and what happened;
 - the Analytics Factory's data sets: `analytics@kaxanuk.mx`;
-- Research Models, such as the worked example `golden-flow`: `research@kaxanuk.mx`;
+- Research Models, such as the worked example `us-golden-flow`: `research@kaxanuk.mx`;
 - Training Workshops: `workshops@kaxanuk.mx`;
 - anything else: `info@kaxanuk.mx`.
 

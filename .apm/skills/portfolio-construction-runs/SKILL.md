@@ -354,7 +354,7 @@ names are held stays the strategy's, because no method has one.
 - **Quote a number the engine did not produce.** This module builds weights; `backtest-engine-runs`
   prices them.
 - **Use a live KaxaNuk strategy as a worked example.** Examples in this package come only from
-  `golden-flow` as the package ships it, never from a live strategy repository.
+  `us-golden-flow` as the package ships it, never from a live strategy repository.
 
 ## Where the documentation is
 

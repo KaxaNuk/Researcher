@@ -6,6 +6,12 @@ Every notable change to this repository, newest first: `## X.Y.Z (YYYY-MM-DD)` w
 This is the home template's changelog, which `init-researcher` copies into every home and `update`
 extends with a *Brought to template* entry at the top; the home's own entries go there too.
 
+## 0.36.1 (2026-11-25)
+
+**PATCH** — the README names the worked example by its new name, `us-golden-flow`.
+
+**What to do differently:** nothing.
+
 ## 0.36.0 (2026-11-09)
 
 **MINOR** — your researcher can watch a video: its transcript goes to `Sources/Videos/`, and the

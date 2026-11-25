@@ -82,7 +82,7 @@ architecture.
 
 Skip this if you don't invest. Investing is there when you want it, never pushed. When an idea is
 ready, the KaxaNuk Investment Lab takes it through eight steps, with your researcher at each one.
-`init-example` copies a finished strategy, `golden-flow`, to read; `init-strategy <name>` starts
+`init-example` copies a finished strategy, `us-golden-flow`, to read; `init-strategy <name>` starts
 your own.
 
 ![Your researcher unites the Lab pipeline: one skill per step](assets/readme/the-lab-process.svg)
@@ -115,7 +115,7 @@ teach the method, never a promise or a recommendation.
 - **The Investment Lab's libraries and licences**, or a problem with your researcher:
   [lab@kaxanuk.mx](mailto:lab@kaxanuk.mx)
 - **The Analytics Factory's data sets:** [analytics@kaxanuk.mx](mailto:analytics@kaxanuk.mx)
-- **Research Models**, such as `golden-flow`: [research@kaxanuk.mx](mailto:research@kaxanuk.mx)
+- **Research Models**, such as `us-golden-flow`: [research@kaxanuk.mx](mailto:research@kaxanuk.mx)
 - **Training Workshops:** [workshops@kaxanuk.mx](mailto:workshops@kaxanuk.mx)
 - **Anything else**, or a tool you would like next: [info@kaxanuk.mx](mailto:info@kaxanuk.mx)
 

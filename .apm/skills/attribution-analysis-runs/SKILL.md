@@ -456,7 +456,7 @@ counterfactual books that say what the residual is made of.
   instead.
 - **Silently accept a shortened window.** The common date range is an output, and it is stated.
 - **Use a live KaxaNuk strategy as a worked example.** Examples in this package come only from
-  `golden-flow` as the package ships it, never from a live strategy repository.
+  `us-golden-flow` as the package ships it, never from a live strategy repository.
 
 ## Where the documentation is
 

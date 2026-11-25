@@ -84,7 +84,7 @@ your judgement stays yours.
 5. **Ask, and think things through.** `query <question>` answers from what you have read, every
    claim cited and every gap named; `study <subject>` works out an idea, a plan or a decision;
    `teach <topic>` gives a lesson a session.
-6. **Start a strategy.** Read a finished one first: `init-example` copies `golden-flow` beside
+6. **Start a strategy.** Read a finished one first: `init-example` copies `us-golden-flow` beside
    this folder — open `OBJECTIVE.md`, then `RESULTS.md`, then `Experiments/Experiment_1/`. Reading
    it needs nothing; running it needs a data provider's key, the Analytics Factory's files and the
    Lab's licences, as its `SETUP.md` says. Then `init-strategy <name>` makes your own beside this
@@ -227,7 +227,7 @@ One address for each kind of question:
   [lab@kaxanuk.mx](mailto:lab@kaxanuk.mx). For a problem, add the versions it names when you ask
   *which version are you?*
 - **The Analytics Factory's data sets:** [analytics@kaxanuk.mx](mailto:analytics@kaxanuk.mx)
-- **Research Models**, such as the worked example `golden-flow`:
+- **Research Models**, such as the worked example `us-golden-flow`:
   [research@kaxanuk.mx](mailto:research@kaxanuk.mx)
 - **Training Workshops:** [workshops@kaxanuk.mx](mailto:workshops@kaxanuk.mx)
 - **Anything else**, or a tool you would like next: [info@kaxanuk.mx](mailto:info@kaxanuk.mx)

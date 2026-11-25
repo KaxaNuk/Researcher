@@ -14,7 +14,7 @@ Usage:
     uv run --no-project python scaffold.py researcher <destination>
     uv run --no-project python scaffold.py strategy <destination>
     uv run --no-project python scaffold.py example <destination>
-    uv run --no-project python scaffold.py example <destination> --name golden-flow
+    uv run --no-project python scaffold.py example <destination> --name us-golden-flow
     uv run --no-project python scaffold.py examples
     uv run --no-project python scaffold.py examples --kind strategy
     uv run --no-project python scaffold.py python-library <destination>
@@ -22,7 +22,7 @@ Usage:
     uv run --no-project python scaffold.py example <a folder of its own> --only Experiments/Experiment_1
 
 An example is a folder `examples/<kind>/<name>/` that holds a `README.md`: its kind is what it is
-an example of, `strategy` for `examples/strategy/golden-flow/`, and its name is its own.  `examples`
+an example of, `strategy` for `examples/strategy/us-golden-flow/`, and its name is its own.  `examples`
 lists them, one line each, `<kind>/<name> — <its line>`: the line its README marks, alone at
 column 0 as `<!-- kaxanuk-example: <its line> -->`, or else its first paragraph's first sentence,
 links and emphasis made plain.  `--kind` lists one kind only.  `example` copies the one example

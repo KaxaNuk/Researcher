@@ -66,7 +66,7 @@ weight file the experiment's notebook writes in `Experiments/Experiment_N/Portfo
 the Backtest Engine's results workbook from `Backtest/` as a backtest of its own. A strategy made
 without the app runs the same; the app can be added to a new one later.
 
-The worked example, `golden-flow`, is not copied: every file it works through is already here,
+The worked example, `us-golden-flow`, is not copied: every file it works through is already here,
 describing what belongs in it. To read or run it, `init-example` copies it into a folder of its
 own. Never build on it.
 
@@ -232,10 +232,11 @@ Research, never investment advice: *What it is, and what it is not*, in the
 ```
 
 Put the same status line in place of the banner at the top of `AGENTS.md`. In `pyproject.toml`,
-rename `name` to the strategy's and set `version` to `0.1.0`. `LICENSE` names KaxaNuk as the
-holder: put yourself there, or choose another licence. In `CHANGELOG.md`, keep everything above the
-first `---` line and replace the template's entries below it with the strategy's first, naming the
-template version `pyproject.toml` declared before you reset it:
+rename `name` to the strategy's and set `version` to `0.1.0`. A strategy ships with no licence:
+every right in it stays with its owner, and an owner who publishes it chooses a licence then. In
+`CHANGELOG.md`, keep everything above the first `---` line and replace the template's entries below
+it with the strategy's first, naming the template version `pyproject.toml` declared before you
+reset it:
 
 ```markdown
 ## 0.1.0 (YYYY-MM-DD)
@@ -246,13 +247,13 @@ template version `pyproject.toml` declared before you reset it:
 Then run `uv lock`, so `uv.lock` records the new name and version, and commit it with the rest:
 
 ```bash
-git add README.md AGENTS.md pyproject.toml LICENSE CHANGELOG.md uv.lock
+git add README.md AGENTS.md pyproject.toml CHANGELOG.md uv.lock
 git commit -m "README: <strategy-name>"
 ```
 
 > **For the agent.** Use the name you asked for at the start, and the user's sentence on the idea
-> if they gave one; **never invent a thesis**, use the placeholder. The holder in `LICENSE` is the
-> user's name: ask if you do not have it, never invent it. Everything else in the block is fixed.
+> if they gave one; **never invent a thesis**, use the placeholder. Everything else in the block
+> is fixed.
 > Do not keep the template's README under another name: the process lives upstream, and a copy
 > here drifts.
 

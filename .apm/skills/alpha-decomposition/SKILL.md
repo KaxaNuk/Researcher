@@ -221,10 +221,10 @@ the signal contributes as a filter**, which a factor model cannot measure.
 sizing rule's own selection, and the honest description of the strategy is "top-N by the sizing
 column". That is worth knowing and belongs in `OBJECTIVE.md` as a falsified claim.
 
-## 5. The worked example — `golden-flow`
+## 5. The worked example — `us-golden-flow`
 
 The KaxaNuk Strategy Template works one strategy through the process in its worked example,
-`examples/strategy/golden-flow/` in `KaxaNuk/Researcher`, which `init-example` copies into a
+`examples/strategy/us-golden-flow/` in `KaxaNuk/Researcher`, which `init-example` copies into a
 folder of its own. Its strategy, **Golden Flow**, owns once a month the KN US Equity Core members
 whose 50-day simple moving average is above the 200-day, ranked and weighted by 63-day traded
 value, none above 20% and none below 1%, a held name left alone when its target moved by half a
@@ -289,4 +289,4 @@ What the arms teach this skill:
 - **Quote a number that did not come from the engine.** Every counterfactual is priced by
   `backtest_engine.run_backtest` over the shared window, never approximated.
 - **Use a live KaxaNuk strategy as a worked example.** Examples in this package come only from
-  `golden-flow` as the package ships it, never from a live strategy repository.
+  `us-golden-flow` as the package ships it, never from a live strategy repository.

@@ -207,8 +207,8 @@ def test_main_examples_lists_each_example_by_its_line(
     package_line = f'The package at {package}, version 9.8.7'
     listed_lines = [
         'etf/sofía-rotation — Rotates between two ETFs, as Sofía does (2024).',
-        'strategy/golden-flow — Golden Flow buys what trades the most, while its trend is up.',
         'strategy/pérez-value — Pérez Value buys cheap stocks of the index, as Pérez, Ana (2021) did.',
+        'strategy/us-golden-flow — Golden Flow buys what trades the most, while its trend is up.',
     ]
     held_lines = [
         f'  {line}'
@@ -232,7 +232,7 @@ def test_main_examples_lists_each_example_by_its_line(
         ]),
     )
     _write(
-        examples / 'strategy' / 'golden-flow' / 'README.md',
+        examples / 'strategy' / 'us-golden-flow' / 'README.md',
         '\n'.join([
             '<!-- example: begin -->',
             '',

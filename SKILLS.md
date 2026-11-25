@@ -30,7 +30,7 @@ anywhere else, say it.
 | You want to | Say or type | You get |
 | --- | --- | --- |
 | build a strategy | `init-strategy <name>`, then `objective`, `blueprint`, `challenge` | a folder on the KaxaNuk Strategy Template: claims before any test, numbers from the Lab's engines |
-| see a strategy worked end to end | `init-example` | `golden-flow`, one finished strategy to read (with more examples, it asks which); running it needs keys and licences |
+| see a strategy worked end to end | `init-example` | `us-golden-flow`, one finished strategy to read (with more examples, it asks which); running it needs keys and licences |
 | follow a KaxaNuk Training Workshop | the session, *Bootcamp S03*; *practice Bootcamp S03, beginner* | your researcher as tutor: where you are in the session, your prediction first, hints in levels, nothing done for you while the AI is off; practice problems from the session at your level |
 | check a method before it touches real data | *known-answer test for my half-life estimate* | one notebook in a folder beside your strategy: data simulated from a model whose truth you set, your method run on it, a check that fails loudly when it misses, and one way the method fails; simulated data only |
 | build a Python library of your own | `init-python-library <name>` | a folder laid out like the KaxaNuk Data Curator: tests, docs, a workflow that tests and publishes |

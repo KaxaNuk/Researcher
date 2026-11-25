@@ -235,10 +235,10 @@ to follow for the second outcome.
 
 ## References
 
-- `Paper_Trading/BITACORA.md` in the worked example, `examples/strategy/golden-flow/` in the KaxaNuk
-  Researcher package — the gate read once, both layers, every row evidenced from `FINDINGS_1.md`:
-  S1 to S5 hold; P1 and P3 fail over 2000–2026 and P2 is not evidenced; the book earned in
-  2018–2026 and lost in 2000–2008. Sound and regime-dependent, read on the owner's word of
+- `Paper_Trading/BITACORA.md` in the worked example, `examples/strategy/us-golden-flow/` in the
+  KaxaNuk Researcher package — the gate read once, both layers, every row evidenced from
+  `FINDINGS_1.md`: S1 to S5 hold; P1 and P3 fail over 2000–2026 and P2 is not evidenced; the book
+  earned in 2018–2026 and lost in 2000–2008. Sound and regime-dependent, read on the owner's word of
   2026-10-27, and put on paper on probation that day: its section `### Paper_Trading_1 —
   Experiment 1, on paper on probation` registers the sign-off, the regime prediction, the 12
   months to the review of 2027-10-27, the bands and the kill switch, and is the model of a book

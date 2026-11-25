@@ -46,6 +46,7 @@ import sys
 
 __all__ = [
     'CheckResult',
+    'changed_markdown_paths',
     'check_bloom_code',
     'check_frozen_files',
     'check_markdown',
@@ -146,6 +147,31 @@ class VersionedPart:
     version_pattern: re.Pattern
 
 
+def changed_markdown_paths(
+    name_status: str,
+) -> dict[str, str | None]:
+    """
+    Each changed Markdown file, from `git diff --name-status -z -M`, mapped to the path it was
+    renamed from, or to None. A renamed file is then compared with its former self, so a folder
+    moved whole does not read every line it already held as added.
+    """
+    fields = iter(
+        field
+        for field in name_status.split('\0')
+        if field
+    )
+    paths = {}
+
+    for status in fields:
+        if status.startswith(('R', 'C')):
+            previous_path = next(fields)
+            paths[next(fields)] = previous_path
+        else:
+            paths[next(fields)] = None
+
+    return paths
+
+
 def check_bloom_code() -> CheckResult:
     """
     The Bloom Code check: the skills' scripts, tools/ and tests/ at its default 120 columns, then each
@@ -223,25 +249,23 @@ def check_markdown() -> CheckResult:
     base_commit = base.stdout.strip()
     changed = git([
         'diff',
-        '--name-only',
+        '--name-status',
         '-z',
+        '-M',
         '--no-ext-diff',
         '--diff-filter=AMR',
         base_commit,
         '--',
         '*.md',
     ])
-    changed_paths = sorted(
-        relative_path
-        for relative_path in changed.stdout.split('\0')
-        if relative_path
-    )
+    changed_paths = changed_markdown_paths(changed.stdout)
     problems = [
         problem
-        for relative_path in changed_paths
+        for relative_path in sorted(changed_paths)
         for problem in _changed_markdown_problems(
             base_commit,
             relative_path,
+            changed_paths[relative_path],
         )
     ]
     result = CheckResult(
@@ -738,18 +762,26 @@ def _cell_lines(
 def _changed_markdown_problems(
     base_commit: str,
     relative_path: str,
+    previous_path: str | None,
 ) -> list[str]:
     """
-    The house rules' problems in one changed Markdown file, its lines added since the base commit.
+    The house rules' problems in one changed Markdown file, its lines added since the base commit;
+    a renamed file is compared with the path it had there.
     """
+    compared_paths = [
+        path
+        for path in (previous_path, relative_path)
+        if path is not None
+    ]
     diff = git([
         'diff',
         '-U0',
+        '-M',
         '--no-color',
         '--no-ext-diff',
         base_commit,
         '--',
-        relative_path,
+        *compared_paths,
     ])
     added_line_numbers = {
         number

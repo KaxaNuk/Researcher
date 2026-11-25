@@ -41,6 +41,13 @@ for somebody who was not in the room:
 
 ---
 
+## 0.21.0 (2026-11-25)
+
+**MINOR** — the example is renamed `us-golden-flow`, from `golden-flow`, and takes the template's
+0.23.0 setup step; it keeps its MIT licence. No result changes; not re-run.
+
+**What to do differently:** `init-example` makes a folder named `us-golden-flow`.
+
 ## 0.20.1 (2026-11-16)
 
 **PATCH** — the spin-off step computes `c_trend_50_200` again from the close it rewrites, through

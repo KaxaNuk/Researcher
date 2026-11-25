@@ -241,4 +241,4 @@ different universe from the one the row count suggests.
 - **Change the seed without a change-set.** Its own commit, changelog entry, and the pipeline re-run
   before a figure from the new universe stands beside one from the old.
 - **Use a live KaxaNuk strategy as a worked example.** Examples in this package come only from
-  `golden-flow` as the package ships it, never from a live strategy repository.
+  `us-golden-flow` as the package ships it, never from a live strategy repository.
