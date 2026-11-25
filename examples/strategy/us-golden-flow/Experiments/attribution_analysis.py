@@ -117,9 +117,10 @@ __all__ = [
     "attribute_books",
     "benchmark_coverage",
     "held_overnight",
+    "implied_bill",
     "kn_sectors",
-    "load_asset_returns",
     "load_benchmark_weights",
+    "load_excess_returns",
     "load_factor_returns",
     "load_prices",
     "open_dashboard",
@@ -166,7 +167,6 @@ FACTOR_CACHE = {}
 # The Curator's files, for the cash proxy and anything else outside the seed.
 CURATOR_DIRECTORY = pathlib.Path(__file__).parent.parent / "Data" / "Curator" / "Time_Series"
 # The refined files, because each is cut to the span its symbol speaks for its security.
-REFINERY_DIRECTORY = pathlib.Path(__file__).parent.parent / "Data" / "Refinery" / "Time_Series"
 
 
 def attribute_book(
@@ -176,13 +176,14 @@ def attribute_book(
     Run the three passes on one book, in a worker process, and return their linked tables.
 
     The task carries the book's daily weights, held overnight and widened to the index, the index's
-    weights on the same dates, the asset returns and the layers to run: `brinson`, `factor` and
-    `residual`.  The library's own pipeline does the work, through `attribute()`: the textbook
-    Brinson-Fachler by KN sector, the owner's decision of 2026-10-24, the KN US Equity Factor
-    Model, and both linked with Carino, so every cumulative effect adds up to the compounded
-    return.  The cash the rule leaves uninvested is a segment of its own at a zero return, because
-    the textbook formula takes each side's weights summing to one; the library's interest on cash is
-    none, and the engine's is in its own figures.  With a `cache_directory`, the answer is kept
+    weights on the same dates, the asset returns over the bill (`load_excess_returns`) and the
+    layers to run: `brinson`, `factor` and `residual`.  The library's own pipeline does the work,
+    through `attribute()`: the textbook Brinson-Fachler by KN sector, the owner's decision of
+    2026-10-24, the KN US Equity Factor Model, and both linked with Carino, so every cumulative
+    effect adds up to the compounded return over the bill.  The cash the rule leaves uninvested is
+    a segment of its own at a zero excess return -- it earns the bill -- because the textbook
+    formula takes each side's weights summing to one; the engine's cash interest, the bill less a
+    broker's spread, is in its own figures.  With a `cache_directory`, the answer is kept
     under the hash of everything the task carries, so a notebook re-run attributes only what
     changed.
     """
@@ -334,6 +335,41 @@ def held_overnight(
     return moved.iloc[1:]
 
 
+def implied_bill(
+    prices: "pandas.DataFrame",
+) -> "pandas.Series":
+    """
+    The factor model's bill, each day, as its own files imply it.
+
+    The model's total excess return is each security's return less the bill, and the delivery
+    does not ship the bill.  The median, across every security both this repository and the model
+    price that day, of the return here less the model's excess return is the bill: the two price
+    sources agree to rounding (JOURNAL_1, 2026-11-08), so the median is one number a day, set by
+    the whole cross-section and never by a book.  It is not the Fed funds rate the engine pays
+    cash at, which runs above it.  The owner's decision of 2026-11-08; replace it with the
+    desk's own series once a delivery carries one.  The first day has no return and no bill; any
+    later day without one raises, because a missing bill would quietly move a residual.
+    """
+    returns = prices.pct_change(fill_method=None)
+    factors = _factor_returns()
+    model_excess = factors["f_total_excess_returns"].reindex(
+        index=returns.index,
+        columns=returns.columns,
+    )
+    differences = returns - model_excess
+    bill = differences.median(axis=1)
+    later_days = bill.iloc[1:]
+    missing_days = later_days.index[later_days.isna()]
+
+    if len(missing_days) > 0:
+        first_missing = missing_days[0].date()
+        message = f"no implied bill on {len(missing_days)} days, the first {first_missing}"
+
+        raise ValueError(message)
+
+    return bill.fillna(0.0)
+
+
 def kn_sectors(
     factors: dict[str, "pandas.DataFrame"],
 ) -> dict[str, str]:
@@ -364,21 +400,6 @@ def kn_sectors(
     }
 
 
-def load_asset_returns(
-    prices: "pandas.DataFrame",
-) -> "pandas.DataFrame":
-    """
-    Daily returns from a price matrix, a missing day a zero rather than a null.
-
-    The library refuses nulls; a zero on a day a security is not priced is harmless only because
-    neither book holds a weight in it that day, which `load_benchmark_weights` guarantees for the
-    index and the rule guarantees for the book.
-    """
-    returns = prices.pct_change(fill_method=None)
-
-    return returns.fillna(0.0)
-
-
 def load_benchmark_weights(
     dates: "pandas.DatetimeIndex",
     prices: "pandas.DataFrame",
@@ -402,6 +423,30 @@ def load_benchmark_weights(
     )
 
     return renormalised.fillna(0.0)
+
+
+def load_excess_returns(
+    prices: "pandas.DataFrame",
+    bill: "pandas.Series",
+) -> "pandas.DataFrame":
+    """
+    Daily returns over the bill from a price matrix, a missing day a zero rather than a null.
+
+    The factor model is built on returns over the bill, so a total return handed to the library
+    leaves the bill the book earned in the residual, where no factor can claim it: on Experiment
+    1's rule at the flat row, about half the idiosyncratic return summed by year (JOURNAL_1,
+    2026-11-08).  Over the bill, the residual is comparable with the model's own, and the cash
+    segment, at a zero excess return, earns the bill.  The library refuses nulls; a zero on a day
+    a security is not priced is harmless only because neither book holds a weight in it that day,
+    which `load_benchmark_weights` guarantees for the index and the rule guarantees for the book.
+    """
+    returns = prices.pct_change(fill_method=None)
+    excess = returns.sub(
+        bill,
+        axis=0,
+    )
+
+    return excess.fillna(0.0)
 
 
 def load_factor_returns() -> dict[str, "pandas.DataFrame"]:
@@ -439,18 +484,16 @@ def load_prices(
     """
     The total-return price of every security either book names, on the book's dates.
 
-    Read from the refined files, which keep only the dates each symbol speaks for its security, so
-    a reused ticker's other company never enters a return; the cash proxy, which the refinery does
-    not carry, from the Curator's file.  A date with no price stays null here: the caller decides,
-    and `load_benchmark_weights` drops the member that date.  A price of zero or below is not a
-    price -- the return after it is infinite -- and is read as none.
+    Read from the curated files, which `Data/curator.py` cuts to the dates each symbol speaks for
+    its security, so a reused ticker's other company never enters a return.  A date with no
+    price stays null here: the caller decides, and `load_benchmark_weights` drops the member that
+    date.  A price of zero or below is not a price -- the return after it is infinite -- and is
+    read as none.
     """
     columns = {}
 
     for identifier in identifiers:
-        refined_path = time_series.path_for(REFINERY_DIRECTORY, identifier)
-        curated_path = time_series.path_for(CURATOR_DIRECTORY, identifier)
-        path = refined_path if refined_path.is_file() else curated_path
+        path = time_series.path_for(CURATOR_DIRECTORY, identifier)
 
         if not path.is_file():
             continue

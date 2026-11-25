@@ -14,19 +14,14 @@
 
 <!-- example: begin -->
 
-> **In this example, what follows each template paragraph is Golden Flow's, measured.** Experiment 1
-> ran end to end on 2026-10-24 from a working copy whose data folders were emptied first, on
-> Backtest Engine 0.67.0 and Attribution Analysis 0.5.0, and is read here through the two-layer gate
-> of `Paper_Trading/BITACORA.md`. Versions such as 0.15.0 and 0.16.0 below are Golden Flow's own;
-> the earlier ones are not in this copy. A table whose row reads as an instruction is the template's
-> shape, and Golden Flow's follows it.
+> **Executive summary of everything this repository has measured.**
 >
-> **0.22.0: Experiment 1 reads as sound and regime-dependent, and goes to paper on probation** as
-> `Paper_Trading_1`, on the owner's sign-off of 2026-10-27 — the book as it is, no regime filter,
-> at the flat 5 bp row, for 12 months to a review on 2027-10-27 against the KN US Equity Core and
-> its control. No number moves: the gate in two layers is in
-> [`FINDINGS_1.md`](Experiments/Experiment_1/FINDINGS_1.md), and the book's registration in
-> [`Paper_Trading/BITACORA.md`](Paper_Trading/BITACORA.md).
+> Experiment sections are compiled from the `FINDINGS_N.md` files and cite each one. **When a number
+> changes, change it in `FINDINGS_N.md` first**, then here, as `AGENTS.md` says. The one exception
+> is step 3, `Data/analyzer_marimo.py`: its findings go straight into *Before any experiment*
+> below, because a notebook saves no output.
+>
+> Every performance figure comes from the **KaxaNuk Backtest Engine**, the only backtest here.
 
 <!-- example: end -->
 
@@ -36,31 +31,23 @@ Does Experiment 1's book beat its benchmark and its control, with its headline n
 attribution says about where the return comes from. Which lever earned its place after Experiment 1,
 and which was rejected.
 
+---
+
 <!-- example: begin -->
 
-**The golden cross earns its keep against the same book without it, and the book still loses to its
-index.** Over 2000-01-03 to 2026-08-14, net, monthly, the KN US Equity Core members whose 50-day
-average sits above their 200-day, ranked and weighted by 63-day traded value inside 1% and 20%,
-compound at 6.21% for a Sharpe of 0.162 at the pre-registered costs, 7.72% and 0.221 at a flat 5 bp
-half-spread — against 4.91% and 0.097 for the same rule without the cross, and 8.12% and 0.315 for
-the KN US Equity Core. Sharpe ratios are excess of cash.
-
-**The whole shortfall is 2000–2008**, when the most traded names were the bubble's and the book lost
-13.7% a year to the Core's 3.4%; since 2018 it beats the Core by about eleven points a year. By KN
-sector its holdings compounded to 737% against the index's 805%, the sector bets costing the most;
-three fifths of the holdings' return is factor exposure — the market, then momentum and technology —
-and its idiosyncratic residual, +285 points compounded, does not separate from random books priced
-whole (Attribution Analysis 0.5.0, textbook Brinson-Fachler by KN sector, Carino-linked).
-
-**It reads as sound and regime-dependent, and it is tradeable.** Every soundness criterion of the
-gate holds; over the whole window the book loses to its index at both cost rows, and it earned in
-2018–2026 alone of the blueprint's three sub-periods. It goes to paper on probation as
-`Paper_Trading_1`, on the owner's sign-off of 2026-10-27. Twelve dates a
-year, about twenty orders on each, two turns a year.
-
-<!-- example: end -->
+Experiment 1, the most-traded KN US Equity Core members in a golden cross with no sector above half
+the book, 99.5% invested, a delisted name's cash put back two days after its last price,
+1999-12-31 to 2026-10-30, is **falsified as its blueprint words it**, for the third time on the
+same limb: the cross beats its control over the window (Sharpe 0.207 against 0.124 at the flat
+5 bp row) but on both Sharpe and CAGR in only 1 of 3 sub-periods, where 2 were required. The book
+loses to the Core (0.306) and to `SPY` (0.303). Running the cash as a fund would cut the days the
+rule held over 5% cash from 32 to 6 and its mean cash to 1.5%–1.6%, and moved the headline by a
+thousandth of Sharpe; the sector cap did what it was for, lower volatility and drawdown than the
+same rule uncapped, at the same Sharpe.
 
 ---
+
+<!-- example: end -->
 
 ## Before any experiment: what the data already says
 
@@ -76,52 +63,90 @@ report the share of dates on which it had the sign the hypothesis expects.
 | --- | --- | ---: | ---: | --- |
 | 1 | what was measured, over which horizon, on which pool | the number | for a coefficient or a ratio, the share of dates with the sign the hypothesis expects | the analyzer section |
 
+---
+
 <!-- example: begin -->
 
-**0.16.0, measured on 2026-10-23 by `Data/analyzer_marimo.py`** over the KN US Equity Core of
-2026-10-22 on Sharadar prices — 702 to 915 members a day, 2,198 securities priced — every matrix cut
-at 2026-08-14, the last date of the Core and the factor model. The **pool** is the fifty most traded
-members on each date, the neighbourhood the rule selects from; the **window** is 2000-01-03 to
-2026-08-14, fixed by the universe notebook's coverage rule before any rule existed, and read in the
-three thirds the blueprint judges the book on. The expected sign is positive throughout.
-Consecutive windows share 20, 62 and 251 days at the three horizons, so the dates are not
-independent and the ratios overstate the evidence. Every price read is the rebuilt total-return
-close, `c_close_dividend_and_split_adjusted` (section 1.1).
+Findings from step 3, `Data/analyzer_marimo.py`: whether a candidate feature carries information,
+over what horizon and with which sign, and anything else measured about the signal that needs no
+book. Cite the section each number came from.
 
-| # | Measurement | The window | Dates with the expected sign | 2000–2008 | 2009–2017 | 2018–2026 | Section |
-| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| 1 | Mean pairwise correlation of daily returns, 1,992 members with 500 days in the window | 0.237 | — | | | | 2 |
-| 2 | The cross as a state, 1 above and 0 below, information coefficient on the pool, 21 days | +0.0127 (IR 0.058) | 52.7% | +0.0259 | −0.0027 | +0.0150 | 4 |
-| 3 | The same, 63 days | +0.0189 (IR 0.092) | 53.0% | +0.0312 | −0.0009 | +0.0270 | 4 |
-| 4 | The same, 252 days | +0.0151 (IR 0.078) | 52.4% | +0.0411 | +0.0113 | −0.0112 | 4 |
-| 5 | The trend distance `r_trend_50_200`, on the pool, 21 / 63 / 252 days | +0.0264 / +0.0322 / +0.0108 | 55.9% / 54.6% / 49.8% | +0.0440 / +0.0518 / +0.0230 | +0.0072 / +0.0099 / +0.0142 | +0.0279 / +0.0353 / −0.0078 | 4 |
-| 6 | The traded-value rank `r_liquidity_rank`, on the pool, 21 days | +0.0011 (IR 0.006) | 50.6% | −0.0291 | +0.0111 | +0.0223 | 4 |
-| 7 | The same, 63 days | +0.0037 (IR 0.021) | 49.3% | −0.0395 | +0.0100 | +0.0435 | 4 |
-| 8 | The same, 252 days | +0.0130 (IR 0.073) | 51.0% | −0.0504 | +0.0178 | **+0.0825** | 4 |
-| 9 | The traded-value rank on every member, 252 days | **−0.0391 (IR −0.311)** | **38.0%** | **−0.1115** | −0.0226 | +0.0271 | 4 |
-| 10 | Forward 21-day return on the pool, cross on against off | 0.87% against 0.20% | — | | | | 5 |
-| 11 | Forward 21-day volatility on the pool, cross on against off | 31.8% against 43.0% | — | | | | 5 |
-| 12 | Golden-cross members holding at least 1% of the cross members' traded value, median by year | 8 to 21 | — | | | | 5 |
-| 13 | The largest single share of the cross members' traded value, median by year | 2.0% (2013) to 14.9% (2024) | — | | | | 5 |
-| 14 | The share of the Core no price covers, worst day | 0.11% (2008) | — | | | | universe 5 |
-| 15 | The share of the Core priced and signalled, worst day in the window | 96.5% (2000) | — | | | | universe 5 |
-| 16 | Splits at which Sharadar's volume was adjusted twice, corrected by the Curator | 82, in 77 listings | — | | | | 1.1 |
-| 17 | The open's rounding the fills keep, weighted by the Core | 0.23 bp at most (2009), 0.03 bp in 2026 | — | | | | 1.1 |
+### The universe, as `Universe/` holds it
 
-**What it says, before any book.** Over the whole window the cross carries a small positive
-coefficient on the pool at every horizon, strongest in 2000–2008, about nothing in 2009–2017, and
-positive again since 2018 at one and three months; **it separates volatility far more than return**
-— eleven points of forward volatility against seven tenths of a point of monthly return. The
-traded-value rank inside the pool is close to nothing over the window: negative in 2000–2008,
-positive since, strongly at a year after 2018. **Across every member it points the wrong way**
-(−0.039 at a year, the expected sign on 38% of dates), as the three liquidity papers in
-`Bibliotheca/` say, so nothing here licenses ranking the whole index by liquidity, and the rule does
-not. The index's concentration rose across the window, the largest name's share of the cross
-members' traded value going from 2% in 2013 to 15% in 2024, which is what the 20% cap exists for.
+Read on 2026-11-23 from the files as they are — the seed, and what `Universe/universe_marimo.py`
+wrote on 2026-11-20 from the Curator's files of 2026-11-16 — with no download and no rebuild. Every
+file named here but the seed is regenerable and gitignored.
 
-<!-- example: end -->
+| # | Measurement | Value | Source |
+| --- | --- | ---: | --- |
+| U1 | Listings in the seed, one row each, every one with its own Sharadar permaticker | 2,203 | `Universe/Investable_Universe.csv`; `Universe/Security_Master.csv` |
+| U2 | Of them, delisted by Sharadar's catalogue (`is_delisted` Y) — the seed keeps them | 1,148 (52.1%) | `Universe/Security_Master.csv` |
+| U3 | Listings whose last price comes before the panel ends — delisted, acquired or halted | 1,145 | `Universe/Data_Issues.csv`, *early end* |
+| U4 | Listings with no price when the floor opens — listed later | 750 | `Universe/Data_Issues.csv`, *late start* |
+| U5 | Core members a day, 1999-12-31 to 2026-10-30, 6,749 trading days | 694 to 916, median 815 — the fewest on 2026-10-30, the most on 2014-09-22 | `Universe/Coverage.csv` |
+| U6 | Members priced, every day | all of them: priced weight at least 99.997% of the Core's, survivorship cost 0 | `Universe/Coverage.csv` |
+| U7 | Members priced and with 200 days of history behind them, as a share of the Core's weight | at least 96.74% (2000-03-20); 98.30% on the floor, 1999-12-31, against the 90% the window requires | `Universe/Coverage.csv`; `Universe/Window.csv` |
+| U8 | The window | 1999-12-31 to 2026-10-31 | `Universe/Window.csv` |
+| U9 | Index listings Sharadar does not list, or does not carry | 0 and 0 | `Universe/Data_Issues.csv` |
+| U10 | Blocking rows — excluded by name from every book: history shorter than the warm-up | 8: ARXS, CBRS, FDXF, FPS, H1, ILA.A, PS, SUNB | `Universe/Data_Issues.csv` |
+| U11 | A listing Sharadar files under another ticker: Six Flags Entertainment (permaticker 198958, delisted 2024-07-01), the index's `SIX`, fetched as `SIX1`; a fetch of `SIX` had returned another listing's rows | 1 | `Universe/Provider_Renames.csv` |
+| U12 | Splits the Curator's rebuilt adjustment carries | 1,988, in 1,063 listings | `Data/Curator/adjustment_checks.csv` |
+| U13 | Days the rebuilt total-return close moves more than 0.5% off Sharadar's own; days a split leaves the rebuilt split-adjusted close more than 2% off | 7 days, in BILL, CXW and IOT (largest 2.3%, BILL); 0 | `Data/Curator/adjustment_checks.csv` |
+| U14 | Spin-offs in Sharadar's actions file inside a seed listing's span, the ones the Curator's dividend column leaves out and `Data/curator.py` adds to the total-return close | 339, on 252 listings (GE's of Wabtec, GE HealthCare and GE Vernova among them) | `Data/Curator/Actions/sharadar_actions_2026-11-20.csv` |
+
+### The analyzer's screen
+
+`Data/analyzer_marimo.py`, run on 2026-11-23 on the Curator's files of 2026-11-16 as they are
+(Data Curator 0.51.0), with marimo 0.25.2, pandas 2.3.3, NumPy 2.5.5 and SciPy 1.18.1; its Verify
+passed 16 checks. It reads the Curator's `c_*` columns alone, as Experiment 1 does: the panel is the
+Core's members on each date, the pool the fifty most traded of them by `c_traded_value_sma_63d`
+(the rule holds 18 to 58 names), and both are read over the window, 1999-12-31 to 2026-10-30, and
+in the blueprint's three sub-periods. It was run after Experiment 1 had reported, so it licenses
+nothing that experiment predicted; it is the screen a later blueprint starts from.
+
+**State the horizon and the overlap**, item 11 of the bar in `AGENTS.md`: a coefficient over *h*
+days, measured every day, shares *h − 1* days with the next one. Beside any coefficient or ratio,
+report the share of dates on which it had the sign the hypothesis expects — positive, for every
+feature here. The crosses are 1/0 states, so a rank coefficient on them is directional.
+
+| # | Measurement | Value | Dates with the expected sign | Section |
+| --- | --- | ---: | ---: | --- |
+| A1 | Member-days with a usable `c_golden_cross_50_200` — the gap is the 200-day warm-up of a late listing | 99.4% | — | 1 |
+| A2 | Members with more than 500 daily returns in the window; their mean pairwise correlation | 1,994; 0.236 | — | 2 |
+| A3 | The same members: median annualised volatility; median worst day | 43.3%; −24.8% | — | 2 |
+| A4 | The traded-value rank is a percentile inside each date; `c_traded_value_sma_63d` is the 63-day average of `c_traded_value`; `c_eligible_golden_cross_50_200` is membership and the cross at the prior close | exact on all 7,001 dates; a largest gap of 0; 0 disagreements in 5,606,947 member-dates | — | 3 |
+| A5 | IC of the 50/200 cross on the pool, 21 days, overlap 20 — IR 0.056; by sub-period +0.0266, −0.0026, +0.0126 | +0.0122 | 52.5% | 4 |
+| A6 | The same, 63 days, overlap 62 — IR 0.088; by sub-period +0.0345, +0.0004, +0.0192 | +0.0180 | 53.0% | 4 |
+| A7 | The same, 252 days, overlap 251 — IR 0.088; by sub-period +0.0447, +0.0130, −0.0103 | +0.0171 | 52.7% | 4 |
+| A8 | IC of the 50/200 cross on every member, 63 days — IR 0.118 | +0.0158 | 55.4% | 4 |
+| A9 | The sweep's neighbours on the pool, 63 days: the 20/100 cross (IR 0.059); the 100/300 cross (IR 0.164) | +0.0123; +0.0345 | 54.1%; 57.8% | 4 |
+| A10 | IC of the traded-value rank on the pool, 252 days — IR 0.076; by sub-period −0.0481, +0.0184, +0.0789 | +0.0136 | 50.8% | 4 |
+| A11 | IC of the traded-value rank on every member, 252 days — IR −0.324; by sub-period −0.1151, −0.0251, +0.0255 | −0.0411 | 37.2% | 4 |
+| A12 | IC of the traded-value rank on the pool, 21 days — IR 0.012 | +0.0021 | 50.5% | 4 |
+| A13 | On the pool, over the window: mean 21-day forward return with the cross on and off (215,068 and 120,911 observations) | +0.87% and +0.20% | — | 5 |
+| A14 | The same split, mean 21-day forward volatility, annualised | 31.9% and 43.1% | — | 5 |
+| A15 | Traded value among the golden-cross members: the largest member's share, yearly median; members holding at least 1% of it, yearly median | 2.0% to 14.9%; 8 to 21 | — | 5 |
+| A16 | **Buy and hold against the cross, stock by stock, over the window**: stocks analysed — a member at the prior close with the cross there, at least 252 such days — and those on which holding only while the cross was on returned more | **1,845; the cross returned more on 735 (39.8%)** | — | 5.1 |
+| A17 | The same stocks: the cross fell less at its worst; moved less | 80.3%; 99.7% | — | 5.1 |
+| A18 | The same stocks, medians, buy and hold against the cross: annual return; worst decline; volatility | 5.12% against 2.75%; −69.5% against −52.1%; 38.6% against 24.8% | — | 5.1 |
+| A19 | The same stocks: the cross's annual return less buy and hold's, at the 10th, 50th and 90th percentiles; the median share of days the cross was on | −10.96, −2.26 and +24.88 points; 60.4% | — | 5.1 |
+| A20 | Stocks on which the cross returned more, by sub-period: 1999–2008; 2009–2017; 2018–2026 | 665 of 1,145 (58.1%); 224 of 1,157 (19.4%); 284 of 1,048 (27.1%) | — | 5.1 |
+
+**What it allows a blueprint to say, and what it forbids.** The 50/200 cross carries a small
+positive coefficient inside the pool at every horizon, and nothing in 2009–2017 at 21 and 63 days;
+at 21 and 63 days the slower 100/300 reads higher than the 50/200 and the faster 20/100 lower, and
+at 252 days the order breaks — a curve, not a cell to pick. The cross separates risk more than
+return: forward volatility of 31.9% with the cross on against 43.1% with it off (A14), and on 99.7%
+of stocks the cross moved less than holding (A17), while it returned more on only 39.8% (A16) — a
+drawdown control, as `FINDINGS_1.md` prediction 2 found, not a return engine. Across every member
+the traded-value rank points the way the liquidity notes say, the most traded earning less (A11);
+inside the pool its sign turns with the period (A10), so no blueprint may predict its sign over the
+window from this. Section 5.1 is a teaching measurement: cash earns nothing, no trade costs
+anything, and no book is built.
 
 ---
+
+<!-- example: end -->
 
 ## The experiments
 
@@ -142,26 +167,27 @@ sound and regime-dependent with its periods named, or not sound with the soundne
 
 <!-- example: begin -->
 
+Each experiment ranks its variants over **one window shared by all of them**; windows can differ
+between experiments.
+
+> **Compare a winner's Sharpe with its own experiment's control**, never with another experiment's
+> headline. Across experiments, compare the `vs control` column.
+
+**Each row names the claim it moved**: the claim of `OBJECTIVE.md` its blueprint set out to move,
+and the status it reached. A row that beats its benchmarks and moves no claim is a number, not a
+finding. **Its status is the gate's outcome**, as `Paper_Trading/BITACORA.md` reads it: graduates,
+sound and regime-dependent with its periods named, or not sound with the soundness row that failed.
+
 | Exp | Book | CAGR | Sharpe | Max DD | Control Sharpe | vs control | Status | Claim moved | Findings |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- | --- | --- |
-| **1** | KN US Equity Core members above the golden cross, ranked and weighted by 63-day traded value, cap 20%, floor 1%, **monthly**, next-open fill, a half-point band, cash at Fed funds less half a point; Sharadar, 2000–2026 | **6.21%** (flat 5 bp: 7.72%) | **0.162** (0.221) | −82.6% (−78.4%) | 0.097 (0.117) | **+0.065** (+0.105) | **sound and regime-dependent**: S1 to S5 hold; P1 and P3 fail at both cost rows and P2 is not evidenced; it earned in 2018–2026 and failed in 2000–2008 and 2009–2017; on paper on probation as `Paper_Trading_1` from 2026-10-27 | 1, the signal: **confirmed against its control only**; 2, the sizing: **confirmed as a book against equal weight**; 3: true on the targets | [`FINDINGS_1.md`](Experiments/Experiment_1/FINDINGS_1.md) |
-| 1, earlier, on FMP | KN US Equity Core members above the golden cross, ranked and weighted by 63-day traded value, cap 20%, floor 1%, on change; FMP, 2015–2026 | 20.33% | 0.842 | −32.5% | 0.763 | +0.080 | replaced; under the gate's earlier form, criteria 1 to 4 passed and the owner signed it into paper trading on 2026-10-06; retired on 2026-10-24, when Sharadar became the only provider | 1 and 2 confirmed as a book on that window, which no longer stands | not part of this example |
-| 1, earlier, another index | an earlier version, on another index | 24.69% | 0.948 | −34.6% | 0.842 | +0.106 | replaced | the objective of its time; none of it carries over | not part of this example |
-
-**The 0.16.0 row is Experiment 1 rewritten a second time** (`BLUEPRINT_1.md` of 2026-10-23): on the
-first trading day of each month, at the open, the KN US Equity Core's members with a golden cross at
-the month's last close, a 200-day history, a traded value and an open, ranked and weighted by 63-day
-traded value inside 1% and 20%, a held name left as it drifted when its target moved by half a point
-or less; Sharadar prices, the adjustment rebuilt from the exact close; commission 1 bp and the
-engine's slippage, cash paid at FRED's `DFF` less half a point, $1,000,000, integer shares, a 1%
-reserve; 2000-01-03 to 2026-08-14. Its control is the same rule without the cross on the same dates.
-Figures in brackets are the flat 5 bp re-pricing (*Excluded runs* and `FINDINGS_1.md` say why).
-
-**The second and third rows are earlier versions of Experiment 1**: the first rewrite, on FMP
-prices from 2015-01-02 to 2026-06-01, re-struck whenever the held set changed; and before it, a
-version on another index. A rewrite keeps its earlier version as a row, and its books count in the
-trials below. None of their numbers describes this rule, and their Sharpe ratios are not excess of
-cash, so they do not compare with the first row's.
+| **1** | most-traded Core members in a golden cross, by traded value, no sector above half, 99.5% invested, monthly, a delisted name's cash put back on L+2 — flat 5 bp | 7.14% | 0.207 | −76.6% | 0.124 | **+0.083** | **falsified**: prediction 1 fails, 1 of 3 sub-periods; P1 fails; P2 fails at both cost rows, the rule above 14 of 20 random books at the flat row; P3 not evidenced; the sign-off is the owner's | Golden-Flow's claim 1, rejected inside the sector cap | [`FINDINGS_1.md`](Experiments/Experiment_1/FINDINGS_1.md) |
+| 1 | the same, pre-registered costs | 5.58% | 0.143 | −81.5% | 0.102 | +0.040 | as above | | [`FINDINGS_1.md`](Experiments/Experiment_1/FINDINGS_1.md) |
+| 1 | the same rule without the sector cap, flat 5 bp — the cap's own control | 7.31% | 0.202 | −78.9% | — | — | the cap holds as a risk limit: Sharpe within 0.005, volatility and drawdown lower capped | | [`FINDINGS_1.md`](Experiments/Experiment_1/FINDINGS_1.md) |
+| 1, replaced version | the same rule, its band reinvesting to 99.5%, a delisted name's cash waiting for the month, run of 2026-11-18 — flat 5 bp | 7.13% | 0.206 | −76.6% | 0.127 | +0.079 | falsified on the same limb, 1 of 3 sub-periods; P1, P2, P3 fail; rewritten by the blueprint of `69aded0`, kept at the tag `experiment-1-reinvest-v2` | Golden-Flow's claim 1 | `JOURNAL_1.md`, 2026-11-18 |
+| 1, replaced version | the same, pre-registered costs | 5.58% | 0.143 | −81.4% | 0.106 | +0.037 | as above | | `JOURNAL_1.md`, 2026-11-18 |
+| 1, second pass | the same rule, its band leaving a kept name's shortfall in cash (mean invested 98.8%), run of 2026-11-17 — flat 5 bp | 7.17% | 0.209 | −76.2% | 0.124 | +0.086 | falsified on the same limb, 1 of 3 sub-periods; rewritten by the blueprint of `506d42f`, kept at the tag `experiment-1-sector-cap-v1` | Golden-Flow's claim 1 | `JOURNAL_1.md`, 2026-11-17 |
+| 1, second pass | the same, pre-registered costs | 5.65% | 0.146 | −80.9% | 0.101 | +0.045 | as above | | `JOURNAL_1.md`, 2026-11-17 |
+| 1, first pass | Golden-Flow's design replicated, no sector cap, 2000-01-03 to 2026-11-06, run of 2026-11-16 — flat 5 bp | 6.79% | 0.183 | −78.4% | 0.085 | +0.098 | superseded by the blueprint of `107768f`; kept as a row, as `AGENTS.md` asks of a rewrite | | `JOURNAL_1.md`, 2026-11-16 |
 
 <!-- example: end -->
 
@@ -169,67 +195,23 @@ cash, so they do not compare with the first row's.
 
 The same book measured against every benchmark it reports against, over one stated window.
 
-<!-- example: begin -->
-
-**0.16.0, 2000-01-03 to 2026-08-14, net, Sharpe excess of cash**, 27.56 years as the engine counts
-them; from [`FINDINGS_1.md`](Experiments/Experiment_1/FINDINGS_1.md):
-
-| Book | CAGR | Volatility | Sharpe | Max drawdown |
-| --- | ---: | ---: | ---: | ---: |
-| **The rule, pre-registered costs** | **6.21%** | 25.73% | **0.162** | −82.6% |
-| The rule, flat 5 bp | 7.72% | 25.65% | 0.221 | −78.4% |
-| The control, the cross removed | 4.91% | 29.52% | 0.097 | −91.7% |
-| The rule's names, equally weighted | 4.06% | 23.25% | 0.087 | −78.0% |
-| The rule, stress costs | 7.15% | 25.66% | 0.199 | −79.8% |
-| KN US Equity Core | 8.12% | 19.30% | 0.315 | −53.9% |
-| `SPY` | 8.09% | 19.28% | 0.313 | −55.2% |
-
-**By sub-period**, the three the blueprint fixed before the run, each priced from its first
-rebalance date; from [`FINDINGS_1.md`](Experiments/Experiment_1/FINDINGS_1.md):
-
-| Sub-period | Rule Sharpe | Control Sharpe | Rule CAGR | Control CAGR | Core CAGR | Core Sharpe | Beats the control on both |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| 2000–2008 | −0.569 (flat −0.506) | −0.629 (−0.611) | −13.68% (−11.71%) | −19.77% (−19.05%) | −3.41% | −0.303 | yes |
-| 2009–2017 | 0.699 (0.763) | 0.805 (0.827) | 11.80% (12.83%) | 15.88% (16.29%) | 14.39% | 0.837 | **no** |
-| 2018–2026 | 0.772 (0.819) | 0.743 (0.764) | 24.91% (26.24%) | 24.85% (25.45%) | 14.19% | 0.579 | yes |
-
-**Where the return comes from**, by KaxaNuk Attribution Analysis 0.5.0: the textbook
-Brinson-Fachler by KN sector, every cumulative effect linked with Carino, so effects are points of
-compounded return over the 26 years. The first cut's benchmark reconciles with the Core's own
-returns file to 0.22 points a year, inside the blueprint's 1.0. At the flat row, the book's holdings
-compounded to 736.7% against the index's 805.2%: allocation −201.9, selection −73.2, interaction
-+206.6. The factor model, the KN US Equity Factor Model's Experiment 1, is provisional:
-
-| | Rule | Control | Equal weight |
-| --- | ---: | ---: | ---: |
-| Holdings return | 685.4 | 361.6 | 378.2 |
-| Factor return | 400.4 | 194.5 | 290.3 |
-| **Idiosyncratic** | **+285.0** | +167.1 | +87.8 |
-| Market | 539.8 | 354.9 | 396.0 |
-| Momentum | +90.5 | +75.9 | +57.9 |
-| Technology | +85.0 | +71.7 | +46.3 |
-| Size | +23.5 | −3.5 | +23.5 |
-| Beta | −207.6 | −209.9 | −124.7 |
-| Residual volatility | −47.8 | −22.3 | −45.8 |
-| Value | −40.1 | −27.4 | −14.8 |
-| Financials | −32.7 | −28.4 | −23.4 |
-
-The random books' idiosyncratic return at the flat row runs from −57.7 to +679.8, median +117.6.
-Once factors are stripped out, the third pass's selection is +6.7 for the rule, +22.3 for the
-control and −19.0 for equal weight.
-
-<!-- example: end -->
-
 **Does it reproduce?** Re-run from a wiped working copy and state the drift. A Sharpe moving in the
 third decimal is the re-pull's rebasing, limitation 5 below, not a strategy change.
 
 <!-- example: begin -->
 
-**Experiment 1 ran from a working copy whose data folders were emptied first** — download,
-rebuild, universe, refinery, analyzer, experiment — and every notebook reached the end of its
-Verify section, the experiment's with 71 checks
-([`FINDINGS_1.md`](Experiments/Experiment_1/FINDINGS_1.md), success criterion 2). A clone on
-another machine is the stronger test, and is still to be run.
+The same book measured against every benchmark it reports against, over one stated window.
+
+| Book, 1999-12-31 to 2026-10-30 | CAGR | Volatility | Sharpe | Max DD |
+| --- | ---: | ---: | ---: | ---: |
+| The rule, flat 5 bp | 7.14% | 24.60% | 0.207 | −76.6% |
+| KN US Equity Core | 7.93% | 19.19% | 0.306 | −54.0% |
+| `SPY` | 7.89% | 19.22% | 0.303 | −55.2% |
+
+**Does it reproduce?** Yes: run again from a wiped working copy on 2026-11-20, Verify passed 39
+checks, and the summary, sub-period, gate and tradeability tables and the four weight files came
+out equal byte for byte. The twenty random books, priced on 2026-11-24, are not yet run from a
+wiped copy.
 
 <!-- example: end -->
 
@@ -238,22 +220,26 @@ another machine is the stronger test, and is still to be run.
 **How many variants were ranked in each experiment, plus any excluded run**, published as item 3 of
 the bar in `AGENTS.md` asks.
 
+---
+
 <!-- example: begin -->
 
-**152 books**, as the blueprint fixed: 107 before this version and 45 here. The flat-row re-pricing,
-the stress and sub-period rows and one test pricing of the rule with the Abdi–Ranaldo estimator
-re-price these books and add none. **The flat row was added after the pre-registered result was
-seen** — a forking path, listed here and in `RESULTS.md`. Twenty-one runs are excluded by name and
-still count. The deflated Sharpe is not computed.
+**How many variants were ranked in each experiment, plus any excluded run**, published as item 3 of
+the bar in `AGENTS.md` asks.
 
-The 107 were priced by the two earlier versions of Experiment 1 in the experiments table, and 45
-by this one: the rule, its control, the sixteen of the sweep, the four of the band, the
-equal-weight arm, twenty random books, and the rule and control at $100,000. **Two choices are not
-books and are counted beside them: the 2000 floor, and the flat 5 bp row.**
-
-<!-- example: end -->
+- **Experiment 1:** 359 books, as `BLUEPRINT_1.md` counts them — Golden-Flow's 152, the first
+  pass's 45, the second pass's 46, the first rewrite's first draft's 46 (priced, never read: the
+  engine ran out of cash), the replaced version's 46 and this version's 24: its four base books
+  and the twenty random books, priced on the owner's word of 2026-11-24 after the result was seen.
+  The run of 2026-11-20: 20 engine runs, all read; that of 2026-11-24: 40 more, 31 read and 9
+  excluded by name. The window, the sector cap and its 50% were set after the first pass was seen,
+  the band's reinvestment after the second, the top-up and the 100% after the replaced version,
+  and the cash bound turned from a check into a report after this run, disclosed. The deflated
+  Sharpe is not computed.
 
 ---
+
+<!-- example: end -->
 
 ## What stands — reuse, do not rebuild
 
@@ -262,22 +248,32 @@ with its number.
 
 <!-- example: begin -->
 
-- **The control that differs in exactly one thing.** The same names, the same sizing, the rule's own
-  dates, the golden cross off: on the KN US Equity Core from 2000 it measures the cross at +0.065
-  of Sharpe and +1.30 points of CAGR at the pre-registered costs, +0.105 and +2.24 at the flat row,
-  and a drawdown of −82.6% against −91.7%.
-- **The random arm at the rule's turnover.** Twenty books draw the rule's count, on its dates, from
-  the members the control may hold, sized by traded value under the cap and under the same band.
-  At the flat row 19 were priced whole, and the rule's idiosyncratic return beats 15 of them.
-- **Costs and cash inside the engine, with a second row beside the pre-registered one.** The
-  engine's spread model read a megacap's daily range as spread, about 23 bp a trade; the flat 5 bp
-  row, the blueprint's own fallback, re-prices the same weights and adds no book.
-- **The reconciliation before the first cut, and weights held overnight.** The Brinson-Fachler
-  benchmark is checked against the index's own returns before any pass is read: 0.22 points a year
-  here. Both weight tables pair the close of t−1 with day t's return.
-- **The band.** A held name is left as it drifted when its target moved by half a point or less:
-  31 of 43 names left alone on a median date, 348 engine orders a year at $1,000,000, the Sharpe
-  moving by less than 0.03 across a quarter, a half and a full point.
+A result, a module or a method later work should start from rather than re-derive. One line each,
+with its number.
+
+- **The rule's sizing is the library's**: Portfolio Construction 2.1.0's proportional weights,
+  then `Weights.cap_groups` by KN sector at 50% and `Weights.cap(0.20)`, equal
+  `bounded_by_score_and_sector` on 646 book-dates, largest difference 1.4e-6
+  (`Experiments/Experiment_1/library_sizing_check.csv`).
+- **Every signal Experiment 1 reads is a Curator column**: `c_golden_cross_50_200` (and 20/100,
+  100/300), `c_traded_value_sma_63d` (and 21, 126 days), `c_index_weight` and
+  `c_eligible_golden_cross_50_200`, which agrees with membership and the cross at the prior close
+  on all 711,569 name-dates. The KaxaNuk app charts what the rule reads.
+- **A book struck to 99.5% invested**: `portfolio_construction.banded_book` with `invested`
+  reinvests what the band's kept names leave, inside the name and sector caps; the rule's book
+  holds 99.3% to 99.6% on every rebalance date.
+- **A delisted name's cash put back in two days**: `portfolio_construction.delisting_top_up_dates`
+  and `banded_book`'s `top_up_dates` pour it into the names held, inside both caps, buying nothing
+  new and selling nothing priced; the rule's daily cash averages 1.49% at the pre-registered costs,
+  6 days above 5% where the replaced version had 32.
+- **Every Sharadar column is downloaded**, 87 of them, fundamentals by filing date, for later
+  experiments.
+- **Attribution from the engine's cache**: `Experiments/Experiment_1/attribute_base_books.py` runs
+  section 5's three passes on the four base books already priced, at both cost rows, and on the
+  rule and the uncapped arm by sub-period, and the factor model on the twenty random books, over
+  the window and each sub-period; its first cut's benchmark reconciles with the Core
+  within 0.22 points a year ([`FINDINGS_1.md`](Experiments/Experiment_1/FINDINGS_1.md),
+  *What attribution says*).
 
 <!-- example: end -->
 
@@ -288,16 +284,19 @@ repeating it.
 
 <!-- example: begin -->
 
-- **Equal weight as the better sizing.** Closed again from 2000: the same names equally weighted
-  earn a Sharpe of 0.087 against the rule's 0.162, and 0.157 against 0.221 at the flat row.
-- **The filter as a return-neutral drawdown shield.** Closed again: the golden cross adds 1.30
-  points of CAGR as well as a drawdown 9.1 points shallower than the control's.
-- **Attribution with each day's weights paired with that day's return.** Closed by an earlier
-  version's reconciliation, which read the index 6.94 points a year above its own returns that way.
-  Every pass pairs the close of t−1 with day t.
-- **Ranking the whole universe by liquidity.** Across every member the traded-value rank over a
-  year reads −0.0391, at an information ratio of −0.311 and the expected sign on 38.0% of dates
-  (row 9 above), and the rule does not rank the whole index.
+Each rejected idea, with the number that rejected it. This list is what stops the next person
+repeating it.
+
+- **The golden cross alone, as a book to beat the index**: 0 of 8 sweep settings beat the Core on
+  Sharpe at the flat row, uncapped (best 0.204 against 0.302) or capped (best 0.248 against 0.306,
+  0.242 with the book filled to 99.5%).
+- **The golden cross as the lever, inside a sector cap**: prediction 1 fails at both cost rows,
+  the control beaten on both Sharpe and CAGR in 1 of 3 sub-periods, with the band's cash left
+  (second pass) or reinvested (this version).
+- **Reinvesting the band's cash as a lever**: 0.7 points more invested on average moved the rule's
+  Sharpe from 0.209 to 0.206 at the flat row.
+- **Putting a delisted name's cash back at once, as a lever**: it moved the rule's Sharpe from
+  0.206 to 0.207 at the flat row. It is how a fund runs the book, not where the return comes from.
 
 <!-- example: end -->
 
@@ -309,13 +308,19 @@ sit in a findings file.
 
 <!-- example: begin -->
 
-**The book's whole shortfall against the index is one regime.** In 2000–2008 the most traded
-members were the technology and telecom names of the bubble; ranked and weighted by what they
-traded, the book held them into the fall, and a cross read once a month left late: it lost 13.68% a
-year where the Core lost 3.41%. Since 2018 it beats the Core by about eleven points a year. Beside
-it, **three fifths of the holdings' compounded return is factor exposure**, momentum the largest
-style, and the residual does not separate from random books: 15 of 19 beaten, against a bar of 16
-of 20. Claim 1 holds against its control and not against the index.
+The finding that qualifies the idea itself rather than a lever — the claim in `OBJECTIVE.md` that
+turned out weaker than stated. Every honest project has one; write it here rather than letting it
+sit in a findings file.
+
+The cross earns its keep against its control over the window and not inside it: once the sector cap
+stops the book riding a few large technology names, its margin over the control lives in
+1999–2008 alone, and the book still loses to the index. Attribution, at both cost rows, says the
+same from the other side: most of the rule's excess return is the market and its tilts, and once
+the factors are stripped out its selection is −0.03 points (−0.01 at the flat row), against +19.79
+for the control. Against twenty random books drawn from the control's members and sized the same
+way, its idiosyncratic return is above 14 at the flat row, two short of the blueprint's 16; only
+in 2018–2026 is it above nearly all of them, 19 of 20, a third singled out after it was seen
+([`FINDINGS_1.md`](Experiments/Experiment_1/FINDINGS_1.md), *What attribution says*).
 
 <!-- example: end -->
 
@@ -325,19 +330,15 @@ The single highest-value run outstanding, and what it would settle. Then the nex
 
 <!-- example: begin -->
 
-1. **The spread.** Neither of the engine's range-based estimators gives a believable spread on the
-   most traded US stocks; a quoted-spread source in `Bibliotheca/` would settle which cost row the
-   gate is read at.
-2. **The random books at the pre-registered costs**, and the rule at $100,000: a cash reserve that
-   fits a book's costs, or an engine that scales orders to the cash it has, would price them.
-3. **2000–2008.** The book's loss to the index is one regime. A later experiment that leaves the
-   bubble's most traded names sooner — a faster cross, a sector cap — or pairs the rule with
-   another signal would have to earn it against this one, never as a change to it.
-4. **The deflated Sharpe** against 152 trials. Publishing the count is the minimum, not the answer.
-5. **The shifted-entry timing arm**, not run by the gate written before the run, so timing skill is
-   not separated from selection.
-6. **Paper days.** `Paper_Trading_1` is on paper on probation from 2026-10-27, to its review on
-   2027-10-27; until it has days on paper, nothing here has an out-of-sample test.
+The single highest-value run outstanding, and what it would settle. Then the next.
+
+1. **What 2018–2026's selection is: the golden cross, the traded-value ranking, or both.** There
+   the rule's idiosyncratic return, +137.41 at the flat row, is above 19 of 20 random books, whose
+   median is +20.37; over the window it is above 14, and P2 fails. Each random draw replaces the
+   cross and the ranking together. Random books drawn from the names in a golden cross alone,
+   sized the same way, would isolate the ranking: a new arm, counted as trials, and a new
+   experiment, since Experiment 1's rules are frozen
+   ([`FINDINGS_1.md`](Experiments/Experiment_1/FINDINGS_1.md), *What attribution says*).
 
 <!-- example: end -->
 
@@ -353,10 +354,18 @@ a complete one.**
 
 <!-- example: begin -->
 
+Variants removed from the tables above, each by name with its reason, rather than reported with a
+caveat. **A metric computed over a truncated or rejected run does not belong in the same column as
+a complete one.**
+
 | Variant | Why |
 | --- | --- |
-| 0.16.0, at the pre-registered costs: random books 01–04, 07, 08 and 10–20; the 21-day traded-value setting; the 20/100 cross; the rule at $100,000 — twenty runs | **Truncated**: the engine stopped valuing at a rebalance whose costs outran the 1% cash reserve (a cash error): thirteen between September 2008 and May 2009, six between February 2000 and July 2002, and the rule at $100,000 on 2003-01-31. The engine's slippage there read a megacap's daily range as spread; at the flat 5 bp row all but one were priced whole. Listed in `Experiments/Experiment_1/Backtest/excluded_runs.csv` |
-| 0.16.0, random book 17 at the flat 5 bp row | Truncated the same way, on 2011-02-28 |
+| Experiment 1, this version, run of 2026-11-24, nine runs — at the pre-registered costs random books 02, 05, 07, 09, 13, 16, 17, 19 and 20 | **Truncated**: the engine stopped valuing with a "Cash error", in 2000 or in the autumn of 2008, caught by Verify's count of valued days against the window's. Listed in `Experiments/Experiment_1/Backtest/excluded_runs.csv`; at the flat row all twenty are whole |
+| Experiment 1, this version at 100% invested, run of 2026-11-19 — the rule at the pre-registered costs and its 1999–2008 sub-period | **Truncated**: "Cash error" on 2008-07-01; every book struck 99.5% instead, the fallback the blueprint named, and nothing of the 100% run read (`JOURNAL_1.md`, 2026-11-19) |
+| Experiment 1, replaced version, run of 2026-11-18, eleven runs — at the pre-registered costs random books 02, 05, 07, 09, 10, 13, 16, 19 and 20; at the flat row random book 10; the control at $100,000 | **Truncated**: the engine stopped valuing with a "Cash error", caught by Verify's count of valued days against the window's. Listed in `Experiments/Experiment_1/Backtest/excluded_runs.csv` |
+| Experiment 1, second pass, run of 2026-11-17, twenty-one runs — at the pre-registered costs all twenty random books and the 20/100 cross | **Truncated**: the engine stopped valuing at a rebalance, caught by Verify's count of valued days against the window's |
+| Experiment 1, the rewrite's first draft, run of 2026-11-17, all 104 runs — 55 of them out of cash, the rule's included | **Not read**: the book at 100% with a 0.5% reserve; the blueprint was amended before any result was read (`JOURNAL_1.md`, 2026-11-17) |
+| Experiment 1, first pass, run of 2026-11-16, twenty-four runs — at the pre-registered costs random books 01–08 and 10–20, the 21-day traded-value setting, the 20/100 cross, and the rule and the control at $100,000; at the flat row random book 12 | **Truncated**, as above; the same twenty-four as Golden-Flow's run of 2026-11-08 |
 
 <!-- example: end -->
 
@@ -371,31 +380,22 @@ a complete one.**
 | 5 | Curator output is not reproducible across download dates | Dividend adjustment is computed from the present, so a re-pull rebases every adjusted column |
 | 6 | The Deflated Sharpe Ratio has never been computed | The one number that would say whether a winner survives its own trial count |
 
+> **Under the bar in [`AGENTS.md`](AGENTS.md), most numbers above are a reason to run an experiment
+> rather than a result.**
+
 <!-- example: begin -->
-
-**Limitations 1, 2, 4 and 6 hold here, with qualifications.**
-
-- **1.** The book went to paper on probation only on 2026-10-27, and nothing after 2026-08-14
-  exists in the Core or the factor model.
-- **2.** The control that differs in exactly one thing exists: the golden cross off, on the rule's
-  own dates. With the equal-weight arm and the random books, it separates the filter, the sizing and
-  the selection. What is missing is the shifted-entry timing arm.
-- **4.** Here the exit needs no hindsight: a delisted name is sold by the engine at Sharadar's last
-  trade, over the counter where the exchange dropped it, which a hand-traded account may not reach.
-- **6.** The deflated Sharpe of the rule against its 152 trials is not computed.
-
-Six more, specific to this example:
 
 | # | Limitation | Effect |
 | --- | --- | --- |
-| 7 | **The flat 5 bp row was added after the pre-registered result was seen** | A forking path, counted beside the trials; the verdict is the same at both rows |
-| 8 | **The open each book is filled at keeps Sharadar's three-decimal rounding** | At most 0.23 bp of the Core (2009), 0.03 bp in 2026; the adjustment, signals and marks use the rebuilt exact close |
-| 9 | **The cash spread is flat** | A broker's terms depend on the balance |
-| 10 | **The KN US Equity Core's history before its live date is a backtest of its own rules** | Its membership was computed from its methodology; whether every input was dated no later than the day it decided is the Analytics Factory's to state |
-| 11 | **The factor model is provisional**, its owner's review pending | Every second-layer and third-pass figure is read as such |
-| 12 | **Capacity is stated as a participation bound** | At 1% of a name's 63-day traded value the worst trade allows a $25.9 million book, the median $3.25 billion; a bound on participation, not a model of market impact |
-
-<!-- example: end -->
+| 1 | **Nothing is out of sample** until a frozen book has days on paper after its freeze | Every number here is in-sample, and in-sample selection is what the deflation literature warns about |
+| 2 | **A control arm differing in exactly one thing**, item 9 of the bar in `AGENTS.md`, is missing from any experiment that claims a margin | Which lever earned that margin is inferred from per-lever rows, not measured |
+| 3 | Classification buckets use today's labels, not point-in-time | Anything reclassified mid-window is misattributed before its move — the `current_*` prefix marks exactly this |
+| 4 | A delisted holding is sold at its last price | The engine books the sale on Sharadar's last trade, often over the counter, a venue the account may not reach |
+| 5 | Curator output is not reproducible across download dates | Dividend adjustment is computed from the present, so a re-pull rebases every adjusted column |
+| 6 | The Deflated Sharpe Ratio has never been computed | The one number that would say whether a winner survives its own trial count |
+| 7 | The engine buys whole shares at the dividend-and-split-adjusted price | A name split in reverse later looks dear in the past and can be left unbought: CHKAQ left a point of the rule's book in cash for a month at a time, 33 days above the 3% bound at the flat row |
 
 > **Under the bar in [`AGENTS.md`](AGENTS.md), most numbers above are a reason to run an experiment
 > rather than a result.**
+
+<!-- example: end -->

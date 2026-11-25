@@ -50,14 +50,23 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    # Experiment 1 — the most-traded KN US Equity Core members in a golden cross, by traded value, monthly
+
+    **Steps 4, 5 and 6 of 8 — portfolio, backtest, attribution — for one idea.**
+
+    **It produces** a book in `Portfolio/`, a track record in `Backtest/` and a breakdown of the
+    return in `Attribution/`. **It prevents** a good signal in a portfolio nobody could hold, paper
+    returns that real trading would have erased, and factor beta sold as alpha.
+
     The rule is [`BLUEPRINT_1.md`](BLUEPRINT_1.md)'s, committed before this notebook held a line of
     it: on the first trading day of each month, at the open, the KN US Equity Core's members with a
     golden cross at the month's last close, ranked and weighted by 63-day traded value, no weight
-    above 20% and none below 1%, a held name left alone when its target moved by half a point or
-    less; cash paid at the Fed funds rate less half a point; every cost inside the engine; judged
-    against the KN US Equity Core, `SPY` and the same rule without the cross, from 2000-01-03 to
-    2026-08-14. **Every figure comes from the engine or the attribution library**; this notebook
-    only writes books, asks for their prices and reads the answers.
+    above 20%, no KN sector above 50% and none below 1%, a held name left alone when its target
+    moved by half a point or less; cash paid at the Fed funds rate less half a point; every cost
+    inside the engine; judged against the KN US Equity Core, `SPY`, the same rule without the cross
+    and the same rule without the sector cap, from 1999-12-31 to 2026-10-31. **Every figure comes
+    from the engine or the attribution library**; this notebook only writes books, asks for their
+    prices and reads the answers.
     """)
     return
 
@@ -114,6 +123,55 @@ def _(mo):
     return
 
 
+# --- example: begin ---
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## Position in the pipeline
+
+    This notebook is **only the strategy**. The universe and the data are built by earlier stages and
+    are simply read here:
+
+    ```
+    Universe/universe_marimo.py   ->  Security_Master.csv, Data_Issues.csv, Window.csv
+    Data/curator.py               ->  Data/Curator/Time_Series/     m_*, f_* + every c_*  <- read here
+    Data/refinery.py              ->  Data/Refinery/Time_Series/    not read by Experiment 1
+    Data/analyzer_marimo.py       ->  the measurements the blueprint's predictions came from
+            |
+            v
+    experiment_1_marimo.py        ->  Portfolio/  ->  Backtest/  ->  Attribution/
+    ```
+
+    **What this notebook does not do.** It does not download anything, profile the universe, or
+    compute a signal. A number about the data itself belongs in the Universe or Data stage.
+
+    **Four modules beside this notebook are shared by every experiment** — `securities_panel.py`,
+    `portfolio_construction.py`, `backtest_engine.py` and `attribution_analysis.py`, one per Lab
+    library — and no strategy column is named in any of them.
+
+    ## The section contract
+
+    | Section | Contains |
+    | --- | --- |
+    | 0 · Setup | paths, and **the strategy's columns** — the only strategy names outside the rule |
+    | 1 · The panel | load the refined files, reshape them, and the rebalance calendar |
+    | 2 · The rule | selection, sizing, timing. **The one cell you write** |
+    | 2.1 · Invariants | what every rule must pass, whatever it is |
+    | 3 · Construction | the book, and the diagnostics a person would run it on |
+    | 4 · Backtest | the engine, guarded; costs and cash priced inside it |
+    | 5 · Attribution | where the return came from, guarded the same way |
+    | 6 · Counterfactuals | the sweep and the arms that price who earned the idiosyncratic share |
+    | 7 · Verdict | what it concluded, **in words**, and the gate's criteria 1 to 4 |
+    | 8 · Verify | assertions that raise when the output is wrong |
+    """)
+    return
+
+
+# --- example: end ---
+
+
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
@@ -150,6 +208,8 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    ## 0 · Setup
+
     Three price columns do **three different jobs**, and getting them out of step is silent:
 
     | Role | Column | Why |
@@ -212,22 +272,31 @@ def _():
 
 @app.cell
 def _(attribution_analysis, backtest_engine, pandas):
+    import functools
+
     # The window, the bounds, the band and the columns, as BLUEPRINT_1.md fixed them.
-    WINDOW_START = pandas.Timestamp("2000-01-03")
-    WINDOW_END = pandas.Timestamp("2026-08-14")
+    WINDOW_START = pandas.Timestamp("1999-12-31")
+    WINDOW_END = pandas.Timestamp("2026-10-31")
     SUB_PERIODS = (
-        ("2000 to 2008", WINDOW_START, pandas.Timestamp("2008-12-31")),
+        ("1999 to 2008", WINDOW_START, pandas.Timestamp("2008-12-31")),
         ("2009 to 2017", pandas.Timestamp("2009-01-01"), pandas.Timestamp("2017-12-31")),
         ("2018 to 2026", pandas.Timestamp("2018-01-01"), WINDOW_END),
     )
     MAXIMUM_WEIGHT = 0.20
     MINIMUM_WEIGHT = 0.01
     BAND = 0.005
-    TREND_COLUMN = "r_trend_50_200"
-    SCORE_COLUMN = "r_traded_value_sma_63d"
-    MEMBERSHIP_COLUMN = "r_index_weight"
+    # No KN sector above half the book: the rule's sector cap, in every book but its own control.
+    SECTOR_MAXIMUM = 0.50
+    # The golden cross as 1 or 0, and the Curator's point-in-time flag the rule reads: a member with
+    # the cross at 1 at the prior close.  Experiment 1 reads the Curator alone.
+    CROSS_COLUMN = "c_golden_cross_50_200"
+    ELIGIBLE_COLUMN = "c_eligible_golden_cross_50_200"
+    SCORE_COLUMN = "c_traded_value_sma_63d"
+    MEMBERSHIP_COLUMN = "c_index_weight"
     FILL_COLUMN = "c_open_dividend_and_split_adjusted"
     MARK_COLUMN = "c_close_dividend_and_split_adjusted"
+    # The names the blueprint's rule excluded on the data it was written on; shown beside the
+    # rule's names at Verify, never checked against them.
     EXPECTED_EXCLUSIONS = (
         "FPS",
         "H1",
@@ -252,7 +321,20 @@ def _(attribution_analysis, backtest_engine, pandas):
     FLAT_SLIPPAGE_MODEL = "basis_points"
     FLAT_SLIPPAGE_BASIS_POINTS = 5.0
     FLAT_SUFFIX = ", flat 5 bp"
+    # The engine's buffer for costs, 1%, and every book struck fully invested, by the owner's
+    # decision of 2026-11-19; a 0.5% reserve ran out of cash for costs (JOURNAL_1, 2026-11-17).
+    # The blueprint names 99.5% as the fallback if any of the four base books stops, and the rule
+    # at 100% stopped on 2008-07-01 at the pre-registered costs (JOURNAL_1, 2026-11-19): 99.5%.
     CASH_RESERVE = 0.01
+    INVESTED = 0.995
+    # Only the four base books, at both cost rows and over the sub-periods, by the owner's decision
+    # of 2026-11-19: the sweep, the band's widths, the random books, the stress and small-account
+    # rows and attribution are not run in this version, and what needs them reads "not evidenced".
+    BASE_BOOKS_ONLY = True
+    # The twenty random books are priced after all, at both cost rows, by the owner's word of
+    # 2026-11-24, "price and attribute the random books", given after the base books' result was
+    # seen; the other rows above stay off. `attribute_base_books.py` attributes them.
+    RANDOM_BOOKS = True
     # A run the engine stopped valuing before its window's end is excluded by name, never read.
     VALUED_SHARE_REQUIRED = 0.99
     UNVALUED_DAYS_AT_END_ALLOWED = 5
@@ -263,10 +345,10 @@ def _(attribution_analysis, backtest_engine, pandas):
         ("cap 25%", {"maximum_weight": 0.25}),
         ("floor 0.5%", {"minimum_weight": 0.005}),
         ("floor 2%", {"minimum_weight": 0.02}),
-        ("traded value over 21 days", {"score_column": "r_traded_value_sma_21d"}),
-        ("traded value over 126 days", {"score_column": "r_traded_value_sma_126d"}),
-        ("cross 20/100", {"trend_column": "r_trend_20_100"}),
-        ("cross 100/300", {"trend_column": "r_trend_100_300"}),
+        ("traded value over 21 days", {"score_column": "c_traded_value_sma_21d"}),
+        ("traded value over 126 days", {"score_column": "c_traded_value_sma_126d"}),
+        ("cross 20/100", {"cross_column": "c_golden_cross_20_100"}),
+        ("cross 100/300", {"cross_column": "c_golden_cross_100_300"}),
     )
     BAND_SWEEP = (
         ("band 0.25 points", 0.0025),
@@ -276,7 +358,7 @@ def _(attribution_analysis, backtest_engine, pandas):
     # Engine batches at once: each loads the whole universe, so more than six compete for the disk.
     WORKERS = 6
     # Attribution books at once: each holds the universe's returns and the factor files in memory.
-    ATTRIBUTION_WORKERS = 4
+    ATTRIBUTION_WORKERS = 2
 
     # The window is the universe notebook's, and the exclusions are its register's blocking rows: the
     # blueprint fixed both, and a run on anything else is not this experiment.
@@ -290,6 +372,8 @@ def _(attribution_analysis, backtest_engine, pandas):
         for identifiers in blocking["identifiers"]
         for identifier in str(identifiers).split()
     }))
+    # Each security's KN sector, the factor model's own classification: today's, for every date.
+    SECTORS = attribution_analysis.kn_sectors(attribution_analysis.load_factor_returns())
     print(f"window {WINDOW_START.date()} to {WINDOW_END.date()}; the universe notebook's: "
           f"{window_written['window_start'].iloc[0]} to {window_written['window_end'].iloc[0]}")
     print(f"excluded by name: {', '.join(EXCLUDED)}")
@@ -299,8 +383,11 @@ def _(attribution_analysis, backtest_engine, pandas):
         ATTRIBUTION_WORKERS,
         BAND,
         BAND_SWEEP,
+        BASE_BOOKS_ONLY,
         CASH_RESERVE,
         COMMISSION_BASIS_POINTS,
+        CROSS_COLUMN,
+        ELIGIBLE_COLUMN,
         EXCLUDED,
         EXPECTED_EXCLUSIONS,
         FILL_COLUMN,
@@ -308,12 +395,16 @@ def _(attribution_analysis, backtest_engine, pandas):
         FLAT_SLIPPAGE_MODEL,
         FLAT_SUFFIX,
         INITIAL_CAPITAL,
+        INVESTED,
         MARK_COLUMN,
         MAXIMUM_WEIGHT,
         MEMBERSHIP_COLUMN,
         MINIMUM_WEIGHT,
+        RANDOM_BOOKS,
         RANDOM_SEEDS,
         SCORE_COLUMN,
+        SECTORS,
+        SECTOR_MAXIMUM,
         SLIPPAGE_BASIS_POINTS,
         SLIPPAGE_MODEL,
         SMALL_CAPITAL,
@@ -322,12 +413,12 @@ def _(attribution_analysis, backtest_engine, pandas):
         STRESS_SLIPPAGE_MODEL,
         SUB_PERIODS,
         SWEEP,
-        TREND_COLUMN,
         UNVALUED_DAYS_AT_END_ALLOWED,
         VALUED_SHARE_REQUIRED,
         WINDOW_END,
         WINDOW_START,
         WORKERS,
+        functools,
         window_written,
     )
 
@@ -361,6 +452,8 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    ## 1 · The panel
+
     Load the refined files, resolve **one position per security**, and reshape to `dates x
     securities` matrices. Then the calendar: **the first trading day of each month**, the day the
     orders go in, each decided on the close before it.
@@ -370,12 +463,13 @@ def _(mo):
 
 @app.cell
 def _(
+    CROSS_COLUMN,
+    ELIGIBLE_COLUMN,
     EXCLUDED,
     FILL_COLUMN,
     MARK_COLUMN,
     MEMBERSHIP_COLUMN,
     SCORE_COLUMN,
-    TREND_COLUMN,
     WINDOW_END,
     WINDOW_START,
     pandas,
@@ -383,12 +477,13 @@ def _(
     securities_panel,
 ):
     COLUMNS = (
-        TREND_COLUMN,
-        "r_trend_20_100",
-        "r_trend_100_300",
+        CROSS_COLUMN,
+        "c_golden_cross_20_100",
+        "c_golden_cross_100_300",
+        ELIGIBLE_COLUMN,
         SCORE_COLUMN,
-        "r_traded_value_sma_21d",
-        "r_traded_value_sma_126d",
+        "c_traded_value_sma_21d",
+        "c_traded_value_sma_126d",
         MEMBERSHIP_COLUMN,
         FILL_COLUMN,
         MARK_COLUMN,
@@ -460,6 +555,8 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    ## 2 · The rule — the one cell you write
+
     | Object | Type | Meaning |
     | --- | --- | --- |
     | `REBALANCE_DATES` | a date index | the first trading day of each month |
@@ -483,84 +580,144 @@ def _(mo):
 @app.cell
 def _(
     BAND,
+    CROSS_COLUMN,
+    ELIGIBLE_COLUMN,
     FILL_COLUMN,
+    INVESTED,
     MARK_COLUMN,
     MAXIMUM_WEIGHT,
     MINIMUM_WEIGHT,
     REBALANCE_DATES,
     SCORE_COLUMN,
-    TREND_COLUMN,
+    SECTORS,
+    SECTOR_MAXIMUM,
     allowed,
     cut,
+    functools,
     membership,
     portfolio_construction,
     priced,
 ):
-    # The rule, from BLUEPRINT_1.md. Who may be held on a rebalance date d: a member at the close
-    # before d with a 200-day history and the golden cross at 1 then, a traded value then, an open
-    # on d, not excluded by name. The control keeps everything but the cross's sign.
+    # The rule, from BLUEPRINT_1.md. Who may be held on a rebalance date d:
+    # `c_eligible_golden_cross_50_200` -- a member with the golden cross at 1 at the close before d --
+    # with a traded value then, an open on d, not excluded by name. The control keeps everything but
+    # the cross: a member with a 200-day history.
     def eligibility(
-        trend_column: str,
+        cross_column: str,
         use_cross: bool,
         score_column: str,
     ) -> "pandas.DataFrame":
         """Who may be held on each rebalance date, decided at the prior close."""
-        trend_before = cut[trend_column].shift(1)
+        crossed_before = cut[cross_column].shift(1)
         member_before = membership.shift(1, fill_value=False)
         score_before = cut[score_column].shift(1)
-        eligible = member_before & trend_before.notna() & score_before.notna() & priced & allowed
+        eligible = member_before & crossed_before.notna() & score_before.notna() & priced & allowed
 
-        if use_cross:
-            eligible = eligible & (trend_before > 0)
+        if use_cross and cross_column == CROSS_COLUMN:
+            eligible = eligible & (cut[ELIGIBLE_COLUMN] == 1)
+        elif use_cross:
+            eligible = eligible & (crossed_before == 1)
 
         return eligible.loc[REBALANCE_DATES]
 
     def target_book(
-        trend_column: str = TREND_COLUMN,
+        cross_column: str = CROSS_COLUMN,
         score_column: str = SCORE_COLUMN,
         maximum_weight: float = MAXIMUM_WEIGHT,
         minimum_weight: float = MINIMUM_WEIGHT,
         use_cross: bool = True,
+        sector_maximum: float | None = SECTOR_MAXIMUM,
     ) -> "pandas.DataFrame":
         """The target on every rebalance date; the bounds set the count, the seam cuts the score."""
+        weigher = None if sector_maximum is None else functools.partial(
+            portfolio_construction.bounded_by_score_and_sector,
+            sectors=SECTORS,
+            sector_maximum=sector_maximum,
+        )
+
         return portfolio_construction.bounded_book(
-            eligibility(trend_column, use_cross, score_column),
+            eligibility(cross_column, use_cross, score_column),
             cut[score_column],
             maximum_weight,
             minimum_weight,
+            weigher,
+        )
+
+    def top_up_dates(targets: "pandas.DataFrame") -> "pandas.DatetimeIndex":
+        """The book's own top-up dates: two trading days after a held name's last price."""
+
+        return portfolio_construction.delisting_top_up_dates(
+            targets,
+            cut[FILL_COLUMN],
         )
 
     def strike(
         targets: "pandas.DataFrame",
         band: float = BAND,
+        sector_maximum: float = SECTOR_MAXIMUM,
+        maximum_weight: float = MAXIMUM_WEIGHT,
+        dates: "pandas.DatetimeIndex | None" = None,
+        sized_equally: bool = False,
     ) -> "pandas.DataFrame":
-        """The book struck on each date: the target, except where the band keeps a held name."""
+        """
+        The book struck on each date: the target, except where the band keeps a held name.
+
+        The traded names take up what the kept names leave of a full book, inside the same caps;
+        on a top-up date the cash a delisted name left goes into the names still held, by traded
+        value at the prior close, or equally for the equal-weight arm.
+        """
         return portfolio_construction.banded_book(
             targets,
             cut[MARK_COLUMN].shift(1),
             cut[FILL_COLUMN],
             band,
+            maximum_weight=maximum_weight,
+            sectors=SECTORS,
+            sector_maximum=sector_maximum,
+            invested=INVESTED,
+            top_up_dates=top_up_dates(targets) if dates is None else dates,
+            top_up_scores=None if sized_equally else cut[SCORE_COLUMN].shift(1),
         )
 
     target_weights = target_book()
-    struck_weights = strike(target_weights)
-    # The control: the same rule without the cross's sign, on the rule's dates, under the same band.
     control_targets = target_book(use_cross=False)
-    control_weights = strike(control_targets)
+    # The control trades on the rule's dates: the monthly dates and the top-ups of both books, so
+    # neither waits a month on its own delisting's cash.
+    shared_top_ups = top_up_dates(target_weights).union(top_up_dates(control_targets))
+    struck_weights = strike(
+        target_weights,
+        dates=shared_top_ups,
+    )
+    control_weights = strike(
+        control_targets,
+        dates=shared_top_ups,
+    )
+    # The cap's own control: the rule with the sector cap removed, on its own top-up dates.
+    uncapped_targets = target_book(sector_maximum=None)
+    uncapped_weights = strike(
+        uncapped_targets,
+        sector_maximum=1.0,
+    )
     held_counts = (target_weights > 0).sum(axis=1)
-    print(f"rebalance dates: {len(REBALANCE_DATES)}")
+    print(f"rebalance dates: {len(REBALANCE_DATES)} monthly and {len(shared_top_ups)} top-ups "
+          f"shared by the rule and its control")
     print(f"target holdings per date: {int(held_counts.min())} to {int(held_counts.max())}, "
           f"median {float(held_counts.median()):.0f}")
     print(f"invested, struck: {float(struck_weights.sum(axis=1).min()):.3f} to "
-          f"{float(struck_weights.sum(axis=1).max()):.3f}")
+          f"{float(struck_weights.sum(axis=1).max()):.3f}, "
+          f"mean {float(struck_weights.sum(axis=1).mean()):.4f}; "
+          f"dates under 99%: {int((struck_weights.sum(axis=1) < 0.99).sum())}")
     return (
         control_targets,
         control_weights,
         eligibility,
+        shared_top_ups,
         strike,
         struck_weights,
         target_book,
         target_weights,
+        uncapped_targets,
+        uncapped_weights,
     )
 
 
@@ -595,6 +752,8 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    ## 2.1 · Invariants
+
     Cheap to check here, expensive to discover inside a P&L. On the **targets**: never more than
     fully invested, no negative weight, no weight above the cap or under the floor, every holding a
     member with its cross at 1 at the prior close and an open on its date, no excluded name. On the
@@ -612,7 +771,11 @@ def _(
     MAXIMUM_WEIGHT,
     MINIMUM_WEIGHT,
     REBALANCE_DATES,
-    TREND_COLUMN,
+    CROSS_COLUMN,
+    ELIGIBLE_COLUMN,
+    SECTORS,
+    SECTOR_MAXIMUM,
+    control_targets,
     control_weights,
     cut,
     membership,
@@ -621,16 +784,42 @@ def _(
     target_weights,
 ):
     held = target_weights > 0
-    trend_yesterday = cut[TREND_COLUMN].shift(1).reindex_like(held)
+    cross_yesterday = cut[CROSS_COLUMN].shift(1).reindex_like(held)
+    sector_of_name = [
+        SECTORS.get(str(name), "unclassified")
+        for name in target_weights.columns
+    ]
+    target_by_sector = target_weights.T.groupby(sector_of_name).sum().T
+    control_by_sector = control_targets.T.groupby(sector_of_name).sum().T
+    struck_on_targets = struck_weights.reindex_like(target_weights).fillna(0.0)
+    struck_by_sector = struck_on_targets.T.groupby(sector_of_name).sum().T
+    # The Curator's flag against what it says: a member with the cross at 1 at the prior close.
+    flag = (cut[ELIGIBLE_COLUMN] == 1).loc[REBALANCE_DATES]
+    recomputed = (
+        membership.shift(1, fill_value=False) & (cut[CROSS_COLUMN].shift(1) == 1)
+    ).loc[REBALANCE_DATES]
+    flag_disagreements = int((flag != recomputed).sum().sum())
     member_yesterday = membership.shift(1, fill_value=False).reindex_like(held)
     priced_today = priced.reindex_like(held)
     struck_held = struck_weights.reindex_like(target_weights).fillna(0.0)
     departed = (struck_held - target_weights).abs() > 1e-9
+    # The names the band left above their targets, counted by sector: each may carry its sector past
+    # the cap by at most the band and a point overnight, so that is the struck sector's bound.
+    kept_above = (struck_held - target_weights) > 1e-9
+    kept_above_by_sector = kept_above.T.groupby(sector_of_name).sum().T
     struck_invested = struck_held.sum(axis=1)
     outside_bounds = struck_held.where(struck_held > 0)
     band_excursions = int(
         ((outside_bounds > MAXIMUM_WEIGHT + 1e-9) | (outside_bounds < MINIMUM_WEIGHT - 1e-9)).sum().sum()
     )
+    # Each top-up row beside the row the book held before it, and which names had a price that day.
+    _is_top_up = ~struck_weights.index.isin(REBALANCE_DATES)
+    top_up_rows = struck_weights.loc[_is_top_up]
+    top_up_before = struck_weights.shift(1).fillna(0.0).loc[_is_top_up]
+    top_up_priced = priced.reindex(
+        index=top_up_rows.index,
+        columns=top_up_rows.columns,
+    ).fillna(False)
     invariants = {
         "no target more than fully invested": bool((target_weights.sum(axis=1) <= 1.0 + 1e-9).all()),
         "no negative target": bool((target_weights >= -1e-12).all().all()),
@@ -639,7 +828,25 @@ def _(
             (~held | (target_weights >= MINIMUM_WEIGHT - 1e-9)).all().all()
         ),
         "every holding had its cross at 1 at the prior close": bool(
-            (~held | (trend_yesterday > 0)).all().all()
+            (~held | (cross_yesterday == 1)).all().all()
+        ),
+        "no target sector above the sector cap": bool(
+            (target_by_sector <= SECTOR_MAXIMUM + 1e-9).all().all()
+        ),
+        "no control target sector above the sector cap": bool(
+            (control_by_sector <= SECTOR_MAXIMUM + 1e-9).all().all()
+        ),
+        # The blueprint has the notebook report how far the band lets a struck sector sit above
+        # the cap, not hold it to a fixed margin: what is checked is that only the band's kept names
+        # carry it there, each by no more than the band and a point overnight.
+        "no struck sector above the cap by more than its kept names drifted": bool(
+            (
+                struck_by_sector
+                <= SECTOR_MAXIMUM + (BAND + 0.01) * kept_above_by_sector + 1e-9
+            ).all().all()
+        ),
+        "c_eligible_golden_cross_50_200 agrees with membership and the cross at the prior close": (
+            flag_disagreements <= 0.0001 * flag.size
         ),
         "every holding was a member at the prior close": bool((~held | member_yesterday).all().all()),
         "every holding has an open on its date": bool((~held | priced_today).all().all()),
@@ -649,16 +856,34 @@ def _(
         "no struck book more than fully invested": bool((struck_invested <= 1.0 + 1e-6).all()),
         "no negative struck weight": bool((struck_held >= -1e-12).all().all()),
         # A kept name is decided at the close and written at the next open, so the overnight move can
-        # carry it past the band: one point of allowance, and the largest excess printed below.
-        "no struck weight above its target by more than the band and a point overnight": bool(
-            (struck_held <= target_weights + BAND + 0.01).all().all()
+        # carry it past the band: one point of allowance over the cap, and the largest printed below.
+        # A traded name may sit above its target, by what the kept names left, but never the cap.
+        "no struck weight above the cap by more than the band and a point overnight": bool(
+            (struck_held <= MAXIMUM_WEIGHT + BAND + 0.01).all().all()
         ),
-        "no entry struck above its target": bool(
-            (struck_held <= target_weights + 1e-9)
+        "no entry struck above the cap": bool(
+            (struck_held <= MAXIMUM_WEIGHT + 1e-9)
             .where(struck_held.shift(1, fill_value=0.0) <= 0, True).all().all()
         ),
         "the control trades only on the rule's dates": bool(
-            control_weights.index.equals(REBALANCE_DATES)
+            control_weights.index.equals(struck_weights.index)
+        ),
+        "every monthly date is a rebalance date of the rule": bool(
+            REBALANCE_DATES.isin(struck_weights.index).all()
+        ),
+        # A top-up only pours a delisted name's cash into what the book holds: nothing new is
+        # bought, nothing still priced is sold, and no weight leaves the band's allowance.
+        "a top-up buys no name the book did not hold": bool(
+            (~(top_up_rows > 0) | (top_up_before > 0)).all().all()
+        ),
+        "a top-up sells no name still priced": bool(
+            (~((top_up_before > 0) & top_up_priced) | (top_up_rows > 0)).all().all()
+        ),
+        "no top-up weight above the cap by more than the band and a point overnight": bool(
+            (top_up_rows <= MAXIMUM_WEIGHT + BAND + 0.01).all().all()
+        ),
+        "no top-up book more than fully invested": bool(
+            (top_up_rows.sum(axis=1) <= 1.0 + 1e-6).all()
         ),
     }
 
@@ -667,6 +892,13 @@ def _(
 
     print(f"struck weights the band left outside the 1% to 20% bounds: {band_excursions}")
     print(f"largest struck weight above its target: {float((struck_held - target_weights).max().max()):.4f}")
+    print(f"rebalance dates with a struck sector above the cap: "
+          f"{int((struck_by_sector > SECTOR_MAXIMUM + 1e-9).any(axis=1).sum())} of "
+          f"{len(struck_by_sector)}")
+    print(f"largest struck sector: {float(struck_by_sector.max().max()):.4f}; "
+          f"eligibility flag disagreements: {flag_disagreements} of {flag.size} name-dates")
+    print(f"share of rebalance dates the sector cap binds: "
+          f"{float((target_by_sector >= SECTOR_MAXIMUM - 1e-9).any(axis=1).mean()):.3f}")
     return band_excursions, invariants
 
 
@@ -702,6 +934,8 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    ## 3 · Construction — is this a book you would actually run?
+
     | Property | What a bad value would mean |
     | --- | --- |
     | Invested share over time | the eligibility column is not doing what the analyzer says |
@@ -732,7 +966,13 @@ def _(
     holdings_count = (struck_weights > 0).sum(axis=1)
     effective_positions = 1 / struck_weights.pow(2).sum(axis=1).replace(0, numpy.nan)
     previous_held = (struck_weights.shift(1).fillna(0.0) > 0)
-    kept = previous_held & (target_weights > 0) & ((struck_weights - target_weights).abs() > 1e-9)
+    # A top-up date has no target of its own: every name it holds is bought into, so none is kept.
+    targets_on_struck = target_weights.reindex(struck_weights.index).fillna(0.0)
+    kept = (
+        previous_held
+        & (targets_on_struck > 0)
+        & ((struck_weights - targets_on_struck).abs() > 1e-9)
+    )
     touched = (struck_weights > 0) | previous_held
     orders_per_date = (touched & ~kept).sum(axis=1)
     turnover = struck_weights.diff().abs().sum(axis=1) / 2
@@ -740,6 +980,7 @@ def _(
     cap_binding = (target_weights >= MAXIMUM_WEIGHT - 1e-9).any(axis=1)
     construction = pandas.Series({
         "rebalance dates": len(REBALANCE_DATES),
+        "top-up dates": len(struck_weights) - len(REBALANCE_DATES),
         "rule orders per date, median": float(orders_per_date.median()),
         "rule orders per date, largest": int(orders_per_date.max()),
         "held names kept by the band per date, median": float(kept.sum(axis=1).median()),
@@ -796,11 +1037,16 @@ def _(
 @app.cell
 def _(
     BAND_SWEEP,
+    BASE_BOOKS_ONLY,
+    CROSS_COLUMN,
     EXPERIMENT_DIRECTORY,
     MAXIMUM_WEIGHT,
+    RANDOM_BOOKS,
     RANDOM_SEEDS,
     REBALANCE_DATES,
     SCORE_COLUMN,
+    SECTORS,
+    SECTOR_MAXIMUM,
     SWEEP,
     allowed,
     backtest_engine,
@@ -817,14 +1063,16 @@ def _(
     struck_weights,
     target_book,
     target_weights,
+    uncapped_weights,
 ):
     # Every book this experiment prices, written before any is priced: the rule and its control, the
-    # sweep with a control for each setting, the band at two other widths with theirs, the
-    # equal-weight arm and the random books, every one on the rule's dates under its band.
+    # rule without the sector cap, the sweep with a control for each setting, the band at two other
+    # widths with theirs, the equal-weight arm and the random books, every one on the rule's dates
+    # under its band, and every one but the uncapped arm inside the same sector cap.
     score_before = cut[SCORE_COLUMN].shift(1)
     pool = (
         membership.shift(1, fill_value=False)
-        & cut["r_trend_50_200"].shift(1).notna()
+        & cut[CROSS_COLUMN].shift(1).notna()
         & score_before.notna()
         & priced
         & allowed
@@ -848,10 +1096,12 @@ def _(
             candidates = sorted(set(available) - set(kept_names))
             drawn = list(generator.choice(candidates, len(rule_names) - len(kept_names), replace=False))
             held_names = sorted(kept_names + drawn)
-            rows[date] = portfolio_construction.bounded_by_score(
+            rows[date] = portfolio_construction.bounded_by_score_and_sector(
                 score_before.loc[date, held_names],
                 MAXIMUM_WEIGHT,
                 0.0,
+                SECTORS,
+                SECTOR_MAXIMUM,
             )
             previous_rule = rule_names
 
@@ -859,24 +1109,55 @@ def _(
 
         return frame.reindex(columns=target_weights.columns).fillna(0.0)
 
-    equal_targets = (target_weights > 0).astype(float)
-    equal_targets = equal_targets.div(equal_targets.sum(axis=1).replace(0, numpy.nan), axis=0)
-    equal_targets = equal_targets.fillna(0.0).clip(upper=MAXIMUM_WEIGHT)
+    # The rule's own names, equally weighted inside the same caps: equal scores, no floor.
+    equal_rows = {}
+
+    for _date in REBALANCE_DATES:
+        _names = target_weights.columns[target_weights.loc[_date] > 0]
+        equal_rows[_date] = portfolio_construction.bounded_by_score_and_sector(
+            pandas.Series(1.0, index=_names),
+            MAXIMUM_WEIGHT,
+            0.0,
+            SECTORS,
+            SECTOR_MAXIMUM,
+        )
+
+    equal_targets = pandas.DataFrame.from_dict(equal_rows, orient="index").reindex(
+        index=REBALANCE_DATES,
+        columns=target_weights.columns,
+    ).fillna(0.0)
     books = {
         "rule": struck_weights,
         "control": control_weights,
-        "equal weight": strike(equal_targets),
+        "equal weight": strike(
+            equal_targets,
+            sized_equally=True,
+        ),
+        "rule without the sector cap": uncapped_weights,
     }
+    # The sweep and the band's widths are not priced in this version; the random books are, since
+    # 2026-11-24.
+    sweep_settings = () if BASE_BOOKS_ONLY else SWEEP
+    band_settings = () if BASE_BOOKS_ONLY else BAND_SWEEP
+    random_seeds = RANDOM_SEEDS if RANDOM_BOOKS or not BASE_BOOKS_ONLY else ()
 
-    for _setting, _arguments in SWEEP:
-        books[f"sweep, {_setting}"] = strike(target_book(**_arguments))
-        books[f"sweep, {_setting}, control"] = strike(target_book(**_arguments, use_cross=False))
+    for _setting, _arguments in sweep_settings:
+        # A sweep of the cap strikes under the same cap it sized with.
+        _cap = _arguments.get("maximum_weight", MAXIMUM_WEIGHT)
+        books[f"sweep, {_setting}"] = strike(
+            target_book(**_arguments),
+            maximum_weight=_cap,
+        )
+        books[f"sweep, {_setting}, control"] = strike(
+            target_book(**_arguments, use_cross=False),
+            maximum_weight=_cap,
+        )
 
-    for _setting, _band in BAND_SWEEP:
+    for _setting, _band in band_settings:
         books[_setting] = strike(target_weights, _band)
         books[f"{_setting}, control"] = strike(control_targets, _band)
 
-    for _seed in RANDOM_SEEDS:
+    for _seed in random_seeds:
         books[f"random {_seed:02d}"] = strike(random_targets(_seed))
 
     file_names = {
@@ -884,16 +1165,34 @@ def _(
         for _label in books
     }
     file_names["rule"] = "portfolio_weights"
+    file_names["rule without the sector cap"] = "portfolio_weights_no_sector_cap"
+    # The KaxaNuk app lists the top level of `Portfolio/`: the four books a reader compares go
+    # there, and every book written only to test the rule goes beneath it, which the app ignores.
+    HEADLINE_BOOKS = (
+        "rule",
+        "control",
+        "equal weight",
+        "rule without the sector cap",
+    )
+    folders = {
+        _label: (
+            backtest_engine.PORTFOLIO_FOLDER
+            if _label in HEADLINE_BOOKS
+            else backtest_engine.VARIANTS_FOLDER
+        )
+        for _label in books
+    }
 
     for _label, _weights in books.items():
         backtest_engine.write_weight_file(
             securities_panel.expand_to_identifiers(_weights),
             EXPERIMENT_DIRECTORY,
             file_names[_label],
+            folders[_label],
         )
 
-    print(f"books written: {len(books)}")
-    return books, file_names
+    print(f"books written: {len(books)}, {len(HEADLINE_BOOKS)} of them where the app lists them")
+    return books, file_names, folders
 
 
 # --- example: end ---
@@ -934,6 +1233,8 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    ## 4 · Backtest — KaxaNuk Backtest Engine
+
     **The only backtest in the repository**, and results are accepted **net** or not at all. The
     engine fills at the open, holds integer shares and a 1% cash reserve, charges commission in basis
     points and slippage from its own spread-and-impact model, pays the cash the Fed funds rate less
@@ -946,6 +1247,7 @@ def _(mo):
 
 @app.cell
 def _(
+    BASE_BOOKS_ONLY,
     CASH_RESERVE,
     COMMISSION_BASIS_POINTS,
     EXPERIMENT_DIRECTORY,
@@ -969,6 +1271,7 @@ def _(
     backtest_engine,
     books,
     file_names,
+    folders,
     pandas,
     securities_panel,
     window_days,
@@ -981,10 +1284,12 @@ def _(
         slippage_model: str = SLIPPAGE_MODEL,
         slippage_basis_points: float = SLIPPAGE_BASIS_POINTS,
         initial_capital: int = INITIAL_CAPITAL,
+        folder: str = backtest_engine.VARIANTS_FOLDER,
     ) -> dict:
-        """One engine run's settings."""
+        """One engine run's settings, and the folder its weight file is in."""
         return {
             "experiment_directory": str(EXPERIMENT_DIRECTORY),
+            "portfolio_folder": folder,
             "portfolio_name": portfolio_name,
             "start": start.date().isoformat(),
             "end": end.date().isoformat(),
@@ -1000,14 +1305,20 @@ def _(
         start: "pandas.Timestamp",
         end: "pandas.Timestamp",
     ) -> "pandas.DataFrame":
-        """The book from a sub-period's first rebalance date to its end, on its own dates."""
-        inside = REBALANCE_DATES[(REBALANCE_DATES >= start) & (REBALANCE_DATES <= end)]
+        """The book from a sub-period's first monthly date to its end, on its own dates."""
+        first = REBALANCE_DATES[REBALANCE_DATES >= start][0]
+        inside = weights.index[(weights.index >= first) & (weights.index <= end)]
 
         return weights.loc[inside]
 
     first_day = REBALANCE_DATES[0]
     tasks = [
-        task(file_names[_label], first_day, WINDOW_END)
+        task(
+            file_names[_label],
+            first_day,
+            WINDOW_END,
+            folder=folders[_label],
+        )
         for _label in books
     ]
     runs_by_label = {
@@ -1023,6 +1334,7 @@ def _(
             securities_panel.expand_to_identifiers(books[_label]),
             EXPERIMENT_DIRECTORY,
             _flat_name,
+            backtest_engine.VARIANTS_FOLDER,
         )
         tasks.append(task(
             _flat_name,
@@ -1033,7 +1345,10 @@ def _(
         ))
         runs_by_label[f"{_label}{FLAT_SUFFIX}"] = _flat_name
 
-    for _label in ("rule", "control"):
+    # The stress and small-account rows are not priced in this version; the sub-periods are.
+    stressed_labels = () if BASE_BOOKS_ONLY else ("rule", "control")
+
+    for _label in stressed_labels:
         _stress_name = f"{file_names[_label]}_stress"
         _small_name = f"{file_names[_label]}_small_account"
 
@@ -1042,6 +1357,7 @@ def _(
                 securities_panel.expand_to_identifiers(books[_label]),
                 EXPERIMENT_DIRECTORY,
                 _name,
+                backtest_engine.VARIANTS_FOLDER,
             )
 
         tasks.append(task(
@@ -1061,6 +1377,7 @@ def _(
         ))
         runs_by_label[f"{_label}, $100,000"] = _small_name
 
+    for _label in ("rule", "control"):
         for _period, _start, _end in SUB_PERIODS:
             _period_name = f"{file_names[_label]}_{_period.replace(' ', '_')}"
             _period_book = from_start(books[_label], _start, _end)
@@ -1068,6 +1385,7 @@ def _(
                 securities_panel.expand_to_identifiers(_period_book),
                 EXPERIMENT_DIRECTORY,
                 _period_name,
+                backtest_engine.VARIANTS_FOLDER,
             )
             tasks.append(task(_period_name, _period_book.index[0], _end))
             runs_by_label[f"{_label}, {_period}"] = _period_name
@@ -1076,6 +1394,7 @@ def _(
                 securities_panel.expand_to_identifiers(_period_book),
                 EXPERIMENT_DIRECTORY,
                 _flat_period_name,
+                backtest_engine.VARIANTS_FOLDER,
             )
             tasks.append(task(
                 _flat_period_name,
@@ -1189,9 +1508,11 @@ def _(EXPERIMENT_DIRECTORY, SUB_PERIODS, pandas, runs):
             "rule",
             "control",
             "equal weight",
+            "rule without the sector cap",
             "rule, flat 5 bp",
             "control, flat 5 bp",
             "equal weight, flat 5 bp",
+            "rule without the sector cap, flat 5 bp",
             "rule, stress costs",
             "control, stress costs",
             "rule, $100,000",
@@ -1445,6 +1766,8 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    ## 5 · Attribution — KaxaNuk Attribution Analysis
+
     **Brinson–Fachler**, the first cut; **the KN US Equity Factor Model**, the second layer — its
     Experiment 1, momentum skipping the latest month, **unreviewed by its owner and provisional**;
     and **Brinson–Fachler on the residual**, the third pass. The book arrives daily, as the engine
@@ -1457,6 +1780,7 @@ def _(mo):
 @app.cell
 def _(
     ATTRIBUTION_WORKERS,
+    BASE_BOOKS_ONLY,
     EXCLUDED,
     EXPERIMENT_DIRECTORY,
     FLAT_SUFFIX,
@@ -1469,13 +1793,16 @@ def _(
     runs,
     window_days,
 ):
-    missing = attribution_analysis.report_missing_inputs()
+    # Attribution is not run in this version, by the owner's decision of 2026-11-19.
+    missing = attribution_analysis.report_missing_inputs() + (
+        ["not run in this version: the four base books only"] if BASE_BOOKS_ONLY else []
+    )
     ATTRIBUTION_READY = len(missing) == 0 and "rule" in runs
 
     if not ATTRIBUTION_READY:
         print("step 6 skipped:", "; ".join(missing))
     else:
-        market_factor = pandas.read_csv(hand_supplied.factor_directory() / "Market.csv", usecols=[0])
+        market_factor = pandas.read_csv(hand_supplied.factor_path("Market"), usecols=[0])
         factor_dates = pandas.DatetimeIndex(pandas.to_datetime(market_factor.iloc[:, 0]))
         rule_days = pandas.DatetimeIndex(runs["rule"]["daily_weights"].index)
         window = window_days[
@@ -1526,7 +1853,9 @@ def _(
             names_held = names_held | set(runs[_label]["daily_weights"].columns)
 
         all_prices = attribution_analysis.load_prices(tuple(sorted(names_held)), window)
-        all_returns = attribution_analysis.load_asset_returns(all_prices)
+        # Every return over the factor model's bill, the owner's decision of 2026-11-08.
+        bill = attribution_analysis.implied_bill(all_prices)
+        all_returns = attribution_analysis.load_excess_returns(all_prices, bill)
         priced_index = attribution_analysis.load_benchmark_weights(window, all_prices).drop(
             columns=list(EXCLUDED),
             errors="ignore",
@@ -1553,12 +1882,13 @@ def _(
         print(f"books attributed: {len(attributed)}, failed: {len(errors)} {errors}")
     else:
         attributed = {}
+        bill = None
         window = window_days
-    return ATTRIBUTION_READY, attributed, attribution_task, window
+    return ATTRIBUTION_READY, attributed, attribution_task, bill, window
 
 
 @app.cell
-def _(ATTRIBUTION_READY, attributed, hand_supplied, window):
+def _(ATTRIBUTION_READY, attributed, bill, hand_supplied, window):
     # First cut: Brinson-Fachler, per asset, as the library computes it. Then the reconciliation the
     # blueprint makes a precondition: the first cut's benchmark against the Core's own returns file.
     brinson_totals = None
@@ -1575,14 +1905,15 @@ def _(ATTRIBUTION_READY, attributed, hand_supplied, window):
             for column in brinson_daily.columns
             if "bench" in column.lower() and "return" in column.lower()
         ]
-        index_returns = hand_supplied.read_benchmark_returns().reindex(window[1:])
+        # The Core over the same bill, as the first cut now reads it.
+        index_returns = (hand_supplied.read_benchmark_returns() - bill).reindex(window[1:])
 
         if len(benchmark_columns) > 0:
             first_cut_annual = float(brinson_daily[benchmark_columns[0]].mean() * 252 * 100)
             index_annual = float(index_returns.mean() * 252 * 100)
             reconciliation_gap = abs(first_cut_annual - index_annual)
             print(f"first cut's benchmark, mean daily return a year: {first_cut_annual:.2f} points")
-            print(f"the KN US Equity Core's own, same window:       {index_annual:.2f} points")
+            print(f"the KN US Equity Core's own less the bill:      {index_annual:.2f} points")
             print(f"gap: {reconciliation_gap:.2f} points a year (tolerance 1.0)")
         else:
             print("the library returned no benchmark return column: the reconciliation cannot be read")
@@ -1809,6 +2140,8 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    ## 6 · Counterfactuals — the sweep, the band, and who earned the idiosyncratic share
+
     The sweep is read as a curve, each setting against its own control. The band at two other widths
     is read on turnover and orders, never on the gate. Beside the rule's margin over its control:
     the share of months the book beat it, and how much of the two books' weight overlapped, because
@@ -2006,17 +2339,16 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    ## 7 · Verdict
+
     **In words**, in [`FINDINGS_1.md`](FINDINGS_1.md) — **that file is the record, this notebook is
-    the method.** The cell below reads, from the numbers above, the rows of the gate those numbers
-    decide, and the predictions, row by row, **once for each pricing**: the pre-registered costs,
-    which the blueprint fixed, and the flat 5 bp half-spread, the blueprint's own fallback, priced
-    after the engine's range-based spread was found to read a megacap's daily range as spread. Which
-    of the two the gate is read at is the owner's decision, recorded in the journal. Its table keeps
-    the numbering of the gate the run was registered under: criteria 1 to 3 are the performance rows
-    P1 to P3 of the gate in two layers, and criterion 4 is soundness row S4; the other soundness
-    rows, S1, S2, S3 and S5, are read in `FINDINGS_1.md`, from the universe, the blueprint, the trial
-    count and the run itself. A row that needs a run excluded by name reads "not evidenced". The
-    outcome, and the sign-off, are a person's, never this cell's.
+    the method.** The cell below reads the gate's criteria 1 to 4 and the predictions from the
+    numbers above, row by row, **once for each pricing**: the pre-registered costs, which the
+    blueprint fixed, and the flat 5 bp half-spread, the blueprint's own fallback, priced after the
+    engine's range-based spread was found to read a megacap's daily range as spread. Which of the two
+    the gate is read at is the owner's decision, recorded in the journal. A criterion that needs a
+    run excluded by name reads "not evidenced". Criterion 5 is a person's signature, never this
+    cell's.
 
     ## Handoff
 
@@ -2242,6 +2574,8 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    ## 8 · Verify
+
     **Assertions that raise when this experiment's output is wrong**: every invariant of section
     2.1; the window and the exclusions the blueprint's; every weight file read back with one column
     per rebalance date, none over one, none negative; **no name a blocking register row lists held by
@@ -2281,7 +2615,26 @@ def _(
     verifications["the window is the universe notebook's"] = (
         window_written["window_start"].iloc[0] == WINDOW_START.date().isoformat()
     )
-    verifications["the exclusions are the blueprint's"] = EXCLUDED == EXPECTED_EXCLUSIONS
+    # The blueprint's exclusions are a rule, the register's blocking rows, not the names it listed
+    # on its own data (the owner's ruling of 2026-11-08): the register is read again here, so a
+    # register changed after the setup cell read it fails, and the blueprint's list is only shown.
+    _register = pandas.read_csv("Universe/Data_Issues.csv").fillna("")
+    _blocking = _register[
+        (_register["severity"] == "blocking") & ~_register["check"].str.startswith("missing file")
+    ]
+    _by_rule = tuple(sorted({
+        _identifier
+        for _identifiers in _blocking["identifiers"]
+        for _identifier in str(_identifiers).split()
+    }))
+    verifications["the exclusions are the blueprint's rule, the register's blocking rows"] = (
+        EXCLUDED == _by_rule
+    )
+    print(
+        "exclusions beside the blueprint's own list:",
+        f"added {sorted(set(EXCLUDED) - set(EXPECTED_EXCLUSIONS))},",
+        f"no longer {sorted(set(EXPECTED_EXCLUSIONS) - set(EXCLUDED))}",
+    )
 
     for _label, _weights in books.items():
         _held = _weights.columns[(_weights > 0).any(axis=0)]
@@ -2291,8 +2644,8 @@ def _(
         EXPERIMENT_DIRECTORY / "Portfolio" / f"{file_names['rule']}.csv",
         index_col=0,
     )
-    verifications["the weight file has one column per rebalance date"] = (
-        _weight_file.shape[1] == len(REBALANCE_DATES)
+    verifications["the weight file has one column per rebalance date, top-ups included"] = (
+        _weight_file.shape[1] == len(books["rule"].index)
     )
     verifications["no weight-file column sums to more than one"] = bool(
         (_weight_file.sum(axis=0) <= 1.0 + 1e-6).all()
@@ -2310,8 +2663,50 @@ def _(
         set(_written.index) == set(excluded_runs)
     )
 
-    for _label in ("rule", "control", "equal weight", f"rule{FLAT_SUFFIX}", f"control{FLAT_SUFFIX}"):
+    for _label in (
+        "rule",
+        "control",
+        "equal weight",
+        "rule without the sector cap",
+        f"rule{FLAT_SUFFIX}",
+        f"control{FLAT_SUFFIX}",
+    ):
         verifications[f"{_label}: valued whole, never excluded"] = _label in runs
+
+    # The cash a fund would hold, the blueprint's lead 10: the rule's daily cash, as the engine held
+    # it, at most 3% on every day but the two before a rebalance, when a delisted name's cash waits
+    # for its top-up or for the month's first day. Reported, not raised: the blueprint had it raise,
+    # and the flat row broke it on whole shares of CHKAQ at an adjusted price inflated by its 2020
+    # reverse split; on the owner's go of 2026-11-20 the bound is read as a lead's outcome, a change
+    # made after the run and disclosed in JOURNAL_1.md and FINDINGS_1.md.
+    _waiting = {
+        window_days[_position - _back]
+        for _date in books["rule"].index
+        if _date in window_days
+        for _position in (window_days.get_loc(_date),)
+        for _back in (1, 2)
+        if _position - _back >= 0
+    }
+
+    for _label in ("rule", f"rule{FLAT_SUFFIX}"):
+        if _label not in runs:
+            continue
+
+        _cash = runs[_label]["daily_weights"]["CASH_RESERVE"].astype(float)
+        _cash.index = pandas.to_datetime(_cash.index)
+        _outside = _cash[~_cash.index.isin(list(_waiting))]
+        print(
+            f"{_label}: daily cash mean {_cash.mean():.4f}, median {_cash.median():.4f}, "
+            f"99th percentile {_cash.quantile(0.99):.4f}, largest {_cash.max():.4f} on "
+            f"{_cash.idxmax().date()}; days above 3%: {int((_cash > 0.03).sum())}, above 5%: "
+            f"{int((_cash > 0.05).sum())}"
+        )
+        _breaches = _outside[_outside > 0.03]
+        _verdict = "holds" if len(_breaches) == 0 else "fails"
+        print(
+            f"{_label}: lead 10 {_verdict}; {len(_breaches)} days above 3% outside the two days "
+            f"before a rebalance"
+        )
 
     if ATTRIBUTION_READY:
         verifications["the attribution window lies inside the backtest's"] = bool(

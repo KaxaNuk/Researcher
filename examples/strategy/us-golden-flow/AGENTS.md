@@ -9,15 +9,16 @@ survive before anyone believes it.
 <!-- example: begin -->
 
 > **Hypothetical:** the figures below come from a backtest on the past prices the strategy was
-> designed on, one of 152 portfolios tested; past returns do not guarantee future returns. The
+> designed on, one of 359 portfolios tested; past returns do not guarantee future returns. The
 > README's *Hypothetical results* says more.
 >
-> **Status, as curated on 2026-10-27: Experiment 1 ran in sample on Sharadar and reads as sound and
-> regime-dependent; it does not graduate, and its book is on paper on probation as
-> `Paper_Trading_1`, frozen on 2026-10-27, its review on 2027-10-27.** In a backtest, net of every
-> cost the engine prices, 2000-01-03 to 2026-08-14: 6.21% a year at a Sharpe of 0.162, 7.72% and
-> 0.221 at a flat 5 bp half-spread, against 0.097 without the golden cross and 8.12% and 0.315 for
-> the KN US Equity Core. The whole shortfall is 2000–2008; since 2018 it beats the Core.
+> **Status, as curated on 2026-11-25 from US-Golden-Flow 0.8.3: Experiment 1 is falsified as its
+> blueprint words it, and nothing is on paper.** The most-traded KN US Equity Core members in a
+> golden cross, by traded value, no KN sector above half the book, 1999-12-31 to 2026-10-30, net of
+> every cost the engine prices: 5.58% a year at a Sharpe of 0.143, 7.14% and 0.207 at a flat 5 bp
+> half-spread, against 0.124 without the golden cross and 7.93% and 0.306 for the KN US Equity Core.
+> It beats its control over the window but in only 1 of 3 sub-periods; P1 and P2 fail at both cost
+> rows.
 
 <!-- example: end -->
 
@@ -87,11 +88,13 @@ entry *the rule read back*, saved before the blueprint. A no means a new draft o
 
 <!-- example: begin -->
 
-**In this example, the rule was read back on one worked date**, the book of 2026-08-03 struck on
-the close of 2026-07-31: 28 names, fully invested, MU at 18.8%, and the 29th, UNH, out because it
-would put the smallest weight under 1% (`JOURNAL_1.md`, 2026-10-23, before the blueprint). The band
-was read back on the books of 2026-07-01 and 2026-08-03, in the entry that put the draft to its
-critic: 16 held names kept their drifted weights and 12 orders went in.
+**In this example, the rule was read back on two worked dates**, the books of 2026-09-01 and
+2026-10-01 on the first pass's data: on 2026-10-01, 451 names eligible and 38 held, technology at
+exactly 50%, MU the largest at 9.47%, and the first names out technology ones — LRCX, CRM, V —
+because the sector was full (`JOURNAL_1.md`, 2026-11-16, before the blueprint). The band was read
+back between the two dates: a kept name that moved half a point or less keeps its drift, AAPL 4.48%
+→ 4.21%. Each rewrite was read back again before its blueprint: the band's reinvestment on
+2026-11-17, and the delisting top-up on UST, 2009-01-07, on 2026-11-19.
 
 <!-- example: end -->
 
@@ -103,10 +106,10 @@ blockquote.
 
 <!-- example: begin -->
 
-**In this example, the order cannot be read from this copy's one commit.** The blueprint was
-committed alone on 2026-10-23, in the strategy's own repository, which is private. What a reader
-can check is `BLUEPRINT_1.md`'s line "Written 2026-10-23, before the rule cell held a line of this
-version", and the entries of that day in `JOURNAL_1.md`.
+**In this example, the order cannot be read from this copy's one commit.** Each version of the
+blueprint was committed alone, the last on 2026-11-19, in the strategy's own repository, which is
+private. What a reader can check is `BLUEPRINT_1.md`'s line "Rewritten 2026-11-19, before this
+version was run", and the entries of that day in `JOURNAL_1.md`.
 
 <!-- example: end -->
 
@@ -180,9 +183,11 @@ Two standing exceptions, and one that has to be asked for:
 
 <!-- example: begin -->
 
-**In this example, Experiment 1 was rewritten twice:** the versions it replaces — on FMP from
-2015, and before that on another index — are rows of `RESULTS.md`, and the 107 books they priced
-count in its 152 trials.
+**In this example, Experiment 1 was rewritten three times:** the first pass, Golden-Flow's design
+priced again on the Curator's data; the second, with no KN sector above half the book; the third,
+whose band reinvests what its kept names leave; and this one, which puts a delisted name's cash back
+two days after its last price. Each earlier version is a row of `RESULTS.md`, and every book they
+priced counts in its 359 trials, Golden-Flow's 152 among them.
 
 <!-- example: end -->
 
@@ -305,22 +310,21 @@ says.
 
 **In this example, rows 1, 2 and 4.**
 
-- **Row 1 is close to removed, and what is left is measured.** Sharadar is the only price
-  provider, by the owner's decision of 2026-10-23, and it keeps delisted securities: a member it
-  does not price (`UB`) is dropped, counted in `Universe/Data_Issues.csv`, and the share of the
-  index's weight it held is published per date as the survivorship cost — at most 0.11% on any day.
-  The window opens on the later of 2000-01-03 and the first date on which the members priced and
-  signalled hold at least 90% of the index's weight.
-- **Row 2's exit is the engine's.** A delisted name is sold by the engine at its last price
-  (`sell_at_last_price`), Sharadar's last trade, which needs no hindsight; a name with a gap inside
-  its series is excluded by name from every book, the owner's decisions of 2026-10-23. What is left:
-  a name with no open on its date is dropped, and the over-the-counter venue a delisted name last
-  traded on may be out of an account's reach.
+- **Row 1 is measured, and nothing is missing.** Sharadar is the only price provider, and it keeps
+  delisted securities: every member of the KN US Equity Core is priced on every day of the window,
+  at least 99.997% of the index's weight, so the survivorship cost is 0 (`RESULTS.md`, row U6).
+- **Row 2's exit is the engine's, and its cash comes back in two days.** A delisted name is sold by
+  the engine at its last price, Sharadar's last trade; the cash goes into the names held on the
+  second trading day after, the day after the stop is known. That is one day of hindsight, disclosed
+  in the blueprint. A name with a gap inside its series is excluded by name from every book, eight
+  names by the register's blocking rows.
 - **Row 4's costs are inside the engine, and its capacity is a participation bound only.**
   Commission is 1 bp of the notional, slippage the engine's spread model with a flat 5 bp
-  half-spread priced beside it, and cash earns FRED's `DFF` less half a point. At 1% of a name's
-  63-day traded value, the worst trade allows a $25.9 million book and the median trade $3.25
-  billion. That bounds participation; it does not model market impact.
+  half-spread priced beside it, and cash earns FRED's `DFF` less half a point. The engine buys whole
+  shares at the adjusted open, which leaves a name split in reverse later unbought: Chesapeake's
+  point of cash in 2005, 2008 and 2011. At 1% of a name's 63-day traded value, the worst trade
+  allows a $6.4 million book and the median trade $3.84 billion. That bounds participation; it does
+  not model market impact.
 
 <!-- example: end -->
 

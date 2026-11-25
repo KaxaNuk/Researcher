@@ -114,7 +114,7 @@ or describe an example from memory.
 
 6. **Hand over**, for the whole example, in three short lines — for `us-golden-flow`:
    - *Read*, with nothing installed: `OBJECTIVE.md`, `RESULTS.md`, then `BLUEPRINT_1.md` and
-     `FINDINGS_1.md` in `Experiments/Experiment_1/`, then `Paper_Trading/BITACORA.md`.
+     `FINDINGS_1.md` in `Experiments/Experiment_1/`, then `PIPELINE.md` for how its code runs.
    - *Run*: its README's *Run it*, in a **new** session opened in the folder — a Sharadar key of
      their own, the Analytics Factory's KN US Equity Core and factor model files, and the Backtest
      Engine and Attribution Analysis, which come with their licences in the KaxaNuk Investment Lab,
@@ -122,9 +122,8 @@ or describe an example from memory.
      `lab@kaxanuk.mx`, saying which library and what it is for, with *via KaxaNuk Researcher* in the
      subject — <https://www.kaxanuk.mx/lab> shows the Lab.
    - *Own*: a strategy of your own is `init-strategy <name>`; nothing is built on the example. Its
-     Experiment 1 reads as sound and regime-dependent, and is on paper on probation as
-     `Paper_Trading_1`, frozen on 2026-10-27; in the copy it is a record, which the daily run
-     stops.
+     Experiment 1 is falsified as its blueprint words it, and nothing is on paper: a rejected
+     result, reported as loudly as a promising one.
 
    For another example, the same three lines from its own README: what to read first, how it runs,
    and the `init-<kind>` that starts one of the owner's own.

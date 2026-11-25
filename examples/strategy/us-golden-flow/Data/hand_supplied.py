@@ -46,29 +46,6 @@ a member dropped because its two keys differ.
 
 # --- example: begin ---
 
-# Golden Flow reads the **KN US Equity Core** of 2026-10-22, from 1998-12-31, under the names the
-# owner supplied it with on 2026-10-23:
-#
-#     Benchmarks/index_daily_holdings_1998.csv
-#         m_date, ISO dates; one column per listing, keyed by Sharadar's ticker, its weight in the
-#         index that day
-#     Benchmarks/backtest_returns.csv
-#         m_date, ISO dates; the index's daily return in a second column whose header is blank
-#     Benchmarks/backtest_components_mask.csv, Benchmarks/tickers.csv
-#         the same membership as 0 and 1, and the listings' tickers: staged beside the two, and
-#         checked against them by the universe notebook, never read for a number
-#     Factors/<Name>.csv
-#         dates down in an unnamed first column, ISO; listings across, keyed like the holdings
-#
-# **Two keys, one map.**  The desk keys every listing by Sharadar's ticker -- `BRK.B`, `DD1` for a
-# symbol since recycled -- and so does every price file, since Sharadar serves both; the map is the
-# identity today, and it stays a map so a second provider is one more column, not a rewrite.  The
-# seed, `Universe/Investable_Universe.csv`, carries both: `index_identifier`, the desk's, and
-# `main_identifier`, the price file's.  `read_member_holdings` renames the holdings
-# through that map, and every reader of membership -- the universe notebook, the analyzer, the rule,
-# the attribution and the paper book -- goes through it, so a listing whose two keys differ is never
-# silently read as a non-member.  `read_listing_keys` gives the map itself, for the factor files.
-
 import os
 import pathlib
 
@@ -78,15 +55,21 @@ import pandas
 __all__ = [
     "ANALYTICS_PATH_KEY",
     "BENCHMARK_HOLDINGS_NAME",
+    "BENCHMARK_MEMBERSHIP_NAME",
+    "BENCHMARK_NAME",
     "BENCHMARK_RETURNS_NAME",
     "BENCHMARK_RETURNS_SERIES_NAME",
+    "BENCHMARK_TICKERS_NAME",
+    "FACTOR_DELIVERY_NAME",
     "INDEX_IDENTIFIER_COLUMN",
     "LIBRARY_DATE_HEADER",
     "benchmark_directory",
     "factor_directory",
+    "factor_path",
     "read_benchmark_holdings",
     "read_benchmark_returns",
     "read_factor_returns",
+    "read_idiosyncratic_returns",
     "read_listing_keys",
     "read_member_holdings",
     "report_missing",
@@ -98,16 +81,27 @@ BENCHMARK_FOLDER_NAMES = (
     "Benchmark Portfolios",
     "Benchmarks",
 )
-BENCHMARK_HOLDINGS_NAME = "index_daily_holdings_1998.csv"
-BENCHMARK_RETURNS_NAME = "backtest_returns.csv"
-# The index's return series has no header of its own, so it is named here.
-BENCHMARK_RETURNS_SERIES_NAME = "kn_us_equity_core"
+# The benchmark a book is reported against, as its files name it, and the files themselves.
+BENCHMARK_NAME = "Core"
+BENCHMARK_HOLDINGS_NAME = f"KN_US_Equity_{BENCHMARK_NAME}_Holdings_Daily.csv"
+BENCHMARK_MEMBERSHIP_NAME = f"KN_US_Equity_{BENCHMARK_NAME}_Membership_Daily.csv"
+BENCHMARK_RETURNS_NAME = f"KN_US_Equity_{BENCHMARK_NAME}_Returns_Daily.csv"
+# The index's return series is named for the index, as the attribution reports it.
+BENCHMARK_RETURNS_SERIES_NAME = f"kn_us_equity_{BENCHMARK_NAME.lower()}"
+BENCHMARK_TICKERS_NAME = f"KN_US_Equity_{BENCHMARK_NAME}_Tickers.csv"
 DROP_IN_DIRECTORY = pathlib.Path(__file__).parent / "Curator"
 ENVIRONMENT_PATH = pathlib.Path(__file__).parent.parent / "Config" / ".env"
+# The factor model's delivery read, in its own folder under the factor folder, so the next delivery
+# can sit beside it without a book reading two models at once.
+FACTOR_DELIVERY_NAME = "KN_US_Equity_Factor_Model_2026-11-06"
+# A factor file is `KN_US_Equity_Factor_<Name>_Daily.csv`; the factor returns file is not a factor.
+FACTOR_FILE_PREFIX = "KN_US_Equity_Factor_"
+FACTOR_FILE_SUFFIX = "_Daily"
 FACTOR_FOLDER_NAMES = (
     "Factor Models",
     "Factors",
 )
+FACTOR_RETURNS_FILE_NAME = "KN_US_Equity_Factor_Model_Returns_Daily.csv"
 # The seed's two keys: the price file's, and the desk's.
 IDENTIFIER_COLUMN = "main_identifier"
 INDEX_IDENTIFIER_COLUMN = "index_identifier"
@@ -149,18 +143,30 @@ def benchmark_directory() -> "pathlib.Path":
 
 def factor_directory() -> "pathlib.Path":
     """
-    The folder the factor model's files are read from: the desk's, or the drop-in.
+    The folder the factor model's delivery is read from, under the desk's factor folder or the
+    drop-in.
     """
     analytics = _analytics_directory()
 
     if analytics is None:
 
-        return DROP_IN_DIRECTORY / "Factors"
+        return DROP_IN_DIRECTORY / "Factors" / FACTOR_DELIVERY_NAME
 
-    return _first_existing(
+    factor_folder = _first_existing(
         analytics,
         FACTOR_FOLDER_NAMES,
     )
+
+    return factor_folder / FACTOR_DELIVERY_NAME
+
+
+def factor_path(name: str) -> "pathlib.Path":
+    """
+    One factor's file in the delivery, by the factor's name as the model gives it -- `Market`,
+    `Idyo_Returns` -- so a notebook never spells the naming standard itself.
+    """
+
+    return factor_directory() / f"{FACTOR_FILE_PREFIX}{name}{FACTOR_FILE_SUFFIX}.csv"
 
 
 def read_benchmark_holdings() -> "pandas.DataFrame":
@@ -214,20 +220,29 @@ def read_benchmark_returns() -> "pandas.Series":
 
 def read_factor_returns() -> dict[str, "pandas.DataFrame"]:
     """
-    Every factor file in the folder, each one named for the attribution library.
+    Every factor file of the delivery, each one named for the attribution library by the `<Name>`
+    of `KN_US_Equity_Factor_<Name>_Daily.csv`.
 
-    Every file is read as a factor, so a stray file is a stray factor.  The date column arrives
-    unnamed and as strings; a string date aligns with nothing and the factor attribution comes back
-    with zero rows rather than an error, so it is parsed here.  The listings stay keyed as the desk
-    keys them; `read_listing_keys` renames them where a caller needs the price files' keys.
+    Every file of that pattern is read as a factor, so a stray one is a stray factor.  The date
+    column arrives unnamed and as strings; a string date aligns with nothing and the factor
+    attribution comes back with zero rows rather than an error, so it is parsed here.  The listings
+    stay keyed as the desk keys them; `read_listing_keys` renames them where a caller needs the
+    price files' keys.
     """
     factors = {}
     directory = factor_directory()
 
-    for path in sorted(directory.glob("*.csv")):
+    factor_paths = [
+        path
+        for path in sorted(directory.glob(f"{FACTOR_FILE_PREFIX}*{FACTOR_FILE_SUFFIX}.csv"))
+        if path.name != FACTOR_RETURNS_FILE_NAME
+    ]
+
+    for path in factor_paths:
+        factor_name = path.stem[len(FACTOR_FILE_PREFIX):-len(FACTOR_FILE_SUFFIX)]
         name = RESERVED_FACTOR_NAMES.get(
-            path.stem,
-            path.stem.lower(),
+            factor_name,
+            factor_name.lower(),
         )
         frame = pandas.read_csv(path)
         dates = pandas.to_datetime(
@@ -242,6 +257,45 @@ def read_factor_returns() -> dict[str, "pandas.DataFrame"]:
         factors[name] = values
 
     return factors
+
+
+def read_idiosyncratic_returns() -> "pandas.DataFrame":
+    """
+    Each listing's daily specific return from the factor model, keyed by the price files.
+
+    The specific return is what the model's factors do not explain on that day: the model takes
+    each exposure at the close before and the factor returns from that day's cross-section, so a
+    day's specific return uses nothing after that day's close.  A listing the seed does not map is
+    left out, as `read_member_holdings` leaves it out; a day the model gives no return stays null.
+    """
+    frame = pandas.read_csv(factor_path("Idyo_Returns"))
+    dates = pandas.to_datetime(
+        frame[frame.columns[0]],
+        format=FACTOR_DATE_FORMAT,
+    )
+    returns = frame.drop(columns=[frame.columns[0]])
+    returns.index = pandas.DatetimeIndex(
+        dates,
+        name=LIBRARY_DATE_HEADER,
+    )
+    keys = read_listing_keys()
+    mapped = [
+        listing
+        for listing in returns.columns
+        if listing in keys
+    ]
+    keyed = returns[mapped]
+    keyed.columns = [
+        keys[listing]
+        for listing in mapped
+    ]
+
+    if keyed.columns.has_duplicates:
+        message = "two model listings map to one price file; the seed's map must be one to one"
+
+        raise ValueError(message)
+
+    return keyed.sort_index()
 
 
 def read_listing_keys() -> dict[str, str]:

@@ -225,58 +225,56 @@ column". That is worth knowing and belongs in `OBJECTIVE.md` as a falsified clai
 
 The KaxaNuk Strategy Template works one strategy through the process in its worked example,
 `examples/strategy/us-golden-flow/` in `KaxaNuk/Researcher`, which `init-example` copies into a
-folder of its own. Its strategy, **Golden Flow**, owns once a month the KN US Equity Core members
-whose 50-day simple moving average is above the 200-day, ranked and weighted by 63-day traded
-value, none above 20% and none below 1%, a held name left alone when its target moved by half a
-point or less. Steps 1 to 6 have run, and its gate reads **sound and regime-dependent**: every
-soundness criterion holds, and the book loses to its index over the window while it earns in named
-periods. So the numbers below are measured, not made up for illustration: the example's in-sample
-backtest over 2000-01-03 to 2026-08-14, priced by the engine at the flat 5 bp half-spread the gate
-is read at, and attributed by Attribution Analysis 0.5.0 — Brinson-Fachler by KN sector, every
-cumulative effect linked, in points of compounded return — as reported in
+folder of its own. Its strategy, **US-Golden-Flow**, owns once a month the KN US Equity Core
+members whose 50-day simple moving average is above the 200-day, ranked and weighted by 63-day
+traded value, none above 20%, none below 1% and no KN sector above half the book, a held name left
+alone when its target moved by half a point or less. Steps 1 to 6 have run, and the experiment is
+**falsified as its blueprint words it**: the cross beats its control over the window but in only
+one of three sub-periods, and the book loses to its index. So the numbers below are measured, not
+made up for illustration: the example's in-sample backtest over 1999-12-31 to 2026-10-30, priced by
+the engine at the flat 5 bp half-spread the gate is read at, and attributed by Attribution Analysis
+0.7.0 over 2000-01-03 to 2026-10-30 — Brinson-Fachler by KN sector, every cumulative effect linked,
+in points of compounded return over the bill — as reported in
 `Experiments/Experiment_1/FINDINGS_1.md`; hypothetical, never traded.
 
 | Arm | What it removes | CAGR | Sharpe | **Idiosyncratic** |
 | --- | --- | ---: | ---: | ---: |
-| The rule | — | 7.72% | 0.221 | **+285.0** |
-| The control | the golden cross | 5.48% | 0.117 | **+167.1** |
-| Equal weight | traded-value sizing | 5.67% | 0.157 | **+87.8** |
-| Random, the 19 of twenty seeds priced whole | the cross and the ranking together | — | — | **−57.7 to +679.8**, median +117.6 |
+| The rule | — | 7.14% | 0.207 | **+58.67** |
+| The control | the golden cross | 5.53% | 0.124 | **+29.91** |
+| Equal weight | traded-value sizing | 5.30% | 0.145 | **−29.77** |
+| Random, twenty seeds | the cross and the ranking together | — | — | **−97.01 to +161.79**, median +16.88 |
 
 What the arms teach this skill:
 
-- **The control prices a filter whatever the model shows.** The golden cross adds +0.105 of Sharpe
-  and +2.24 points of CAGR over the control, with a maximum drawdown of −78.4% against −91.0%. In
-  the factor model the two books carry almost the same beta, −207.6 against −209.9, and the rule a
-  little more momentum, +90.5 against +75.9: the exclusion-filter test of section 4 measured what
-  the factor split barely shows. Read the arms, not the name, before saying what a signal does.
-- **A large residual is not yet selection.** The rule's +285.0 is above 15 of the 19 random books
-  priced whole, short of the gate's 16 of 20, and the random books' own residuals run from −57.7
-  to +679.8. Alpha is the residual's *expected* value: read it against the random books, never by
-  its level. Each draw replaces both the cross and the ranking, so section 3b credits the two
-  together; no arm isolated the ranking.
+- **The control prices a filter whatever the model shows.** The golden cross adds +0.083 of Sharpe
+  and +1.62 points of CAGR over the control, with a maximum drawdown of −76.6% against −89.8%. In
+  the factor model the rule carries less negative beta than the control, −130.06 against −146.39,
+  and less momentum, +42.75 against +52.37: the exclusion-filter test of section 4 measured what
+  the factor split does not show. Read the arms, not the name, before saying what a signal does.
+- **A positive residual is not yet selection.** The rule's +58.67 is above 14 of the 20 random
+  books, short of the gate's 16, and the random books' own residuals run from −97.01 to +161.79.
+  Alpha is the residual's *expected* value: read it against the random books, never by its level.
+  Each draw replaces both the cross and the ranking, so section 3b credits the two together; no arm
+  isolated the ranking.
 - **Sizing is measured here, not assumed.** Traded-value weighting against the same names equally
-  weighted: 0.221 against 0.157 of Sharpe, +285.0 against +87.8 idiosyncratic. A rule that weights
+  weighted: 0.207 against 0.145 of Sharpe, +58.67 against −29.77 idiosyncratic. A rule that weights
   equally across whatever passes its screen has sizing skill zero by construction — report it as
   zero, not as a finding.
 - **Timing was never priced, and the findings say so.** No shifted-entry arm was run, so section 3c
   reports nothing. An arm you did not run is reported as not run, never inferred from the ones you
   did.
-- **Read the sub-periods, not only the window.** The rule beats its control on Sharpe and CAGR in
-  2000–2008 and 2018–2026 and loses to it in 2009–2017; it loses to the KN US Equity Core over the
-  window, its whole shortfall in 2000–2008, and beats it by about eleven points a year since 2018. A
-  decomposition that read the whole window alone would miss both, and the gate's outcome rests on
-  them.
-- **Three fifths of the holdings' return is factor exposure.** Of 685.4 compounded points, 400.4
-  are factors — the market 539.8, momentum +90.5 the largest style, technology +85.0, beta −207.6 —
-  and 285.0 idiosyncratic. Report both parts, as section 1 asks.
-- **Summed and linked figures are different numbers.** Summed daily effects put the rule's
-  idiosyncratic return at +43.2 on Attribution Analysis 0.2.0, with the model's own residual file;
-  linked over 26 years, and computed by 0.5.0, it is +285.0. Say which a figure is before comparing
-  two.
-- **By sector, interaction offsets the bets**: allocation −201.9, selection −73.2, interaction
-  +206.6 in the first cut — the book is heavy where its picks did well — and the third pass's
-  selection is +6.7. Say so beside any selection figure.
+- **Read the sub-periods, not only the window.** The rule beats its control on both Sharpe and
+  CAGR in 1999–2008 only, which is why the experiment is falsified. Its residual is above 19 of the
+  20 random books in 2018–2026 and below most of them in 1999–2008: a decomposition that read the
+  whole window alone would miss both. A period singled out after it was seen is information, never
+  the test.
+- **Four fifths of the holdings' return is factor exposure.** Of 314.81 compounded points over the
+  bill, 256.14 are factors — the market 351.16, technology +63.86, momentum +42.75 the largest
+  style, beta −130.06 — and 58.67 idiosyncratic. Report both parts, as section 1 asks.
+- **By sector, interaction offsets the bets**: allocation −57.33, selection −102.82, interaction
+  +76.59 in the first cut — the book is heavier where its picks did better — and the third pass's
+  selection is −0.01. A positive idiosyncratic return beside a negative selection is not a
+  contradiction: the two layers ask different questions. Say so beside any selection figure.
 
 ## What this skill will not let you do
 

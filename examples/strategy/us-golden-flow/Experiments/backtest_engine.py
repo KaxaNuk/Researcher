@@ -89,6 +89,8 @@ __all__ = [
     "EXECUTION_PRICE_COLUMN",
     "INDEX_IDENTIFIER",
     "MARKET_DATA_DIRECTORY",
+    "PORTFOLIO_FOLDER",
+    "VARIANTS_FOLDER",
     "align_variants",
     "build_configuration",
     "describe_window",
@@ -155,6 +157,10 @@ MARKET_DATA_COLUMNS = (
 )
 # The licence file, loaded by its own path before a worker leaves the repository's folder.
 ENVIRONMENT_PATH = pathlib.Path(__file__).parent.parent / "Config" / ".env"
+# Where a weight file is written: the folder the KaxaNuk app lists, and beneath it the folder for
+# the books an experiment prices to test its rule, which the app does not list.
+PORTFOLIO_FOLDER = "Portfolio"
+VARIANTS_FOLDER = "Portfolio/variants"
 # The engine parses weights as fixed-scale decimals and refuses a value it cannot hold exactly, so
 # a third written as 0.3333333333333333 fails before the first fill.  Six places is a hundredth of
 # a basis point, far below anything a book can trade.
@@ -464,7 +470,7 @@ def price_book(
     """
     experiment_directory = pathlib.Path(str(task["experiment_directory"]))
     portfolio_name = str(task["portfolio_name"])
-    weight_path = experiment_directory / "Portfolio" / f"{portfolio_name}.csv"
+    weight_path = _weight_path(task)
     cache_path = _cache_path(
         experiment_directory,
         weight_path,
@@ -716,15 +722,18 @@ def write_weight_file(
     weights: "pandas.DataFrame",
     experiment_directory: "pathlib.Path",
     name: str = "portfolio_weights",
+    folder: str = PORTFOLIO_FOLDER,
 ) -> "pathlib.Path":
     """
     Write the book in the layout the engine detects: identifiers down, rebalance dates across.
 
     Whatever the rule left uninvested stays out of the file: the engine holds it as dollar cash and
     pays it the cash rate, as a broker does.  Every column is checked to sum to at most one before
-    the file is written, because a column over one is leverage the rule never asked for.
+    the file is written, because a column over one is leverage the rule never asked for.  `folder`
+    is `Portfolio` for a book the KaxaNuk app should list, and `VARIANTS_FOLDER` for the many an
+    experiment prices to test the rule -- the app lists only the top level.
     """
-    portfolio_directory = experiment_directory / "Portfolio"
+    portfolio_directory = experiment_directory / folder
     portfolio_directory.mkdir(
         parents=True,
         exist_ok=True,
@@ -1066,8 +1075,9 @@ def _weight_path(
     """
     experiment_directory = pathlib.Path(str(task["experiment_directory"]))
     portfolio_name = str(task["portfolio_name"])
+    folder = str(task.get("portfolio_folder", PORTFOLIO_FOLDER))
 
-    return experiment_directory / "Portfolio" / f"{portfolio_name}.csv"
+    return experiment_directory / folder / f"{portfolio_name}.csv"
 
 
 def _with_benchmark_statistics(

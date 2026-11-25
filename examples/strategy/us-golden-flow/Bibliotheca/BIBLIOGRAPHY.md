@@ -123,17 +123,15 @@ them**. This is the part of the bibliography that should argue with you.
 
 <!-- example: begin -->
 
-These notes predate the note shape above: each paper has *What it says* and *What it implies
-for Golden Flow*, and Paleologo's index has one section per idea, each with its implication,
-under the chapter table a book's index holds. The claim each note serves is its row below.
+Each paper has *What it says* and *What it implies for US-Golden-Flow*, written for this strategy.
+The example carries public papers only, and no PDF. The claim each note serves is its row below.
 
 | Claim | Source | What it bears on |
 | --- | --- | --- |
 | 1 | [Faber (2007, updated 2013) — *A Quantitative Approach to Tactical Asset Allocation*](Papers/Faber_2007_Quantitative_Approach_To_Tactical_Asset_Allocation.md) | **for**: a simple moving-average filter as a drawdown control, with an "else cash" leg |
 | 1 | [Hurst, Ooi & Pedersen (2017) — *A Century of Evidence on Trend-Following Investing*](Papers/Hurst_Ooi_Pedersen_2017_Century_Of_Evidence_On_Trend_Following.md) | **for**: trend is not one sample's artefact; its books are sized by volatility, not by traded value |
 | 1 | [Moskowitz, Ooi & Pedersen (2012) — *Time Series Momentum*](Papers/Moskowitz_Ooi_Pedersen_2012_Time_Series_Momentum.md) | **for**: the family the golden cross belongs to — absolute, not relative |
-| 1 | [Jegadeesh & Titman (1993) — *Returns to Buying Winners and Selling Losers*](Papers/Jegadeesh_Titman_1993_Returns_To_Buying_Winners_And_Selling_Losers.md) | **the contrast**: momentum that is relative and long/short, which Golden Flow does not run |
-| 1 | [Paleologo (2021) — *Advanced Portfolio Management*](Books/Paleologo_2021_Advanced_Portfolio_Management/INDEX.md) | **the contrast**: momentum is relative, trend-following is absolute; and the method that asks whether the signal does anything |
+| 1 | [Jegadeesh & Titman (1993) — *Returns to Buying Winners and Selling Losers*](Papers/Jegadeesh_Titman_1993_Returns_To_Buying_Winners_And_Selling_Losers.md) | **the contrast**: momentum that is relative and long/short, which US-Golden-Flow does not run |
 | 1 | [Sullivan, Timmermann & White (1999) — *Data-Snooping, Technical Trading Rule Performance, and the Bootstrap*](Papers/Sullivan_Timmermann_White_1999_Data_Snooping_Technical_Trading_Rules.md) | **against**: moving-average crossovers are in the class of rules this paper deflates |
 | 1 | [Han, Zhou & Zhu (2016) — *Taming Momentum Crashes: A Simple Stop-Loss Strategy*](Papers/Han_Zhou_Zhu_2016_Taming_Momentum_Crashes.md) | **against**: the cross is the slowest possible stop |
 | 1 | [Kaminski & Lo (2014) — *When Do Stop-Loss Rules Stop Losses?*](Papers/Kaminski_Lo_2014_When_Do_Stop_Loss_Rules_Stop_Losses.md) | **against**: a stop whipsaws where prices mean-revert |
@@ -143,10 +141,10 @@ under the chapter table a book's index holds. The claim each note serves is its 
 | 2 | [Ibbotson, Chen, Kim & Hu (2013) — *Liquidity as an Investment Style*](Papers/Ibbotson_Chen_Kim_Hu_2013_Liquidity_As_An_Investment_Style.md) | **against**: the strongest published case |
 | 3 | [Asness, Moskowitz & Pedersen (2013) — *Value and Momentum Everywhere*](Papers/Asness_Moskowitz_Pedersen_2013_Value_And_Momentum_Everywhere.md) | **for**: value and momentum move against each other, so a trend filter screens out value traps |
 
-Four more were read for an earlier form of the idea and are leads here, their notes not carried
-into this copy: Novy-Marx (2012) — *Is Momentum Really Momentum?*; Barroso & Santa-Clara (2015) —
-*Momentum Has Its Moments*; George & Hwang (2004) — *The 52-Week High and Momentum Investing*; and
-Moreira & Muir (2017), Part 3's lead.
+Four more were read for an earlier form of Golden-Flow's idea and are leads here, with no note:
+Novy-Marx (2012) — *Is Momentum Really Momentum?*; Barroso & Santa-Clara (2015) — *Momentum Has Its
+Moments*; George & Hwang (2004) — *The 52-Week High and Momentum Investing*; and Moreira & Muir
+(2017), Part 3's lead.
 
 <!-- example: end -->
 
@@ -163,9 +161,8 @@ idiosyncrasy, a futures book one on roll.*
 
 <!-- example: begin -->
 
-In this example both have notes:
-[Brown, Goetzmann, Ibbotson & Ross (1992)](Papers/Brown_Goetzmann_Ibbotson_Ross_1992_Survivorship_Bias_In_Performance_Studies.md)
-and [Shumway (1997)](Papers/Shumway_1997_The_Delisting_Bias_In_CRSP_Data.md).
+| [Brown, Goetzmann, Ibbotson & Ross (1992) — *Survivorship Bias in Performance Studies*](Papers/Brown_Goetzmann_Ibbotson_Ross_1992_Survivorship_Bias_In_Performance_Studies.md) | why the seed must retain delisted names |
+| [Shumway (1997) — *The Delisting Bias in CRSP Data*](Papers/Shumway_1997_The_Delisting_Bias_In_CRSP_Data.md) | why the last day of a delisted name is an open gap here |
 
 <!-- example: end -->
 
@@ -190,19 +187,14 @@ and [Shumway (1997)](Papers/Shumway_1997_The_Delisting_Bias_In_CRSP_Data.md).
 | Brinson & Fachler (1985) — *Measuring Non-US Equity Portfolio Performance* | the allocation / selection / interaction split step 6 runs under this name. *No note yet.* |
 | Brinson, Hood & Beebower (1986) — *Determinants of Portfolio Performance* | the companion, and the origin of the claim that allocation dominates selection. *No note yet.* |
 | Novy-Marx & Velikov (2016) — *A Taxonomy of Anomalies and Their Trading Costs* | why results are accepted net only. *No note yet.* |
-| Harvey & Liu (2015) — *Backtesting* | how much to haircut a reported Sharpe for the search that produced it. *No note yet.* |
 
 <!-- example: begin -->
 
-In this example two have notes:
-
-- [Novy-Marx & Velikov (2016)](Papers/NovyMarx_Velikov_2016_A_Taxonomy_Of_Anomalies_And_Their_Trading_Costs.md),
-  from the table above
-- [Paleologo (2021) — *Advanced Portfolio Management*](Books/Paleologo_2021_Advanced_Portfolio_Management/INDEX.md),
-  the method for reading step 6: the factor and idiosyncratic split, then selection, sizing and
-  timing by counterfactual books
+| [Novy-Marx & Velikov (2016) — *A Taxonomy of Anomalies and Their Trading Costs*](Papers/NovyMarx_Velikov_2016_A_Taxonomy_Of_Anomalies_And_Their_Trading_Costs.md) | why results are accepted net only |
 
 <!-- example: end -->
+
+| Harvey & Liu (2015) — *Backtesting* | how much to haircut a reported Sharpe for the search that produced it. *No note yet.* |
 
 ## Part 5 — Research integrity: what stops us fooling ourselves
 
@@ -221,15 +213,13 @@ These are not optional reading: each matches something the process does, or admi
 
 <!-- example: begin -->
 
-In this example all seven have notes:
-
-- [Brown, Goetzmann, Ibbotson & Ross (1992)](Papers/Brown_Goetzmann_Ibbotson_Ross_1992_Survivorship_Bias_In_Performance_Studies.md)
-- [Shumway (1997)](Papers/Shumway_1997_The_Delisting_Bias_In_CRSP_Data.md)
-- [Sullivan, Timmermann & White (1999)](Papers/Sullivan_Timmermann_White_1999_Data_Snooping_Technical_Trading_Rules.md)
-- [Harvey, Liu & Zhu (2016)](Papers/Harvey_Liu_Zhu_2016_And_The_Cross_Section_Of_Expected_Returns.md)
-- [Bailey & López de Prado (2014)](Papers/Bailey_LopezDePrado_2014_The_Deflated_Sharpe_Ratio.md)
-- [Bailey, Borwein, López de Prado & Zhu (2014)](Papers/Bailey_Borwein_LopezDePrado_Zhu_2014_Pseudo_Mathematics_And_Financial_Charlatanism.md)
-- [Novy-Marx & Velikov (2016)](Papers/NovyMarx_Velikov_2016_A_Taxonomy_Of_Anomalies_And_Their_Trading_Costs.md)
+| [Brown, Goetzmann, Ibbotson & Ross (1992)](Papers/Brown_Goetzmann_Ibbotson_Ross_1992_Survivorship_Bias_In_Performance_Studies.md) | the point-in-time universe retains delisted names |
+| [Shumway (1997)](Papers/Shumway_1997_The_Delisting_Bias_In_CRSP_Data.md) | **a gap, not a control.** The final day of a delisted name is unaudited |
+| [Sullivan, Timmermann & White (1999) — *Data-Snooping, Technical Trading Rule Performance, and the Bootstrap*](Papers/Sullivan_Timmermann_White_1999_Data_Snooping_Technical_Trading_Rules.md) | any rule that was searched for rather than stated first — and the finding that the search is run by the whole investment community, not by one researcher. Its note is also linked from its Part 1 row |
+| [Harvey, Liu & Zhu (2016) — *… and the Cross-Section of Expected Returns*](Papers/Harvey_Liu_Zhu_2016_And_The_Cross_Section_Of_Expected_Returns.md) | the information-coefficient table screens, it does not prove; publish the trial count |
+| [Bailey & López de Prado (2014) — *The Deflated Sharpe Ratio*](Papers/Bailey_LopezDePrado_2014_The_Deflated_Sharpe_Ratio.md) | the best of N variants is the maximum of N draws |
+| [Bailey, Borwein, López de Prado & Zhu (2014) — *Pseudo-Mathematics and Financial Charlatanism*](Papers/Bailey_Borwein_LopezDePrado_Zhu_2014_Pseudo_Mathematics_And_Financial_Charlatanism.md) | the argument for step 7 existing at all, and for freezing parameters at graduation |
+| [Novy-Marx & Velikov (2016)](Papers/NovyMarx_Velikov_2016_A_Taxonomy_Of_Anomalies_And_Their_Trading_Costs.md) | results are accepted **net** only |
 
 <!-- example: end -->
 
@@ -239,11 +229,3 @@ it is) comes from practice, not from a literature, and this index says so instea
 weak fit. **The cheapest evidence is your own**: if your signal is fitted, the gap between its
 causal and smoothed readings, which [`../AGENTS.md`](../AGENTS.md) asks you to report, is worth
 more here than a citation.
-
-<!-- example: begin -->
-
-In this example the signal is not fitted: the golden cross is arithmetic on past prices. Its causal
-and smoothed readings are the same series, so this audit has nothing to compare, and
-`Data/analyzer_marimo.py` says so.
-
-<!-- example: end -->

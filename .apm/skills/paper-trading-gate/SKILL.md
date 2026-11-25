@@ -107,8 +107,9 @@ paper-traded book is never in question; the experiment's notebook stays where it
 of how the rule was chosen. The template ships `Paper_Trading_1/` as the contract of a frozen book,
 named for the experiment it would mirror: it becomes Experiment 1's book if Experiment 1 graduates
 or goes on probation, and a later experiment takes its own number. The worked example's
-Experiment 1 reads as sound and regime-dependent, and is on paper on probation as
-`Paper_Trading_1`, signed off and frozen on 2026-10-27, its review on 2027-10-27.
+Experiment 1 is falsified, so nothing of it is on paper; the book it had on probation from
+2026-10-27, Golden-Flow's, was retired on 2026-11-25 when the example was curated anew, as its
+`BITACORA.md` records.
 
 A strategy's `1.0.0` waits for more than its first graduation: the changelog reserves it for this
 strategy's first book on paper trading, its results reproduced from a clean clone.
@@ -170,7 +171,7 @@ behind the day, hides a new flag among the old ones: read the flags, not only th
 The record has six tables — runs, books, performance, statistics, diagnostics, flags — keyed so a
 second run of a day replaces that day's rows. A past value the engine now prices differently is a
 **restatement**: flagged, never overwritten. The template ships these files as their contract in a
-docstring; the worked example carries them working, with `Paper_Trading_1` in `BOOKS`.
+docstring; the worked example carries them working, its `BOOKS` empty since its book retired.
 
 **A paper-trading script re-fits nothing.** A run that tunes anything is a backtest wearing a
 costume, and it re-introduces exactly the search that produces negative out-of-sample performance.
@@ -237,14 +238,12 @@ to follow for the second outcome.
 
 - `Paper_Trading/BITACORA.md` in the worked example, `examples/strategy/us-golden-flow/` in the
   KaxaNuk Researcher package — the gate read once, both layers, every row evidenced from
-  `FINDINGS_1.md`: S1 to S5 hold; P1 and P3 fail over 2000–2026 and P2 is not evidenced; the book
-  earned in 2018–2026 and lost in 2000–2008. Sound and regime-dependent, read on the owner's word of
-  2026-10-27, and put on paper on probation that day: its section `### Paper_Trading_1 —
-  Experiment 1, on paper on probation` registers the sign-off, the regime prediction, the 12
-  months to the review of 2027-10-27, the bands and the kill switch, and is the model of a book
-  on probation. `Paper_Trading/Paper_Trading_1/` is that book as frozen, `FREEZE.json` with the
-  sign-off among it, its seed copy cut to tickers and dates; its `promote.py`, `daily_update.py`,
-  whose `BOOKS` names the book, and `record.py` are the working step-7 scripts. The template's
+  `FINDINGS_1.md`: Experiment 1 is falsified, P1 and P2 fail at both cost rows and P3 is not
+  evidenced, and no sign-off is asked. Its section `### Paper_Trading_1 — retired on 2026-11-25`
+  records how a book on probation leaves paper when its experiment is replaced; the book on
+  probation it retired, with its regime prediction, bands and kill switch, is the model of one
+  and stays in the package at the tag `v1.38.0`. Its `promote.py`, `daily_update.py`, whose
+  `BOOKS` is empty, and `record.py` are the working step-7 scripts. The template's
   copies are the same files with the example's lines removed.
 - The strategy's `AGENTS.md`, *Research integrity — the five ways a backtest lies* and *What
   attribution must report*, which S1 to S4 and P2 rest on.

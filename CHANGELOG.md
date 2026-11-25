@@ -6,6 +6,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Releases are
 tagged `vX.Y.Z`.
 
+## [1.39.0] - 2026-11-25
+The worked example `us-golden-flow` now shows US-Golden-Flow's Experiment 1, a strategy falsified
+and reported as such, and a new strategy gets a page on how its code runs and the scripts that
+check its sizing and feed the KaxaNuk app.
+
+**What to do differently:** say `update` in your home. `init-example` now copies US-Golden-Flow;
+the earlier Golden Flow, with its book on paper, stays at the tag `v1.38.0`. In a strategy made
+before, the new files come through `init-strategy`'s script, one `--only` each.
+### Changed
+- **The worked example 1.0.0**, curated on the owner's word of 2026-11-25 from US-Golden-Flow 0.8.3,
+  Experiment 1 only: the most-traded KN US Equity Core members in a golden cross, by traded value,
+  no KN sector above half the book, a delisted name's cash put back in two days. It is falsified as
+  its blueprint words it. Its code and documents sit beside the template's text between the
+  markers; its seed keeps tickers and dates only; it carries public papers only, Paleologo's book
+  left out; and Golden-Flow's `Paper_Trading_1`, on probation since 2026-10-27, is retired. Not run
+  from a wiped copy as the example; its figures reproduced so in US-Golden-Flow on 2026-11-20.
+- **The strategy template 0.24.0** ships `PIPELINE.md` and four scripts beside the experiment
+  notebook, each a description: `app_workbooks.py`, `attribute_base_books.py`,
+  `compare_library_sizing.py` and `validate_sizing_methods.py`; `.gitignore` ignores the two sizing
+  checks' tables.
+- `alpha-decomposition`, `init-example`, `paper-trading-gate` and `portfolio-construction-runs`
+  quote the curated example's figures; the package's `AGENTS.md` records the curation and the
+  retired book.
+
 ## [1.38.0] - 2026-11-25
 A new strategy now starts with no licence, since a strategy is its owner's, and its README is half
 as long; the worked example is renamed `us-golden-flow`.

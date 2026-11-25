@@ -26,18 +26,22 @@ this script checks instead is that Sharadar's catalogue knows each listing at al
   catalogue; outside them a file under the same symbol is another security's history, and the
   panel reads no price there.  A listing Sharadar does not mark as delisted has no `valid_to`: its
   last price date is the day the catalogue was fetched, not an ending.
+- **A ticker the provider gave away.**  When Sharadar gives a delisted listing's ticker to another
+  security, it files the older one under a new ticker -- `SIX1` for Six Flags since 2026-11 --
+  and a fetch under the index's key returns the newer security's prices.  `Provider_Renames.csv`
+  beside this script records each such case by hand, with its evidence: the listing keeps its
+  `index_identifier` and the catalogue's span, its `main_identifier` becomes the provider's ticker
+  now, and the row is used only if the permaticker in the catalogue is the one recorded.
 - **Not in the catalogue.**  A member the catalogue does not list is still a row, under its own
-  ticker, with no span: the Curator asks Sharadar for it anyway, the universe notebook finds it
-  missing from the same catalogue, and it counts the index weight of every member left without
-  prices as the survivorship cost.
-- **Tickers and dates only.**  What a listing is -- its name, Sharadar's permanent identifier,
-  its sector -- is the provider's data: the universe notebook reads it from the cached
-  catalogue, and the seed, which is committed, never carries it.
+  ticker, `match` saying so: the Curator asks Sharadar for it anyway, and the universe notebook
+  counts the index weight of every member left without prices as the survivorship cost.
 
 The provider key comes from `Config/.env`, is read by name and is never printed.
 
-It produces `Universe/Investable_Universe.csv`, tickers and dates only: `main_identifier`,
-`index_identifier`, `valid_from`, `valid_to`.
+It produces `Universe/Investable_Universe.csv`: `main_identifier`, `index_identifier`,
+`valid_from`, `valid_to`.  The worked example's seed is public, so it holds tickers and dates only,
+never a name, a permanent identifier or another vendor field; the name, the permaticker and the
+match it builds each row from stay in memory and in the app's universe, which git ignores.
 
 It prevents a member silently missing from the download, and a dead company's prices read past the
 day it stopped trading.
@@ -68,6 +72,7 @@ __all__ = [
 
 CACHE_DIRECTORY = pathlib.Path(__file__).parent / "Provider_Cache"
 HAND_SUPPLIED_PATH = pathlib.Path(__file__).parent.parent / "Data" / "hand_supplied.py"
+RENAMES_PATH = pathlib.Path(__file__).parent / "Provider_Renames.csv"
 SEED_PATH = pathlib.Path(__file__).parent / "Investable_Universe.csv"
 # The seed as the KaxaNuk app reads a saved universe from `Universe/`: a `symbol` column first, then
 # the name, as the app's own Creator saves one, and each listing's span, so the app can read it
@@ -75,15 +80,14 @@ SEED_PATH = pathlib.Path(__file__).parent / "Investable_Universe.csv"
 APP_UNIVERSE_PATH = pathlib.Path(__file__).parent / "KN_US_Equity_Core.csv"
 APP_UNIVERSE_COLUMNS = {
     "main_identifier": "symbol",
+    "name": "company_name",
     "index_identifier": "index_identifier",
     "valid_from": "valid_from",
     "valid_to": "valid_to",
 }
 # What the catalogue says each listing is, under the names the app's own universes use, so its
-# Universe Analyzer can group by them.  The seed keeps tickers and dates only; the name is the
-# catalogue's, in this view alone.
+# Universe Analyzer can group by them.
 APP_CLASSIFICATION_COLUMNS = {
-    "name": "company_name",
     "exchange": "exchange",
     "category": "instrument_type",
     "sector": "sector",
@@ -96,6 +100,7 @@ LINE_END = "\n"
 # The catalogue's columns this seed reads, and nothing else: a lean request is a fast one.
 CATALOGUE_COLUMNS = (
     "ticker",
+    "permaticker",
     "name",
     "isdelisted",
     "firstpricedate",
@@ -119,6 +124,16 @@ MEMBERSHIP_FLOOR = datetime.date(
 REQUEST_ATTEMPTS = 4
 REQUEST_PAUSE_SECONDS = 30
 SEED_COLUMNS = (
+    "main_identifier",
+    "index_identifier",
+    "name",
+    "permaticker",
+    "valid_from",
+    "valid_to",
+    "match",
+)
+# The columns the seed file keeps: tickers and dates only, since the example's seed is public.
+WRITTEN_COLUMNS = (
     "main_identifier",
     "index_identifier",
     "valid_from",
@@ -210,10 +225,12 @@ def main() -> int:
         arguments.refresh,
     )
     by_ticker = catalogue.drop_duplicates("ticker").set_index("ticker")
+    renames = _read_renames()
     rows = [
         _seed_row(
             listing,
             by_ticker,
+            renames,
         )
         for listing in members
     ]
@@ -221,7 +238,7 @@ def main() -> int:
         rows,
         columns=list(SEED_COLUMNS),
     )
-    seed.to_csv(
+    seed[list(WRITTEN_COLUMNS)].to_csv(
         SEED_PATH,
         index=False,
         lineterminator="\n",
@@ -230,13 +247,9 @@ def main() -> int:
         seed,
         catalogue,
     )
-    not_catalogued = [
-        listing
-        for listing in members
-        if listing not in by_ticker.index
-    ]
+    match_counts = seed["match"].value_counts()
     print(f"wrote {SEED_PATH.name}: {len(seed)} listings")
-    print(f"not in the catalogue: {len(not_catalogued)} {not_catalogued}")
+    print(match_counts.to_string())
 
     return 0
 
@@ -324,31 +337,88 @@ def _load_hand_supplied() -> "types.ModuleType":
     return module
 
 
+def _read_renames() -> dict[str, dict[str, str]]:
+    """
+    The listings whose ticker the provider gave away, by the index's key, each with the
+    permaticker it must carry and the ticker the provider files it under now.
+    """
+    if not RENAMES_PATH.is_file():
+
+        return {}
+
+    renames = pandas.read_csv(
+        RENAMES_PATH,
+        dtype=str,
+        keep_default_na=False,
+    )
+
+    return {
+        row["index_identifier"]: {
+            "permaticker": row["permaticker"],
+            "provider_ticker": row["provider_ticker"],
+        }
+        for _, row in renames.iterrows()
+    }
+
+
 def _seed_row(
     listing: str,
     by_ticker: "pandas.DataFrame",
+    renames: dict[str, dict[str, str]],
 ) -> dict[str, str]:
     """
     One member's row: its keys, and the span the catalogue prices it over, or why it has none.
+
+    A listing in `Provider_Renames.csv` keeps the index's key and the catalogue's span, and takes
+    the provider's ticker now as the key its prices are fetched under -- only when the catalogue's
+    permaticker is the one the file records, so a rename never moves one security's prices onto
+    another's.
     """
-    if listing not in by_ticker.index:
+    rename = renames.get(listing)
+    # A renamed listing is looked up under the ticker the provider files it under now first: once
+    # the provider has given the index's ticker away, the catalogue may no longer list it at all.
+    candidates = [listing] if rename is None else [rename["provider_ticker"], listing]
+    found = [
+        candidate
+        for candidate in candidates
+        if candidate in by_ticker.index
+    ]
+
+    if len(found) == 0:
 
         return {
             "main_identifier": listing,
             "index_identifier": listing,
+            "name": "",
+            "permaticker": "",
             "valid_from": "",
             "valid_to": "",
+            "match": "not in catalogue",
         }
 
-    entry = by_ticker.loc[listing]
+    entry = by_ticker.loc[found[0]]
     still_listed = entry["isdelisted"] != "Y"
     valid_to = "" if still_listed else entry["lastpricedate"]
 
+    if rename is not None and rename["permaticker"] != entry["permaticker"]:
+        message = " ".join([
+            f"{listing}: Provider_Renames.csv records permaticker {rename['permaticker']},",
+            f"the catalogue has {entry['permaticker']}; the rename is not applied",
+        ])
+
+        raise ValueError(message)
+
+    main_identifier = listing if rename is None else rename["provider_ticker"]
+    match = "sharadar ticker" if rename is None else "sharadar ticker, renamed by the provider"
+
     return {
-        "main_identifier": listing,
+        "main_identifier": main_identifier,
         "index_identifier": listing,
+        "name": entry["name"],
+        "permaticker": entry["permaticker"],
         "valid_from": entry["firstpricedate"],
         "valid_to": valid_to,
+        "match": match,
     }
 
 

@@ -34,9 +34,9 @@ the body of `OBJECTIVE.md`; the entries of `CHANGELOG.md`; the name, version and
 of `pyproject.toml`; and, whole, the example's `README.md` (its own, as a strategy's is after
 `SETUP.md` step 5), its `LICENSE` (the template ships none: a strategy is its owner's), its seed
 CSV and every file only the example has — its notes and `Universe/seed.py`. An example with a book
-on paper adds that book's `FREEZE.json` and the files it hashes; `us-golden-flow` has one,
-`Paper_Trading_1`, on probation from 2026-10-27, whose seed copy keeps tickers and dates only.
-`paper_trading_N.py` stays shared and marked.
+on paper adds that book's `FREEZE.json` and the files it hashes; `us-golden-flow` has none since
+2026-11-25, when Golden-Flow's `Paper_Trading_1`, on probation from 2026-10-27, was retired with the
+curation. `paper_trading_N.py` stays shared and marked.
 
 ## Rules
 
@@ -112,8 +112,9 @@ on paper adds that book's `FREEZE.json` and the files it hashes; `us-golden-flow
 - **No secrets, no binaries.** The worked example, `us-golden-flow`, is the only strategy this
   repository names, as a curated copy; nothing in it is taken from a live strategy repository after
   the copy. It was curated again from the live repository once, on the owner's word of 2026-10-27,
-  Experiment 1 only; another curation takes the owner's word again. It was renamed from
-  `golden-flow` on 2026-11-25, on the owner's word, as US-Golden-Flow's curation into it begins.
+  Experiment 1 only; another curation takes the owner's word again. On the owner's word of
+  2026-11-25 it was renamed from `golden-flow` and curated from US-Golden-Flow 0.8.3, Experiment 1
+  only and public papers only, its paper book retired.
 
 ## When a Lab library or an Analytics Factory file changes
 
@@ -141,8 +142,7 @@ the owner's computer runs it every Monday.
    names the build to install.
 5. **An Analytics Factory change** — a folder, a file name, a header, a date order — changes
    `Data/hand_supplied.py` in the template and the example (which keeps reading the older names),
-   `attribution-analysis-runs` and `investment-lab.md`; a frozen book's copy, as `us-golden-flow`'s
-   `Paper_Trading_1`, stays as it was.
+   `attribution-analysis-runs` and `investment-lab.md`; a frozen book's copy stays as it was.
 6. **A library that replaces a hand-rolled stage** (the Data Refinery, the Data Analyzer) gets its
    own `*-runs` skill with a `library_version`, and the stage's seam file, `experiment-lifecycle`
    and `investment-lab.md` move with it.
@@ -152,9 +152,8 @@ the owner's computer runs it every Monday.
    which is the index's own, with its first and last price dates in Sharadar's catalogue — the
    columns `main_identifier`, `index_identifier`, `valid_from` and `valid_to`, never a name, a
    permanent identifier or any other vendor field. It is an example release, re-run where a figure
-   moves. An example with a frozen book, as `us-golden-flow` with `Paper_Trading_1`, keeps that
-   book's seed as it is, tickers and dates only; never restore a hashed original to satisfy its
-   `FREEZE.json`.
+   moves. An example with a frozen book keeps that book's seed as it is, tickers and dates only;
+   never restore a hashed original to satisfy its `FREEZE.json`.
 8. **A new worked example** — an ETF strategy, or one users ask for — is a folder of its own,
    `examples/<kind>/<name>/`, where `<kind>` is the template it is worked through, as
    `templates/<kind>/` names it: `examples/strategy/<name>/` for an ETF strategy. It is curated as

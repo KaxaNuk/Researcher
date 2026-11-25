@@ -1,7 +1,7 @@
 ---
 source: "not recorded. Add it the next time this source is opened; a wrong link is worse than none."
-citation: "Journal of Financial Markets 5(1), 31-56. Cited from the journal reference only; this entry has not been link-checked."
-local_copy: none
+citation: "Journal of Financial Markets 5(1), 31-56. Cited from the journal reference only; this
+entry has not been link-checked." local_copy: none
 read: "2026-09-02; what was read: not recorded"
 ---
 
@@ -12,18 +12,19 @@ read: "2026-09-02; what was read: not recorded"
 Introduces the ILLIQ measure — average absolute return per dollar of volume — and shows expected
 returns rise with illiquidity. An illiquidity premium is paid for holding hard-to-trade names.
 
-## What it implies for Golden Flow
+## What it implies for US-Golden-Flow
 
-> Rewritten on 2026-10-27 for this copy, after FINDINGS_1.md reported on Sharadar.
+> Written on 2026-11-23 for this strategy, after `FINDINGS_1.md` reported on version 0.4.0,
+> run of 2026-11-20.
 >
 > **Claim 2, the sizing: read as a warning, not an endorsement.** The paper puts the premium on the
-> least traded names. Golden Flow holds the most traded.
+> least traded names. US-Golden-Flow holds the most traded KN US Equity Core members, and weights
+> them by what they trade.
 >
-> Across every member, the analyzer agrees with the paper. The traded-value rank's information
-> coefficient over a year — how well it orders the next year's returns — is −0.0391 over
-> 2000–2026, with the expected sign on 38.0% of dates, and −0.1115 in 2000–2008
-> ([`RESULTS.md`](../../RESULTS.md), *Before any experiment*, row 9). Among the most traded names,
-> where the rule ranks, the sizing still won as a book: a Sharpe of 0.162, against 0.087 for the
-> same names equally weighted, 0.221 against 0.157 at the flat 5 bp row
-> ([`FINDINGS_1.md`](../../Experiments/Experiment_1/FINDINGS_1.md), prediction 3). Nothing here
-> licenses ranking the whole index by liquidity, and the rule does not.
+> Among the rule's own names the sizing won as a book: a Sharpe of 0.143 against 0.069 for the same
+> names equally weighted at the pre-registered costs, 0.207 against 0.145 at the flat 5 bp row, more
+> than the 0.03 the blueprint allowed, so its prediction 3 fails
+> ([`FINDINGS_1.md`](../../Experiments/Experiment_1/FINDINGS_1.md), prediction 3). Whether the
+> traded-value rank orders the next returns across all members, the paper's question, is the
+> analyzer's, in [`RESULTS.md`](../../RESULTS.md), *Before any experiment*. Nothing here licenses
+> ranking the whole index by liquidity, and the rule does not.

@@ -1,6 +1,6 @@
 [project]
 name = "kn-strategy-template"
-version = "0.23.0"
+version = "0.24.0"
 # The ceiling is the Backtest Engine's, not this repository's: its quick start states Python 3.12
 # or 3.13, and every performance figure here comes from that engine, so a version it cannot be
 # installed beside is a version that cannot finish the pipeline.  The Data Curator allows 3.12 to

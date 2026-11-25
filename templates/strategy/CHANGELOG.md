@@ -41,6 +41,26 @@ for somebody who was not in the room:
 
 ---
 
+## 0.24.0 (2026-11-25)
+
+**MINOR** — a strategy gets `PIPELINE.md` and four scripts beside its experiment notebook, each a
+description of what belongs there. No result changes.
+
+**What to do differently:** nothing in a new strategy. In one made before, bring each file with
+`init-strategy`'s script, `--only <path>`, which never overwrites, if the strategy needs it.
+
+### Added
+
+- `PIPELINE.md`: how the code runs, in order, step by step, the columns and the rule in the code,
+  debugging recipes, where a run's output lands and the failures seen; written once the pipeline
+  has run.
+- `Experiments/Experiment_1/app_workbooks.py`, the KaxaNuk app's workbooks from single runs;
+  `attribute_base_books.py`, attribution apart from the notebook, from the engine's cache;
+  `compare_library_sizing.py`, the rule's sizing against the Portfolio Construction library's;
+  `validate_sizing_methods.py`, the library's methods on the strategy's data.
+- `.gitignore` ignores `library_sizing_check.csv` and `sizing_methods_check.csv`.
+- `README.md` names `PIPELINE.md` and the scripts.
+
 ## 0.23.0 (2026-11-25)
 
 **MINOR** — a strategy ships with no licence, and the README says each thing once. No result

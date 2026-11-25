@@ -75,12 +75,10 @@ __all__ = [
 ]
 
 # The books on paper, by folder name.  A book is added here in the commit that freezes it, and
-# removed in the commit that sends it to production or retires it.  `Paper_Trading_1` is Experiment
-# 1 on paper on probation, frozen on 2026-10-27; the folder's earlier book, the 0.15.2 one on FMP
-# data, was retired on 2026-10-24, as `BITACORA.md` records.
-BOOKS = (
-    "Paper_Trading_1",
-)
+# removed in the commit that sends it to production or retires it.  None is on paper: Golden-Flow's
+# `Paper_Trading_1`, frozen on 2026-10-27, was retired on 2026-11-25, and the folder's earlier book,
+# the 0.15.2 one on FMP data, on 2026-10-24, as `BITACORA.md` records.
+BOOKS = ()
 
 PAPER_TRADING_DIRECTORY = pathlib.Path(__file__).parent
 REPOSITORY_ROOT = PAPER_TRADING_DIRECTORY.parent

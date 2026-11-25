@@ -91,58 +91,6 @@ rebuild.
 
 # --- example: begin ---
 
-# **Sharadar is the only price provider, by the owner's decision of 2026-10-23,** and the KN US
-# Equity Core is built on it, so every member is asked for under the index's own ticker.  Sharadar
-# keeps delisted securities, which is what lets the window open in 2000 without a survivorship hole.
-# A member it does not price is dropped, and the universe notebook counts the share of the index it
-# held, per date, as the survivorship cost.  Sharadar answers several tickers in one request, so the
-# seed is asked for in batches: fewer requests, inside the provider's rate limit, and a batch it
-# refuses is asked again after a pause.
-#
-# **The columns are the ones the pipeline reads, and no more.**  Sharadar publishes open, high, low,
-# close and volume split-adjusted, the close also unadjusted and dividend-and-split adjusted, and no
-# VWAP.  Widening the tuple changes every file's header and refetches every identifier, so a column
-# is added when a stage reads it, never on speculation.
-#
-# **Sharadar rounds every price to three decimals, its adjusted ones included,** and only its
-# unadjusted close is exact.  So the adjustment is rebuilt by the Curator itself, as `c_*`
-# calculations in `Data/Curator/custom_calculations.py`, from the exact close and Sharadar's own
-# dividends and splits, which the Curator reads through their joined column names --
-# `d_ex_dividend_date_dividend_split_adjusted`, `s_split_date_numerator` and
-# `s_split_date_denominator` -- once the dividend and split blocks are mapped to the provider.
-#
-# **The one action the Curator's dividend column does not carry is a spin-off** (GE's GE HealthCare
-# and GE Vernova): `apply_spin_offs` adds Sharadar's `spinoffdividend` values, from its actions bulk
-# file cached in `Data/Curator/Actions/`, to the files that had one.  After that,
-# `check_adjustments` reads every file back and compares the rebuilt series with Sharadar's own
-# wherever its decimals allow, into `Data/Curator/adjustment_checks.csv`; it writes
-# nothing else.
-#
-#     m_close                               exact; the order ticket is written in it
-#     m_*_split_adjusted                    three decimals; the open, the engine's range and volume
-#     c_close_dividend_and_split_adjusted   the rebuilt total-return close: signals, returns, marks
-#     c_open, c_open_dividend_and_split_adjusted   the next day's open, unadjusted and on that basis
-#     c_traded_value                        the day's dollars traded, volume counted twice corrected
-#
-# The open, high and low exist only split-adjusted, at three decimals, so the open the book is
-# filled at keeps that rounding -- an error in either direction, not a bias -- and the engine's
-# spread estimate reads a range that is coarse wherever a security's split-adjusted price is low.
-#
-# Two more series ride along in the same folder although they are not in the seed: `SPY`, the
-# exchange-traded benchmark the book is reported against beside the index, and `DFF`, the Federal
-# Reserve's effective federal funds rate from FRED, the rate the engine pays on the book's cash, as
-# Interactive Brokers pays on a dollar balance, and the risk-free rate of every Sharpe ratio.  The
-# engine reads everything from one directory, so a series filed anywhere else is one it cannot read.
-# Neither enters the cross-section, because `Data/refinery.py` takes membership from the seed.  The
-# Data Curator will read FRED in a later release; until then `stage_cash_rate` fetches FRED's own
-# published file, which needs no key.
-#
-# It produces `Data/Curator/Time_Series/<identifier>.parquet`, `m_*` plus `c_*`, in the schema
-# `Data/time_series.py` keeps, read by the universe notebook, `Data/refinery.py` and the engine;
-# `DFF.parquet` and `KN_US_Equity_Core.parquet` beside them;
-# `Data/Curator/fetch_outcomes.json`, the last answer the provider gave for each name; and
-# `Data/Curator/adjustment_checks.csv`.
-
 import argparse
 import csv
 import datetime
@@ -164,6 +112,7 @@ import pandas
 
 import kaxanuk.data_curator
 import kaxanuk.data_curator.data_blocks.dividends
+import kaxanuk.data_curator.data_blocks.fundamentals
 import kaxanuk.data_curator.data_blocks.market_daily
 import kaxanuk.data_curator.data_blocks.splits
 import kaxanuk.data_curator.data_providers
@@ -179,6 +128,7 @@ import time_series  # noqa: E402 - the path above has to exist first
 __all__ = [
     "apply_spin_offs",
     "check_adjustments",
+    "complete_files",
     "download_batch",
     "load_custom_calculations",
     "load_hand_supplied",
@@ -186,6 +136,7 @@ __all__ = [
     "read_fetched_through",
     "read_identifiers",
     "read_provider_key",
+    "read_spans",
     "stage_cash_rate",
     "stage_spin_offs",
     "stage_index_price_series",
@@ -197,7 +148,6 @@ __all__ = [
 ACTIONS_DIRECTORY = pathlib.Path(__file__).parent / "Curator" / "Actions"
 ACTIONS_URL = "https://api.sharadar.com/v1.0/data/actions?years=full"
 SPIN_OFF_ACTION = "spinoffdividend"
-ADJUSTMENT_CHECKS_PATH = pathlib.Path(__file__).parent / "Curator" / "adjustment_checks.csv"
 # Where Sharadar's three decimals are fine enough to be compared: a price of ten dollars or more,
 # a rounding of five parts in a hundred thousand.  A day whose rebuilt return differs from
 # Sharadar's by more than this is a day one of the two adjusted for something the other did not.
@@ -223,16 +173,25 @@ CUSTOM_CALCULATIONS_PATH = pathlib.Path(__file__).parent / "Curator" / "custom_c
 # limit disables the account for minutes, so the pause is long.
 DOWNLOAD_ATTEMPTS = 4
 # Fixed, not `today`, so two people running a week apart get the same files.  It is the last date
-# of the KN US Equity Core and of the factor model the strategy reads: 2026-11-06 in US-Golden-Flow.
+# of the window the owner set on 2026-11-16, inside the KN US Equity Core and the factor model.
 END_DATE = datetime.date(
     2026,
-    11,
-    6,
+    10,
+    31,
 )
-# The date each file was last fetched through, so a refresh knows what it has already done.
-FETCHED_THROUGH_PATH = pathlib.Path(__file__).parent / "Curator" / "fetched_through.json"
+# Where the price files are written: the experiments' folder, or the one a caller names in
+# `CURATOR_OUTPUT_DIRECTORY` so that its refresh never moves the experiments' inputs.
+OUTPUT_DIRECTORY = pathlib.Path(
+    os.environ.get(
+        "CURATOR_OUTPUT_DIRECTORY",
+        str(pathlib.Path(__file__).parent / "Curator" / "Time_Series"),
+    )
+)
+# The date each file was last fetched through, so a refresh knows what it has already done; it
+# lives beside the folder it describes.
+FETCHED_THROUGH_PATH = OUTPUT_DIRECTORY.parent / "fetched_through.json"
 # The provider's last word on each name: `downloaded`, `not carried`, or what refused it.
-FETCH_OUTCOMES_PATH = pathlib.Path(__file__).parent / "Curator" / "fetch_outcomes.json"
+FETCH_OUTCOMES_PATH = OUTPUT_DIRECTORY.parent / "fetch_outcomes.json"
 HAND_SUPPLIED_PATH = pathlib.Path(__file__).parent / "hand_supplied.py"
 IDENTIFIER_COLUMN = "main_identifier"
 # The index the book is reported against, under the name the engine prices it by. No price
@@ -244,8 +203,9 @@ INDEX_IDENTIFIER = "KN_US_Equity_Core"
 MARKET_DATA_BLOCK = kaxanuk.data_curator.data_blocks.market_daily.MarketDailyDataBlock
 # The provider's dividends and splits, which the `c_*` calculations rebuild the adjustment from.
 DIVIDENDS_DATA_BLOCK = kaxanuk.data_curator.data_blocks.dividends.DividendsDataBlock
+# The quarterly statements, downloaded for later experiments and for `c_market_cap`.
+FUNDAMENTALS_DATA_BLOCK = kaxanuk.data_curator.data_blocks.fundamentals.FundamentalsDataBlock
 SPLITS_DATA_BLOCK = kaxanuk.data_curator.data_blocks.splits.SplitsDataBlock
-OUTPUT_DIRECTORY = pathlib.Path(__file__).parent / "Curator" / "Time_Series"
 PROVIDER_KEY_VARIABLE = "KNDC_API_KEY_SHARADAR"
 # The words the library logs when a whole batch was refused, as opposed to a name it has no data
 # for: an answer about the moment, worth asking again.
@@ -265,6 +225,8 @@ START_DATE = datetime.date(
     1,
     2,
 )
+# The checks of each file's rebuilt adjustment, beside the folder they check.
+ADJUSTMENT_CHECKS_PATH = OUTPUT_DIRECTORY.parent / "adjustment_checks.csv"
 # The outcomes that leave a name without a file.
 UNANSWERED_OUTCOMES = (
     "not carried",
@@ -281,6 +243,76 @@ OUTPUT_COLUMNS = (
     "m_close_dividend_and_split_adjusted",
     "m_volume_split_adjusted",
     "d_ex_dividend_date_dividend_split_adjusted",
+    "s_split_date_numerator",
+    "s_split_date_denominator",
+    # The statements' dates: the filing a row carries, and the period it reports.
+    "f_filing_date",
+    "f_fiscal_period",
+    "f_fiscal_year",
+    "f_period_end_date",
+    "f_reported_currency",
+    "fis_basic_earnings_per_share",
+    "fis_basic_net_income_available_to_common_stockholders",
+    "fis_cost_of_revenue",
+    "fis_depreciation_and_amortization",
+    "fis_diluted_earnings_per_share",
+    "fis_discontinued_operations_income_after_tax",
+    "fis_earnings_before_interest_and_tax",
+    "fis_earnings_before_interest_tax_depreciation_and_amortization",
+    "fis_gross_profit",
+    "fis_income_before_tax",
+    "fis_income_tax_expense",
+    "fis_interest_expense",
+    "fis_net_income",
+    "fis_net_income_deductions",
+    "fis_operating_expenses",
+    "fis_operating_income",
+    "fis_research_and_development_expense",
+    "fis_revenues",
+    "fis_selling_general_and_administrative_expense",
+    "fis_weighted_average_basic_shares_outstanding",
+    "fis_weighted_average_diluted_shares_outstanding",
+    "fbs_accumulated_other_comprehensive_income_after_tax",
+    "fbs_assets",
+    "fbs_cash_and_cash_equivalents",
+    "fbs_current_accounts_payable",
+    "fbs_current_assets",
+    "fbs_current_liabilities",
+    "fbs_current_net_receivables",
+    "fbs_deferred_revenue",
+    "fbs_investments",
+    "fbs_liabilities",
+    "fbs_longterm_debt",
+    "fbs_longterm_investments",
+    "fbs_net_intangible_assets_including_goodwill",
+    "fbs_net_inventory",
+    "fbs_net_property_plant_and_equipment",
+    "fbs_noncurrent_assets",
+    "fbs_noncurrent_deferred_tax_assets",
+    "fbs_noncurrent_deferred_tax_liabilities",
+    "fbs_noncurrent_liabilities",
+    "fbs_retained_earnings",
+    "fbs_shortterm_debt",
+    "fbs_shortterm_investments",
+    "fbs_stockholder_equity",
+    "fbs_total_debt_including_capital_lease_obligations",
+    "fcf_capital_expenditure",
+    "fcf_cash_and_cash_equivalents_change",
+    "fcf_cash_exchange_rate_effect",
+    "fcf_depreciation_and_amortization",
+    "fcf_dividend_payments",
+    "fcf_free_cash_flow",
+    "fcf_net_business_acquisition_payments",
+    "fcf_net_cash_from_financing_activities",
+    "fcf_net_cash_from_investing_activities",
+    "fcf_net_cash_from_operating_activities",
+    "fcf_net_common_stock_issuance_proceeds",
+    "fcf_net_debt_issuance_proceeds",
+    "fcf_net_income",
+    "fcf_other_investing_activities",
+    "fcf_stock_based_compensation",
+    # The library's own market capitalisation, which the KaxaNuk app sizes a universe by.
+    "c_market_cap",
     "c_split_ratio",
     "c_dividend_and_split_ratio",
     "c_close_dividend_and_split_adjusted",
@@ -289,9 +321,20 @@ OUTPUT_COLUMNS = (
     "c_log_returns_total",
     "c_traded_value",
     "c_volume_dividend_and_split_adjusted",
-    # The rule's two signals, per security, so the KaxaNuk app shows them beside the prices.
-    "c_trend_50_200",
+    # Every signal Experiment 1 reads, per security, so the KaxaNuk app shows them beside the
+    # prices: the rule's cross and score, and their sweep neighbours.
+    "c_golden_cross_20_100",
+    "c_golden_cross_50_200",
+    "c_golden_cross_100_300",
+    "c_traded_value_sma_21d",
     "c_traded_value_sma_63d",
+    "c_traded_value_sma_126d",
+)
+# What `complete_files` adds after the download, from the index's holdings, which no provider
+# serves: the Core's weight that day, and the book's point-in-time universe.
+COMPLETION_COLUMNS = (
+    "c_index_weight",
+    "c_eligible_golden_cross_50_200",
 )
 
 
@@ -380,10 +423,6 @@ def apply_spin_offs(
         frame["c_traded_value"].astype(float) / total_return_close
     )
 
-    if "c_trend_50_200" in frame.columns:
-        calculations = load_custom_calculations()
-        frame["c_trend_50_200"] = calculations.trend_of_closes(total_return_close)
-
     time_series.write_frame(
         frame,
         path,
@@ -441,17 +480,68 @@ def check_adjustments(
     }
 
 
+def complete_files() -> int:
+    """
+    Finish every seed listing's file with what no provider serves; the count of files finished.
+
+    Three things, in order, on every run, whether a file was downloaded now or before:
+
+    - **Cut to the listing's dates in the seed**, both ends included, so a ticker another company
+      took before or after never speaks for this one.
+    - **The window columns computed again on the cut file**, with the same helpers the Curator's
+      `c_*` functions use, so no average reaches across the cut, and every cross reads the close
+      the spin-offs left.
+    - **`c_index_weight`**, the KN US Equity Core's weight that day through the seed's keys, 0 on a
+      day it is not a member or the holdings do not cover; and
+      **`c_eligible_golden_cross_50_200`**, 1 when the listing was a member with
+      `c_golden_cross_50_200` at 1 at its prior close -- the book's point-in-time universe on that
+      day, read from nothing on the day itself.
+
+    A column an earlier version of this pass wrote, and this one does not, is dropped: the file
+    ends with exactly the downloaded columns and these two.
+
+    The benchmarks and the cash rate are not in the seed and are left as downloaded.
+    """
+    calculations = load_custom_calculations()
+    hand_supplied = load_hand_supplied()
+    holdings = hand_supplied.read_member_holdings()
+    holdings.index = pandas.to_datetime(holdings.index)
+    spans = read_spans()
+    completed = []
+
+    for identifier in read_identifiers():
+        path = time_series.path_for(OUTPUT_DIRECTORY, identifier)
+
+        if not path.is_file():
+            continue
+
+        weights = holdings[identifier] if identifier in holdings.columns else None
+        _complete_file(
+            path,
+            spans.get(identifier, ("", "")),
+            weights,
+            calculations,
+        )
+        completed.append(identifier)
+
+    return len(completed)
+
+
 def download_batch(
     identifiers: tuple[str, ...],
     custom_calculations: "types.ModuleType",
     end_date: "datetime.date",
     fetched_through: dict[str, str],
+    spans: dict[str, tuple[str, str]],
 ) -> dict[str, str]:
     """
     Fetch a batch through the end date and say, per identifier, what happened.
 
-    A file with the right header already fetched through this end date is left alone, `skipped`.
-    The rest are asked for in one call; a file written is `downloaded`.  When the provider refused
+    A file with the right header already fetched through this end date is left alone, `skipped`;
+    a delisted listing whose file already reaches the end of its span is left alone, `final`.
+    The rest are asked for in one call; a file written is `downloaded`, unless the listing is
+    delisted and the file holds no date inside its span, when the earlier file is put back and the
+    outcome is `recycled ticker`.  When the provider refused
     the batch as a whole -- a rate limit, a timeout -- it is asked again after a pause, and a name
     still without a file after the last attempt is `refused`.  A name missing from a batch the
     provider answered is `not carried`: Sharadar said it has nothing for it.
@@ -466,8 +556,18 @@ def download_batch(
             fetched_through,
         ):
             outcomes[identifier] = "skipped"
+        elif _is_final(
+            identifier,
+            spans,
+        ):
+            outcomes[identifier] = "final"
         else:
             pending.append(identifier)
+
+    kept = {
+        identifier: _read_bytes(identifier)
+        for identifier in pending
+    }
 
     for attempt in range(1, DOWNLOAD_ATTEMPTS + 1):
         if len(pending) == 0:
@@ -492,6 +592,14 @@ def download_batch(
             # The library writes Sharadar's prices as decimals of each file's own precision; one
             # schema for every file is what lets them stack.
             time_series.normalize_file(time_series.path_for(OUTPUT_DIRECTORY, identifier))
+
+            if _outside_span(identifier, spans):
+                _restore(identifier, kept[identifier])
+                outcomes[identifier] = "recycled ticker"
+                print(f"{identifier}: no row inside its span; another security's file, refused")
+
+                continue
+
             outcomes[identifier] = "downloaded"
             fetched_through[identifier] = end_date.isoformat()
 
@@ -597,9 +705,12 @@ def main() -> int:
     identifiers = requested if len(requested) > 0 else everything
     fetched_through = read_fetched_through()
     fetch_outcomes = _read_fetch_outcomes()
+    spans = read_spans()
     counts = {
         "downloaded": 0,
+        "final": 0,
         "not carried": 0,
+        "recycled ticker": 0,
         "refused": 0,
         "skipped": 0,
     }
@@ -615,12 +726,13 @@ def main() -> int:
             custom_calculations,
             end_date,
             fetched_through,
+            spans,
         )
 
         for identifier, outcome in outcomes.items():
             counts[outcome] += 1
 
-            if outcome != "skipped":
+            if outcome not in ("skipped", "final"):
                 fetch_outcomes[identifier] = outcome
 
         _write_json(
@@ -638,7 +750,7 @@ def main() -> int:
         print(f"{done}/{len(identifiers)} through {end_date}: {counts}", flush=True)
 
         any_work = any(
-            outcome != "skipped"
+            outcome not in ("skipped", "final")
             for outcome in outcomes.values()
         )
 
@@ -671,6 +783,10 @@ def main() -> int:
     ]
     adjusted_names = " ".join(adjusted)
     print(f"spin-offs added to {len(adjusted)} files: {adjusted_names}")
+    # Third pass: every listing's file cut to its dates in the seed, its windows computed again on
+    # what is left, and the index's weight and the book's universe added.
+    completed = complete_files()
+    print(f"completed {completed} files: cut to their spans, with {', '.join(COMPLETION_COLUMNS)}")
     checks = [
         check_adjustments(identifier)
         for identifier in identifiers
@@ -760,6 +876,27 @@ def read_provider_key() -> str:
         raise RuntimeError(message)
 
     return api_key
+
+
+def read_spans() -> dict[str, tuple[str, str]]:
+    """
+    Each listing's span in the seed, `valid_from` and `valid_to`, the second empty while it trades.
+
+    A listing with a `valid_to` is delisted: its history no longer moves, and its ticker is one the
+    provider may give to another company.
+    """
+    with SEED_PATH.open(encoding="utf-8-sig", newline="") as handle:
+        reader = csv.DictReader(handle)
+        spans = {
+            row[IDENTIFIER_COLUMN].strip(): (
+                row.get("valid_from", "").strip(),
+                row.get("valid_to", "").strip(),
+            )
+            for row in reader
+            if row.get(IDENTIFIER_COLUMN, "").strip()
+        }
+
+    return spans
 
 
 def stage_cash_rate(
@@ -880,6 +1017,60 @@ def stage_spin_offs(
     return downloaded[downloaded["action"] == SPIN_OFF_ACTION]
 
 
+def _complete_file(
+    path: "pathlib.Path",
+    span: tuple[str, str],
+    weights: "pandas.Series | None",
+    calculations: "types.ModuleType",
+) -> None:
+    """
+    One file finished, as `complete_files` says: cut, windows again, weight and universe added.
+    """
+    frame = time_series.read_frame(path)
+    dates = pandas.to_datetime(frame["m_date"])
+    valid_from, valid_to = span
+    start = pandas.Timestamp(valid_from) if valid_from else dates.min()
+    end = pandas.Timestamp(valid_to) if valid_to else dates.max()
+    inside = (dates >= start) & (dates <= end)
+    cut = frame.loc[inside].reset_index(drop=True)
+    cut_dates = dates.loc[inside].reset_index(drop=True)
+    prices = cut["c_close_dividend_and_split_adjusted"].astype(float)
+    traded_value = cut["c_traded_value"].astype(float)
+
+    for column, (short_window, long_window) in calculations.GOLDEN_CROSS_WINDOWS.items():
+        cut[column] = calculations.golden_cross_of_closes(
+            prices,
+            short_window,
+            long_window,
+        )
+
+    for column, window in calculations.TRADED_VALUE_WINDOWS.items():
+        cut[column] = calculations.traded_value_average(
+            traded_value,
+            window,
+        )
+
+    if weights is None:
+        index_weight = pandas.Series(0.0, index=cut.index)
+    else:
+        on_dates = weights.reindex(cut_dates.to_numpy())
+        weight_values = on_dates.to_numpy()
+        index_weight = pandas.Series(weight_values, index=cut.index).fillna(0.0)
+
+    cut["c_index_weight"] = index_weight
+    member_and_crossed = (index_weight > 0) & (cut["c_golden_cross_50_200"] == 1)
+    before = member_and_crossed.shift(
+        1,
+        fill_value=False,
+    )
+    cut["c_eligible_golden_cross_50_200"] = before.astype(float)
+    finished = cut[[*OUTPUT_COLUMNS, *COMPLETION_COLUMNS]]
+    time_series.write_frame(
+        finished,
+        path,
+    )
+
+
 def _fetch_once(
     identifiers: tuple[str, ...],
     custom_calculations: "types.ModuleType",
@@ -917,6 +1108,7 @@ def _fetch_once(
                 MARKET_DATA_BLOCK: provider,
                 DIVIDENDS_DATA_BLOCK: provider,
                 SPLITS_DATA_BLOCK: provider,
+                FUNDAMENTALS_DATA_BLOCK: provider,
             },
             master_clock_data_block=MARKET_DATA_BLOCK,
             logger_level=logging.WARNING,
@@ -950,7 +1142,38 @@ def _is_current(
         "",
     )
 
-    return tuple(header) == OUTPUT_COLUMNS and remembered == end_date.isoformat()
+    # The downloaded columns decide it; what `complete_files` adds after them it writes again.
+    downloaded = tuple(header[:len(OUTPUT_COLUMNS)])
+
+    return downloaded == OUTPUT_COLUMNS and remembered == end_date.isoformat()
+
+
+def _is_final(
+    identifier: str,
+    spans: dict[str, tuple[str, str]],
+) -> bool:
+    """
+    Whether a delisted listing's file, with this schema, already reaches the end of its span.
+    """
+    valid_to = spans.get(
+        identifier,
+        ("", ""),
+    )[1]
+    output_path = time_series.path_for(OUTPUT_DIRECTORY, identifier)
+
+    if valid_to == "" or not output_path.is_file():
+
+        return False
+
+    header = time_series.read_column_names(output_path)
+
+    if tuple(header) != OUTPUT_COLUMNS:
+
+        return False
+
+    dates = time_series.read_frame(output_path)["m_date"].astype(str)
+
+    return len(dates) > 0 and dates.max() >= valid_to
 
 
 def _modified_time(
@@ -968,6 +1191,44 @@ def _modified_time(
     return output_path.stat().st_mtime
 
 
+def _outside_span(
+    identifier: str,
+    spans: dict[str, tuple[str, str]],
+) -> bool:
+    """
+    Whether a delisted listing's file holds no date inside its span: another security's answer.
+    """
+    valid_from, valid_to = spans.get(
+        identifier,
+        ("", ""),
+    )
+
+    if valid_to == "":
+
+        return False
+
+    dates = time_series.read_frame(time_series.path_for(OUTPUT_DIRECTORY, identifier))["m_date"]
+    text_dates = dates.astype(str)
+    inside = (text_dates >= (valid_from or "0000")) & (text_dates <= valid_to)
+
+    return not bool(inside.any())
+
+
+def _read_bytes(
+    identifier: str,
+) -> bytes | None:
+    """
+    A file's bytes before a fetch, so an answer that is not this listing's can be undone.
+    """
+    output_path = time_series.path_for(OUTPUT_DIRECTORY, identifier)
+
+    if not output_path.is_file():
+
+        return None
+
+    return output_path.read_bytes()
+
+
 def _read_fetch_outcomes() -> dict[str, str]:
     """
     The provider's last word on each name, empty before the first run.
@@ -977,6 +1238,23 @@ def _read_fetch_outcomes() -> dict[str, str]:
         return {}
 
     return json.loads(FETCH_OUTCOMES_PATH.read_text(encoding="utf-8"))
+
+
+def _restore(
+    identifier: str,
+    content: bytes | None,
+) -> None:
+    """
+    Put a file back as it was before a fetch, or remove the one a fetch wrote where none was.
+    """
+    output_path = time_series.path_for(OUTPUT_DIRECTORY, identifier)
+
+    if content is None:
+        output_path.unlink(missing_ok=True)
+
+        return
+
+    output_path.write_bytes(content)
 
 
 def _write_json(

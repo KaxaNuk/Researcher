@@ -285,8 +285,8 @@ cap and a floor on each weight — are the design, not levers to earn, and the c
 too. The library's richer machinery — a `Mandate` with group limits, a tracking-error budget,
 Black-Litterman views — is a lever of the same kind: one at a time, each beating the book without
 it. The worked example sizes by traded value inside a 20% cap and a 1% floor, by the owner's
-design, and in its in-sample backtest the equal-weight arm lost: at the flat 5 bp row, 5.67% a year
-at a Sharpe of 0.157, against 7.72% at 0.221.
+design, and in its in-sample backtest the equal-weight arm lost: at the flat 5 bp row, 5.30% a year
+at a Sharpe of 0.145, against 7.14% at 0.207.
 
 ## 7. The weight file
 

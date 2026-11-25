@@ -1,7 +1,7 @@
 ---
 source: "not recorded. Add it the next time this source is opened; a wrong link is worse than none."
-citation: "Notices of the American Mathematical Society 61(5), 458-471. Cited from the journal reference only; this entry has not been link-checked."
-local_copy: none
+citation: "Notices of the American Mathematical Society 61(5), 458-471. Cited from the journal
+reference only; this entry has not been link-checked." local_copy: none
 read: "2026-09-02; what was read: not recorded"
 ---
 
@@ -13,17 +13,18 @@ With enough trials, an in-sample optimal strategy can be produced from pure nois
 overfitting reliably produces *negative* out-of-sample performance rather than merely disappointing
 performance.
 
-## What it implies for Golden Flow
+## What it implies for US-Golden-Flow
 
-> Rewritten on 2026-10-27 for this copy, after FINDINGS_1.md reported on Sharadar.
+> Written on 2026-11-23 for this strategy, after `FINDINGS_1.md` reported on version 0.4.0,
+> run of 2026-11-20.
 >
 > **Every claim here is measured in sample, and this paper is why that is not yet evidence.** Paper
-> trading is the first test the search did not touch, and Golden Flow's book began it only on
-> 2026-10-27.
+> trading is the first test the search did not touch, and US-Golden-Flow has no book on paper.
 >
-> Experiment 1 reads as sound and regime-dependent, and went to paper on probation on 2026-10-27
-> ([`BITACORA.md`](../../Paper_Trading/BITACORA.md)), with no paper day read yet. Its periods,
-> 2000–2008 failed and 2018–2026 earned, were fixed by the blueprint before the run, so they are not
-> cut around the result; they are still in sample. Nothing after 2026-08-14 exists in the index or
-> the factor model
-> ([`FINDINGS_1.md`](../../Experiments/Experiment_1/FINDINGS_1.md), *Caveats*).
+> Experiment 1 is falsified as its blueprint words it, for the third time on the same limb, and its
+> gate reads P1 failing at both cost rows
+> ([`FINDINGS_1.md`](../../Experiments/Experiment_1/FINDINGS_1.md), *The gate, in two layers*). Its
+> sub-periods were fixed before the run, but the window, the 50% sector cap, the band's reinvestment
+> and the delisting top-up were each set after an earlier pass of the same experiment had been seen,
+> disclosed in [`BLUEPRINT_1.md`](../../Experiments/Experiment_1/BLUEPRINT_1.md), *The trial count*.
+> Each is the kind of choice this paper says turns noise into an in-sample optimum.

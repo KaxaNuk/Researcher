@@ -52,12 +52,23 @@ It prevents a signal that knew the future distribution, and a rank that was sile
 
 # --- example: begin ---
 
+import numpy
 import pandas
 
 __all__ = [
     "CLASSIFICATION_DEPENDENT_COLUMNS",
     "REFINERY_COLUMNS",
+    "r_eligible",
+    "r_golden_cross_100_300",
+    "r_golden_cross_20_100",
+    "r_golden_cross_50_200",
     "r_liquidity_rank",
+    "r_range_volatility_10d",
+    "r_residual_momentum_12_1",
+    "r_return_5d",
+    "r_sortino_10d",
+    "r_sortino_21d",
+    "r_sortino_63d",
     "r_traded_value_sma_126d",
     "r_traded_value_sma_21d",
     "r_traded_value_sma_63d",
@@ -79,10 +90,109 @@ REFINERY_COLUMNS = (
     "r_trend_20_100",
     "r_trend_50_200",
     "r_trend_100_300",
+    "r_golden_cross_20_100",
+    "r_golden_cross_50_200",
+    "r_golden_cross_100_300",
+    "r_eligible",
+    "r_sortino_21d",
+    "r_sortino_63d",
+    "r_sortino_10d",
+    "r_range_volatility_10d",
+    "r_return_5d",
+    "r_residual_momentum_12_1",
 )
+# A window with no losing day has no downside deviation; its Sortino is read as this, never as
+# infinity, so a rank still places it at the top and no mean over names is broken by it.
+SORTINO_CAP = 20.0
+# How many rows the Refinery's golden cross may differ from the Curator's before the run stops:
+# a tie between the two averages can flip in the last digit, nothing else should.
+CROSS_MISMATCH_ALLOWED = 50
+CROSS_MISMATCH_SHARE = 1e-5
+# Trading days in a year, to annualise a daily ratio.
+TRADING_DAYS_A_YEAR = 252
+# Parkinson's (1980) constant: the expected squared log range of a day is 4 ln 2 times its variance.
+PARKINSON_CONSTANT = 4 * numpy.log(2)
+# Residual momentum's window, after Blitz, Huij & Martens (2011): twelve months of the factor
+# model's specific return, skipping the latest month, and at least most of them observed.
+RESIDUAL_MOMENTUM_WINDOW = 231
+RESIDUAL_MOMENTUM_SKIP = 21
+RESIDUAL_MOMENTUM_MINIMUM = 200
 # The subset that needs `Universe/Security_Master.csv`, so the refinery still runs before the
 # universe notebook has written one.  This strategy groups by nothing, so the subset is empty.
 CLASSIFICATION_DEPENDENT_COLUMNS = ()
+
+
+def r_eligible(
+    main_identifier: "pandas.Series",
+    r_index_weight: "pandas.Series",
+    r_golden_cross_50_200: "pandas.Series",
+) -> "pandas.Series":
+    """
+    1 when a security was an index member with the golden cross on at its prior close, else 0.
+
+    The book's point-in-time universe on a rebalance date: what the rule may hold that day, read
+    from the close before it, so nothing on the row's own date decides it.  The rule adds what only
+    the fill can know -- an open price on the date -- and the register's exclusions.  A security's
+    first row has no prior close and is 0.
+    """
+    member = r_index_weight.fillna(0.0) > 0
+    crossed = r_golden_cross_50_200 == 1
+    both = (member & crossed).astype(float)
+    by_security = both.groupby(main_identifier.to_numpy())
+    before = by_security.shift(1)
+
+    return before.fillna(0.0)
+
+
+def r_golden_cross_100_300(
+    r_trend_100_300: "pandas.Series",
+) -> "pandas.Series":
+    """
+    1 while the 100-day average is above the 300-day one, else 0: the slower neighbour of the rule.
+    """
+    return _crossed(r_trend_100_300)
+
+
+def r_golden_cross_20_100(
+    r_trend_20_100: "pandas.Series",
+) -> "pandas.Series":
+    """
+    1 while the 20-day average is above the 100-day one, else 0: the faster neighbour of the rule.
+    """
+    return _crossed(r_trend_20_100)
+
+
+def r_golden_cross_50_200(
+    r_trend_50_200: "pandas.Series",
+    c_golden_cross_50_200: "pandas.Series",
+) -> "pandas.Series":
+    """
+    1 while the 50-day average is above the 200-day one, else 0: the rule's state.
+
+    The same state the Curator's `c_golden_cross_50_200` holds, recomputed here from the same close
+    so the Refinery's sweep neighbours share its definition.  The two must agree: the app charts
+    the Curator's and the rule reads this one, so a row where they differ stops the refinery,
+    beyond the few a tie between the two averages can flip in the last digit.
+    """
+    crossed = _crossed(r_trend_50_200)
+    both = crossed.notna() & c_golden_cross_50_200.notna()
+    differing = int((crossed[both] != c_golden_cross_50_200[both]).sum())
+    crossed_known = crossed.notna()
+    curated_known = c_golden_cross_50_200.notna()
+    one_side = int((crossed_known != curated_known).sum())
+    allowed = max(
+        CROSS_MISMATCH_ALLOWED,
+        int(len(crossed) * CROSS_MISMATCH_SHARE),
+    )
+    print(f"golden cross, Refinery against Curator: {differing} rows differ, {one_side} one-sided")
+
+    if differing + one_side > allowed:
+        count = differing + one_side
+        message = f"r_golden_cross_50_200 differs from the Curator's on {count} rows, > {allowed}"
+
+        raise ValueError(message)
+
+    return crossed
 
 
 def r_liquidity_rank(
@@ -107,6 +217,140 @@ def r_liquidity_rank(
     return traded_value_by_date.rank(
         pct=True,
         ascending=True,
+    )
+
+
+def r_range_volatility_10d(
+    main_identifier: "pandas.Series",
+    m_high_split_adjusted: "pandas.Series",
+    m_low_split_adjusted: "pandas.Series",
+) -> "pandas.Series":
+    """
+    The last ten days' volatility read from each day's range, Parkinson's estimator, annualised.
+
+    The range sees the day's stress where the close may not: a name that swings and recovers within
+    the day has a calm close and a wide range.  It is a ratio of the day's high to its low, so the
+    split basis cancels, and Sharadar's three decimals matter only on a price of a few cents.
+    Experiment 3's exit reads it against that day's cross members.
+    """
+    high = m_high_split_adjusted.astype(float)
+    low = m_low_split_adjusted.astype(float)
+    valid = (high > 0) & (low > 0) & (high >= low)
+    ratio = high.where(valid) / low.where(valid)
+    log_range = numpy.log(ratio)
+    daily_variance = log_range * log_range / PARKINSON_CONSTANT
+    mean_variance = _rolling_mean(
+        main_identifier,
+        daily_variance,
+        10,
+    )
+    annual_variance = mean_variance * TRADING_DAYS_A_YEAR
+
+    return annual_variance.pow(0.5)
+
+
+def r_residual_momentum_12_1(
+    main_identifier: "pandas.Series",
+    r_idiosyncratic_return: "pandas.Series",
+) -> "pandas.Series":
+    """
+    Twelve months of a name's specific return, skipping the latest month, over its own volatility.
+
+    Blitz, Huij & Martens (2011) rank on the residual of a factor model rather than on the total
+    return, so the rank carries the news particular to a firm and not the market's or a style's
+    move. They standardise it by its own standard deviation over the same window, to tell news
+    from noise, and skip the latest month, whose return tends to reverse. Here the residual is the
+    KN US Equity Factor Model's specific return, which takes every exposure at the close before.
+    The window is the 231 trading days that end 21 days before the row, strictly backward, with at
+    least 200 of them observed: the mean over the standard deviation, times the square root of the
+    days counted, the standardised cumulative residual.
+    """
+    panel = pandas.DataFrame({
+        "identifier": main_identifier,
+        "value": r_idiosyncratic_return,
+    })
+    by_security = panel.groupby("identifier")["value"]
+    rolling = by_security.rolling(
+        RESIDUAL_MOMENTUM_WINDOW,
+        min_periods=RESIDUAL_MOMENTUM_MINIMUM,
+    )
+    mean = rolling.mean().reset_index(
+        level=0,
+        drop=True,
+    )
+    deviation = rolling.std().reset_index(
+        level=0,
+        drop=True,
+    )
+    count = rolling.count().reset_index(
+        level=0,
+        drop=True,
+    )
+    standardised = mean / deviation.where(deviation > 0) * numpy.sqrt(count)
+    skipped = standardised.groupby(main_identifier).shift(RESIDUAL_MOMENTUM_SKIP)
+
+    return skipped.reindex(main_identifier.index)
+
+
+def r_return_5d(
+    main_identifier: "pandas.Series",
+    c_log_returns_total: "pandas.Series",
+) -> "pandas.Series":
+    """
+    The last five days' total log return: how far a name has just fallen, for Experiment 3's exit.
+    """
+    mean_return = _rolling_mean(
+        main_identifier,
+        c_log_returns_total,
+        5,
+    )
+
+    return mean_return * 5
+
+
+def r_sortino_10d(
+    main_identifier: "pandas.Series",
+    c_log_returns_total: "pandas.Series",
+) -> "pandas.Series":
+    """
+    The Sortino ratio of the last ten trading days, two weeks: whether a name is falling now.
+    """
+    return _rolling_sortino(
+        main_identifier,
+        c_log_returns_total,
+        10,
+    )
+
+
+def r_sortino_21d(
+    main_identifier: "pandas.Series",
+    c_log_returns_total: "pandas.Series",
+) -> "pandas.Series":
+    """
+    The Sortino ratio of the last 21 trading days: a month's return per unit of its losses.
+
+    Experiment 2's falling-knife screen reads it beside the 63-day one; it is computed here, from
+    the daily total returns the Curator already wrote, because a window is a setting an experiment
+    sweeps and a sweep must never cost a download.
+    """
+    return _rolling_sortino(
+        main_identifier,
+        c_log_returns_total,
+        21,
+    )
+
+
+def r_sortino_63d(
+    main_identifier: "pandas.Series",
+    c_log_returns_total: "pandas.Series",
+) -> "pandas.Series":
+    """
+    The Sortino ratio of the last 63 trading days, a quarter: the slower half of the screen.
+    """
+    return _rolling_sortino(
+        main_identifier,
+        c_log_returns_total,
+        63,
     )
 
 
@@ -222,6 +466,17 @@ def r_universe_size(
     return members_by_date.transform("sum")
 
 
+def _crossed(
+    trend: "pandas.Series",
+) -> "pandas.Series":
+    """
+    1 where a trend is above zero, 0 where it is not, null through the warm-up, as the trend is.
+    """
+    crossed = (trend > 0).astype(float)
+
+    return crossed.where(trend.notna())
+
+
 def _rolling_mean(
     main_identifier: "pandas.Series",
     values: "pandas.Series",
@@ -240,6 +495,41 @@ def _rolling_mean(
     return rolling.reset_index(
         level=0,
         drop=True,
+    )
+
+
+def _rolling_sortino(
+    main_identifier: "pandas.Series",
+    returns: "pandas.Series",
+    window: int,
+) -> "pandas.Series":
+    """
+    A strictly backward Sortino ratio per security, annualised, null until the window is full.
+
+    The mean daily return over the window, over the downside deviation -- the root mean square of
+    the losing days' returns, the target zero -- times the square root of a year's trading days.
+    Its sign is the window's mean return's, so a screen that reads it at zero is a return filter;
+    what the Sortino adds is the scale, the losses a return was earned with, which is why the
+    screen ranks it rather than thresholding it.
+    """
+    losses = returns.clip(upper=0.0)
+    mean_return = _rolling_mean(
+        main_identifier,
+        returns,
+        window,
+    )
+    mean_square_loss = _rolling_mean(
+        main_identifier,
+        losses * losses,
+        window,
+    )
+    downside_deviation = mean_square_loss.pow(0.5)
+    ratio = mean_return / downside_deviation * TRADING_DAYS_A_YEAR ** 0.5
+    no_losses = (downside_deviation == 0) & mean_return.notna()
+
+    return ratio.where(~no_losses, SORTINO_CAP).clip(
+        lower=-SORTINO_CAP,
+        upper=SORTINO_CAP,
     )
 
 

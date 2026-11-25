@@ -35,6 +35,7 @@ formats, and a refined panel that spends its hours parsing text instead of compu
 """
 
 # --- example: begin ---
+
 import pathlib
 
 import pandas
@@ -293,4 +294,5 @@ def _write_table(
         path,
         compression=COMPRESSION,
     )
+
 # --- example: end ---

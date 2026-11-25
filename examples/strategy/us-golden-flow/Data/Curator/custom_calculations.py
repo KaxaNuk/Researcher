@@ -55,40 +55,6 @@ error.
 
 # --- example: begin ---
 
-# **Sharadar rounds every price to three decimals, its adjusted ones included,** and only its
-# unadjusted close is exact: on 1998-01-02 its AAPL rows read a close of 16.25, a split-adjusted
-# close of 0.145 and an adjusted close of 0.121, a series that can only move in steps of 0.8%.  So
-# the adjustment is rebuilt here from the exact close and the provider's own dividends and splits,
-# read through their joined column names -- `d_ex_dividend_date_dividend_split_adjusted` (cash a
-# share, in today's split-adjusted shares, on its ex-date) and `s_split_date_numerator` /
-# `s_split_date_denominator` (new shares to old, on the split's date).
-#
-# **A split after the requested window is in Sharadar's split-adjusted prices and dividends, but not
-# in the window's split columns** (NFE's 1-for-50 of 2026-09-14), and one security's split-adjusted
-# prices carry a factor no split records at all (NVTP).  Both are a constant between Sharadar's
-# basis and the window's splits, taken from Sharadar's own split-adjusted close over the exact
-# close, so the rebuilt price, Sharadar's volume and its dividends stay on one basis.
-# `Data/curator.py` checks every file against Sharadar's adjusted close where its decimals allow.
-#
-# **Sharadar's volume is adjusted twice at some splits**: traded value steps by the split's own
-# factor while the shares the tape printed do not move.  `c_traded_value` divides the earlier volume
-# by that factor where both hold.
-#
-# The columns, and why each exists:
-#
-# - `c_split_ratio` and `c_dividend_and_split_ratio`, the factors between the day's quoted price and
-#   the split-adjusted and total-return series;
-# - `c_close_dividend_and_split_adjusted`, the total-return close every signal, return and mark
-#   reads, and `c_log_returns_total`, its one-day log return;
-# - `c_open` and `c_open_dividend_and_split_adjusted`, the next day's open a book is filled at,
-#   unadjusted for the order ticket and on the total-return basis for the fill;
-# - `c_traded_value`, the day's dollars traded, and `c_volume_dividend_and_split_adjusted`, the
-#   volume in the shares of the fill's basis, which the engine's market impact divides by.
-#
-# The library ships `c_daily_traded_value` and `c_log_returns_dividend_and_split_adjusted` of its
-# own, read from columns Sharadar leaves empty or rounds, and which of two functions of one name a
-# run uses is not documented; so these carry names of their own.
-
 import numpy
 import pandas
 
@@ -97,15 +63,20 @@ import kaxanuk.data_curator
 __all__ = [
     "c_close_dividend_and_split_adjusted",
     "c_dividend_and_split_ratio",
+    "c_golden_cross_100_300",
+    "c_golden_cross_20_100",
+    "c_golden_cross_50_200",
     "c_log_returns_total",
     "c_open",
     "c_open_dividend_and_split_adjusted",
     "c_split_ratio",
     "c_traded_value",
+    "c_traded_value_sma_126d",
+    "c_traded_value_sma_21d",
     "c_traded_value_sma_63d",
-    "c_trend_50_200",
     "c_volume_dividend_and_split_adjusted",
-    "trend_of_closes",
+    "golden_cross_of_closes",
+    "traded_value_average",
 ]
 
 # Where Sharadar's three decimals are fine enough to read its split basis from: a split-adjusted
@@ -120,12 +91,18 @@ SPLIT_SHARES_TOLERANCE = 0.15
 SPLIT_SIGNATURE_TOLERANCE = 0.10
 SPLIT_SMALLEST_LOG_FACTOR = 0.2
 SPLIT_WINDOW_DAYS = 30
-# The rule's own windows, the owner's choice of 2026-11-16: the signals the KaxaNuk app shows beside
-# the prices are computed here, per security.  Their sweep neighbours stay `r_*` columns of the
-# Refinery, where a window is a setting.
-TRADED_VALUE_WINDOW_DAYS = 63
-TREND_LONG_WINDOW_DAYS = 200
-TREND_SHORT_WINDOW_DAYS = 50
+# The rule's windows and their sweep neighbours, the owner's choice of 2026-11-16: every signal
+# Experiment 1 reads is computed here, per security, so the KaxaNuk app shows it beside the prices.
+GOLDEN_CROSS_WINDOWS = {
+    "c_golden_cross_100_300": (100, 300),
+    "c_golden_cross_20_100": (20, 100),
+    "c_golden_cross_50_200": (50, 200),
+}
+TRADED_VALUE_WINDOWS = {
+    "c_traded_value_sma_126d": 126,
+    "c_traded_value_sma_21d": 21,
+    "c_traded_value_sma_63d": 63,
+}
 
 
 def c_close_dividend_and_split_adjusted(
@@ -167,6 +144,60 @@ def c_dividend_and_split_ratio(
     ratio = _floats(c_close_dividend_and_split_adjusted) / _floats(m_close)
 
     return _column(ratio)
+
+
+def c_golden_cross_100_300(
+    c_close_dividend_and_split_adjusted: "kaxanuk.data_curator.DataColumn",
+) -> "kaxanuk.data_curator.DataColumn":
+    """
+    1 while the 100-day average is above the 300-day one, else 0: the slower neighbour of the rule.
+    """
+    prices = _floats(c_close_dividend_and_split_adjusted)
+    short_window, long_window = GOLDEN_CROSS_WINDOWS["c_golden_cross_100_300"]
+    crossed = golden_cross_of_closes(
+        prices,
+        short_window,
+        long_window,
+    )
+
+    return _column(crossed)
+
+
+def c_golden_cross_20_100(
+    c_close_dividend_and_split_adjusted: "kaxanuk.data_curator.DataColumn",
+) -> "kaxanuk.data_curator.DataColumn":
+    """
+    1 while the 20-day average is above the 100-day one, else 0: the faster neighbour of the rule.
+    """
+    prices = _floats(c_close_dividend_and_split_adjusted)
+    short_window, long_window = GOLDEN_CROSS_WINDOWS["c_golden_cross_20_100"]
+    crossed = golden_cross_of_closes(
+        prices,
+        short_window,
+        long_window,
+    )
+
+    return _column(crossed)
+
+
+def c_golden_cross_50_200(
+    c_close_dividend_and_split_adjusted: "kaxanuk.data_curator.DataColumn",
+) -> "kaxanuk.data_curator.DataColumn":
+    """
+    1 while the 50-day average of the total-return close is above its 200-day average, else 0.
+
+    The rule's state, the signal that says when a name may be bought and when it must be sold.
+    Strictly backward and null through the first 199 rows.
+    """
+    prices = _floats(c_close_dividend_and_split_adjusted)
+    short_window, long_window = GOLDEN_CROSS_WINDOWS["c_golden_cross_50_200"]
+    crossed = golden_cross_of_closes(
+        prices,
+        short_window,
+        long_window,
+    )
+
+    return _column(crossed)
 
 
 def c_log_returns_total(
@@ -298,34 +329,48 @@ def c_traded_value(
     return _column(pandas.Series(traded_value * fix))
 
 
+def c_traded_value_sma_126d(
+    c_traded_value: "kaxanuk.data_curator.DataColumn",
+) -> "kaxanuk.data_curator.DataColumn":
+    """
+    The 126-day simple average of the day's traded value: the rule's score over half a year.
+    """
+    average = traded_value_average(
+        _floats(c_traded_value),
+        TRADED_VALUE_WINDOWS["c_traded_value_sma_126d"],
+    )
+
+    return _column(average)
+
+
+def c_traded_value_sma_21d(
+    c_traded_value: "kaxanuk.data_curator.DataColumn",
+) -> "kaxanuk.data_curator.DataColumn":
+    """
+    The 21-day simple average of the day's traded value: the rule's score over a month.
+    """
+    average = traded_value_average(
+        _floats(c_traded_value),
+        TRADED_VALUE_WINDOWS["c_traded_value_sma_21d"],
+    )
+
+    return _column(average)
+
+
 def c_traded_value_sma_63d(
     c_traded_value: "kaxanuk.data_curator.DataColumn",
 ) -> "kaxanuk.data_curator.DataColumn":
     """
     The 63-day simple average of the day's traded value: the rule's rank and weight.
 
-    Strictly backward and null until 63 days have traded, as the Refinery's
-    `r_traded_value_sma_63d` is, so the two agree wherever both are computed.
+    Strictly backward and null until 63 days have traded.
     """
-    traded_value = _floats(c_traded_value)
-    average = traded_value.rolling(TRADED_VALUE_WINDOW_DAYS).mean()
+    average = traded_value_average(
+        _floats(c_traded_value),
+        TRADED_VALUE_WINDOWS["c_traded_value_sma_63d"],
+    )
 
     return _column(average)
-
-
-def c_trend_50_200(
-    c_close_dividend_and_split_adjusted: "kaxanuk.data_curator.DataColumn",
-) -> "kaxanuk.data_curator.DataColumn":
-    """
-    The 50-day average of the total-return close over its 200-day average, minus one.
-
-    Above zero the security is in an uptrend, the rule's state.  Strictly backward and null through
-    the first 199 rows, as the Refinery's `r_trend_50_200` is.
-    """
-    prices = _floats(c_close_dividend_and_split_adjusted)
-    trend = trend_of_closes(prices)
-
-    return _column(trend)
 
 
 def c_volume_dividend_and_split_adjusted(
@@ -344,19 +389,35 @@ def c_volume_dividend_and_split_adjusted(
     return _column(volume)
 
 
-def trend_of_closes(
+def golden_cross_of_closes(
     prices: "pandas.Series",
+    short_window: int,
+    long_window: int,
 ) -> "pandas.Series":
     """
-    The trend `c_trend_50_200` holds, from a total-return close as plain floats.
+    1 where the short average of a total-return close is above the long one, 0 where it is not.
 
-    Not a column of its own: `Data/curator.py` calls it again once it has added a file's spin-offs
-    to the total-return close, so the trend reads the close the file ends with.
+    Null until the long window is full.  Not a column of its own: `Data/curator.py` calls it again
+    once a file's spin-offs are added and the file is cut to its listing's dates, so every cross
+    reads the close the file ends with.
     """
-    short_average = prices.rolling(TREND_SHORT_WINDOW_DAYS).mean()
-    long_average = prices.rolling(TREND_LONG_WINDOW_DAYS).mean()
+    short_average = prices.rolling(short_window).mean()
+    long_average = prices.rolling(long_window).mean()
+    crossed = (short_average > long_average).astype(float)
 
-    return short_average / long_average - 1
+    return crossed.where(long_average.notna())
+
+
+def traded_value_average(
+    traded_value: "pandas.Series",
+    window: int,
+) -> "pandas.Series":
+    """
+    The strictly backward simple average of the day's traded value, null until the window is full.
+
+    `Data/curator.py` calls it again once a file is cut to its listing's dates.
+    """
+    return traded_value.rolling(window).mean()
 
 
 def _column(
@@ -389,4 +450,5 @@ def _floats(
         numbers,
         errors="coerce",
     ).astype(float)
+
 # --- example: end ---

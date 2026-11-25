@@ -60,7 +60,8 @@ __all__ = [
 
 DATE_COLUMN = "m_date"
 IDENTIFIER_COLUMN = "main_identifier"
-REFINERY_DIRECTORY = pathlib.Path(__file__).parent.parent / "Data" / "Refinery" / "Time_Series"
+# The folder the panel is read from: the Curator's for Experiment 1.
+PANEL_DIRECTORY = pathlib.Path(__file__).parent.parent / "Data" / "Curator" / "Time_Series"
 SECURITY_MASTER_PATH = pathlib.Path(__file__).parent.parent / "Universe" / "Security_Master.csv"
 SEED_PATH = pathlib.Path(__file__).parent.parent / "Universe" / "Investable_Universe.csv"
 
@@ -104,7 +105,7 @@ def expand_to_identifiers(
         spans = []
 
         for listing in listings:
-            path = time_series.path_for(REFINERY_DIRECTORY, listing)
+            path = time_series.path_for(PANEL_DIRECTORY, listing)
 
             if not path.is_file():
                 continue
@@ -159,17 +160,17 @@ def load_matrices(
     """
     investable = read_investable_identifiers()
     position_keys = read_position_keys()
-    refined_suffix = time_series.suffix_for(REFINERY_DIRECTORY)
-    refined_paths = sorted(REFINERY_DIRECTORY.glob(f"*{refined_suffix}"))
+    panel_suffix = time_series.suffix_for(PANEL_DIRECTORY)
+    panel_paths = sorted(PANEL_DIRECTORY.glob(f"*{panel_suffix}"))
     paths = [
         path
-        for path in refined_paths
+        for path in panel_paths
         if path.stem in investable
     ]
 
     if len(paths) == 0:
         empty_folder_message = (
-            f"no refined files in {REFINERY_DIRECTORY}: run Data/refinery.py first"
+            f"no panel files in {PANEL_DIRECTORY}: run Data/curator.py first"
         )
 
         raise FileNotFoundError(empty_folder_message)

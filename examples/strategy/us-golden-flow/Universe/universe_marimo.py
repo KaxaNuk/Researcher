@@ -50,15 +50,30 @@ def _(mo):
 
 
 # --- example: begin ---
+
+
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    # Universe — step 2 of 8
+
+    **In plain words:** the eligible list, rebuilt for each date rather than for today.
+
+    **It produces** `Universe/Security_Master.csv`, `Universe/Data_Issues.csv` and
+    `Universe/Coverage.csv`, and fixes the date the experiment's window opens, `Universe/Window.csv`.
+
+    **It prevents** survivorship bias — testing on the winners that happened to survive — and a
+    window that opens before the universe can honestly be priced.
+
+    > **Runs after `Data/curator.py`**, because it profiles the files that were downloaded, and
+    > **before `Data/refinery.py`**, because that stage joins the security master this one writes.
+
     **The universe is decided in `Universe/` and nowhere else** — the index's membership says which
     listings, `Universe/seed.py` the span Sharadar prices each over, and this notebook what each
     one is, from when, and how much of the index this repository can price on each date.
 
     ```
-    Data/Curator/Benchmarks/index_daily_holdings_1998.csv   the index's daily membership, by hand
+    Data/Curator/Benchmarks/KN_US_Equity_Core_Holdings_Daily.csv   the index's daily membership
             |
             +--> Universe/seed.py      Investable_Universe.csv: each member listing and its span
             |
@@ -74,6 +89,8 @@ def _(mo):
     survivorship cost this notebook publishes is the share of the index Sharadar does not price.
     """)
     return
+
+
 # --- example: end ---
 
 
@@ -114,9 +131,13 @@ def _(mo):
 
 
 # --- example: begin ---
+
+
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    ## 0 · Setup
+
     Paths, and the owner's rules for the window. No network call is made here: the catalogue the
     security master is shaped from was cached by `Universe/seed.py`, and `Config/.env` is not read.
     """)
@@ -163,11 +184,11 @@ def _():
     TRADED_VALUE_COLUMN = "c_traded_value"
     SPLIT_RATIO_COLUMN = "c_split_ratio"
 
-    # The owner's floor and the panel's last day, decided on 2026-10-23: the window opens no
-    # earlier than the first date the factor model covers, and closes on the last date the Core and
-    # the factor model both reach.
-    WINDOW_FLOOR = pandas.Timestamp("2000-01-03")
-    PANEL_END = pandas.Timestamp("2026-08-14")
+    # The owner's floor and the panel's last day, decided on 2026-11-16: the window opens no
+    # earlier than the last trading day of 1999, and closes on the last day of October 2026, inside
+    # what the Core and the factor model reach.
+    WINDOW_FLOOR = pandas.Timestamp("1999-12-31")
+    PANEL_END = pandas.Timestamp("2026-10-31")
     # The owner's rule of 2026-10-05, kept: the window opens on the first date from which the
     # members Sharadar prices, with a signal, hold at least this share of the index's weight on
     # every date to the window's end.
@@ -188,20 +209,23 @@ def _():
     SPLIT_WINDOW_DAYS = 30
     VOLUME_COLUMN = "m_volume_split_adjusted"
 
-    seed_rows = pandas.read_csv(SEED_PATH, dtype=str, keep_default_na=False)
+    # The example's seed is public, so it carries tickers and dates only: the name, the permaticker
+    # and how each listing was matched are read as empty, and the checks on them pass on nothing.
+    # The positions are joined by ISIN, not permaticker, so no figure moves.
+    _seed_read = pandas.read_csv(SEED_PATH, dtype=str, keep_default_na=False)
+    _absent = [
+        column
+        for column in ("name", "permaticker", "match")
+        if column not in _seed_read.columns
+    ]
+    seed_rows = _seed_read.reindex(columns=[*_seed_read.columns, *_absent], fill_value="")
+    if _absent:
+        print(f"the seed carries no {', '.join(_absent)}: read as empty")
     priced_rows = seed_rows[seed_rows["main_identifier"] != ""]
     identifiers = list(priced_rows["main_identifier"])
     holdings = hand_supplied.read_benchmark_holdings()
     print(f"seed: {len(seed_rows)} index listings, {len(priced_rows)} with a price key")
-    # The seed holds tickers and dates only: what each listing is -- its permanent identifier,
-    # its name -- is read from the newest catalogue `Universe/seed.py` cached.
-    catalogue_path = sorted(CATALOGUE_DIRECTORY.glob("sharadar_tickers_*.csv"))[-1]
-    _catalogue = pandas.read_csv(catalogue_path, dtype=str, keep_default_na=False)
-    _equities = _catalogue[_catalogue["table"] == "SEP"] if "table" in _catalogue else _catalogue
-    catalogue_by_ticker = _equities.drop_duplicates("ticker").set_index("ticker")
-    in_catalogue = seed_rows["main_identifier"].isin(catalogue_by_ticker.index)
-    print(f"in the catalogue {catalogue_path.name}: {int(in_catalogue.sum())}, "
-          f"not in it: {int((~in_catalogue).sum())}")
+    print(seed_rows["match"].value_counts().to_string())
     return (
         BENCHMARK_DIRECTORY,
         CATALOGUE_DIRECTORY,
@@ -226,14 +250,11 @@ def _():
         WARM_UP_DAYS,
         WINDOW_FLOOR,
         WINDOW_PATH,
-        catalogue_by_ticker,
-        catalogue_path,
         csv,
         datetime,
         hand_supplied,
         holdings,
         identifiers,
-        in_catalogue,
         json,
         numpy,
         pandas,
@@ -241,6 +262,8 @@ def _():
         seed_rows,
         time_series,
     )
+
+
 # --- example: end ---
 
 
@@ -265,9 +288,13 @@ def _(mo):
 
 
 # --- example: begin ---
+
+
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    ## 1 · The seed, checked
+
     Before anything downstream trusts this file:
 
     1. **Every key is unique**, the price key, the index's key and Sharadar's permanent identifier.
@@ -285,7 +312,6 @@ def _(mo):
 def _(
     BENCHMARK_DIRECTORY,
     WINDOW_FLOOR,
-    catalogue_by_ticker,
     holdings,
     pandas,
     priced_rows,
@@ -293,19 +319,17 @@ def _(
 ):
     duplicate_symbols = priced_rows["main_identifier"][priced_rows["main_identifier"].duplicated()]
     duplicate_listings = seed_rows["index_identifier"][seed_rows["index_identifier"].duplicated()]
-    # The permanent identifier is the catalogue's, never the seed's.
-    _permanent = seed_rows["main_identifier"].map(catalogue_by_ticker["permaticker"])
-    _permanent = _permanent[_permanent.notna() & (_permanent != "")]
+    _permanent = seed_rows.loc[seed_rows["permaticker"] != "", "permaticker"]
     duplicate_permatickers = _permanent[_permanent.duplicated()]
     _since_floor = holdings.loc[holdings.index >= WINDOW_FLOOR - pandas.Timedelta(450, unit="D")]
     weighted_listings = set(_since_floor.columns[(_since_floor > 0).any(axis=0)])
     listings_without_row = sorted(weighted_listings - set(seed_rows["index_identifier"]))
     _mask = pandas.read_csv(
-        BENCHMARK_DIRECTORY / "backtest_components_mask.csv",
+        BENCHMARK_DIRECTORY / hand_supplied.BENCHMARK_MEMBERSHIP_NAME,
         index_col=0,
         parse_dates=True,
     )
-    _tickers = pandas.read_csv(BENCHMARK_DIRECTORY / "tickers.csv")["ticker"]
+    _tickers = pandas.read_csv(BENCHMARK_DIRECTORY / hand_supplied.BENCHMARK_TICKERS_NAME)["ticker"]
     _aligned_mask = _mask.reindex(index=holdings.index, columns=holdings.columns)
     mask_disagreements = int(((holdings > 0) != (_aligned_mask == 1)).sum().sum())
     tickers_agree = set(_tickers) == set(holdings.columns)
@@ -323,6 +347,8 @@ def _(
         tickers_agree,
         weighted_listings,
     )
+
+
 # --- example: end ---
 
 
@@ -352,22 +378,34 @@ def _(mo):
 
 
 # --- example: begin ---
+
+
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    ## 2 · The security master
+
     The seed gives identity. Everything else comes from the provider's catalogue, cached by
     `Universe/seed.py` under the date it was fetched: the name, what kind of instrument it is, where
     it trades, in what currency, and its sector and industry.
 
     **The seed wins.** Its identity columns define the universe, so a catalogue value never
     overwrites one.
+
+    > **What the master carries is what a security is *today*.** The catalogue keeps no history, so
+    > on a universe whose members get reclassified, every period before the move is attributed
+    > wrongly and nothing raises an error. That is why the refinery prefixes every joined column
+    > `current_`.
     """)
     return
 
 
 @app.cell
-def _(SECURITY_MASTER_PATH, catalogue_by_ticker, catalogue_path, pandas, priced_rows):
-    _by_ticker = catalogue_by_ticker
+def _(CATALOGUE_DIRECTORY, SECURITY_MASTER_PATH, pandas, priced_rows):
+    _catalogue_path = sorted(CATALOGUE_DIRECTORY.glob("sharadar_tickers_*.csv"))[-1]
+    _catalogue = pandas.read_csv(_catalogue_path, dtype=str, keep_default_na=False)
+    _equities = _catalogue[_catalogue["table"] == "SEP"] if "table" in _catalogue else _catalogue
+    _by_ticker = _equities.drop_duplicates("ticker").set_index("ticker")
     _master_rows = []
 
     for _row in priced_rows.itertuples(index=False):
@@ -375,8 +413,8 @@ def _(SECURITY_MASTER_PATH, catalogue_by_ticker, catalogue_path, pandas, priced_
         _master_rows.append({
             "main_identifier": _row.main_identifier,
             "index_identifier": _row.index_identifier,
-            "permaticker": _entry.get("permaticker") or None,
-            "name": _entry.get("name") or None,
+            "permaticker": _row.permaticker or None,
+            "name": _row.name or _entry.get("name"),
             "category": _entry.get("category"),
             "exchange": _entry.get("exchange"),
             "currency": _entry.get("currency"),
@@ -386,18 +424,16 @@ def _(SECURITY_MASTER_PATH, catalogue_by_ticker, catalogue_path, pandas, priced_
             "industry": _entry.get("industry"),
             "valid_from": _row.valid_from or None,
             "valid_to": _row.valid_to or None,
-            "match": (
-                "sharadar ticker"
-                if _row.main_identifier in _by_ticker.index
-                else "not in catalogue"
-            ),
+            "match": _row.match,
         })
 
     security_master = pandas.DataFrame(_master_rows)
     security_master.to_csv(SECURITY_MASTER_PATH, index=False)
-    print(f"catalogue {catalogue_path.name}; wrote {SECURITY_MASTER_PATH}: {len(security_master)} rows")
+    print(f"catalogue {_catalogue_path.name}; wrote {SECURITY_MASTER_PATH}: {len(security_master)} rows")
     print(security_master["category"].value_counts(dropna=False).head(8).to_string())
     return (security_master,)
+
+
 # --- example: end ---
 
 
@@ -443,9 +479,18 @@ def _(mo):
 
 
 # --- example: begin ---
+
+
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    ## 3 · Composition, and how much of it is already dead
+
+    **What the universe is made of** sets what diversification is even available; **how much of it
+    stopped trading before the panel ends** says whether this is a universe or a survivor list.
+
+    ## 4 · The data-issues register
+
     The seed says what *should* exist. This section reads what *does*, and writes
     `Universe/Data_Issues.csv`, one row per check, each with a severity: a **blocking** row is an
     exclusion every experiment applies by name, **survivorship** rows are the cost published beside
@@ -675,7 +720,6 @@ def _(
     duplicate_symbols,
     early_end,
     impossible_moves,
-    in_catalogue,
     late_start,
     listings_without_row,
     non_positive_prices,
@@ -689,7 +733,7 @@ def _(
     split_traded_value,
     status_disagreement,
 ):
-    _not_catalogued = seed_rows.loc[~in_catalogue, "index_identifier"].tolist()
+    _not_catalogued = seed_rows.loc[seed_rows["match"] == "not in catalogue", "index_identifier"].tolist()
     _duplicates = sorted(
         set(duplicate_symbols) | set(duplicate_listings) | set(duplicate_permatickers)
     )
@@ -722,6 +766,8 @@ def _(
     print(f"wrote {DATA_ISSUES_PATH}")
     issues[["check", "severity", "count"]]
     return
+
+
 # --- example: end ---
 
 
@@ -747,13 +793,17 @@ def _(mo):
 
 
 # --- example: begin ---
+
+
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    ## 5 · When the universe is actually usable
+
     A file that starts in 1999 gives no golden cross until its 200th day, and a member Sharadar does
     not price gives none at all. **The date that matters is the first day from which this repository
     can price, and signal, the index it says it trades**: the owner's rule of 2026-10-05, kept on
-    2026-10-23 — the window opens on the later of the floor, 2000-01-03, and the first date from
+    2026-11-16 — the window opens on the later of the floor, 1999-12-31, and the first date from
     which the members with a price and 200 days of history behind it on that date hold at least 90%
     of the index's weight on every date to the window's end.
 
@@ -837,6 +887,8 @@ def _(
     )
     print(by_year.round(4).to_string())
     return (window_start,)
+
+
 # --- example: end ---
 
 
@@ -863,9 +915,13 @@ def _(mo):
 
 
 # --- example: begin ---
+
+
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    ## 6 · Handoff
+
     | Output | Consumed by |
     | --- | --- |
     | `Universe/Security_Master.csv` | `Data/refinery.py`, which joins its columns onto the panel as `current_*` |
@@ -883,6 +939,8 @@ def _(mo):
     | 3 | **The catalogue is the one of 2026-09-24**, cached by `Universe/seed.py`. | A listing added to Sharadar later is "not in the catalogue" until the seed is rebuilt with `--refresh`. |
     """)
     return
+
+
 # --- example: end ---
 
 
@@ -911,9 +969,16 @@ def _(mo):
 
 
 # --- example: begin ---
+
+
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    ## 7 · Verify
+
+    **Assertions that raise when this stage's output is wrong**, read back from the files this
+    notebook wrote rather than from the variables that wrote them:
+
     - the security master has one row per price key in the seed, each once, and no key the seed
       lacks;
     - the register has a row for every check section 4 runs, each with a count, and its
@@ -992,6 +1057,8 @@ def _(
 
     print(f"verified: {len(_verifications)} checks on the master, the register and the coverage")
     return
+
+
 # --- example: end ---
 
 

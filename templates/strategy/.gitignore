@@ -85,6 +85,10 @@ Experiments/*/Attribution/*
 Experiments/*/portfolio/*
 Experiments/*/backtest/*
 Experiments/*/attribution/*
+# The sizing checks beside an experiment's notebook write their tables next to it; they are
+# rebuilt by their scripts, as every other output is.
+Experiments/*/library_sizing_check.csv
+Experiments/*/sizing_methods_check.csv
 !Experiments/*/Portfolio/.gitkeep
 !Experiments/*/Backtest/.gitkeep
 !Experiments/*/Attribution/.gitkeep

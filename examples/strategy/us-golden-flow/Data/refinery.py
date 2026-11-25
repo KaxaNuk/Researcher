@@ -64,6 +64,7 @@ sys.path.insert(0, str(DATA_DIRECTORY))
 import time_series  # noqa: E402 - the path above has to exist first
 
 __all__ = [
+    "attach_idiosyncratic_return",
     "attach_index_weight",
     "attach_security_master",
     "load_custom_calculations",
@@ -80,6 +81,7 @@ CUSTOM_CALCULATIONS_PATH = pathlib.Path(__file__).parent / "Refinery" / "custom_
 DATE_COLUMN = "m_date"
 HAND_SUPPLIED_PATH = pathlib.Path(__file__).parent / "hand_supplied.py"
 IDENTIFIER_COLUMN = "main_identifier"
+IDIOSYNCRATIC_RETURN_COLUMN = "r_idiosyncratic_return"
 INDEX_WEIGHT_COLUMN = "r_index_weight"
 REFINERY_DIRECTORY = pathlib.Path(__file__).parent / "Refinery" / "Time_Series"
 # What a security is classified as **today**, joined for grouping and reporting only.  The prefix
@@ -90,6 +92,36 @@ SECURITY_MASTER_COLUMNS = {
 }
 SECURITY_MASTER_PATH = pathlib.Path(__file__).parent.parent / "Universe" / "Security_Master.csv"
 SEED_PATH = pathlib.Path(__file__).parent.parent / "Universe" / "Investable_Universe.csv"
+
+
+def attach_idiosyncratic_return(
+    panel: "pandas.DataFrame",
+) -> "pandas.DataFrame":
+    """
+    Map the factor model's specific return on each date onto the panel, keyed by the price files.
+
+    Unlike the index's weight, a missing value stays null: a day the model gives no specific return
+    is not a day the name earned none, and a rolling column must count it as missing.
+    """
+    hand_supplied = _load_hand_supplied()
+    returns = hand_supplied.read_idiosyncratic_returns()
+    stacked = returns.stack()
+    long_returns = stacked.rename(IDIOSYNCRATIC_RETURN_COLUMN).reset_index()
+    long_returns.columns = [
+        DATE_COLUMN,
+        IDENTIFIER_COLUMN,
+        IDIOSYNCRATIC_RETURN_COLUMN,
+    ]
+
+    return panel.merge(
+        long_returns,
+        on=[
+            DATE_COLUMN,
+            IDENTIFIER_COLUMN,
+        ],
+        how="left",
+        validate="one_to_one",
+    )
 
 
 def attach_index_weight(
@@ -103,12 +135,7 @@ def attach_index_weight(
     starts, or after it ends -- carries no weight: membership is never carried forward past the
     last date the desk wrote.
     """
-    specification = importlib.util.spec_from_file_location(
-        "hand_supplied",
-        HAND_SUPPLIED_PATH,
-    )
-    hand_supplied = importlib.util.module_from_spec(specification)
-    specification.loader.exec_module(hand_supplied)
+    hand_supplied = _load_hand_supplied()
     holdings = hand_supplied.read_member_holdings()
     stacked = holdings.stack()
     long_weights = stacked.rename(INDEX_WEIGHT_COLUMN).reset_index()
@@ -262,7 +289,8 @@ def main() -> int:
     securities = panel[IDENTIFIER_COLUMN].nunique()
     print(f"panel: {len(panel):,} rows from {securities} securities")
     weighted = attach_index_weight(panel)
-    enriched = attach_security_master(weighted)
+    with_residual = attach_idiosyncratic_return(weighted)
+    enriched = attach_security_master(with_residual)
     refined = refine_panel(
         enriched,
         calculations,
@@ -423,6 +451,21 @@ def _inside_span(
     inside = (dates >= start) & (dates <= end)
 
     return frame.loc[inside].reset_index(drop=True)
+
+
+def _load_hand_supplied() -> "types.ModuleType":
+    """
+    `Data/hand_supplied.py`, loaded from its file, the one reader of the index's and the model's
+    files.
+    """
+    specification = importlib.util.spec_from_file_location(
+        "hand_supplied",
+        HAND_SUPPLIED_PATH,
+    )
+    hand_supplied = importlib.util.module_from_spec(specification)
+    specification.loader.exec_module(hand_supplied)
+
+    return hand_supplied
 
 
 if __name__ == "__main__":

@@ -27,6 +27,7 @@ trying to do, [`RESULTS.md`](RESULTS.md) says how far we got and what it cost.
 | [`RESULTS.md`](RESULTS.md) | the executive summary of every experiment, compiled from the `FINDINGS_N.md` files |
 | [`CHANGELOG.md`](CHANGELOG.md) | every version, newest first, and what a version number means here |
 | [`AGENTS.md`](AGENTS.md) | **how work is done** — the workflow, the restrictions, and the bar a result has to clear |
+| [`PIPELINE.md`](PIPELINE.md) | how the code runs, step by step, and how to debug it — written once the pipeline has run |
 
 Every `Experiments/Experiment_N/` holds three more, and the split is the point: `BLUEPRINT` is
 frozen so a result cannot reshape its question, `JOURNAL` is append-only so the path is
@@ -45,7 +46,7 @@ notebook as its markdown cells — to be filled in with the strategy's own.
 | 1 | **Bibliotheca** | `Bibliotheca/` | `BIBLIOGRAPHY.md`, the sources and leads; one note per paper in `Papers/`, one per chapter in `Books/`; `LOG.md`, what was read and when | backtesting a hunch you cannot defend |
 | 2 | **Universe** | `Universe/` | `Investable_Universe.csv`, **the seed**, one row per security, delisted names kept; `universe_marimo.py`, which writes `Security_Master.csv` and `Data_Issues.csv` | survivorship bias |
 | 3 | **Data** | `Data/` | the drivers `curator.py`, `refinery.py`, `analyzer_marimo.py`; `hand_supplied.py` for the index and factor files; `c_*` columns in `Curator/custom_calculations.py`, `r_*` in `Refinery/custom_calculations.py` | results that came from broken inputs |
-| 4–6 | **Portfolio, Backtest, Attribution** | `Experiments/` | the four shared modules; one `Experiment_N/` per idea, with its three documents, its notebook and its `Portfolio/`, `Backtest/` and `Attribution/` outputs | a book nobody could hold, paper returns, factor beta sold as alpha |
+| 4–6 | **Portfolio, Backtest, Attribution** | `Experiments/` | the four shared modules; one `Experiment_N/` per idea, with its three documents, its notebook and its `Portfolio/`, `Backtest/` and `Attribution/` outputs; beside the notebook, the scripts that check its sizing against the library, attribute its books apart and write the KaxaNuk app's workbooks | a book nobody could hold, paper returns, factor beta sold as alpha |
 | 7 | **Paper trading** | `Paper_Trading/` | `BITACORA.md`, the gate; `promote.py`, `daily_update.py`, `record.py`; one frozen book per `Paper_Trading_N/` | plumbing problems on day one of funding |
 | 8 | Production | **elsewhere** | real capital, real monitoring, a real drawdown policy | research that stays research forever |
 | — | | `Config/` | `.env.template`, copied to `.env` with the keys and licences | |

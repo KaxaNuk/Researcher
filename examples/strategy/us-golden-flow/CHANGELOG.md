@@ -41,6 +41,31 @@ for somebody who was not in the room:
 
 ---
 
+## 1.0.0 (2026-11-25)
+
+**MAJOR** — the example is US-Golden-Flow's Experiment 1, curated from US-Golden-Flow 0.8.3 on the
+owner's word; every published figure changes. Not run from a wiped copy as the example; its figures
+reproduced so in US-Golden-Flow on 2026-11-20.
+
+**What to do differently:** read it as a falsified experiment: the golden cross beats its control
+over 1999–2026 but in only one of three sub-periods, and the book loses to the KN US Equity Core.
+Golden Flow, the strategy this example showed before, is at the package's tag `v1.38.0`.
+
+### Changed
+
+- Every shared file is the template's text with US-Golden-Flow's code and documents beside it,
+  marked; the modules keep the template's docstrings, and the four new scripts their own
+  descriptions as comments. `README.md`, `OBJECTIVE.md`'s body, `AGENTS.md`'s banner and its
+  example blocks are US-Golden-Flow's.
+- The seed keeps tickers and dates only; `Universe/seed.py` writes it so, and the universe notebook
+  reads the name, permaticker and match as empty.
+- `Bibliotheca/`: the eighteen paper notes; Paleologo's book is left out, with every link to it.
+
+### Removed
+
+- Golden-Flow's `Paper_Trading_1`, its frozen files and `FREEZE.json`: retired on 2026-11-25, as
+  `Paper_Trading/BITACORA.md` records; `daily_update.py`'s `BOOKS` is empty.
+
 ## 0.21.0 (2026-11-25)
 
 **MINOR** — the example is renamed `us-golden-flow`, from `golden-flow`, and takes the template's
